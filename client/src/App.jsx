@@ -7,7 +7,7 @@ import 'bootstrap/dist/js/bootstrap.bundle';
 import './App.css';
 import axios from "axios";
 
-import Protected from "./utils/Protected";
+// import Protected from "./utils/Protected";
 
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
@@ -92,33 +92,33 @@ function App() {
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/register" element={<Register />} />
 
-                        {/*<Route path="/bill" element={<Cart />} />*/}
-                        <Route path="/bill" element={
-                            <Protected isAuthenticated={isAuthenticated}>
-                                <Bill />
-                            </Protected>
-                        } />
+                        {/*/!*<Route path="/bill" element={<Cart />} />*!/*/}
+                        {/*<Route path="/bill" element={*/}
+                        {/*    <Protected isAuthenticated={isAuthenticated}>*/}
+                        {/*        <Bill />*/}
+                        {/*    </Protected>*/}
+                        {/*} />*/}
 
-                        {/*<Route path="/bill" element={<Cart />} />*/}
-                        <Route path="/address" element={
-                            <Protected isAuthenticated={isAuthenticated}>
-                                <AddressManagement />
-                            </Protected>
-                        } />
+                        {/*/!*<Route path="/bill" element={<Cart />} />*!/*/}
+                        {/*<Route path="/address" element={*/}
+                        {/*    <Protected isAuthenticated={isAuthenticated}>*/}
+                        {/*        <AddressManagement />*/}
+                        {/*    </Protected>*/}
+                        {/*} />*/}
 
-                        {/*<Route path="/cart" element={<Cart />} />*/}
-                        <Route path="/cart" element={
-                            <Protected isAuthenticated={isAuthenticated}>
-                                <Cart />
-                            </Protected>
-                        } />
+                        {/*/!*<Route path="/cart" element={<Cart />} />*!/*/}
+                        {/*<Route path="/cart" element={*/}
+                        {/*    <Protected isAuthenticated={isAuthenticated}>*/}
+                        {/*        <Cart />*/}
+                        {/*    </Protected>*/}
+                        {/*} />*/}
 
-                        {/*<Route path="/profile" element={<UserProfile />} />*/}
-                        <Route path="/profile" element={
-                            <Protected isAuthenticated={isAuthenticated}>
-                                <UserProfile />
-                            </Protected>
-                        } />
+                        {/*/!*<Route path="/profile" element={<UserProfile />} />*!/*/}
+                        {/*<Route path="/profile" element={*/}
+                        {/*    <Protected isAuthenticated={isAuthenticated}>*/}
+                        {/*        <UserProfile />*/}
+                        {/*    </Protected>*/}
+                        {/*} />*/}
 
                         <Route path="/admin" element={
                             <Manager isAuthenticated={isAuthenticated} userRole={userRole}>
