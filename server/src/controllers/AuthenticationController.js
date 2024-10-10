@@ -36,6 +36,34 @@ class AuthenticationController {
         }
     }
 
+    async logout(req, res) {
+        const { id } = req.user;
+        console.log(req.user)
+        try {
+            await Account.update({ status: 0 }, { where: { idaccount: id } });
+            return res.json({ message: 'Logout successful' });
+        } catch (error) {
+            res.status(500).json({ message: 'Logout failed J', error });
+        }
+
+        // try {
+        //     const userId = req.user.id; // Lấy userId từ token hoặc session
+        //     const account = await Account.findByPk(userId);
+        //
+        //     if (!account) {
+        //         return res.status(404).json({ message: 'User not found' });
+        //     }
+        //
+        //     // Cập nhật status về 0
+        //     account.status = 0;
+        //     await account.save();
+        //
+        //     res.json({ message: 'Logged out successfully' });
+        // } catch (error) {
+        //     return res.status(500).json({ message: 'Server error', error });
+        // }
+    }
+
     async register(req, res) {
         const { username, password, email, firstname, lastname, phone, avatar } = req.body;
 
@@ -73,35 +101,6 @@ class AuthenticationController {
         } catch (error) {
             return res.status(500).json({ error: 'Error registering user' });
         }
-    }
-
-    async logout(req, res) {
-        const { userId } = req.user;
-
-        try {
-            await Account.update({ status: 0 }, { where: { idaccount: userId } });
-
-            return res.json({ message: 'Logout successful' });
-        } catch (error) {
-            res.status(500).json({ message: 'Logout failed', error });
-        }
-
-        // try {
-        //     const userId = req.user.id; // Lấy userId từ token hoặc session
-        //     const account = await Account.findByPk(userId);
-        //
-        //     if (!account) {
-        //         return res.status(404).json({ message: 'User not found' });
-        //     }
-        //
-        //     // Cập nhật status về 0
-        //     account.status = 0;
-        //     await account.save();
-        //
-        //     res.json({ message: 'Logged out successfully' });
-        // } catch (error) {
-        //     return res.status(500).json({ message: 'Server error', error });
-        // }
     }
 }
 

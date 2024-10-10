@@ -16,8 +16,10 @@ import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import ListProducts from "./elements/ListProducts.jsx";
 import Cart from "./pages/Cart.jsx";
+import Bill from "./pages/Bill.jsx";
 import Product from "./pages/Product.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+import AddressManagement from "./components/AddressManagement.jsx";
 
 import Administrator from "./managements/Administrator.jsx";
 import Statistic from "./managements/Statistic.jsx";
@@ -75,7 +77,6 @@ function App() {
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/product" element={<Product />} />
                         <Route path="/search" element={<ListProducts />} />
-                        <Route path="/cart" element={<Cart />} />
 
                         {/* <Route path="/map" element={<Map />} /> */}
                         {/* <Route path="/notifications" element={<Notifications />} /> */}
@@ -90,6 +91,27 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/register" element={<Register />} />
+
+                        {/*<Route path="/bill" element={<Cart />} />*/}
+                        <Route path="/bill" element={
+                            <Protected isAuthenticated={isAuthenticated}>
+                                <Bill />
+                            </Protected>
+                        } />
+
+                        {/*<Route path="/bill" element={<Cart />} />*/}
+                        <Route path="/address" element={
+                            <Protected isAuthenticated={isAuthenticated}>
+                                <AddressManagement />
+                            </Protected>
+                        } />
+
+                        {/*<Route path="/cart" element={<Cart />} />*/}
+                        <Route path="/cart" element={
+                            <Protected isAuthenticated={isAuthenticated}>
+                                <Cart />
+                            </Protected>
+                        } />
 
                         {/*<Route path="/profile" element={<UserProfile />} />*/}
                         <Route path="/profile" element={

@@ -10,7 +10,6 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 function AccountInfo() {
-
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         username: '',

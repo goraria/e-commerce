@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import SocialFormButton from "../elements/SocialFormButton.jsx";
 
-import jp from "../resources/images/jp.jpeg";
+import jp from "../assets/images/jp.jpeg";
 import {Link} from "react-router-dom";
 
 const sclItems = [

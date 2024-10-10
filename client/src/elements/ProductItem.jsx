@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalfAlt, faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarEmpty } from '@fortawesome/free-regular-svg-icons';
 import { noAuto } from "@fortawesome/fontawesome-svg-core"
-import jp from '../resources/images/jp.jpeg'
+import jp from '../assets/images/jp.jpeg'
 
 const obj_test = {
     name: "Product 1",

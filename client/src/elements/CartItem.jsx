@@ -96,7 +96,7 @@ import React, { Component } from "react";
 import { Container, Button, Form, Row, Col, Image } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-import jp from "../resources/images/jp.jpeg";
+import jp from "../assets/images/jp.jpeg";
 
 class CardItem extends Component {
   constructor(props) {

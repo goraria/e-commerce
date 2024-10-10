@@ -32,31 +32,33 @@ const dropdownContains = [
 ]
 
 const LogoutButton = () => {
-    const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        const token = localStorage.getItem('token');
-        try {
-            await axios.post('/api/logout', {}, {
-                headers: { Authorization: token },
-            });
-            localStorage.removeItem('token');  // Xóa JWT
-            navigate('/login');
-        } catch (error) {
-            console.error('Logout failed', error);
-        }
-    };
-
-    return <button onClick={handleLogout}>Logout</button>;
 };
 
 const Header = () => {
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
+    const handleLogout = async () => {
+        try {
+            const token = localStorage.getItem('token');  // Assuming you store JWT in localStorage
+            if (!token) throw new Error('No token found');
 
-        navigate('/login');
+            const response = await axios.post('http://localhost:5172/authentication/logout', {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 200) {
+                // Handle successful logout (e.g., clear token, redirect to login, etc.)
+                localStorage.removeItem('token');
+                console.log('Logout successful');
+            }
+
+            navigate('/login')
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
     };
 
     return (
@@ -66,9 +68,9 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link><Link to={'/search'}>Product</Link></Nav.Link>
-                        <Nav.Link><Link to={'/contact'}>Contact</Link></Nav.Link>
-                        <Nav.Link><Link to={'/about'}>About</Link></Nav.Link>
+                        <Nav.Link href="/search">Product</Nav.Link>
+                        <Nav.Link href="/contact">Contact</Nav.Link>
+                        <Nav.Link href="/about">About</Nav.Link>
                         {/*<NavDropdown title="Dropdown" id="basic-nav-dropdown">*/}
                         {/*    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>*/}
                         {/*    <NavDropdown.Item href="#action/3.2">*/}
@@ -91,18 +93,18 @@ const Header = () => {
                             />
                             <Button variant="outline-danger"><FontAwesomeIcon icon={faSearch} /></Button>
                         </Form>
-                        {/*<DropdownButton*/}
-                        {/*    as={ButtonGroup}*/}
-                        {/*    align={{ lg: 'end' }}*/}
-                        {/*    variant={'danger'}*/}
-                        {/*    title={<FontAwesomeIcon icon={faShoppingCart}/>}*/}
-                        {/*    className="ms-2 me-2">*/}
-                        {/*    <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>*/}
-                        {/*    <NavDropdown.Item href="#action/3.2">Bill</NavDropdown.Item>*/}
-                        {/*    /!*<NavDropdown.Divider />*!/*/}
-                        {/*    <NavDropdown.Item href="/cart">Full Cart</NavDropdown.Item>*/}
-                        {/*</DropdownButton>*/}
-                        <DropdownConfig dropdownContains={dropdownContains[0]} />
+                        <DropdownButton
+                            as={ButtonGroup}
+                            align={{ lg: 'end' }}
+                            variant={'danger'}
+                            title={<FontAwesomeIcon icon={faShoppingCart}/>}
+                            className="ms-2 me-2">
+                            <NavDropdown.Item href="#action/3.1">Schweitzenburg</NavDropdown.Item>
+                            <NavDropdown.Item href="#action/3.2">Braunschweig</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item href="/cart">Full Cart</NavDropdown.Item>
+                        </DropdownButton>
+                        {/*<DropdownConfig dropdownContains={dropdownContains[0]} />*/}
                         {/*<DropdownConfig dropdownContains={dropdownContains[1]} />*/}
                         <DropdownButton
                             as={ButtonGroup}
