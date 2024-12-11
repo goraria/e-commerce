@@ -9,8 +9,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
-
-
 const Order = () => {
     const [user, setUser] = useState([]);
     const [address, setAdress] = useState([]);
@@ -137,21 +135,20 @@ const Order = () => {
         <>
             <Transitionbar />
             <div className="container">
-                <Row>
+                <div className="row">
                     {/* Left Section */}
-                    <Col sm={12} md={6} lg={8}>
+                    <div className="col col-sm-12 col-md-6 col-lg-8">
                         {/* Delivery Method Selection */}
                         <div
-                            className="card sticky-summary mb-4"
+                            className="card sticky-summary mb-4 p-3"
                             style={{
                                 position: "sticky",
-                                padding: '15px 12px 15px 12px',
                                 top: 80,
                                 zIndex: 1,
                                 border: "none",
                             }}>
-                            <div className="container" style={{ display: "flex", padding: '0 8px' }}>
-                                <h2 className="m-0">Giỏ hàng</h2>
+                            <div className="container d-flex py-0 px-1">
+                                <h2 className="m-0">Order</h2>
                                 {/*<Button variant="primary" style={{marginLeft: 'auto'}}>*/}
                                 {/*    <FontAwesomeIcon icon={faPlus} className="me-2"/>*/}
                                 {/*    <span>Thêm sản phẩm</span>*/}
@@ -247,9 +244,9 @@ const Order = () => {
                         {/* <Card className="p-3">
                             {products.map((item) => <CardItem key={item.id} item={item} />)}
                         </Card> */}
-                    </Col>
+                    </div>
                     {/* Right Section: Order Summary */}
-                    <Col sm={12} md={6} lg={4} className="mb-2">
+                    <div className="col col-sm-12 col-md-6 col-lg-4 mb-2">
                         <div className="card sticky-summary mb-3 shadow-none" style={{ position: 'sticky', top: 100, backgroundColor: 'transparent', boxShadow: 'none' }}>
                             <div className="card p-3 sticky-summary">
                                 <h4>Khuyến mãi</h4>
@@ -285,12 +282,11 @@ const Order = () => {
                                 ))}
                             </div>
                         </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
         </>
     )
-
 }
 
 export default Order

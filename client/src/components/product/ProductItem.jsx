@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Component } from "react";
+import React, { Component } from "react";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Card } from "react-bootstrap";
@@ -8,6 +8,7 @@ import { faStar, faStarHalfAlt, faCartPlus } from '@fortawesome/free-solid-svg-i
 import { faStar as faStarEmpty } from '@fortawesome/free-regular-svg-icons';
 import { noAuto } from "@fortawesome/fontawesome-svg-core"
 import jp from '../../assets/images/jp.jpeg'
+import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
 
 
 const renderStars = (rating) => {
@@ -46,6 +47,7 @@ const ProductItem = (product, state) => {
     const [carts, setCart] = useState();
     const [colors, setColor] = useState();
 
+    const [showSuccess, setShowSuccess] = useState(false);
 
     var obj = product.obj;
     const token = localStorage.getItem('token');
@@ -139,7 +141,8 @@ const ProductItem = (product, state) => {
                 idconfiguration:configurations.idconfiguration,
             });
             if (response.status === 201) {
-                alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                // alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                setShowSuccess(true)
             }
         } catch (error) {
             console.error('Lỗi khi thêm vào giỏ hàng:', error);
@@ -222,11 +225,18 @@ const ProductItem = (product, state) => {
                         {/* Buy Button */}
                         <button className="btn btn-primary d-flex align-items-center" onClick={handleAddToCart}>
                             <i className='bx bxs-cart-add me-2'></i>
-                            <span>Buy now</span>
+                            {/*<span>Buy now</span>*/}
+                            <span>Add</span>
                         </button>
                     </div>
                 </div>
             </div>
+            <NotifySuccess
+                title="Add to cart successfully"
+                message="Sản phẩm đã được thêm vào giỏ hàng!"
+                show={showSuccess}
+                onHide={() => setShowSuccess(false)}
+            />
         </>
     );
 }

@@ -13,6 +13,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
+import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 
 
 const Product = () => {
@@ -27,6 +28,8 @@ const Product = () => {
     const [products, setProduct] = useState([]);
     const [carts, setCart] = useState();
     const [ChoosedColor, setChoosedColor] = useState(null);
+
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const token = localStorage.getItem('token');
     const fetchCart = async () => {
@@ -106,20 +109,12 @@ const Product = () => {
     //     // console.log(response.data)
     //     setArray(response.data[0])
     // };
-    useEffect(() => {
-        // fetchAPI();
-        // fetchAPI1();
-        fetchProductConfiguration();
-        fetchProductDetails();
-        fetchProductDecription();
-        fetchProductColor();
-        fetchCart();
-    }, [id]);
 
     const handleColorSelect = (idcolor) => {
         setChoosedColor(idcolor); // Cập nhật idcolor đã chọn
-        console.log(idcolor)
+        // console.log(idcolor)
     };
+
     const handleAddToCart = async () => {
         try {
             const response = await axios.put(`http://localhost:5172/cart/add-cartitem`, {
@@ -130,12 +125,23 @@ const Product = () => {
                 idconfiguration:default_config.idconfiguration,
             });
             if (response.status === 201) {
-                alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                // alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                setShowSuccess(true)
             }
         } catch (error) {
             console.error('Lỗi khi thêm vào giỏ hàng:', error);
         }
     };
+
+    useEffect(() => {
+        // fetchAPI();
+        // fetchAPI1();
+        fetchProductConfiguration();
+        fetchProductDetails();
+        fetchProductDecription();
+        fetchProductColor();
+        fetchCart();
+    }, [id]);
 
     return (
         <>
@@ -307,66 +313,6 @@ const Product = () => {
                                 <Button variant="primary" className="mb-3" style={{ width: '100%' }}>Đánh giá</Button>
                             </div>
                         </div>
-                        {/* <Container>
-                          <Row className="my-4">
-                            <Col>
-                              <h2>Laptop Asus Vivobook 15 X1504ZA-N J517W i5-1235U/16GB/512GB/15.6" FHD/Win11</h2>
-                              <p><strong>Product No: 00908399</strong></p>
-                            </Col>
-                          </Row>
-
-                          Pricing Section
-                          <Row>
-                            <Col>
-                              <Card>
-                                <Card.Body>
-                                  <h4>Price: 14,690,000 ₫</h4>
-                                  <p className="text-muted"><del>16,490,000 ₫</del> (11% Off)</p>
-                                  <p>Installment Price: 791,000 ₫ / month</p>
-                                  <p>Reward Points: +3,672 Points</p>
-                                </Card.Body>
-                              </Card>
-                            </Col>
-                          </Row>
-
-                          Promotion Section
-                          <Row className="my-4">
-                            <Col>
-                              <h5>Select a Promotion:</h5>
-                              <Form>
-                                <Form.Check
-                                  type="radio"
-                                  label="Promotion 1: 1,800,000 ₫ off (valid until 26/09)"
-                                  name="promoOptions"
-                                  value="promo1"
-                                  checked
-                                  onChange
-                                />
-                                <Form.Check
-                                  type="radio"
-                                  label="Promotion 2: 1,300,000 ₫ off + Installment Option"
-                                  name="promoOptions"
-                                  value="promo2"
-                                  checked
-                                  onChange
-                                />
-                              </Form>
-                            </Col>
-                          </Row>
-
-                          Student Discount Section
-                          <Row className="my-4">
-                            <Col>
-                              <Card>
-                                <Card.Body>
-                                  <h5>Special Student Discount</h5>
-                                  <p>Get an additional 10% off (1,649,000 ₫)</p>
-                                  <Button variant="danger">Verify Now</Button>
-                                </Card.Body>
-                              </Card>
-                            </Col>
-                          </Row>
-                        </Container> */}
                     </Col>
                 </div>
             </div>
@@ -380,6 +326,12 @@ const Product = () => {
                         )}
                     </Row> */}
             </Overview>
+            <NotifySuccess
+                title="Add to cart successfully"
+                message="Sản phẩm đã được thêm vào giỏ hàng!"
+                show={showSuccess}
+                onHide={() => setShowSuccess(false)}
+            />
         </>
     )
 }

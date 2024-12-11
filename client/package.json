@@ -25,6 +25,7 @@
     "bootstrap": "^5.3.3",
     "boxicons": "^2.1.4",
     "dotenv": "^16.4.5",
+    "jwt-decode": "^4.0.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "perfect-scrollbar": "^1.5.5",

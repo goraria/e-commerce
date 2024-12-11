@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import { Container, Button, Row, Col, Card, Form } from 'react-bootstrap';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
 import { redirect, useLocation } from 'react-router-dom';
@@ -8,8 +8,6 @@ import axios from 'axios';
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import { useNavigate } from 'react-router-dom'
 
-
-
 // var pre_total = 0;
 // // products.map((item) => pre_total += item['price']);
 
@@ -18,7 +16,7 @@ var discount = 0; // Assuming no discount applied.
 // var paid = 0;
 // var remaining = total - paid;
 
-function CheckOut() {
+const CheckOut = () => {
     const location = useLocation();
     const { cartData, prePrice, discounts, totalPrice, userData, selectedaddress, selectedstoreaddress, deliverymethod } = location.state || {};
     const [paymentMethod, setPaymentMethod] = useState("qr"); // State for delivery method
@@ -26,6 +24,9 @@ function CheckOut() {
     const [date, setDate] = useState(new Date()); // State for delivery method
     const [address, setAdress] = useState([]); // State for delivery method
     const [isPaypalSelected, setIsPaypalSelected] = useState(false);
+
+    const [showSuccess, setShowSuccess] = useState(false);
+
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
@@ -50,6 +51,7 @@ function CheckOut() {
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
+
     const paypalAPI = async () => {
         // Kiểm tra nếu PayPal đã được tải trước
         if (window.paypal) {
@@ -100,8 +102,10 @@ function CheckOut() {
                 },
 
             });
-            alert("Hóa đơn đã được tạo vào thành công");
-            navigate('/')
+
+            setShowSuccess(true)
+            // alert("Hóa đơn đã được tạo vào thành công");
+            // navigate('/')
         } catch (error) {
             console.error('Lỗi khi tạo hóa đơn:', error);
         }
@@ -177,76 +181,86 @@ function CheckOut() {
                                 label="Chuyển Khoản QR"
                                 name="paymentMethod"
                                 value="qr"
-                                checked={paymentMethod == "qr"}
+                                checked={paymentMethod === "qr"}
                                 onChange={handlePaymentMethodChange}
                             />
-                            {paymentMethod === "qr" && (
-                                <div className="card p-3 mb-4">
-                                    <h6>Hướng dẫn chuyển khoản</h6>
-                                    <div><strong>Cách 1:</strong> Dùng ứng dụng ngân hàng để quét mã QR.</div>
-                                    <div><strong>Cách 2:</strong> Nhập thông tin chuyển khoản bên dưới. Lưu ý nhập chính xác số tiền, nội dung chuyển khoản.</div>
-                                    <div>Sau khi chuyển khoản thành công, bấm nút "Tôi đã chuyển khoản". Hệ thống sẽ mất khoảng 30 giây để xác minh đã nhận được tiền.</div>
-                                    {/* Bank Info */}
-                                    <div className="card p-3 mt-4">
-                                        <Row>
-                                            <Col>
-                                                <p>Ngân hàng: <strong>Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)</strong></p>
-                                                <p>Tên tài khoản: <strong>Lê Tuấn Linh</strong></p>
-                                                <p>Số tài khoản: <strong>9968727279</strong></p>
-                                                <p>Nội dung CK: <strong>212410160005 RYPRGG</strong></p>
-                                                <p>Số tiền: <strong>${totalPrice}</strong></p>
-                                            </Col>
-                                            <Col>
-                                                <img src="https://via.placeholder.com/150" alt="QR Code" />
-                                                <p className="text-center">Quét mã QR bằng ứng dụng ngân hàng</p>
-                                            </Col>
-                                        </Row>
-                                        <Button className="w-100 mt-2" variant="primary" onClick={() => {
-                                            handleStatusChange(1);
-                                            handleAddBill()
-                                            // NotifySuccess()
-                                        }}>Tôi đã chuyển khoản</Button>
-                                    </div>
-                                </div>
-                            )}
                             {/* Other Payment Methods */}
                             <Form.Check
                                 type="radio"
                                 label="Thanh toán khi nhận hàng"
                                 name="paymentMethod"
                                 value="cod"
-                                checked={paymentMethod == "cod"}
+                                checked={paymentMethod === "cod"}
                                 onChange={handlePaymentMethodChange}
                             />
-                            {paymentMethod === "cod" && (
-                                <div className="card p-3 mb-3">
-                                    <Button className="w-100" variant="primary" onClick={() => {
-                                        handleStatusChange(0),
-                                            handleAddBill()
-                                    }}>
-                                        Xác nhận thanh toán
-                                    </Button>
-                                </div>
-                            )}
                             <Form.Check
                                 type="radio"
                                 label="Paypal"
                                 name="paymentMethod"
                                 value="paypal"
-                                checked={paymentMethod == "paypal"}
+                                checked={paymentMethod === "paypal"}
                                 onChange={handlePaymentMethodChange}
                             />
-                            {paymentMethod === "paypal" && (
-                                <div className="card p-3 mb-3" id="paypal-button-container">
-                                </div>
-                            )}
                         </div>
+                        {paymentMethod === "qr" && (
+                            <>
+                                <div className="card p-3 mb-4">
+                                    <h6>Hướng dẫn chuyển khoản</h6>
+                                    <div><strong>Cách 1:</strong> Dùng ứng dụng ngân hàng để quét mã QR.</div>
+                                    <div><strong>Cách 2:</strong> Nhập thông tin chuyển khoản bên dưới. Lưu ý nhập chính
+                                        xác số tiền, nội dung chuyển khoản.
+                                    </div>
+                                    <div>Sau khi chuyển khoản thành công, bấm nút "Tôi đã chuyển khoản". Hệ thống sẽ mất
+                                        khoảng 30 giây để xác minh đã nhận được tiền.
+                                    </div>
+                                </div>
+
+                                {/* Bank Info */}
+                                <div className="card p-3 mb-4">
+                                    <Row>
+                                        <Col>
+                                            <p>Ngân hàng: <strong>Ngân hàng TMCP Ngoại thương Việt Nam
+                                                (Vietcombank)</strong></p>
+                                            <p>Tên tài khoản: <strong>Lê Tuấn Linh</strong></p>
+                                            <p>Số tài khoản: <strong>9968727279</strong></p>
+                                            <p>Nội dung CK: <strong>212410160005 RYPRGG</strong></p>
+                                            <p>Số tiền: <strong>${totalPrice}</strong></p>
+                                        </Col>
+                                        <Col>
+                                            <img src="https://via.placeholder.com/150" alt="QR Code"/>
+                                            <p className="text-center">Quét mã QR bằng ứng dụng ngân hàng</p>
+                                        </Col>
+                                    </Row>
+                                    <Button className="w-100 mt-2" variant="primary" onClick={() => {
+                                        handleStatusChange(1);
+                                        handleAddBill()
+                                        // NotifySuccess()
+                                    }}>Tôi đã chuyển khoản</Button>
+                                </div>
+                            </>
+                        )}
+                        {paymentMethod === "cod" && (
+                            <div className="card p-3 mb-3">
+                                <Button className="w-100" variant="primary" onClick={() => {
+                                    handleStatusChange(0)
+                                    handleAddBill()
+                                }}>
+                                    Xác nhận thanh toán
+                                </Button>
+                            </div>
+                        )}
+                        {paymentMethod === "paypal" && (
+                            <div className="card p-3 mb-3 d-flex justify-content-center">
+                                <div className="d-flex" id="paypal-button-container"></div>
+                            </div>
+                        )}
                     </Col>
 
                     {/* Right Section: Order Summary & Product List */}
                     <Col sm={12} md={6} lg={4} className="mb-4">
                         {/* First Card: Order Summary */}
-                        <div className="card sticky-summary mb-4 shadow-none" style={{ position: 'sticky', top: 120, backgroundColor: 'transparent', boxShadow: 'none' }}>
+                        <div className="card sticky-summary mb-4 shadow-none"
+                             style={{position: 'sticky', top: 120, backgroundColor: 'transparent', boxShadow: 'none'}}>
                             <div className="card p-3 sticky-summary mb-4">
                                 <h5>Tóm tắt đơn hàng</h5>
                                 <div className="d-flex justify-content-between">
@@ -259,7 +273,7 @@ function CheckOut() {
                                 </div>
                                 <div className="d-flex justify-content-between mt-2">
                                     <span>Tổng cộng</span>
-                                    <span style={{ fontWeight: 'bold', fontSize: '1.5em' }}>${totalPrice} </span>
+                                    <span style={{fontWeight: 'bold', fontSize: '1.5em'}}>${totalPrice} </span>
                                 </div>
                                 {/* <div className="d-flex justify-content-between mt-2">
                                     <span>Đã thanh toán</span>
@@ -280,6 +294,12 @@ function CheckOut() {
                     </Col>
                 </div>
             </div>
+            <NotifySuccess
+                title="Order successfully"
+                message="Follow your order in Order History!"
+                show={showSuccess}
+                onHide={() => setShowSuccess(false)}
+            />
         </>
     );
 }

@@ -18,6 +18,34 @@ const Outbar = () => {
 
                 {/*<Overside/>*/}
 
+                <div className="navbar-nav">
+                    <ul className="navbar-nav flex-row align-items-center ms-auto">
+                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                            <Link
+                                className="navbar-brand app-brand-text demo menu-text fw-bold text-capitalize"
+                                to={"/"}
+                            >
+                                <span>Cipher</span>
+                            </Link>
+                        </li>
+                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                            <Link className="nav-link" to="/search">
+                                <h5 className="m-0">Product</h5>
+                            </Link>
+                        </li>
+                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                            <Link className="nav-link" to="/contact">
+                                <h5 className="m-0">Contact</h5>
+                            </Link>
+                        </li>
+                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                            <Link className="nav-link" to="/about">
+                                <h5 className="m-0">About</h5>
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
                         {/*<div className="navbar-nav align-items-center">*/}

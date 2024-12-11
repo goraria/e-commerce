@@ -116,7 +116,7 @@ const App = () => {
                 }
             />
 
-            <Route path="/login" element={<Frame role={auth.role}><Login authenticationCheck={authenticationCheck} /></Frame>} />
+            {/*<Route path="/login" element={<Frame role={auth.role}><Login authenticationCheck={authenticationCheck} /></Frame>} />*/}
 
             <Route path="*" element={<NotFound />} />
         </Routes>
