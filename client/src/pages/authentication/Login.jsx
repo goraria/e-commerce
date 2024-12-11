@@ -1,10 +1,10 @@
-import React, {Component, useState, useEffect} from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
 import {
     faApple, faMeta, faGoogle, faTwitter, faXTwitter, faGithub
 } from '@fortawesome/free-brands-svg-icons';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 import SocialFormButton from "../../components/button/SocialFormButton.jsx";
@@ -118,19 +118,19 @@ const Login = ({ authenticationCheck }) => {
     //     authenticationCheck();
     // }, [navigate]);
 
-    if (loading) return <Frame><Loading/></Frame>
+    if (loading) return <Frame><Loading /></Frame>
 
     return (
         <>
             <Overview mt={112} me={56}>
                 <div>
                     <h2>Log in</h2>
-                    <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>
+                    <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>
                         <Image
                             className="d-block"
                             src={jp}
                             alt="Second slide"
-                            style={{objectFit: 'cover', width: 224, height: 224, borderRadius: '5px'}}
+                            style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}
                         />
                     </div>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -182,6 +182,8 @@ const Login = ({ authenticationCheck }) => {
                             <Col xs={6} className="text-end">
                                 <Button
                                     variant="link"
+                                    as={Link}
+                                    to="/forgot-password"
                                     style={{
                                         padding: 0,
                                         color: '#696cff',
@@ -192,11 +194,11 @@ const Login = ({ authenticationCheck }) => {
                                 </Button>
                             </Col>
                         </Row>
-                        <Button variant="primary" type="submit" style={{width: '100%'}}
-                                onClick={() => setCheck(true)}>
+                        <Button variant="primary" type="submit" style={{ width: '100%' }}
+                            onClick={() => setCheck(true)}>
                             Log in
                         </Button>
-                        <hr/>
+                        <hr />
                         {/*<div className="text-center" style={{marginBottom: 16}}>or sign in with</div>*/}
                         {/*<div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>*/}
                         {/*    {sclItems.map(socialItem => (*/}
@@ -204,7 +206,7 @@ const Login = ({ authenticationCheck }) => {
                         {/*    ))}*/}
                         {/*</div>*/}
                         {/*<hr/>*/}
-                        <div className="text-center" style={{marginBottom: 16}}>
+                        <div className="text-center" style={{ marginBottom: 16 }}>
                             you don&#39;t have an acoount
                             <Link to="/register">
                                 <Button variant="link" style={{
