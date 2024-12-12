@@ -1,19 +1,14 @@
 import React, {Component, useState} from "react";
 import { Alert, Button, Col, Container, Form, Image, InputGroup, Nav, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faAt, faBullseye, faCity, faGift, faHistory, faLocationDot, faMapMarkerAlt, faMapPin,
-    faPhone, faQuestionCircle, faSignOutAlt, faStar, faUser
-} from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import SaveChange from "../components/modal/notify/SaveChange.jsx";
 
 const sidebarLinks = [
-    { id: 1, text: "Account Information", icon: faUser, link: "/user/profile" },
-    { id: 2, text: "Order History", icon: faHistory, link: "/user/bill" },
-    { id: 3, text: "Voucher Wallet", icon: faGift, link: "/user/voucher" },
-    { id: 4, text: "Address", icon: faMapPin, link: "/user/address" },
+    { id: 1, text: "Account Information", link: "/user/profile" },
+    { id: 2, text: "Order History", link: "/user/bill" },
+    { id: 3, text: "Voucher Wallet", link: "/user/voucher" },
+    { id: 4, text: "Address", link: "/user/address" },
     // { id: 5, text: "Rating", icon: faStar, link: "/user/rating" },
     // { id: 6, text: "FAQ", icon: faQuestionCircle, link: "/faq" },
     // { id: 7, text: "Log out", icon: faSignOutAlt, link: '' },
@@ -34,7 +29,7 @@ const MenuItem = ({ directory, item, isActive }) => {
                 border: "none",
                 boxShadow: "none"
             }}>
-            <FontAwesomeIcon icon={directory.icon} className="me-2" style={{ width: 28 }} />
+            {/*<FontAwesomeIcon icon={directory.icon} className="me-2" style={{ width: 28 }} />*/}
             <span>{directory.text}</span>
         </Button>
     )
@@ -76,7 +71,7 @@ const UserSidebar = () => {
                     onClick={() => setShowModal(true)}
                     className="d-flex align-items-center btn"
                     style={{ color: '#384551', backgroundColor: '#f8f9fa', justifyContent: "left", border: "none", boxShadow: "none" }}>
-                    <FontAwesomeIcon icon={faSignOutAlt} className="me-2" style={{ width: 28 }} />
+                    {/*<FontAwesomeIcon icon={faSignOutAlt} className="me-2" style={{ width: 28 }} />*/}
                     <span>Log out</span>
                 </Button>
             </Nav>

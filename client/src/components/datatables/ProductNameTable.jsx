@@ -1,45 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
-import {
-    faPenToSquare,
-    faPlus,
-    faTrash,
-    faAngleLeft,
-    faAngleRight,
-    faAnglesLeft,
-    faAnglesRight,
-    faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-    faAddressBook
-} from "@fortawesome/free-regular-svg-icons";
 import axios from 'axios';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import "./DataTables.css"; // Add custom styling here
-import { DescriptionForm } from "../modal/form/DescriptionForm";
-export const DescriptionTable = () => {
-    const [data, setData] = useState([])
+import { useNavigate } from "react-router-dom";
+import { ProductForm } from "../modal/form/ProductForm";
 
+export const ProductNameTable = () => {
+    const navigate = useNavigate();
+
+    const [data, setData] = useState([])
+    const fetchAPI = async () => {
+        const response = await axios.get("http://localhost:5172/products/load-product")
+        setData(response.data)
+    };
     const [data1, setData1] = useState([])
-    const fetchData = async () => {
-        try {
-            const [descriptionResponse, productsResponse] = await Promise.all([
-                axios.get("http://localhost:5172/admin/get-description"),
-                axios.get("http://localhost:5172/products/load-product"),
-                // axios.get("http://localhost:5172/admin/payhd"),
-            ]);
-            setData(descriptionResponse.data);
-            setData1(productsResponse.data);
-            // setData2(payhdResponse.data);
-        } catch (error) {
-            console.error("Error fetching data", error);
-        }
+    const fetchAPI1 = async () => {
+        const response = await axios.get("http://localhost:5172/admin/get-category")
+        setData1(response.data)
     };
     const mergedData = data.map(user => {
-        const account = data1.find(acc => acc.idproduct === user.idproduct);
+        const account = data1.find(acc => acc.idcategory === user.idcategory);
         return { ...user, ...account };
     });
-    // console.log(mergedData)
+    console.log(mergedData)
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -50,30 +32,35 @@ export const DescriptionTable = () => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);
     };
-    const handleEdit = (iddescription) => {
-
-        const DescriptionToEdit = mergedData.find(product => product.iddescription === iddescription);
-        if (DescriptionToEdit) {
-            setSelectedDescription(DescriptionToEdit); // Lưu thông tin user vào state `selectedUser`
+    const handleEdit = (idproduct) => {
+        // Tìm user theo ID
+        console.log(idproduct)
+        const productToEdit = mergedData.find(product => product.idproduct === idproduct);
+        console.log(productToEdit)
+        if (productToEdit) {
+            setSelectedProduct(productToEdit); // Lưu thông tin user vào state `selectedUser`
             setModalShow(true); // Hiển thị modal để chỉnh sửa thông tin
         }
     };
     const handleModalClose = () => {
-        fetchData();
+        fetchAPI();
+        fetchAPI1();
         setModalShow(false);
-        setSelectedDescription(null);
+        setSelectedProduct(null);
     };
-    const [selectedDescription, setSelectedDescription] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const handleSelectAll = (e) => {
         if (e.target.checked) {
-            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.iddescription);
+            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idproduct);
             setSelectedEntries(allVisibleItems);
         } else {
             setSelectedEntries([]);
         }
     };
-
+    const handleNavigate = (idproduct) => {
+        navigate(`/admin/profile_user/${idproduct}`); // điều hướng tới URL động với userId
+    };
     const handleSelectItem = (idproduct) => {
         if (selectedEntries.includes(idproduct)) {
             setSelectedEntries(selectedEntries.filter(item => item !== idproduct));
@@ -85,20 +72,19 @@ export const DescriptionTable = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-description/${id}`);
+            await axios.delete(`http://localhost:5172/products/delete-productname/${id}`);
 
             // Optionally, fetch the updated data again
-            fetchData();
+            fetchAPI();
         } catch (error) {
             console.error("Error deleting product:", error);
         }
     };
 
     const filteredData = mergedData.filter(item =>
-        item.title_description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.sub_description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.img_description.toLowerCase().includes(searchTerm.toLowerCase())
+        item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
@@ -116,6 +102,7 @@ export const DescriptionTable = () => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
     };
+
     const renderPagination = () => {
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -138,14 +125,14 @@ export const DescriptionTable = () => {
                 key="first"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAnglesLeft} /> {/* << */}
+                <i className='bx bx-chevrons-left' ></i> /> {/* << */}
             </Pagination.First>,
 
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAngleLeft} /> {/* < */}
+                <i className='bx bx-chevron-left'></i> {/* < */}
             </Pagination.Prev>
         );
 
@@ -156,7 +143,7 @@ export const DescriptionTable = () => {
             }
             if (totalPages > 5) {
                 paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
                 </Pagination.Ellipsis>);
                 paginationItems.push(addPageButton(totalPages));
             }
@@ -165,7 +152,7 @@ export const DescriptionTable = () => {
         else if (currentPage >= totalPages - 2) {
             paginationItems.push(addPageButton(1));
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             for (let i = totalPages - 4; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
@@ -175,7 +162,7 @@ export const DescriptionTable = () => {
         else {
             paginationItems.push(addPageButton(1)); // Trang đầu tiên
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
 
             const startPage = currentPage - 1; // Trang trước
@@ -186,7 +173,7 @@ export const DescriptionTable = () => {
             }
 
             paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
         }
@@ -197,23 +184,22 @@ export const DescriptionTable = () => {
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAngleRight} /> {/* > */}
+                <i className='bx bx-chevron-right' ></i> {/* > */}
             </Pagination.Next>,
 
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAnglesRight} /> {/* >> */}
+                <i className='bx bx-chevrons-right' ></i> {/* >> */}
             </Pagination.Last>
         );
 
         return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
     };
     useEffect(() => {
-        // fetchAPI();
-        // fetchAPI1();
-        fetchData();
+        fetchAPI();
+        fetchAPI1();
     }, []);
 
     return (
@@ -223,13 +209,13 @@ export const DescriptionTable = () => {
                     <div className="card-header flex-column flex-md-row pb-0">
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <div className="head-label text-center">
-                                <h5 className="card-title mb-0">Description DataTable</h5>
+                                <h5 className="card-title mb-0">Product DataTable</h5>
                             </div>
                             <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                 <div className="dt-buttons btn-group flex-wrap">
                                     <div>
                                         <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }} onClick={() => setModalShow(true)}>
-                                            <FontAwesomeIcon icon={faPlus} style={{ marginRight: 10 }} />
+                                            <i className='bx bx-plus me-2' ></i>
                                             Add New Record
                                         </Button>
                                     </div>
@@ -282,9 +268,11 @@ export const DescriptionTable = () => {
                                 />
                             </th>
                             <th>Product Name</th>
-                            <th>Title Description</th>
-                            <th>Sub Description</th>
-                            <th>Img Description</th>
+                            <th>Brand</th>
+                            {/* <th>Email</th> */}
+                            {/* <th>Role</th> */}
+                            <th>Category</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -293,8 +281,8 @@ export const DescriptionTable = () => {
                                 <td>
                                     <Form.Check
                                         type="checkbox"
-                                        checked={selectedEntries.includes(item.iddescription)}
-                                        onChange={() => handleSelectItem(item.iddescription)}
+                                        checked={selectedEntries.includes(item.idproduct)}
+                                        onChange={() => handleSelectItem(item.idproduct)}
                                     />
                                 </td>
                                 <td>
@@ -307,13 +295,13 @@ export const DescriptionTable = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item.title_description}</td>
-                                <td>{item.sub_description}</td>
-                                <td>{item.img_description}</td>
-
+                                <td>{item.brand}</td>
+                                <td>{item.category_name}</td>
+                                {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
+                                <td>{item.phone_number}</td> */}
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.iddescription)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.iddescription)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faTrash} /></Button>
+                                    <Button variant="link" onClick={() => handleEdit(item.idproduct)} style={{ marginLeft: 'auto' }}><i className='bx bx-edit' ></i></Button>
+                                    <Button variant="link" onClick={() => handleDelete(item.idproduct)} style={{ marginLeft: 'auto' }}><i className='bx bx-trash'></i></Button>
                                 </td>
                             </tr>
                         ))}
@@ -337,17 +325,16 @@ export const DescriptionTable = () => {
                         <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
                             {renderPagination()}
                         </div>
-                        <DescriptionForm
+                        <ProductForm
                             show={modalShow}
                             // onHide={() => setModalShow(false)}
                             onHide={handleModalClose}
                             onReload='a'
-                            description={selectedDescription}
+                            product={selectedProduct}
                         />
                     </div>
                 </div>
             </div>
         </div>
-
     );
 };

@@ -1,20 +1,5 @@
 import React, { useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
-import {
-    faPenToSquare,
-    faPlus,
-    faTrash,
-    faAngleLeft,
-    faAngleRight,
-    faAnglesLeft,
-    faAnglesRight,
-    faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-    faAddressBook
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import "./DataTables.css"; // Add custom styling here
 
 export const DataTables = () => {
     const [data, setData] = useState([
@@ -272,14 +257,14 @@ export const DataTables = () => {
                 key="first"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAnglesLeft} /> {/* << */}
+                <i className='bx bx-chevrons-left' ></i> {/* << */}
             </Pagination.First>,
 
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAngleLeft} /> {/* < */}
+                <i className='bx bx-chevron-left'></i> {/* < */}
             </Pagination.Prev>
         );
 
@@ -290,7 +275,7 @@ export const DataTables = () => {
             }
             if (totalPages > 5) {
                 paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
                 </Pagination.Ellipsis>);
                 paginationItems.push(addPageButton(totalPages));
             }
@@ -299,7 +284,7 @@ export const DataTables = () => {
         else if (currentPage >= totalPages - 2) {
             paginationItems.push(addPageButton(1));
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             for (let i = totalPages - 4; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
@@ -309,7 +294,7 @@ export const DataTables = () => {
         else {
             paginationItems.push(addPageButton(1)); // Trang đầu tiên
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
 
             const startPage = currentPage - 1; // Trang trước
@@ -320,7 +305,7 @@ export const DataTables = () => {
             }
 
             paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
         }
@@ -331,14 +316,14 @@ export const DataTables = () => {
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAngleRight} /> {/* > */}
+                <i className='bx bx-chevron-right' ></i> {/* > */}
             </Pagination.Next>,
 
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAnglesRight} /> {/* >> */}
+                <i className='bx bx-chevrons-right' ></i> {/* >> */}
             </Pagination.Last>
         );
 
@@ -387,7 +372,7 @@ export const DataTables = () => {
                                     </div>
                                     <div>
                                         <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }}>
-                                            <FontAwesomeIcon icon={faPlus} style={{ marginRight: 10 }} />
+                                            <i className='bx bx-plus me-2' ></i>
                                             Add New Record
                                         </Button>
                                     </div>
@@ -472,8 +457,8 @@ export const DataTables = () => {
                                 <td>{item.salary}</td>
                                 <td>{renderStatusBadge(item.status)}</td>
                                 <td>
-                                    <Button variant="link"><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                                    <Button variant="link"><FontAwesomeIcon icon={faTrash} /></Button>
+                                    <Button variant="link"><i className='bx bx-edit' ></i></Button>
+                                    <Button variant="link"><i className='bx bx-trash'></i></Button>
                                 </td>
                             </tr>
                         ))}
@@ -630,7 +615,7 @@ export const DataTabless = () => {
                             <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                 <div className="dt-buttons btn-group flex-wrap">
                                     <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }}>
-                                        <FontAwesomeIcon icon={faPlus} style={{ marginRight: 10 }} />
+                                        <i className='bx bx-plus me-2' ></i>
                                         Add New Record
                                     </Button>
                                 </div>
@@ -712,8 +697,8 @@ export const DataTabless = () => {
                                 <td>{item.salary}</td>
                                 <td>{renderStatusBadge(item.status)}</td>
                                 <td>
-                                    <Button variant="link"><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                                    <Button variant="link"><FontAwesomeIcon icon={faTrash} /></Button>
+                                    <Button variant="link"><i className='bx bx-edit' ></i></Button>
+                                    <Button variant="link"><i className='bx bx-trash'></i></Button>
                                 </td>
                             </tr>
                         ))}

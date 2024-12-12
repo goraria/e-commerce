@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faBuilding,
-    faCheck,
-    faCity,
-    faFlag,
-    faGlobe,
-    faPlus,
-    faRoad,
-    faTrash,
-    faUser,
-    faXmark
-} from "@fortawesome/free-solid-svg-icons";
+
 import axios from "axios";
 import SaveChange from "../notify/SaveChange.jsx";
 
@@ -132,7 +120,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Fullname</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="fullname">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -148,7 +136,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Username</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="username">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -166,7 +154,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Phone</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="phone">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -182,7 +170,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="email">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -200,7 +188,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Address</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="address">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -216,7 +204,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Voucher</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="voucher">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -234,7 +222,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Date</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="date">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -250,7 +238,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Price</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="price">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -266,7 +254,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                 <Form.Label>Status</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="status">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         readOnly
@@ -285,7 +273,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                                     <Form.Label>Date</Form.Label>
                                     <InputGroup hasValidation>
                                         <InputGroup.Text id="date">
-                                            <FontAwesomeIcon icon={faBuilding}/>
+                                            <i className='bx bx-buildings' ></i>
                                         </InputGroup.Text>
                                         <Form.Control
                                             readOnly
@@ -305,11 +293,11 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <FontAwesomeIcon icon={faXmark} className="me-2" />
+                        <i className='bx bx-x' ></i>
                         <span>Close</span>
                     </Button>
                     <Button onClick={onHide} variant="primary">
-                        <FontAwesomeIcon icon={faXmark} className="me-2"/>
+                        <i className='bx bx-x me-2' ></i>
                         <span>Close</span>
                     </Button>
                 </Modal.Footer>

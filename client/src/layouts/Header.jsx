@@ -11,14 +11,6 @@ import {
     DropdownButton,
     ButtonGroup,
 } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faShoppingCart,
-    faUser,
-    faSearch,
-    faBarsProgress,
-    faHome,
-} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 import DropdownConfig from "../components/button/DropdownConfig.jsx";
@@ -34,7 +26,7 @@ import Outbar from "./Outbar.jsx";
 const dropdownContains = [
     {
         id: 1,
-        title: <FontAwesomeIcon icon={faShoppingCart} />,
+        // title: <FontAwesomeIcon icon={faShoppingCart} />,
         align: "end",
         className: "ms-2 me-2",
         item: [
@@ -45,7 +37,7 @@ const dropdownContains = [
     },
     {
         id: 2,
-        title: <FontAwesomeIcon icon={faUser} />,
+        // title: <i className='bx bx-user' ></i>,
         align: "end",
         className: "",
         item: [
@@ -674,7 +666,7 @@ const Header = () => {
             {/*                            as={ButtonGroup}*/}
             {/*                            align={{ lg: "end" }}*/}
             {/*                            variant={'primary'}*/}
-            {/*                            title={<FontAwesomeIcon icon={faUser} />}*/}
+            {/*                            title={<i className='bx bx-user' ></i>}*/}
             {/*                            className="">*/}
             {/*                            <NavDropdown.Item as={Link} to={"/user/profile"}>Profile</NavDropdown.Item>*/}
             {/*                            <NavDropdown.Item as={Link} to={"/user/address"}>Address</NavDropdown.Item>*/}
@@ -687,7 +679,7 @@ const Header = () => {
             {/*                            as={ButtonGroup}*/}
             {/*                            align={{ lg: "end" }}*/}
             {/*                            variant={'primary'}*/}
-            {/*                            title={<FontAwesomeIcon icon={faUser} />}*/}
+            {/*                            title={<i className='bx bx-user' ></i>}*/}
             {/*                            className="">*/}
             {/*                            <NavDropdown.Item as={Link} to={"/admin/profile"}>Profile</NavDropdown.Item>*/}
             {/*                            <NavDropdown.Divider />*/}
@@ -698,7 +690,7 @@ const Header = () => {
             {/*                            as={ButtonGroup}*/}
             {/*                            align={{ lg: "end" }}*/}
             {/*                            variant={'primary'}*/}
-            {/*                            title={<FontAwesomeIcon icon={faUser} />}*/}
+            {/*                            title={<i className='bx bx-user' ></i>}*/}
             {/*                            className="">*/}
             {/*                            <NavDropdown.Item as={Link} to={"/login"}>Log in</NavDropdown.Item>*/}
             {/*                            <NavDropdown.Item as={Link} to={"/register"}>Sign up</NavDropdown.Item>*/}

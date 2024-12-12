@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import {ButtonGroup, DropdownButton, DropdownItem, DropdownMenu, NavDropdown} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 
 const dItems = [
     {id: 1, title: "", align: 'end-or-start', item: [

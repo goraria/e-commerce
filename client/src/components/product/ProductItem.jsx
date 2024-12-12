@@ -3,10 +3,6 @@ import React, { Component } from "react";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Card } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalfAlt, faCartPlus } from '@fortawesome/free-solid-svg-icons';
-import { faStar as faStarEmpty } from '@fortawesome/free-regular-svg-icons';
-import { noAuto } from "@fortawesome/fontawesome-svg-core"
 import jp from '../../assets/images/jp.jpeg'
 import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
 
@@ -154,44 +150,8 @@ const ProductItem = (product, state) => {
     const averageScore = totalScore / ratings.length;
     const cardWidth = state;
     const imageHeight = (1 / 8) * cardWidth;
+
     return (
-        // <Card style={{ border: 'none', backgroundColor: '#f8f9fa', borderRadius: 10,height:cardWidth*6/5 , width: cardWidth ,objectFit: 'cover' }}>
-        //     <Link to={`/product?id=${obj.idproduct}`} style={{ textDecoration: 'none' }}>
-        //         <Card.Img variant="top" src = {products.product_image}  style={{  width: '100%', height: '100%', objectFit: 'cover' }} />
-        //     </Link>
-        //     <Card.Body>
-        //         {/* Price and Name in the same line */}
-        //         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        //             <Card.Title style={{
-        //                 marginBottom: '0',
-        //                 whiteSpace: 'nowrap',
-        //                 overflow: 'hidden',
-        //                 textOverflow: 'ellipsis'
-        //             }}>
-        //                 {products.product_name}
-        //             </Card.Title>
-        //             <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>${configurations.price}</span>
-        //         </div>
-        //
-        //         {/* Truncated Description */}
-        //         <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        //             {descriptions.title_description}
-        //         </Card.Text>
-        //
-        //         {/* Rating and Buy Button */}
-        //         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        //             {/* Rating Section */}
-        //             <div style={{ color: '#f39c12', fontSize: '1.2rem' }}>
-        //                 {renderStars(averageScore)}
-        //             </div>
-        //             {/* Buy Button */}
-        //             <Button variant="primary" onClick={handleAddToCart}>
-        //                 <FontAwesomeIcon className="me-2" icon={faCartPlus}/>
-        //                 <span>Buy now</span>
-        //             </Button>
-        //         </div>
-        //     </Card.Body>
-        // </Card>
         <>
             <div className="card border-0 bg-light rounded-3" style={{height: cardWidth * 6 / 5, width: cardWidth}}>
                 <a href={`/product?id=${obj.idproduct}`} style={{textDecoration: 'none'}}>

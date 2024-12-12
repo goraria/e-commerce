@@ -3,7 +3,6 @@ import Sidebar from './Sidebar';
 import Activitybar from "./Activitybar.jsx";
 import Navbar from './Navbar';
 import Copyright from './Copyright.jsx';
-import {faGift, faHistory, faMapPin, faUser} from "@fortawesome/free-solid-svg-icons";
 
 const menu = [
     {
@@ -11,7 +10,7 @@ const menu = [
         "items": [
             {
                 "text": "Dashboard",
-                "icon": "bx bx-home",
+                "icon": "z",
                 "available": true,
                 "link": "/user"
             },

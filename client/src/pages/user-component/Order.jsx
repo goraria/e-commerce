@@ -150,7 +150,7 @@ const Order = () => {
                             <div className="container d-flex py-0 px-1">
                                 <h2 className="m-0">Order</h2>
                                 {/*<Button variant="primary" style={{marginLeft: 'auto'}}>*/}
-                                {/*    <FontAwesomeIcon icon={faPlus} className="me-2"/>*/}
+                                {/*    <i className='bx bx-plus me-2' ></i>*/}
                                 {/*    <span>Thêm sản phẩm</span>*/}
                                 {/*</Button>*/}
                             </div>

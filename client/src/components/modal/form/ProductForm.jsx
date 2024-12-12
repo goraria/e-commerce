@@ -2,21 +2,7 @@ import axios from "axios";
 import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faBuilding,
-    faCheck,
-    faCity,
-    faFlag,
-    faGlobe,
-    faPlus,
-    faRoad,
-    faTrash,
-    faUser,
-    faXmark,
-    faPhone,
-    faMailBulk
-} from "@fortawesome/free-solid-svg-icons";
+
 export const ProductForm = ({ product, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -186,7 +172,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                                 <Form.Label>Product Name</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="product_name">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -204,7 +190,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                                 <Form.Label>Brand</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="brand">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -222,7 +208,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                                 <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="email">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="email"
@@ -242,7 +228,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                                 <Form.Label>Category</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="category_name">
-                                        <FontAwesomeIcon icon={faPhone} />
+                                        <i className='bx bxs-phone' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -265,27 +251,27 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <FontAwesomeIcon icon={faXmark} className="me-2" />
+                        <i className='bx bx-x' ></i>
                         <span>Close</span>
                     </Button>
                     {/*<Button type="submit" variant="info"*/}
                     {/*        onClick={handleSubmit}> /!*onClick={handleSubmit, openConfirmModal}*!/*/}
-                    {/*    <FontAwesomeIcon icon={faCheck} className="me-2"/>*/}
+                    {/*    <i className='bx bx-check me-2' ></i>*/}
                     {/*    <span>Save changes</span>*/}
                     {/*</Button>*/}
                     {product ?
                         <>
                             <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
-                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                <i className='bx bx-trash' ></i>
                                 <span>Delete Product</span>
                             </Button>
                             <Button onClick={handleInvalid} variant="info">
-                                <FontAwesomeIcon icon={faCheck} className="me-2" />
+                                <i className='bx bx-check' ></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <FontAwesomeIcon icon={faPlus} className="me-2" />
+                                <i className='bx bx-plus' ></i>
                                 <span>Create Product</span>
                             </Button>
                         </>

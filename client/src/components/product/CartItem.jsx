@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Image, Form, Button } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
 
 const CardItem = ({ Item, onCheckboxChange, onRemoveItem }) => {
@@ -117,8 +115,8 @@ const CardItem = ({ Item, onCheckboxChange, onRemoveItem }) => {
                     <h6>${default_config.price}</h6>
                 </Col>
                 <Col xs={12} md={2} className="d-flex align-items-center justify-content-center justify-content-md-start">
-                    <Button variant="light">
-                        <FontAwesomeIcon icon={faMinus} onClick={() => handleQuantityChange(quantity - 1)} />
+                    <Button variant="light" onClick={() => handleQuantityChange(quantity - 1)}>
+                        <i className='bx bx-minus'></i>
                     </Button>
                     <Form className="d-flex align-items-center justify-content-center mx-2">
                         <Form.Control
@@ -130,11 +128,11 @@ const CardItem = ({ Item, onCheckboxChange, onRemoveItem }) => {
                             style={{ width: 56, textAlign: "center" }}
                         />
                     </Form>
-                    <Button variant="light">
-                        <FontAwesomeIcon icon={faPlus} onClick={() => handleQuantityChange(quantity + 1)} />
+                    <Button variant="light" onClick={() => handleQuantityChange(quantity + 1)}>
+                        <i className='bx bx-plus'></i>
                     </Button>
                     <Button variant="light" onClick={handleRemoveItem}>
-                        <FontAwesomeIcon icon={faTrash} />
+                        <i className='bx bx-trash'></i>
                     </Button>
                 </Col>
             </div>

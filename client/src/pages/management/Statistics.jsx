@@ -1,14 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Badge, Button, Dropdown, Form, Pagination, Table} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faAngleLeft,
-    faAngleRight,
-    faAnglesLeft,
-    faAnglesRight,
-    faEllipsis, faEye, faPenToSquare,
-    faPlus, faTrash
-} from "@fortawesome/free-solid-svg-icons";
 import Calendar from "react-calendar";
 import axios from "axios";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
@@ -289,20 +280,25 @@ export const Statistics = () => {
 
     const renderStatusBadge = (status) => {
         switch (status) {
-            case "Delivered":
+            case 5: // "Delivered"
                 return <Badge bg="label-success">Delivered</Badge>;
-            case "Ordered":
+            case 0: // "Ordered"
                 return <Badge bg="label-warning">Ordered</Badge>;
-            case "Delivering":
+            case 3: // "Delivering"
                 return <Badge bg="label-primary">Delivering</Badge>;
-            case "Paid":
+            case 1: // "Paid"
                 return <Badge bg="label-info">Paid</Badge>;
-            case "Rejected":
+            case 6: // "Rejected"
                 return <Badge bg="label-danger">Rejected</Badge>;
+            case 2: // "Arrival"
+                return <Badge bg="label-dark">Arrival</Badge>;
+            case 4: // "Arrival"
+                return <Badge bg="label-secondary">Arrival</Badge>;
             default:
-                return <Badge bg="label-secondary">{status}</Badge>;
+                return <Badge bg="label-light">{status}</Badge>;
         }
     };
+
     const handleOpenModal = (item) => {
         setModalData(item); // Cập nhật dữ liệu cho modal
         setShowModal(true);  // Mở modal
@@ -317,15 +313,75 @@ export const Statistics = () => {
                 <div className="card-datatable table-responsive">
                     <div className="dataTables_wrapper dt-bootstrap5 no-footer">
                         <div className="card-header flex-column flex-md-row pb-0">
-                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                <div className="head-label text-center">
-                                    <h5 className="card-title mb-0">Statistics</h5>
+                            <div className="d-flex justify-content-between align-items-center mb-4">
+                                {/*<div className="head-label text-center">*/}
+                                {/*    <h5 className="card-title mb-0">Statistics</h5>*/}
+                                {/*</div>*/}
+                                <div className="col-sm-12 col-md-6 d-flex">
+                                    <div
+                                        className="dataTables_filter mb-0 mb-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0 me-3"> {/* col-sm-6 col-md-2 */}
+                                        <Form.Control
+                                            className="form-control"
+                                            type="search"
+                                            placeholder="Search..."
+                                            value={searchTerm}
+                                            onChange={handleSearch}
+                                        />
+                                    </div>
+                                    <div className="dataTables_length">
+                                        <label className="d-flex justify-content-left align-items-center">
+                                            {/*<span>Show</span>*/}
+                                            <select
+                                                name="DataTables_Table_0_length"
+                                                aria-controls="DataTables_Table_0"
+                                                className="form-select" // ms-3 me-3
+                                                style={{width: "80px"}}
+                                                onChange={handleItemsPerPageChange}
+                                                value={itemsPerPage}
+                                            >
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                            </select>
+                                            {/*<span>entries</span>*/}
+                                        </label>
+                                    </div>
                                 </div>
+                                {/*<div className="col-lg-3 col-sm-6 col-12">*/}
+                                {/*    <small className="text-light fw-medium">Hidden arrow</small>*/}
+                                {/*    <div className="demo-inline-spacing">*/}
+                                {/*        <div className="btn-group">*/}
+                                {/*            <button aria-label='Click me'*/}
+                                {/*                    type="button"*/}
+                                {/*                    className="btn btn-primary dropdown-toggle hide-arrow"*/}
+                                {/*                    data-bs-toggle="dropdown"*/}
+                                {/*                    aria-expanded="false">*/}
+                                {/*                Hidden arrow*/}
+                                {/*            </button>*/}
+                                {/*            <ul className="dropdown-menu">*/}
+                                {/*                <li><a aria-label="dropdown action link" className="dropdown-item"*/}
+                                {/*                       href="#">Action</a></li>*/}
+                                {/*                <li><a aria-label="dropdown action link" className="dropdown-item"*/}
+                                {/*                       href="#">Another*/}
+                                {/*                    action</a></li>*/}
+                                {/*                <li><a aria-label="dropdown action link" className="dropdown-item"*/}
+                                {/*                       href="#">Something*/}
+                                {/*                    else here</a></li>*/}
+                                {/*                <li>*/}
+                                {/*                    <hr className="dropdown-divider"/>*/}
+                                {/*                </li>*/}
+                                {/*                <li><a aria-label="dropdown action link" className="dropdown-item"*/}
+                                {/*                       href="#">Separated*/}
+                                {/*                    link</a></li>*/}
+                                {/*            </ul>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                                 <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                     <div className="dt-buttons btn-group flex-wrap">
                                         <div style={{position: 'relative'}}
                                              ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
-                                            <Button variant="outline-primary" className="me-2"
+                                            <Button variant="outline-primary" className="me-3"
                                                     onClick={handleFromDateClick} style={{width: 200}}>
                                                 From date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}
                                             </Button>
@@ -350,39 +406,39 @@ export const Statistics = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row mb-3">
-                                <div className="col-sm-12 col-md-6">
-                                    <div className="dataTables_length">
-                                        <label style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
-                                            {/*<span>Show</span>*/}
-                                            <select
-                                                name="DataTables_Table_0_length"
-                                                aria-controls="DataTables_Table_0"
-                                                className="form-select" // ms-3 me-3
-                                                style={{width: "80px"}}
-                                                onChange={handleItemsPerPageChange}
-                                                value={itemsPerPage}
-                                            >
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                            </select>
-                                            {/*<span>entries</span>*/}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div
-                                    className="dataTables_filter mb-0 mb-md-6 col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0">
-                                    <Form.Control
-                                        className="form-control"
-                                        type="search"
-                                        placeholder="Search..."
-                                        value={searchTerm}
-                                        onChange={handleSearch}
-                                        style={{width: "410px"}}
-                                    />
-                                </div>
-                            </div>
+                            {/*<div className="row mb-3">*/}
+                            {/*    <div className="col-sm-12 col-md-6">*/}
+                            {/*        <div className="dataTables_length">*/}
+                            {/*            <label style={{display: "flex", justifyContent: "left", alignItems: "center"}}>*/}
+                            {/*                /!*<span>Show</span>*!/*/}
+                            {/*                <select*/}
+                            {/*                    name="DataTables_Table_0_length"*/}
+                            {/*                    aria-controls="DataTables_Table_0"*/}
+                            {/*                    className="form-select" // ms-3 me-3*/}
+                            {/*                    style={{width: "80px"}}*/}
+                            {/*                    onChange={handleItemsPerPageChange}*/}
+                            {/*                    value={itemsPerPage}*/}
+                            {/*                >*/}
+                            {/*                    <option value="10">10</option>*/}
+                            {/*                    <option value="25">25</option>*/}
+                            {/*                    <option value="50">50</option>*/}
+                            {/*                </select>*/}
+                            {/*                /!*<span>entries</span>*!/*/}
+                            {/*            </label>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*    <div*/}
+                            {/*        className="dataTables_filter mb-0 mb-md-6 col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0">*/}
+                            {/*        <Form.Control*/}
+                            {/*            className="form-control"*/}
+                            {/*            type="search"*/}
+                            {/*            placeholder="Search..."*/}
+                            {/*            value={searchTerm}*/}
+                            {/*            onChange={handleSearch}*/}
+                            {/*            style={{width: "410px"}}*/}
+                            {/*        />*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                         </div>
                         <Table hover responsive className="table border-top dataTable no-footer dtr-column">
                             <thead style={{height: 64}}>
@@ -424,7 +480,7 @@ export const Statistics = () => {
                                     <td>{item.account?.username || "N/A"}</td>
                                     <td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>
                                     <td>{item.price ? item.price : "$?"}</td>
-                                    <td>{renderStatusBadge(item.status === 1 ? 'Paid' : 'Ordered')}</td>
+                                    <td>{renderStatusBadge(item.status)}</td>
                                     <td>
                                         <Button variant="link" onClick={() => handleItemClick(item)}>
                                             <i className='bx bx-bullseye'></i>
@@ -437,15 +493,20 @@ export const Statistics = () => {
                         <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                             <div className="row">
                                 <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
-                                    <div className="dataTables_info"
-                                         style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                                    <div className="dataTables_info d-flex justify-content-start align-items-center">
                                         <div className="text-center mt-2">
-                                            {`Showing from ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredData.length)} of ${filteredData.length} entries`}
+                                            {/*{`Showing from ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredData.length)} of ${filteredData.length} entries`}*/}
+                                            <span>Showing from </span>
+                                            <span className="text-primary">{indexOfFirstItem + 1}</span>
+                                            <span> to </span>
+                                            <span className="text-primary">{Math.min(indexOfLastItem, filteredData.length)}</span>
+                                            <span> of </span>
+                                            <span className="text-primary">{filteredData.length}</span>
+                                            <span> entries</span>
                                         </div>
                                     </div>
                                     <div className="ms-2 me-2"></div>
-                                    <div className="dataTables_select"
-                                         style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                                    <div className="dataTables_select d-flex justify-content-start align-items-center">
                                         <div className="text-center mt-2">
                                             Selected {selectedEntries.length} entries
                                         </div>

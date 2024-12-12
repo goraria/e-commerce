@@ -1,50 +1,41 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faCreditCard, faCircleCheck, faTruck, faShieldAlt, faShoppingBag, faMoneyBill,
-    faMoneyCheck, faMoneyCheckDollar, faCircleInfo, faExpand, faRotate
-} from '@fortawesome/free-solid-svg-icons';
-import {
-    faThreads, faFacebook, faGithub, faInstagram, faPinterest, faTwitter, faYoutube,
-    faWhatsapp, faReddit, faSnapchat, faSteam, faTiktok, faTelegram, faCcVisa, faCcPaypal, faCcMastercard
-} from '@fortawesome/free-brands-svg-icons';
 
 const paymentIcons = [
-    { id: 1, name: "Banking", icon: faMoneyCheckDollar, box: "bxs-dollar-circle", link: "#" },
-    { id: 2, name: "Cash", icon: faMoneyBill, box: "bx-money", link: "#" },
-    { id: 3, name: "ATM Card", icon: faCreditCard, box: "bx-credit-card-front", link: "#" },
-    { id: 4, name: "PayPal", icon: faCcPaypal, box: "bxl-paypal", link: "#" },
-    { id: 5, name: "VISA Card", icon: faCcVisa, box: "bxl-visa", link: "#" },
-    { id: 6, name: "Mastercard", icon: faCcMastercard, box: "bx-credit-card", link: "#" },
+    { id: 1, name: "Banking", box: "bxs-dollar-circle", link: "#" },
+    { id: 2, name: "Cash", box: "bx-money", link: "#" },
+    { id: 3, name: "ATM Card", box: "bx-credit-card-front", link: "#" },
+    { id: 4, name: "PayPal", box: "bxl-paypal", link: "#" },
+    { id: 5, name: "VISA Card", box: "bxl-visa", link: "#" },
+    { id: 6, name: "Mastercard", box: "bx-credit-card", link: "#" },
 ]
 
 const usefulInfo = [
-    { id: 1, name: "Warranty Policy", icon: faCircleCheck, box: "bx-check-circle", link: "#" },
-    { id: 2, name: "Return Policy", icon: faRotate, box: "bx-rotate-left", link: "#" },
-    { id: 3, name: "Shipping Policy", icon: faTruck, box: "bx-package", link: "#" },
-    { id: 4, name: "Privacy Policy", icon: faShieldAlt, box: "bx-shield-quarter", link: "#" },
-    { id: 5, name: "Payment Policy", icon: faMoneyCheck, box: "bx-wallet", link: "#" },
-    { id: 6, name: "Inspection Policy", icon: faExpand, box: "bx-expand", link: "#" },
-    { id: 7, name: "Online Shopping Guide", icon: faShoppingBag, box: "bx-planet", link: "#" },
-    { id: 8, name: "About Us", icon: faCircleInfo, box: "bx-info-circle", link: "/about" }
+    { id: 1, name: "Warranty Policy", box: "bx-check-circle", link: "#" },
+    { id: 2, name: "Return Policy", box: "bx-rotate-left", link: "#" },
+    { id: 3, name: "Shipping Policy", box: "bx-package", link: "#" },
+    { id: 4, name: "Privacy Policy", box: "bx-shield-quarter", link: "#" },
+    { id: 5, name: "Payment Policy", box: "bx-wallet", link: "#" },
+    { id: 6, name: "Inspection Policy", box: "bx-expand", link: "#" },
+    { id: 7, name: "Online Shopping Guide", box: "bx-planet", link: "#" },
+    { id: 8, name: "About Us", box: "bx-info-circle", link: "/about" }
 ];
 
 const socialIcons = [
-    { id: 1, name: "Github", icon: faGithub, box: "bxl-github", link: "https://github.com/goraria/e-commerce" },
-    { id: 2, name: "Facebook", icon: faFacebook, box: "bxl-facebook-circle", link: "#" },
-    { id: 3, name: "Youtube", icon: faYoutube, box: "bxl-youtube", link: "#" },
-    { id: 4, name: "Tiktok", icon: faTiktok, box: "bxl-tiktok", link: "#" },
-    { id: 5, name: "Twitter", icon: faTwitter, box: "bxl-twitter", link: "#" },
-    // { id: 6, name: "Threads", icon: faThreads, box: "bxl-thread", link: "#" },
-    { id: 7, name: "Instagram", icon: faInstagram, box: "bxl-instagram", link: "#" },
-    { id: 8, name: "Pinterest", icon: faPinterest, box: "bxl-pinterest", link: "#" },
-    { id: 9, name: "Whatsapp", icon: faWhatsapp, box: "bxl-whatsapp", link: "#" },
-    { id: 10, name: "Reddit", icon: faReddit, box: "bxl-reddit", link: "#" },
-    { id: 11, name: "Steam", icon: faSteam, box: "bxl-steam", link: "#" },
-    { id: 12, name: "Snapchat", icon: faSnapchat, box: "bxl-snapchat", link: "#" },
-    { id: 13, name: "Telegram", icon: faTelegram, box: "bxl-telegram", link: "#" }
+    { id: 1, name: "Github", box: "bxl-github", link: "https://github.com/goraria/e-commerce" },
+    { id: 2, name: "Facebook", box: "bxl-facebook-circle", link: "#" },
+    { id: 3, name: "Youtube", box: "bxl-youtube", link: "#" },
+    { id: 4, name: "Tiktok", box: "bxl-tiktok", link: "#" },
+    { id: 5, name: "Twitter", box: "bxl-twitter", link: "#" },
+    // { id: 6, name: "Threads" box: "bxl-thread", link: "#" },
+    { id: 7, name: "Instagram", box: "bxl-instagram", link: "#" },
+    { id: 8, name: "Pinterest", box: "bxl-pinterest", link: "#" },
+    { id: 9, name: "Whatsapp", box: "bxl-whatsapp", link: "#" },
+    { id: 10, name: "Reddit", box: "bxl-reddit", link: "#" },
+    { id: 11, name: "Steam", box: "bxl-steam", link: "#" },
+    { id: 12, name: "Snapchat", box: "bxl-snapchat", link: "#" },
+    { id: 13, name: "Telegram", box: "bxl-telegram", link: "#" }
 ];
 
 const FooterLink = ({ item }) => {

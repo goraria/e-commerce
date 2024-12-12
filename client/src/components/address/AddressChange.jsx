@@ -1,13 +1,8 @@
 import React, {Component, useEffect, useState} from "react";
 import {Alert, Button, Card, Col, Container, Form, Image, InputGroup, Nav, Row} from "react-bootstrap";
 import jp from "../assets/images/jp.jpeg";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faAt, faBullseye, faCity, faGift, faHistory, faLocationDot, faMapMarkerAlt, faMapPin,
-    faPhone, faQuestionCircle, faSignOutAlt, faStar, faUser
-} from "@fortawesome/free-solid-svg-icons";
 import UserSidebar from "./UserSidebar";
-import AddressList from "../../../pages/user-infomation/AddressList.jsx";
+import AddressList from "../../pages/user-infomation/AddressList.jsx";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
@@ -61,7 +56,7 @@ function AddressChange() {
                         <Form.Label>Tower</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text id="tower">
-                                <FontAwesomeIcon icon={faAt}/>
+                                <i className='bx bx-at' ></i>
                             </InputGroup.Text>
                             <Form.Control
                                 required
@@ -78,7 +73,7 @@ function AddressChange() {
                         <Form.Label>Street</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text id="street">
-                                <FontAwesomeIcon icon={faUser}/>
+                                <i className='bx bx-user' ></i>
                             </InputGroup.Text>
                             <Form.Control
                                 type="text"
@@ -95,7 +90,7 @@ function AddressChange() {
                         <Form.Label>District</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text id="district">
-                                <FontAwesomeIcon icon={faUser}/>
+                                <i className='bx bx-user' ></i>
                             </InputGroup.Text>
                             <Form.Control
                                 type="text"
@@ -114,7 +109,7 @@ function AddressChange() {
                         <Form.Label>City</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text id="city">
-                                <FontAwesomeIcon icon={faCity}/>
+                                <i className='bx bxs-city' ></i>
                             </InputGroup.Text>
                             <Form.Control
                                 type="text"
@@ -132,7 +127,7 @@ function AddressChange() {
                         <Form.Label>State</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text id="state">
-                                <FontAwesomeIcon icon={faUser}/>
+                                <i className='bx bx-user' ></i>
                             </InputGroup.Text>
                             <Form.Control
                                 type="text"
@@ -150,7 +145,7 @@ function AddressChange() {
                         <Form.Label>Country</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text id="country">
-                                <FontAwesomeIcon icon={faUser}/>
+                                <i className='bx bx-user' ></i>
                             </InputGroup.Text>
                             <Form.Control
                                 type="text"

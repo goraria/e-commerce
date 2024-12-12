@@ -3,16 +3,11 @@ import { Component } from "react";
 import {
     Container, Button, Form, ButtonGroup, DropdownButton, Dropdown, Row, Col, Card, Image, Stack, Carousel, Nav, Navbar
 } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faCreditCard, faCheck, faTruck, faShieldAlt, faShoppingBag, faMoneyBills, faLaptop, faKeyboard, faMouse
-} from '@fortawesome/free-solid-svg-icons';
-
 
 const clsifications = [
-    { category: "Laptop", icon: faLaptop, box: "bx-laptop", items: ['#a', '#b', '#c',] },
-    { category: "Mouse", icon: faMouse, box: "bx-mouse-alt", items: ['#action1', '#action1', '#action1',] },
-    { category: "Keyboard", icon: faKeyboard, box: "bxs-keyboard", items: ['#action1', '#action1', '#action1',] },
+    { category: "Laptop", box: "bx-laptop", items: ['#a', '#b', '#c',] },
+    { category: "Mouse", box: "bx-mouse-alt", items: ['#action1', '#action1', '#action1',] },
+    { category: "Keyboard", box: "bxs-keyboard", items: ['#action1', '#action1', '#action1',] },
 
 ]
 

@@ -1,11 +1,6 @@
 import React, { Component, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Container, Form, Image, InputGroup, Nav, Row } from "react-bootstrap";
 import jp from "../../assets/images/jp.jpeg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faAt, faBullseye, faCity, faGift, faHistory, faLocationDot, faMapMarkerAlt, faMapPin,
-    faPhone, faQuestionCircle, faSignOutAlt, faStar, faUser
-} from "@fortawesome/free-solid-svg-icons";
 import AccountInfo from "../user-infomation/AccountInfo";
 
 export const UserProfileid = () => {
@@ -21,7 +16,6 @@ export const UserProfileid = () => {
             <div className="row">
                 <div className="col-lg-10 mb-2 order-0">
                     <div className="card">
-
                         <Card
                             className="sticky-summary"
                             style={{
@@ -34,7 +28,6 @@ export const UserProfileid = () => {
                             }}>
                             <AccountInfo key={reloadAccountInfo} onReload={handleReloadAccountInfo} />
                         </Card>
-
                     </div>
                 </div>
             </div>
