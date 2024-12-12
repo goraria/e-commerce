@@ -4,6 +4,7 @@ import { Statistics } from "./management/Statistics.jsx";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'
 import '../components/calendar/calendar.css'
+import ToastBox from "../components/toast/ToastBox.jsx";
 
 // type ValuePiece = Date | null;
 //
@@ -20,6 +21,11 @@ export const DashboardPage = () => {
             <div className="row">
                 <div className="col-lg-12 mb-4 order-0">
                     <Statistics/>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-lg-12 mb-4 order-0">
+                    <ToastBox title="Notify" type="Info" position="Top right" message="Japtor"/>
                 </div>
             </div>
             <div className="row">

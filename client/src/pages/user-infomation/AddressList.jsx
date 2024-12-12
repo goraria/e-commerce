@@ -1,11 +1,9 @@
 import React, {Component, useEffect, useState} from "react";
 import {Button, Container} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 
-import AddressItem from "../../components/information/address/AddressItem.jsx";
+import AddressItem from "../../components/address/AddressItem.jsx";
 import AddressForm from "../../components/modal/form/AddressForm.jsx";
 import Notification from "../../components/bar-elements/Notification.jsx";
 import Message from "../../components/bar-elements/Message.jsx";

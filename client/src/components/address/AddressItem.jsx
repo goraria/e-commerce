@@ -1,16 +1,12 @@
 import React, {Component, useState} from "react";
 import {Container, Button, Form, Row, Col, Image, Card, InputGroup} from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faPlus, faMinus, faAt, faUser, faPhone, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
-import jp from "../../../assets/images/jp.jpeg";
-import UserSidebar from "../../../layouts/UserSidebar.jsx";
-import AccountInfo from "../../../pages/user-infomation/AccountInfo.jsx";
-import AddressForm from "../../modal/form/AddressForm.jsx";
+import jp from "../../assets/images/jp.jpeg";
+import AddressForm from "../modal/form/AddressForm.jsx";
 
-const AddressItem = (props, onReload) => {
+const AddressItem = ({ item, onReload }) => {
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [modalShow, setModalShow] = useState(false);
-    const { item } = props;
+    // const { item } = props;
 
     const handleCardClick = (address) => {
         setSelectedAddress(address);

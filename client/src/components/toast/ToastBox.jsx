@@ -1,26 +1,132 @@
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 
-const BellWarning = () => {
+const ToastBox = ({ title, type, position, message }) => {
     useEffect(() => {
         Toast();
     },[])
 
+    const chooseType = () => {
+        switch (type) {
+            case 'Primary':
+                return 'bg-primary';
+            case 'Secondary':
+                return 'bg-secondary';
+            case 'Success':
+                return 'bg-success';
+            case 'Danger':
+                return 'bg-danger';
+            case 'Warning':
+                return 'bg-warning';
+            case 'Info':
+                return 'bg-info';
+            case 'Dark':
+                return 'bg-dark';
+            default:
+                return 'bg-primary';
+        }
+    }
+
+    const choosePosition = () => {
+        switch (position) {
+            case 'Top left':
+                return 'top-0 start-0';
+            case 'Top center':
+                return 'top-0 start-50 translate-middle-x';
+            case 'Top right':
+                return 'top-0 end-0';
+            case 'Middle left':
+                return 'top-50 start-0 translate-middle-y';
+            case 'Middle center':
+                return 'top-50 start-50 translate-middle';
+            case 'Middle right':
+                return 'top-50 end-0 translate-middle-y';
+            case 'Bottom left':
+                return 'bottom-0 start-0';
+            case 'Bottom center':
+                return 'bottom-0 start-50 translate-middle-x';
+            case 'Bottom right':
+                return 'bottom-0 end-0';
+            default:
+                return 'top-0 end-0';
+        }
+    }
+
     return (
         <>
+            <div
+                className="bs-toast toast toast-placement-ex m-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-bs-delay="3000">
+                <div className="toast-header">
+                    <i className="bx bx-bell me-2"></i>
+                    <div className="me-auto fw-medium">{title}</div>
+                    <small>{type}</small>
+                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div className="toast-body">{message}</div>
+            </div>
+            {/* <!-- Toast with Placements --> */}
+
+            {/* <!-- Bootstrap Toasts with Placement --> */}
+            <div className="card mb-4">
+                <h5 className="card-header">Bootstrap Toasts Example With Placement</h5>
+                <div className="card-body">
+                    <div className="row gx-3 gy-2 align-items-center">
+                        <div className="col-md-3">
+                            <label className="form-label" htmlFor="selectTypeOpt">
+                                Type
+                            </label>
+                            <select id="selectTypeOpt" className="form-select color-dropdown" defaultValue={chooseType()}>
+                                <option value="bg-primary">Primary</option>
+                                <option value="bg-secondary">Secondary</option>
+                                <option value="bg-success">Success</option>
+                                <option value="bg-danger">Danger</option>
+                                <option value="bg-warning">Warning</option>
+                                <option value="bg-info">Info</option>
+                                <option value="bg-dark">Dark</option>
+                            </select>
+                        </div>
+                        <div className="col-md-3">
+                            <label className="form-label" htmlFor="selectPlacement">
+                                Placement
+                            </label>
+                            <select className="form-select placement-dropdown" id="selectPlacement" defaultValue={choosePosition()}>
+                                <option value="top-0 start-0">Top left</option>
+                                <option value="top-0 start-50 translate-middle-x">Top center</option>
+                                <option value="top-0 end-0">Top right</option>
+                                <option value="top-50 start-0 translate-middle-y">Middle left</option>
+                                <option value="top-50 start-50 translate-middle">Middle center</option>
+                                <option value="top-50 end-0 translate-middle-y">Middle right</option>
+                                <option value="bottom-0 start-0">Bottom left</option>
+                                <option value="bottom-0 start-50 translate-middle-x">Bottom center</option>
+                                <option value="bottom-0 end-0">Bottom right</option>
+                            </select>
+                        </div>
+                        <div className="col-md-3">
+                            <label className="form-label" htmlFor="showToastPlacement">
+                                &nbsp;
+                            </label>
+                            <button id="showToastPlacement" className="btn btn-primary d-block">
+                                Show Toast
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="card mb-4">
                 <h5 className="card-header">Bootstrap Toasts Styles</h5>
                 <div className="row g-0">
                     <div className="col-md-6 p-4">
                         <div className="text-light small fw-medium mb-3">Default</div>
                         <div className="toast-container position-relative">
-                            <div className="bs-toast toast fade show" role="alert" aria-live="assertive"
-                                 aria-atomic="true">
+                            <div className="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">White</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -34,10 +140,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Primary</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -51,10 +156,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Secondary</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -68,10 +172,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Success</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -85,10 +188,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Danger</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -102,10 +204,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Warning</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -119,10 +220,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Info</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -136,10 +236,9 @@ const BellWarning = () => {
                                 aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
-                                    <div className="me-auto fw-medium">Bootstrap</div>
+                                    <div className="me-auto fw-medium">Dark</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -152,14 +251,12 @@ const BellWarning = () => {
                         <div className="text-white small fw-medium mb-3">Translucent</div>
 
                         <div className="toast-container position-relative">
-                            <div className="bs-toast toast fade show" role="alert" aria-live="assertive"
-                                 aria-atomic="true">
+                            <div className="bs-toast toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
                                 <div className="toast-header">
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -175,8 +272,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -192,8 +288,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -209,8 +304,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -226,8 +320,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -243,8 +336,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -260,8 +352,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -277,8 +368,7 @@ const BellWarning = () => {
                                     <i className="bx bx-bell me-2"></i>
                                     <div className="me-auto fw-medium">Bootstrap</div>
                                     <small>11 mins ago</small>
-                                    <button type="button" className="btn-close" data-bs-dismiss="toast"
-                                            aria-label="Close"></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                                 <div className="toast-body">
                                     Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
@@ -288,8 +378,9 @@ const BellWarning = () => {
                     </div>
                 </div>
             </div>
+            {/* <!--/ Bootstrap Toasts Styles --> */}
         </>
     )
 }
 
-export default BellWarning
+export default ToastBox;

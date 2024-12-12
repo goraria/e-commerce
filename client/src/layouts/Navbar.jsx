@@ -1,6 +1,4 @@
 import getGreetingMessage from '../utils/greetingHandler';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome, faUser} from "@fortawesome/free-solid-svg-icons";
 import {Button, ButtonToolbar, Nav} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useState} from "react";

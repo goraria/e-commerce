@@ -2,19 +2,6 @@ import axios from "axios";
 import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faBuilding,
-    faCheck,
-    faCity,
-    faFlag,
-    faGlobe,
-    faPlus,
-    faRoad,
-    faTrash,
-    faUser,
-    faXmark
-} from "@fortawesome/free-solid-svg-icons";
 export const AccessoryForm = ({ address, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -176,7 +163,7 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>Tower</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="tower">
-                                        <FontAwesomeIcon icon={faBuilding} />
+                                        <i className='bx bx-buildings'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -194,7 +181,7 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>Street</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="street">
-                                        <FontAwesomeIcon icon={faRoad} />
+                                        <i className='bx bx-directions'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -212,7 +199,7 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>District</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="district">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -232,7 +219,7 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>City</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="city">
-                                        <FontAwesomeIcon icon={faCity} />
+                                        <i className='bx bxs-city'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -251,7 +238,7 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>State</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="state">
-                                        <FontAwesomeIcon icon={faFlag} />
+                                        <i className='bx bxs-flag-alt' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -270,7 +257,7 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>Country</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="country">
-                                        <FontAwesomeIcon icon={faGlobe} />
+                                        <i className='bx bx-globe' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -291,27 +278,22 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <FontAwesomeIcon icon={faXmark} className="me-2" />
+                        <i className='bx bx-x' ></i>
                         <span>Close</span>
                     </Button>
-                    {/*<Button type="submit" variant="info"*/}
-                    {/*        onClick={handleSubmit}> /!*onClick={handleSubmit, openConfirmModal}*!/*/}
-                    {/*    <FontAwesomeIcon icon={faCheck} className="me-2"/>*/}
-                    {/*    <span>Save changes</span>*/}
-                    {/*</Button>*/}
                     {address ?
                         <>
                             <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
-                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                <i className='bx bx-trash' ></i>
                                 <span>Delete Address</span>
                             </Button>
                             <Button onClick={handleInvalid} variant="info">
-                                <FontAwesomeIcon icon={faCheck} className="me-2" />
+                                <i className='bx bx-check' ></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <FontAwesomeIcon icon={faPlus} className="me-2" />
+                                <i className='bx bx-plus' ></i>
                                 <span>Create Address</span>
                             </Button>
                         </>

@@ -2,21 +2,7 @@ import axios from "axios";
 import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faBuilding,
-    faCheck,
-    faCity,
-    faFlag,
-    faGlobe,
-    faPlus,
-    faRoad,
-    faTrash,
-    faUser,
-    faXmark,
-    faPhone,
-    faMailBulk
-} from "@fortawesome/free-solid-svg-icons";
+
 export const UserForm = ({ user, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -168,11 +154,11 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                     </p> */}
                     <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={5} controlId="firstname">
+                            <Form.Group as={Col} md={6} controlId="firstname">
                                 <Form.Label>First Name</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="firstname">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -186,11 +172,11 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="lastname">
+                            <Form.Group as={Col} md={6} controlId="lastname">
                                 <Form.Label>Last Name</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="lastname">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -208,7 +194,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                                 <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="email">
-                                        <FontAwesomeIcon icon={faUser} />
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="email"
@@ -224,11 +210,11 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                             </Form.Group> */}
                         </Row>
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={5} controlId="phone_number">
+                            <Form.Group as={Col} md={6} controlId="phone_number">
                                 <Form.Label>Phone Number</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="phone_number">
-                                        <FontAwesomeIcon icon={faPhone} />
+                                        <i className='bx bxs-phone' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="tel"
@@ -242,11 +228,11 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="email">
+                            <Form.Group as={Col} md={6} controlId="email">
                                 <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="email">
-                                        <FontAwesomeIcon icon={faMailBulk} />
+                                        <i className='bx bx-envelope' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="email"
@@ -264,7 +250,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                                 <Form.Label>State</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="state">
-                                        <FontAwesomeIcon icon={faFlag} />
+                                        <i className='bx bxs-flag-alt' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -283,7 +269,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                                 <Form.Label>Country</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="country">
-                                        <FontAwesomeIcon icon={faGlobe} />
+                                        <i className='bx bx-globe' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -304,27 +290,27 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <FontAwesomeIcon icon={faXmark} className="me-2" />
+                        <i className='bx bx-x' ></i>
                         <span>Close</span>
                     </Button>
                     {/*<Button type="submit" variant="info"*/}
                     {/*        onClick={handleSubmit}> /!*onClick={handleSubmit, openConfirmModal}*!/*/}
-                    {/*    <FontAwesomeIcon icon={faCheck} className="me-2"/>*/}
+                    {/*    <i className='bx bx-check me-2' ></i>*/}
                     {/*    <span>Save changes</span>*/}
                     {/*</Button>*/}
                     {user ?
                         <>
                             {/* <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
-                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                <i className='bx bx-trash' ></i>
                                 <span>Delete Address</span>
                             </Button> */}
                             <Button onClick={handleInvalid} variant="info">
-                                <FontAwesomeIcon icon={faCheck} className="me-2" />
+                                <i className='bx bx-check' ></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <FontAwesomeIcon icon={faPlus} className="me-2" />
+                                <i className='bx bx-plus' ></i>
                                 <span>Create Address</span>
                             </Button>
                         </>

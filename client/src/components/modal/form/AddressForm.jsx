@@ -1,18 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faBuilding,
-    faCheck,
-    faCity,
-    faFlag,
-    faGlobe,
-    faPlus,
-    faRoad,
-    faTrash,
-    faUser,
-    faXmark
-} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import SaveChange from "../notify/SaveChange.jsx";
 
@@ -40,7 +27,10 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                 state: address.state || '',
                 country: address.country || ''
             });
-        } else {
+        }
+
+        if (!show) {
+            // Reset form data và trạng thái khi modal đóng
             setFormData({
                 tower: '',
                 street: '',
@@ -49,8 +39,10 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                 state: '',
                 country: ''
             });
+            setValidated(false);
+            setError(null);
         }
-    }, [address]);
+    }, [show]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -74,37 +66,6 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                 setValidated(true);
             }
         }
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            setValidated(true);
-            return;
-        }
-
-        try {
-            const token = localStorage.getItem('token');
-            const response = address ?
-                await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
-                await axios.post('http://localhost:5172/address/addition', formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-            if (response.status === 200 || response.status === 201) {
-                // alert(address ? 'Address updated successfully' : 'Address added successfully');
-                onHide();
-            }
-            onReload()
-        } catch (error) {
-            setError(error.response ? error.response.data.message : 'Failed to save address');
-        }
-        // setValidated(true);
     };
 
     const handleConfirmSave = async () => {
@@ -178,7 +139,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>Tower</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="tower">
-                                        <FontAwesomeIcon icon={faBuilding}/>
+                                        <i className='bx bx-buildings' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -196,7 +157,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>Street</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="street">
-                                        <FontAwesomeIcon icon={faRoad}/>
+                                        <i className='bx bx-map-alt'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -214,7 +175,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>District</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="district">
-                                        <FontAwesomeIcon icon={faUser}/>
+                                        <i className='bx bxs-directions'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -234,7 +195,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>City</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="city">
-                                        <FontAwesomeIcon icon={faCity}/>
+                                        <i className='bx bxs-city' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -253,7 +214,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>State</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="state">
-                                        <FontAwesomeIcon icon={faFlag}/>
+                                        <i className='bx bxs-flag-alt'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -272,7 +233,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                 <Form.Label>Country</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="country">
-                                        <FontAwesomeIcon icon={faGlobe}/>
+                                        <i className='bx bx-globe'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -293,27 +254,22 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <FontAwesomeIcon icon={faXmark} className="me-2" />
+                        <i className='bx bx-x' ></i>
                         <span>Close</span>
                     </Button>
-                    {/*<Button type="submit" variant="info"*/}
-                    {/*        onClick={handleSubmit}> /!*onClick={handleSubmit, openConfirmModal}*!/*/}
-                    {/*    <FontAwesomeIcon icon={faCheck} className="me-2"/>*/}
-                    {/*    <span>Save changes</span>*/}
-                    {/*</Button>*/}
                     {address ?
                         <>
                             <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
-                                <FontAwesomeIcon icon={faTrash} className="me-2"/>
+                                <i className='bx bx-trash me-2'></i>
                                 <span>Delete Address</span>
                             </Button>
                             <Button onClick={handleInvalid} variant="info">
-                                <FontAwesomeIcon icon={faCheck} className="me-2"/>
+                                <i className='bx bx-check me-2'></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <FontAwesomeIcon icon={faPlus} className="me-2"/>
+                                <i className='bx bx-plus me-2'></i>
                                 <span>Create Address</span>
                             </Button>
                         </>

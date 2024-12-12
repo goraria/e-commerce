@@ -1,10 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
-import {
-    faApple, faMeta, faGoogle, faTwitter, faXTwitter, faGithub
-} from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 import SocialFormButton from "../../components/button/SocialFormButton.jsx";

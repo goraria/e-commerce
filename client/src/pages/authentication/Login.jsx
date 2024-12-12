@@ -1,10 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
-import {
-    faApple, faMeta, faGoogle, faTwitter, faXTwitter, faGithub
-} from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 import SocialFormButton from "../../components/button/SocialFormButton.jsx";
@@ -19,9 +15,9 @@ import Loading from "../overview/Loading.jsx";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
-    { id: 1, name: "Apple", icon: faApple, color: "dark" },
-    { id: 2, name: "Google", icon: faGoogle, color: "success" },
-    { id: 3, name: "Meta", icon: faMeta, color: "primary" },
+    { id: 1, name: "Apple", color: "dark" },
+    { id: 2, name: "Google", color: "success" },
+    { id: 3, name: "Meta", color: "primary" },
     // { id: 4, name: "Twitter", icon: faTwitter },
 ]
 
@@ -100,9 +96,10 @@ const Login = ({ authenticationCheck }) => {
                     //     navigate("/user/profile");
                     // }
 
-                    setTimeout(() => {
-                        handleNavigate(role)
-                    }, 3000)
+                    // setTimeout(() => {
+                    //     handleNavigate(role)
+                    // }, 3000)
+                    handleNavigate(role)
                 }
             } catch (error) {
                 setError(error.response ? error.response.data.message : 'Login failed');

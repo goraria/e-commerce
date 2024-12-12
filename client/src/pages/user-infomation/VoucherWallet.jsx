@@ -1,8 +1,10 @@
 import AddressList from "./AddressList.jsx";
-import AddressItem from "../../components/information/address/AddressItem.jsx";
+import AddressItem from "../../components/address/AddressItem.jsx";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import VoucherItem from "../../components/information/voucher/VoucherItem.jsx";
+import VoucherItem from "../../components/voucher/VoucherItem.jsx";
+import {Button} from "react-bootstrap";
+import jp from "../../assets/images/jp.jpeg";
 
 const VoucherWallet = () => {
     const [addresses, setAddresses] = useState([]);
@@ -36,30 +38,24 @@ const VoucherWallet = () => {
     }, []);  // Khi reloadTrigger thay đổi, useEffect sẽ gọi lại API //
     return (
         <>
-            <div className="card p-0 mb-4">{/* px-3 py-3 */}
-                <div className="container h-px-40"></div>
-                {/*<AddressList key={reloadTrigger} onReload={handleReload}/>*/}
-            </div>
             <div className="row">
-                {/*{addresses.map((address, index) => (*/}
-                {/*    <div className="col-4 mb-0">*/}
-                {/*        <div*/}
-                {/*            className="card sticky-summary position-sticky mb-4 px-2 py-3"*/}
-                {/*            style={{*/}
-                {/*                top: 80,*/}
-                {/*            }}>*/}
-                {/*            /!*<VoucherItem/> /!* item={address} key={reloadTrigger} onReload={handleReload} *!/*!/*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*))}*/}
-                <div className="col-6 mb-0">
+                <div className="col-12 mb-4">
                     <div
-                        className="card sticky-summary position-sticky mb-4 p-0" // px-2 py-3
-                        style={{
-                            top: 80,
-                        }}>
-                        <VoucherItem/> {/* item={address} key={reloadTrigger} onReload={handleReload} */}
+                        className="card px-3 py-3 light bg-body-tertiary align-items-center bg-navbar-theme">
+                        {/*<AddressList key={reloadTrigger} onReload={handleReload}/>*/}
+                        <div className="container d-flex ps-2 p-0 align-items-center">
+                            <h5 className="m-0">Voucher Wallet</h5>
+                            <Button disabled variant="light" className="ms-auto">
+                                <i className='bx bx-plus text-white me-2'></i>
+                                <span></span>
+                            </Button>
+                        </div>
                     </div>
+                </div>
+            </div>
+            <div className="row mb-5">
+                <div className="col-lg-4 col-md-6 col-md col-sm-12">
+                    <VoucherItem/>
                 </div>
             </div>
         </>

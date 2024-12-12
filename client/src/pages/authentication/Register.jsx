@@ -1,14 +1,6 @@
 import React, {Component, useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import { Button, Col, Row, Container, Card, Form, Image, InputGroup } from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faApple, faMeta, faGoogle
-} from '@fortawesome/free-brands-svg-icons';
-import {
-    faAt, faLocationDot, faCity, faBullseye, faPhone, faUser
-} from '@fortawesome/free-solid-svg-icons';
-
 import SocialFormButton from "../../components/button/SocialFormButton.jsx";
 
 import jp from '../../assets/images/jp.jpeg'
@@ -19,9 +11,9 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
-    { id: 1, name: "Apple", icon: faApple, color: "dark" },
-    { id: 2, name: "Google", icon: faGoogle, color: "success" },
-    { id: 3, name: "Meta", icon: faMeta, color: "primary" },
+    { id: 1, name: "Apple", color: "dark" },
+    { id: 2, name: "Google", color: "success" },
+    { id: 3, name: "Meta", color: "primary" },
     // { id: 4, name: "Twitter", icon: faTwitter },
 ]
 
@@ -92,33 +84,11 @@ const Register = () => {
                     </div>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Row className="mb-3">
-                            {/*<Form.Group as={Col} md={7} controlId="email">*/}
-                            {/*    <Form.Label>Email address</Form.Label>*/}
-                            {/*    <InputGroup hasValidation>*/}
-                            {/*        <InputGroup.Text id="inputGroupPrepend">*/}
-                            {/*            <FontAwesomeIcon icon={faAt}/>*/}
-                            {/*        </InputGroup.Text>*/}
-                            {/*        <Form.Control*/}
-                            {/*            required*/}
-                            {/*            type="email"*/}
-                            {/*            name="email"*/}
-                            {/*            placeholder="email@email.com"*/}
-                            {/*            value={formData.email}*/}
-                            {/*            onChange={handleChange}*/}
-                            {/*        />*/}
-                            {/*        <Form.Control.Feedback type="invalid">*/}
-                            {/*            Please choose a email.*/}
-                            {/*        </Form.Control.Feedback>*/}
-                            {/*        /!*<Form.Control.Feedback>*!/*/}
-                            {/*        /!*    Looks good!*!/*/}
-                            {/*        /!*</Form.Control.Feedback>*!/*/}
-                            {/*    </InputGroup>*/}
-                            {/*</Form.Group>*/}
                             <Form.Group as={Col} md={7} controlId="email">
                                 <Form.Label>Email address</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="inputGroupPrepend">
-                                        <FontAwesomeIcon icon={faAt}/>
+                                        <i className='bx bx-at' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -140,7 +110,7 @@ const Register = () => {
                                 <Form.Label>Username</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="inputGroupPrepend">
-                                        <FontAwesomeIcon icon={faUser}/>
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -243,7 +213,7 @@ const Register = () => {
                                 {/*<Form.Control type="list-number" placeholder="Phone" required />*/}
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="inputGroupPrepend">
-                                        <FontAwesomeIcon icon={faPhone}/>
+                                        <i className='bx bx-phone'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"

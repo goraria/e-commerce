@@ -1,70 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
-import {
-    faPenToSquare,
-    faPlus,
-    faTrash,
-    faAngleLeft,
-    faAngleRight,
-    faAnglesLeft,
-    faAnglesRight,
-    faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-    faAddressBook
-} from "@fortawesome/free-regular-svg-icons";
 import axios from 'axios';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import "./DataTables.css"; // Add custom styling here
-import { ColorForm } from "../modal/form/ColorForm";
-export const ColorTable = () => {
+import { useNavigate } from "react-router-dom";
+import { ConfigurationForm } from "../modal/form/ConfigurationForm";
+
+export const ConfigurationTable = () => {
+    const navigate = useNavigate();
+
     const [data, setData] = useState([])
-    // const fetchAPI = async () => {
-    //     const response = await axios.get("http://localhost:5172/admin/get-color")
-    //     setData(response.data)
-    // };
+    const fetchAPI = async () => {
+        const response = await axios.get("http://localhost:5172/admin/get-configration")
+        setData(response.data)
+    };
     const [data1, setData1] = useState([])
-    // const fetchAPI1 = async () => {
-    //     try {
-    //         const response = await axios.get("http://localhost:5172/products/load-product")
-    //         setData1(response.data)
-    //         console.log(response.data)
-    //         console.log(data1)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-
-    // };
-    // const [data2, setData2] = useState([false])
-    // const fetchAPI2 = async () => {
-    //     try {
-    //         const response = await axios.get("http://localhost:5172/admin/payhd")
-    //         setData2(response.data)
-    //         console.log(response.data)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-
-    // };
-    const fetchData = async () => {
-        try {
-            const [colorsResponse, productsResponse] = await Promise.all([
-                axios.get("http://localhost:5172/admin/get-color"),
-                axios.get("http://localhost:5172/products/load-product"),
-                // axios.get("http://localhost:5172/admin/payhd"),
-            ]);
-            setData(colorsResponse.data);
-            setData1(productsResponse.data);
-            // setData2(payhdResponse.data);
-        } catch (error) {
-            console.error("Error fetching data", error);
-        }
+    const fetchAPI1 = async () => {
+        const response = await axios.get("http://localhost:5172/products/load-product")
+        setData1(response.data)
     };
     const mergedData = data.map(user => {
         const account = data1.find(acc => acc.idproduct === user.idproduct);
         return { ...user, ...account };
     });
-    // console.log(mergedData)
+    console.log(mergedData)
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -75,32 +32,35 @@ export const ColorTable = () => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);
     };
-    const handleEdit = (idcolor) => {
+    const handleEdit = (idconfiguration) => {
         // Tìm user theo ID
-        // console.log(idcolor)
-        const colorToEdit = mergedData.find(product => product.idcolor === idcolor);
-        // console.log(colorToEdit)
-        if (colorToEdit) {
-            setSelectedColor(colorToEdit); // Lưu thông tin user vào state `selectedUser`
+        console.log(idconfiguration)
+        const configurationToEdit = mergedData.find(product => product.idconfiguration === idconfiguration);
+        console.log(configurationToEdit)
+        if (configurationToEdit) {
+            setSelectedConfiguration(configurationToEdit); // Lưu thông tin user vào state `selectedUser`
             setModalShow(true); // Hiển thị modal để chỉnh sửa thông tin
         }
     };
     const handleModalClose = () => {
-        fetchData();
+        fetchAPI();
+        fetchAPI1();
         setModalShow(false);
-        setSelectedColor(null);
+        setSelectedConfiguration(null);
     };
-    const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedConfiguration, setSelectedConfiguration] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const handleSelectAll = (e) => {
         if (e.target.checked) {
-            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idcolor);
+            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idconfi);
             setSelectedEntries(allVisibleItems);
         } else {
             setSelectedEntries([]);
         }
     };
-
+    const handleNavigate = (idproduct) => {
+        navigate(`/admin/profile_user/${idproduct}`); // điều hướng tới URL động với userId
+    };
     const handleSelectItem = (idproduct) => {
         if (selectedEntries.includes(idproduct)) {
             setSelectedEntries(selectedEntries.filter(item => item !== idproduct));
@@ -112,18 +72,28 @@ export const ColorTable = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-color/${id}`);
+            await axios.delete(`http://localhost:5172/admin/delete-configuration/${id}`);
 
             // Optionally, fetch the updated data again
-            fetchData();
+            fetchAPI();
         } catch (error) {
             console.error("Error deleting product:", error);
         }
     };
 
-    const filteredData = mergedData.filter(item =>
-        item.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.color.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredData = mergedData.filter(item => {
+        const searchNumber = Number(searchTerm); // Chuyển đổi searchTerm thành số
+        const isNumberSearch = !isNaN(searchNumber); // Kiểm tra xem searchNumber có phải là số
+
+        return (item.cpu.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (isNumberSearch && item.ram === searchNumber) || // So sánh chỉ khi là số
+            (isNumberSearch && item.screen === searchNumber) || // So sánh chỉ khi là số
+            (isNumberSearch && item.price === searchNumber) ||
+            item.resolution.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (isNumberSearch && item.storage === searchNumber) ||
+            item.gpu.toLowerCase().includes(searchTerm.toLowerCase()))
+
+    }
     );
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -164,14 +134,14 @@ export const ColorTable = () => {
                 key="first"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAnglesLeft} /> {/* << */}
+                <i className='bx bx-chevrons-left' ></i> /> {/* << */}
             </Pagination.First>,
 
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAngleLeft} /> {/* < */}
+                <i className='bx bx-chevron-left'></i> {/* < */}
             </Pagination.Prev>
         );
 
@@ -182,7 +152,7 @@ export const ColorTable = () => {
             }
             if (totalPages > 5) {
                 paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
                 </Pagination.Ellipsis>);
                 paginationItems.push(addPageButton(totalPages));
             }
@@ -191,7 +161,7 @@ export const ColorTable = () => {
         else if (currentPage >= totalPages - 2) {
             paginationItems.push(addPageButton(1));
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             for (let i = totalPages - 4; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
@@ -201,7 +171,7 @@ export const ColorTable = () => {
         else {
             paginationItems.push(addPageButton(1)); // Trang đầu tiên
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
 
             const startPage = currentPage - 1; // Trang trước
@@ -212,7 +182,7 @@ export const ColorTable = () => {
             }
 
             paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
         }
@@ -223,23 +193,22 @@ export const ColorTable = () => {
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAngleRight} /> {/* > */}
+                <i className='bx bx-chevron-right' ></i> {/* > */}
             </Pagination.Next>,
 
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAnglesRight} /> {/* >> */}
+                <i className='bx bx-chevrons-right' ></i> {/* >> */}
             </Pagination.Last>
         );
 
         return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
     };
     useEffect(() => {
-        // fetchAPI();
-        // fetchAPI1();
-        fetchData();
+        fetchAPI();
+        fetchAPI1();
     }, []);
 
     return (
@@ -249,13 +218,13 @@ export const ColorTable = () => {
                     <div className="card-header flex-column flex-md-row pb-0">
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <div className="head-label text-center">
-                                <h5 className="card-title mb-0">Color DataTable</h5>
+                                <h5 className="card-title mb-0">Configuration DataTable</h5>
                             </div>
                             <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                 <div className="dt-buttons btn-group flex-wrap">
                                     <div>
                                         <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }} onClick={() => setModalShow(true)}>
-                                            <FontAwesomeIcon icon={faPlus} style={{ marginRight: 10 }} />
+                                            <i className='bx bx-plus me-2' ></i>
                                             Add New Record
                                         </Button>
                                     </div>
@@ -308,8 +277,14 @@ export const ColorTable = () => {
                                 />
                             </th>
                             <th>Product Name</th>
-                            <th>Color</th>
-
+                            <th>CPU</th>
+                            <th>Ram</th>
+                            <th>GPU</th>
+                            <th>Storage</th>
+                            <th>Screen</th>
+                            <th>Resolution</th>
+                            <th>Price</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -318,8 +293,8 @@ export const ColorTable = () => {
                                 <td>
                                     <Form.Check
                                         type="checkbox"
-                                        checked={selectedEntries.includes(item.idcolor)}
-                                        onChange={() => handleSelectItem(item.idcolor)}
+                                        checked={selectedEntries.includes(item.id)}
+                                        onChange={() => handleSelectItem(item.id)}
                                     />
                                 </td>
                                 <td>
@@ -332,10 +307,16 @@ export const ColorTable = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item.color}</td>
+                                <td>{item.cpu}</td>
+                                <td>{item.ram}</td>
+                                <td> {item.gpu}</td>
+                                <td>{item.storage}</td>
+                                <td> {item.screen}</td>
+                                <td>{item.resolution}</td>
+                                <td>{item.price}</td>
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.idcolor)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.idcolor)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faTrash} /></Button>
+                                    <Button variant="link" onClick={() => handleEdit(item.idconfiguration)} style={{ marginLeft: 'auto' }}><i className='bx bx-edit' ></i></Button>
+                                    <Button variant="link" onClick={() => handleDelete(item.idconfiguration)} style={{ marginLeft: 'auto' }}><i className='bx bx-trash'></i></Button>
                                 </td>
                             </tr>
                         ))}
@@ -359,12 +340,12 @@ export const ColorTable = () => {
                         <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
                             {renderPagination()}
                         </div>
-                        <ColorForm
+                        <ConfigurationForm
                             show={modalShow}
                             // onHide={() => setModalShow(false)}
                             onHide={handleModalClose}
                             onReload='a'
-                            color={selectedColor}
+                            configuration={selectedConfiguration}
                         />
                     </div>
                 </div>

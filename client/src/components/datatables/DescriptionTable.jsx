@@ -1,41 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
-import {
-    faPenToSquare,
-    faPlus,
-    faTrash,
-    faAngleLeft,
-    faAngleRight,
-    faAnglesLeft,
-    faAnglesRight,
-    faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-    faAddressBook
-} from "@fortawesome/free-regular-svg-icons";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import "./DataTables.css"; // Add custom styling here
-import { ProductForm } from "../modal/form/ProductForm";
-export const ProductNameTable = () => {
-    const navigate = useNavigate();
-
+import { DescriptionForm } from "../modal/form/DescriptionForm";
+export const DescriptionTable = () => {
     const [data, setData] = useState([])
-    const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/products/load-product")
-        setData(response.data)
-    };
+
     const [data1, setData1] = useState([])
-    const fetchAPI1 = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-category")
-        setData1(response.data)
+    const fetchData = async () => {
+        try {
+            const [descriptionResponse, productsResponse] = await Promise.all([
+                axios.get("http://localhost:5172/admin/get-description"),
+                axios.get("http://localhost:5172/products/load-product"),
+                // axios.get("http://localhost:5172/admin/payhd"),
+            ]);
+            setData(descriptionResponse.data);
+            setData1(productsResponse.data);
+            // setData2(payhdResponse.data);
+        } catch (error) {
+            console.error("Error fetching data", error);
+        }
     };
     const mergedData = data.map(user => {
-        const account = data1.find(acc => acc.idcategory === user.idcategory);
+        const account = data1.find(acc => acc.idproduct === user.idproduct);
         return { ...user, ...account };
     });
-    console.log(mergedData)
+    // console.log(mergedData)
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -46,35 +36,30 @@ export const ProductNameTable = () => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);
     };
-    const handleEdit = (idproduct) => {
-        // Tìm user theo ID
-        console.log(idproduct)
-        const productToEdit = mergedData.find(product => product.idproduct === idproduct);
-        console.log(productToEdit)
-        if (productToEdit) {
-            setSelectedProduct(productToEdit); // Lưu thông tin user vào state `selectedUser`
+    const handleEdit = (iddescription) => {
+
+        const DescriptionToEdit = mergedData.find(product => product.iddescription === iddescription);
+        if (DescriptionToEdit) {
+            setSelectedDescription(DescriptionToEdit); // Lưu thông tin user vào state `selectedUser`
             setModalShow(true); // Hiển thị modal để chỉnh sửa thông tin
         }
     };
     const handleModalClose = () => {
-        fetchAPI();
-        fetchAPI1();
+        fetchData();
         setModalShow(false);
-        setSelectedProduct(null);
+        setSelectedDescription(null);
     };
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedDescription, setSelectedDescription] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const handleSelectAll = (e) => {
         if (e.target.checked) {
-            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idproduct);
+            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.iddescription);
             setSelectedEntries(allVisibleItems);
         } else {
             setSelectedEntries([]);
         }
     };
-    const handleNavigate = (idproduct) => {
-        navigate(`/admin/profile_user/${idproduct}`); // điều hướng tới URL động với userId
-    };
+
     const handleSelectItem = (idproduct) => {
         if (selectedEntries.includes(idproduct)) {
             setSelectedEntries(selectedEntries.filter(item => item !== idproduct));
@@ -86,19 +71,20 @@ export const ProductNameTable = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/products/delete-productname/${id}`);
+            await axios.delete(`http://localhost:5172/admin/delete-description/${id}`);
 
             // Optionally, fetch the updated data again
-            fetchAPI();
+            fetchData();
         } catch (error) {
             console.error("Error deleting product:", error);
         }
     };
 
     const filteredData = mergedData.filter(item =>
-        item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.title_description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.sub_description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.img_description.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
@@ -116,7 +102,6 @@ export const ProductNameTable = () => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
     };
-
     const renderPagination = () => {
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -139,14 +124,14 @@ export const ProductNameTable = () => {
                 key="first"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAnglesLeft} /> {/* << */}
+                <i className='bx bx-chevrons-left' ></i> /> {/* << */}
             </Pagination.First>,
 
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAngleLeft} /> {/* < */}
+                <i className='bx bx-chevron-left'></i> {/* < */}
             </Pagination.Prev>
         );
 
@@ -157,7 +142,7 @@ export const ProductNameTable = () => {
             }
             if (totalPages > 5) {
                 paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
                 </Pagination.Ellipsis>);
                 paginationItems.push(addPageButton(totalPages));
             }
@@ -166,7 +151,7 @@ export const ProductNameTable = () => {
         else if (currentPage >= totalPages - 2) {
             paginationItems.push(addPageButton(1));
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             for (let i = totalPages - 4; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
@@ -176,7 +161,7 @@ export const ProductNameTable = () => {
         else {
             paginationItems.push(addPageButton(1)); // Trang đầu tiên
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
 
             const startPage = currentPage - 1; // Trang trước
@@ -187,7 +172,7 @@ export const ProductNameTable = () => {
             }
 
             paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
         }
@@ -198,22 +183,23 @@ export const ProductNameTable = () => {
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAngleRight} /> {/* > */}
+                <i className='bx bx-chevron-right' ></i> {/* > */}
             </Pagination.Next>,
 
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAnglesRight} /> {/* >> */}
+                <i className='bx bx-chevrons-right' ></i> {/* >> */}
             </Pagination.Last>
         );
 
         return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
     };
     useEffect(() => {
-        fetchAPI();
-        fetchAPI1();
+        // fetchAPI();
+        // fetchAPI1();
+        fetchData();
     }, []);
 
     return (
@@ -223,13 +209,13 @@ export const ProductNameTable = () => {
                     <div className="card-header flex-column flex-md-row pb-0">
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <div className="head-label text-center">
-                                <h5 className="card-title mb-0">Product DataTable</h5>
+                                <h5 className="card-title mb-0">Description DataTable</h5>
                             </div>
                             <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                 <div className="dt-buttons btn-group flex-wrap">
                                     <div>
                                         <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }} onClick={() => setModalShow(true)}>
-                                            <FontAwesomeIcon icon={faPlus} style={{ marginRight: 10 }} />
+                                            <i className='bx bx-plus me-2' ></i>
                                             Add New Record
                                         </Button>
                                     </div>
@@ -282,11 +268,9 @@ export const ProductNameTable = () => {
                                 />
                             </th>
                             <th>Product Name</th>
-                            <th>Brand</th>
-                            {/* <th>Email</th> */}
-                            {/* <th>Role</th> */}
-                            <th>Category</th>
-                            <th>Actions</th>
+                            <th>Title Description</th>
+                            <th>Sub Description</th>
+                            <th>Img Description</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -295,8 +279,8 @@ export const ProductNameTable = () => {
                                 <td>
                                     <Form.Check
                                         type="checkbox"
-                                        checked={selectedEntries.includes(item.idproduct)}
-                                        onChange={() => handleSelectItem(item.idproduct)}
+                                        checked={selectedEntries.includes(item.iddescription)}
+                                        onChange={() => handleSelectItem(item.iddescription)}
                                     />
                                 </td>
                                 <td>
@@ -309,13 +293,13 @@ export const ProductNameTable = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item.brand}</td>
-                                <td>{item.category_name}</td>
-                                {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
-                                <td>{item.phone_number}</td> */}
+                                <td>{item.title_description}</td>
+                                <td>{item.sub_description}</td>
+                                <td>{item.img_description}</td>
+
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.idproduct)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.idproduct)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faTrash} /></Button>
+                                    <Button variant="link" onClick={() => handleEdit(item.iddescription)} style={{ marginLeft: 'auto' }}><i className='bx bx-edit' ></i></Button>
+                                    <Button variant="link" onClick={() => handleDelete(item.iddescription)} style={{ marginLeft: 'auto' }}><i className='bx bx-trash'></i></Button>
                                 </td>
                             </tr>
                         ))}
@@ -339,12 +323,12 @@ export const ProductNameTable = () => {
                         <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
                             {renderPagination()}
                         </div>
-                        <ProductForm
+                        <DescriptionForm
                             show={modalShow}
                             // onHide={() => setModalShow(false)}
                             onHide={handleModalClose}
                             onReload='a'
-                            product={selectedProduct}
+                            description={selectedDescription}
                         />
                     </div>
                 </div>

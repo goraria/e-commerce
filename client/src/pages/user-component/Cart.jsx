@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import { Container, Button, Row, Col, Card, Form } from 'react-bootstrap';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
 import CardItem from '../../components/product/CartItem.jsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'
 import AddressList from "../user-infomation/AddressList.jsx";
-
-
-
-
-
-
 
 const Cart = () => {
     const [carts, setCart] = useState();
@@ -178,7 +170,7 @@ const Cart = () => {
                             <Container style={{ display: "flex", padding: '0 8px' }}>
                                 <h2 className="m-0">Giỏ hàng</h2>
                                 <Button as={Link} to={'/search'} variant="primary" style={{ marginLeft: 'auto' }}>
-                                    <FontAwesomeIcon icon={faPlus} className="me-2" />
+                                    <i className='bx bx-plus me-2'></i>
                                     <span>Thêm sản phẩm</span>
                                 </Button>
                             </Container>

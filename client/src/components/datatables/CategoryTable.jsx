@@ -1,42 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
-import {
-    faPenToSquare,
-    faPlus,
-    faTrash,
-    faAngleLeft,
-    faAngleRight,
-    faAnglesLeft,
-    faAnglesRight,
-    faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-    faAddressBook
-} from "@fortawesome/free-regular-svg-icons";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import "./DataTables.css"; // Add custom styling here
 import { CategoryForm } from "../modal/form/CategoryForm";
+
 export const CategoryDataTables = () => {
     const navigate = useNavigate();
 
     const [data, setData] = useState([])
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-category")
-        console.log(response.data)
-        setData(response.data)
+        // const response = await axios.get("http://localhost:5172/admin/get-category")
+        try {
+            const response = await axios.get("http://localhost:5172/category/get-category")
+            setData(response.data)
+        } catch (error) {
+            console.error("Error fetching category data:", error);
+        }
     };
+
     const handleEdit = (idcategory) => {
         // Tìm user theo ID
-        console.log(idcategory)
+        // console.log(idcategory)
         const categoryToEdit = data.find(product => product.idcategory === idcategory);
-        console.log(categoryToEdit)
+        // console.log(categoryToEdit)
         if (categoryToEdit) {
             setSelectedCategory(categoryToEdit); // Lưu thông tin user vào state `selectedUser`
             setModalShow(true); // Hiển thị modal để chỉnh sửa thông tin
         }
     };
+
     const handleModalClose = () => {
         fetchAPI();
         setModalShow(false);
@@ -45,11 +37,9 @@ export const CategoryDataTables = () => {
 
     const handleDelete = async (id) => {
         try {
+            // await axios.delete(`http://localhost:5172/admin/delete-category/${id}`);
+            await axios.delete(`http://localhost:5172/category/delete-category/${id}`);
 
-            // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-category/${id}`);
-
-            // Optionally, fetch the updated data again
             fetchAPI();
         } catch (error) {
             console.error("Error deleting category:", error);
@@ -70,17 +60,18 @@ export const CategoryDataTables = () => {
 
     const handleSelectAll = (e) => {
         if (e.target.checked) {
-            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idcategory);
+            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.id);
             setSelectedEntries(allVisibleItems);
         } else {
             setSelectedEntries([]);
         }
     };
-    const handleSelectItem = (idcategory) => {
-        if (selectedEntries.includes(idcategory)) {
-            setSelectedEntries(selectedEntries.filter(item => item !== idcategory));
+
+    const handleSelectItem = (id) => {
+        if (selectedEntries.includes(id)) {
+            setSelectedEntries(selectedEntries.filter(item => item !== id));
         } else {
-            setSelectedEntries([...selectedEntries, idcategory]);
+            setSelectedEntries([...selectedEntries, id]);
         }
     };
 
@@ -128,14 +119,14 @@ export const CategoryDataTables = () => {
                 key="first"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAnglesLeft} /> {/* << */}
+                <i className='bx bx-chevrons-left' ></i> /> {/* << */}
             </Pagination.First>,
 
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}>
-                <FontAwesomeIcon icon={faAngleLeft} /> {/* < */}
+                <i className='bx bx-chevron-left'></i> {/* < */}
             </Pagination.Prev>
         );
 
@@ -146,7 +137,7 @@ export const CategoryDataTables = () => {
             }
             if (totalPages > 5) {
                 paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
                 </Pagination.Ellipsis>);
                 paginationItems.push(addPageButton(totalPages));
             }
@@ -155,7 +146,7 @@ export const CategoryDataTables = () => {
         else if (currentPage >= totalPages - 2) {
             paginationItems.push(addPageButton(1));
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             for (let i = totalPages - 4; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
@@ -165,7 +156,7 @@ export const CategoryDataTables = () => {
         else {
             paginationItems.push(addPageButton(1)); // Trang đầu tiên
             paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
 
             const startPage = currentPage - 1; // Trang trước
@@ -176,7 +167,7 @@ export const CategoryDataTables = () => {
             }
 
             paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <FontAwesomeIcon icon={faEllipsis} /> {/* ... */}
+                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
             </Pagination.Ellipsis>);
             paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
         }
@@ -187,22 +178,21 @@ export const CategoryDataTables = () => {
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAngleRight} /> {/* > */}
+                <i className='bx bx-chevron-right' ></i> {/* > */}
             </Pagination.Next>,
 
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}>
-                <FontAwesomeIcon icon={faAnglesRight} /> {/* >> */}
+                <i className='bx bx-chevrons-right' ></i> {/* >> */}
             </Pagination.Last>
         );
 
-        return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
+        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
     useEffect(() => {
         fetchAPI();
-        // fetchAPI1();
     }, []);
 
     return (
@@ -210,31 +200,29 @@ export const CategoryDataTables = () => {
             <div className="card-datatable table-responsive">
                 <div className="dataTables_wrapper dt-bootstrap5 no-footer">
                     <div className="card-header flex-column flex-md-row pb-0">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <div className="head-label text-center">
-                                <h5 className="card-title mb-0">Category DataTable</h5>
-                            </div>
-                            <div className="dt-action-buttons text-end pt-6 pt-md-0">
-                                <div className="dt-buttons btn-group flex-wrap">
-                                    <div>
-                                        <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }} onClick={() => setModalShow(true)}>
-                                            <FontAwesomeIcon icon={faPlus} style={{ marginRight: 10 }} />
-                                            Add New Record
-                                        </Button>
-                                    </div>
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            {/*<div className="head-label text-center">*/}
+                            {/*    <h5 className="card-title mb-0">Category DataTable</h5>*/}
+                            {/*</div>*/}
+                            <div className="col-sm-12 col-md-6 d-flex">
+                                <div
+                                    className="dataTables_filter mb-0 mb-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0 me-3"> {/* col-sm-6 col-md-2 */}
+                                    <Form.Control
+                                        className="form-control"
+                                        type="search"
+                                        placeholder="Search..."
+                                        value={searchTerm}
+                                        onChange={handleSearch}
+                                    />
                                 </div>
-                            </div>
-                        </div>
-                        <div className="row mb-3">
-                            <div className="col-sm-12 col-md-6">
                                 <div className="dataTables_length">
-                                    <label style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
-                                        <span>Show</span>
+                                    <label className="d-flex justify-content-left align-items-center">
+                                        {/*<span>Show</span>*/}
                                         <select
                                             name="DataTables_Table_0_length"
                                             aria-controls="DataTables_Table_0"
-                                            className="form-select ms-3 me-3"
-                                            style={{ width: "80px" }}
+                                            className="form-select" // ms-3 me-3
+                                            style={{width: "80px"}}
                                             onChange={handleItemsPerPageChange}
                                             value={itemsPerPage}
                                         >
@@ -242,80 +230,92 @@ export const CategoryDataTables = () => {
                                             <option value="25">25</option>
                                             <option value="50">50</option>
                                         </select>
-                                        <span>entries</span>
+                                        {/*<span>entries</span>*/}
                                     </label>
                                 </div>
                             </div>
-                            <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0">
-                                {/* <div className="datatable-controls">
-                            </div> */}
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Search..."
-                                    value={searchTerm}
-                                    onChange={handleSearch}
-                                    style={{ width: "290px" }}
-                                />
+                            <div className="dt-action-buttons text-end pt-6 pt-md-0">
+                                <div className="dt-buttons btn-group flex-wrap">
+                                    <div>
+                                        <Button variant="primary" type="button"
+                                                className="btn btn-secondary create-new btn-primary d-flex text-center"
+                                                onClick={() => setModalShow(true)}>
+                                            <i className='bx bx-plus me-2'></i>
+                                            Add New Category
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Table striped bordered hover responsive className="datatable">
-                    <thead>
-                        <tr>
-                            <th>
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            <th>Category Name</th>
-                            <th>Action</th>
-                            {/* <th>Email</th> */}
-                            {/* <th>Role</th> */}
-                            {/* <th>Phone Number</th>
-                            <th>Actions</th> */}
-                        </tr>
+                <Table hover responsive className="table border-top dataTable datatable no-footer dtr-column">
+                    <thead style={{height: 64}}>
+                    <tr>
+                        <th
+                            className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                            style={{verticalAlign: "middle", fontSize: 16, width: 18}}
+                        >
+                            <Form.Check
+                                type="checkbox"
+                                onChange={handleSelectAll}
+                                checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
+                            />
+                        </th>
+                        <th className="sorting" style={{verticalAlign: "middle", fontSize: 13}}>
+                            Category Name
+                        </th>
+                        <th className="sorting_disabled text-center"
+                            style={{verticalAlign: "middle", fontSize: 13, width: 156}}>Actions
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <Form.Check
-                                        type="checkbox"
-                                        checked={selectedEntries.includes(item.id)}
-                                        onChange={() => handleSelectItem(item.id)}
-                                    />
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div className="avatar-circle me-2">
-
-                                        </div>
-                                        <div>
-                                            {item.category_name}
-                                        </div>
+                    {currentItems.map((item, index) => (
+                        <tr key={index} style={{height: 64}}>
+                            <td>
+                                <Form.Check
+                                    className="dt-checkboxes-cell"
+                                    type="checkbox"
+                                    checked={selectedEntries.includes(item.id)}
+                                    onChange={() => handleSelectItem(item.id)}
+                                />
+                            </td>
+                            <td className="sorting_1">
+                                <div className="d-flex align-items-center">
+                                    <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                        <div className="avatar"><img
+                                            src={`../assets/img/categories/${item.category_image}`}
+                                            alt="Product-8"
+                                            className="rounded"/></div>
                                     </div>
-                                </td>
-                                {/* <td>{item.brand}</td> */}
-                                {/* <td>{item.product_name}</td> */}
-                                {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
+                                    <div className="d-flex flex-column justify-content-center"><span
+                                        className="text-heading text-wrap fw-medium">{item.category_name}</span><span
+                                        className="text-truncate mb-0 d-none d-sm-block"><small>{item.category_description}</small></span>
+                                    </div>
+                                </div>
+                            </td>
+                            {/* <td>{item.brand}</td> */}
+                            {/* <td>{item.product_name}</td> */}
+                            {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
                                 <td>{item.phone_number}</td> */}
-                                <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.idcategory)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.idcategory)} style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faTrash} /></Button>
-                                </td>
-                            </tr>
-                        ))}
+                            <td>
+                                <Button variant="link" onClick={() => handleEdit(item.idcategory)}
+                                        style={{marginLeft: 'auto'}}><i className='bx bx-edit' ></i></Button>
+                                <Button variant="link" onClick={() => handleDelete(item.idcategory)}
+                                        style={{marginLeft: 'auto'}}><i className='bx bx-trash' ></i></Button>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </Table>
                 <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                     <div className="row">
-                        <div className="col-sm-12 col-md-6" style={{ display: "flex" }}>
-                            <div className="dataTables_info" style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
+                        <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                            <div className="dataTables_info"
+                                 style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
                                 <div className="text-center mt-2">
-                                    Showing {currentItems.length} of {filteredData.length} entries
+                                Showing {currentItems.length} of {filteredData.length} entries
                                 </div>
                             </div>
                             <div className="ms-2 me-2"></div>
@@ -339,6 +339,5 @@ export const CategoryDataTables = () => {
                 </div>
             </div>
         </div>
-
     );
 };

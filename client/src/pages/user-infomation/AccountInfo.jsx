@@ -1,11 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
 import { Container, Form, Row, Col, InputGroup, Button } from "react-bootstrap";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faAt, faBullseye, faCity, faGift, faHistory, faLocationDot, faMapMarkerAlt, faMapPin,
-    faPhone, faQuestionCircle, faSignOutAlt, faStar, faUser
-} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SaveChange from "../../components/modal/notify/SaveChange.jsx";
@@ -139,7 +133,7 @@ const AccountInfo = ({ onReload }) => {
                             <Form.Label>Email address</Form.Label>
                             <InputGroup hasValidation>
                                 <InputGroup.Text id="inputGroupPrepend">
-                                    <FontAwesomeIcon icon={faAt} />
+                                    <i className='bx bx-at'></i>
                                 </InputGroup.Text>
                                 <Form.Control
                                     required
@@ -158,7 +152,7 @@ const AccountInfo = ({ onReload }) => {
                             <Form.Label>Username</Form.Label>
                             <InputGroup hasValidation>
                                 <InputGroup.Text id="inputGroupPrepend">
-                                    <FontAwesomeIcon icon={faUser} />
+                                    <i className='bx bx-user'></i>
                                 </InputGroup.Text>
                                 <Form.Control
                                     required
@@ -207,7 +201,7 @@ const AccountInfo = ({ onReload }) => {
                             <Form.Label>Phone</Form.Label>
                             <InputGroup hasValidation>
                                 <InputGroup.Text id="inputGroupPrepend">
-                                    <FontAwesomeIcon icon={faPhone} />
+                                    <i className='bxs bx-phone'></i>
                                 </InputGroup.Text>
                                 <Form.Control
                                     type="text"

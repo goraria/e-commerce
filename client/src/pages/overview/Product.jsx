@@ -3,18 +3,15 @@ import {
     Container, Button, Form, ButtonGroup, DropdownButton, Dropdown, Row, Col, Card, Image, Stack, Carousel, ListGroup, Badge,
     CardTitle,
     CardText
-
 } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductItem from "../../components/product/ProductItem.jsx";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
-import { config } from "@fortawesome/fontawesome-svg-core";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
-
 
 const Product = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
