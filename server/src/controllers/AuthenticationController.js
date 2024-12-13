@@ -12,6 +12,24 @@ const generateToken = () => {
     return crypto.randomBytes(20).toString('hex');
 };
 class AuthenticationController {
+    async google(req, res) {
+        try {
+            const { token } = req.body;
+
+            const ticket = await client.verifyIdToken({
+                idToken: token,
+                audience: "YOUR_GOOGLE_CLIENT_ID",
+            });
+            const payload = ticket.getPayload();
+            const userId = payload.sub;
+
+            res.status(200).json({ success: true, token: "JWT_TOKEN_HERE" });
+        } catch (error) {
+            console.error('Google login error:', error);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
     async login(req, res) {
         const { username, password } = req.body;
         try {

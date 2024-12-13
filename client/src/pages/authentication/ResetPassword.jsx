@@ -12,6 +12,7 @@ import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import Frame from "../../layouts/Frame.jsx";
 import Loading from "../overview/Loading.jsx";
+import {AuthWrapper} from "./AuthWrapper.jsx";
 
 const ResetPassword = () => {
     const [check, setCheck] = useState(false);
@@ -47,7 +48,7 @@ const ResetPassword = () => {
                     newPassword: formData.password
                 });
                 setShowSuccess(true);
-                navigate('/login');
+                navigate('/auth/login');
             } catch (error) {
                 setError(error.response ? error.response.data.message : 'Reset password failed');
                 setShowError(true);
@@ -72,55 +73,118 @@ const ResetPassword = () => {
 
     return (
         <>
-            <Overview mt={112} me={56}>
-                <div>
-                    <h2>Forgot Password</h2>
-                    <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>
-                        <Image
-                            className="d-block"
-                            src={jp}
-                            alt="Second slide"
-                            style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}
-                        />
-                    </div>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>New Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
+            <AuthWrapper>
+                <h4 className="mb-2">Reset Password? 🔒</h4>
+                <p className="mb-4">Enter your new password and we&#39;ll instructions to reset your password</p>
+                <Form id="formAuthentication" className="mb-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">New Password</label>
+                        <div className="input-group">
+                            <input
+                                required
                                 name="password"
-                                onChange={handleChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your password.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Form>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="retypePassword">
-                            <Form.Label>Retype password</Form.Label>
-                            <Form.Control
                                 type="password"
-                                placeholder="RetypePassword"
-                                name="retypePassword"
-
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                minLength={8}
+                                value={formData.password}
                                 onChange={handleChange}
-                                required
+                                aria-describedby="inputGroupPrepend"
+                                className="form-control"
+                                aria-label="Password"
                             />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your retype password.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button>
-                    </Form>
+                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Verify Password</label>
+                        <div className="input-group">
+                            <input
+                                required
+                                type="password"
+                                name="retypePassword"
+                                minLength={8}
+                                value={formData.retypepass}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                className="form-control"
+                                aria-label="Password"
+                            />
+                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                        </div>
+                    </div>
+                    <div className="mb-3"> {/* mt-5 */}
+                        <button
+                            aria-label='Click me'
+                            className="btn btn-primary d-grid w-100"
+                            type="submit"
+                            onClick={() => setCheck(true)}
+                        >
+                            Reset Password
+                        </button>
+                        {/*<Button variant="primary" type="submit" style={{width: '100%'}}*/}
+                        {/*        onClick={() => setCheck(true)}>*/}
+                        {/*    Submit*/}
+                        {/*</Button>*/}
+                    </div>
+                </Form>
+                <div className="text-center">
+                    <Link aria-label="Go to Login Page" to="/auth/login"
+                          className="d-flex align-items-center justify-content-center">
+                        <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                        Back to login
+                    </Link>
                 </div>
-            </Overview>
+            </AuthWrapper>
+            {/*<Overview mt={112} me={56}>*/}
+            {/*    <div>*/}
+            {/*        <h2>Forgot Password</h2>*/}
+            {/*        <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>*/}
+            {/*            <Image*/}
+            {/*                className="d-block"*/}
+            {/*                src={jp}*/}
+            {/*                alt="Second slide"*/}
+            {/*                style={{objectFit: 'cover', width: 224, height: 224, borderRadius: '5px'}}*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*        <Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
+            {/*            <Form.Group className="mb-3" controlId="password">*/}
+            {/*                <Form.Label>New Password</Form.Label>*/}
+            {/*                <Form.Control*/}
+            {/*                    type="password"*/}
+            {/*                    placeholder="Password"*/}
+            {/*                    name="password"*/}
+            {/*                    onChange={handleChange}*/}
+            {/*                    required*/}
+            {/*                />*/}
+            {/*                <Form.Control.Feedback type="invalid">*/}
+            {/*                    Please enter your password.*/}
+            {/*                </Form.Control.Feedback>*/}
+            {/*            </Form.Group>*/}
+            {/*        </Form>*/}
+            {/*        <Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
+            {/*            <Form.Group className="mb-3" controlId="retypePassword">*/}
+            {/*                <Form.Label>Retype password</Form.Label>*/}
+            {/*                <Form.Control*/}
+            {/*                    type="password"*/}
+            {/*                    placeholder="RetypePassword"*/}
+            {/*                    name="retypePassword"*/}
+
+            {/*                    onChange={handleChange}*/}
+            {/*                    required*/}
+            {/*                />*/}
+            {/*                <Form.Control.Feedback type="invalid">*/}
+            {/*                    Please enter your retype password.*/}
+            {/*                </Form.Control.Feedback>*/}
+            {/*            </Form.Group>*/}
+
+            {/*            <Button variant="primary" type="submit" style={{ width: '100%' }}*/}
+            {/*                onClick={() => setCheck(true)}>*/}
+            {/*                Submit*/}
+            {/*            </Button>*/}
+            {/*        </Form>*/}
+            {/*    </div>*/}
+            {/*</Overview>*/}
         </>
     )
 }

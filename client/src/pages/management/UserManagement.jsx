@@ -279,7 +279,7 @@ export const UserManagement = () => {
                                 ))
                             }
                             <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 128}}>Actions
+                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
                         </tr>
                         </thead>

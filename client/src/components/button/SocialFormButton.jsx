@@ -1,30 +1,17 @@
-import React, {Component} from "react";
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import PropTypes from 'prop-types';
 
-const SocialFormButton = ({ socialItems }) => {
+const SocialFormButton = ({ element }) => {
     return (
         <Button
-            variant={socialItems.color} type="button"
-            style={{flex: '1', margin: '0 5px', minWidth: '120px'}}
+            variant={element.color} type="button"
+            className="flex-grow-1 w-100"
+            style={{minWidth: '120px'}}
         >
-            {/*<FontAwesomeIcon icon={socialItems.icon} style={{width: 24}}/>*/}
-            {socialItems.name}
+            <i className={`${element.box} me-2`}></i>
+            {element.name}
         </Button>
     )
 }
 
-class SocialFormButton0 extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-    }
-
-    render() {
-        const { socialItems } = this.props;
-
-    }
-}
-
-export default SocialFormButton
+export default SocialFormButton;

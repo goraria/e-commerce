@@ -19,13 +19,13 @@ export const ShareRoutes = () => {
             <Route path="/product" element={<Product />} />
             <Route path="/search" element={<ProductList />} />
 
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/login" element={<Login />} />
+            {/*<Route path="/forgot-password" element={<ForgotPassword />} />*/}
+            {/*<Route path="/reset-password" element={<ResetPassword />} />*/}
+            {/*<Route path="/login" element={<Login />} />*/}
             {/* <Route path="/signup" element={<Signup />} /> */}
-            <Route path="/register" element={<Register />} />
+            {/*<Route path="/register" element={<Register />} />*/}
             <Route path="/faq" element={<NotFound />} />
-            <Route path="/404" element={<NotFound />} />
+            {/*<Route path="/404" element={<NotFound />} />*/}
         </Routes>
     )
 }

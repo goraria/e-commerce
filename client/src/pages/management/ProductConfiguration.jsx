@@ -287,7 +287,7 @@ export const ProductConfiguration = () => {
                                 ))
                             }
                             <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 156}}>Actions
+                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
                         </tr>
                         </thead>
@@ -312,17 +312,25 @@ export const ProductConfiguration = () => {
                                     </div>
                                 </td>
                                 <td>{item.cpu}</td>
-                                <td> {item.gpu}</td>
+                                <td>{item.gpu}</td>
                                 <td>{item.ram}</td>
                                 <td>{item.storage}</td>
-                                <td> {item.screen}</td>
+                                <td>{item.screen}</td>
                                 <td>{item.resolution}</td>
                                 <td>{item.price}</td>
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.idconfiguration)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-edit' ></i></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.idconfiguration)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-trash' ></i></Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleEdit(item.idconfiguration)}
+                                        className="p-2">
+                                        <i className='bx bx-edit'></i>
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleDelete(item.idconfiguration)}
+                                        className="p-2">
+                                        <i className='bx bx-trash'></i>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

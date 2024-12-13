@@ -104,14 +104,14 @@ const ToastBox = ({ title, type, position, message }) => {
                                 <option value="bottom-0 end-0">Bottom right</option>
                             </select>
                         </div>
-                        <div className="col-md-3">
-                            <label className="form-label" htmlFor="showToastPlacement">
-                                &nbsp;
-                            </label>
-                            <button id="showToastPlacement" className="btn btn-primary d-block">
-                                Show Toast
-                            </button>
-                        </div>
+                        {/*<div className="col-md-3">*/}
+                        {/*    <label className="form-label" htmlFor="showToastPlacement">*/}
+                        {/*        &nbsp;*/}
+                        {/*    </label>*/}
+                        {/*    <button id="showToastPlacement" className="btn btn-primary d-block">*/}
+                        {/*        Show Toast*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             </div>

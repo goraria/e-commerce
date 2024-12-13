@@ -90,7 +90,7 @@ const Footer = () => {
                             <h5 className="text-dark">Phản hồi, góp ý, khiếu nại</h5>
                             <p className="p-2">Phản hồi nóng về chất lượng sản phẩm và dịch vụ. Đội ngũ Kiểm Soát Chất
                                 Lượng của chúng tôi sẵn sàng lắng nghe quý khách.</p>
-                            <Button href="#" variant="primary">
+                            <Button href="#" variant="secondary">
                                 Gửi phản hồi ngay
                             </Button>
                         </div>

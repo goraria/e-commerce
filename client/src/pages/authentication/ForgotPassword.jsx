@@ -12,6 +12,7 @@ import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import Frame from "../../layouts/Frame.jsx";
 import Loading from "../overview/Loading.jsx";
+import {AuthWrapper} from "./AuthWrapper.jsx";
 
 const ForgotPassword = () => {
     const [check, setCheck] = useState(false);
@@ -61,40 +62,81 @@ const ForgotPassword = () => {
 
     return (
         <>
-            <Overview mt={112} me={56}>
-                <div>
-                    <h2>Forgot Password</h2>
-                    <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>
-                        <Image
-                            className="d-block"
-                            src={jp}
-                            alt="Second slide"
-                            style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}
-                        />
+            <AuthWrapper>
+                <h4 className="mb-2">Forgot Password? 🔒</h4>
+                <p className="mb-4">Enter your email and we&#39;ll send you instructions to reset your password</p>
+                <Form id="formAuthentication" className="mb-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">Email</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Enter your email"
+                            autoFocus/>
                     </div>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="username">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your Email.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button>
-                    </Form>
+                    <div className="mb-3">
+                        <button
+                            aria-label='Click me'
+                            className="btn btn-primary d-grid w-100"
+                            type="submit"
+                            onClick={() => setCheck(true)}
+                        >
+                            Send Reset Link
+                        </button>
+                        {/*<Button variant="primary" type="submit" style={{width: '100%'}}*/}
+                        {/*        onClick={() => setCheck(true)}>*/}
+                        {/*    Submit*/}
+                        {/*</Button>*/}
+                    </div>
+                </Form>
+                <div className="text-center">
+                <Link aria-label="Go to Login Page" to="/auth/login"
+                          className="d-flex align-items-center justify-content-center">
+                        <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                        Back to login
+                    </Link>
                 </div>
-            </Overview>
+            </AuthWrapper>
+
+            {/*<Overview mt={112} me={56}>*/}
+            {/*    <div>*/}
+            {/*    <h2>Forgot Password</h2>*/}
+            {/*        <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>*/}
+            {/*            <Image*/}
+            {/*                className="d-block"*/}
+            {/*                src={jp}*/}
+            {/*                alt="Second slide"*/}
+            {/*                style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*        <Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
+            {/*            <Form.Group className="mb-3" controlId="username">*/}
+            {/*                <Form.Label>Email</Form.Label>*/}
+            {/*                <Form.Control*/}
+            {/*                    type="email"*/}
+            {/*                    placeholder="Email"*/}
+            {/*                    name="email"*/}
+            {/*                    value={formData.email}*/}
+            {/*                    onChange={handleChange}*/}
+            {/*                    required*/}
+            {/*                />*/}
+            {/*                <Form.Control.Feedback type="invalid">*/}
+            {/*                    Please enter your Email.*/}
+            {/*                </Form.Control.Feedback>*/}
+            {/*            </Form.Group>*/}
+
+            {/*            <hr/>*/}
+            {/*            <Button variant="primary" type="submit" style={{width: '100%'}}*/}
+            {/*                    onClick={() => setCheck(true)}>*/}
+            {/*                Submit*/}
+            {/*            </Button>*/}
+            {/*        </Form>*/}
+            {/*    </div>*/}
+            {/*</Overview>*/}
         </>
     )
 }
