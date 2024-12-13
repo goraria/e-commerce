@@ -10,7 +10,7 @@ const menu = [
         "items": [
             {
                 "text": "Dashboard",
-                "icon": "z",
+                "icon": "bx bx-home",
                 "available": true,
                 "link": "/user"
             },

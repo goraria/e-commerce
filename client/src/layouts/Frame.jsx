@@ -13,7 +13,7 @@ const Frame = ({ children, role }) => {
         Main();
     }, [])
 
-    const renderComponentByRole = (r) => {
+    const renderComponentByRole = async (r) => {
         if (r === 1) {
             return <Navbar/>;
         } else if (r === 0) {

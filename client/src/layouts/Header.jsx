@@ -164,7 +164,7 @@ const Header = () => {
             );
             localStorage.removeItem("token"); // Xóa JWT
             setShowModalHeader(false);
-            navigate("/login");
+            navigate("/auth/login");
         } catch (error) {
             console.error("Logout failed", error);
         }

@@ -324,7 +324,7 @@ export const ProductColor = () => {
                                 ))
                             }
                             <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 156}}>Actions
+                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
                         </tr>
                         </thead>
@@ -350,10 +350,18 @@ export const ProductColor = () => {
                                 </td>
                                 <td>{renderStatusBadge(item.color)}</td>
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.idcolor)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-edit' ></i></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.idcolor)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-trash' ></i></Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleEdit(item.idcolor)}
+                                        className="p-2">
+                                        <i className='bx bx-edit'></i>
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleDelete(item.idcolor)}
+                                        className="p-2">
+                                        <i className='bx bx-trash'></i>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

@@ -70,7 +70,7 @@ class Signup extends Component {
                                             </Button>
                                         </Col>
                                     </Row>
-                                    <Link to="/register">
+                                    <Link to="/auth/register">
                                         <Button variant="danger" type="submit" className="mb-3" style={{width: '100%'}}>
                                             Sign up
                                         </Button>
@@ -85,7 +85,7 @@ class Signup extends Component {
                                     <hr/>
                                     <div className="text-center" style={{marginBottom: 16}}>
                                         you have an acoount
-                                        <Link to="/login">
+                                        <Link to="/auth/login">
                                             <Button variant="link" style={{
                                                 padding: 0,
                                                 color: '#dc3545',

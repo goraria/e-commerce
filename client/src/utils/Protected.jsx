@@ -15,7 +15,7 @@ const Protected0 = ({ component: Component, roles, ...rest }) => {
     return (
         <Route {...rest} render={(props) => {
             if (!user) {
-                return <Navigate to='/login' />;
+                return <Navigate to='/auth/login' />;
             }
 
             if (roles && !roles.includes(user.role)) {

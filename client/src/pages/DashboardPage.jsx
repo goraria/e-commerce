@@ -26,6 +26,14 @@ export const DashboardPage = () => {
             <div className="row">
                 <div className="col-lg-12 mb-4 order-0">
                     <ToastBox title="Notify" type="Info" position="Top right" message="Japtor"/>
+                    <div className="col-md-3">
+                        <label className="form-label" htmlFor="showToastPlacement">
+                            &nbsp;
+                        </label>
+                        <button id="showToastPlacement" className="btn btn-primary d-block">
+                            Show Toast
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="row">
@@ -35,7 +43,7 @@ export const DashboardPage = () => {
                             <div className="col-sm-7">
                                 <div className="card-body">
                                     <h5 className="card-title text-primary">
-                                        Congratulations John! 🎉
+                                    Congratulations John! 🎉
                                     </h5>
                                     <p className="mb-4">
                                         You have done <span className="fw-medium">72%</span> more

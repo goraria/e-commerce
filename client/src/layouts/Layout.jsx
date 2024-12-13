@@ -138,13 +138,13 @@ const menu = [
                 "link": "https://github.com/zamcha"
             },
             {
-                "text": "Goraria",
-                "icon": "bx bx-file",
+                "text": "Ichibulup",
+                "icon": "bx bx-support",
                 "available": true,
-                "link": "#"
+                "link": "https://github.com/ichibulup"
             },
             {
-                "text": "Ichibulup",
+                "text": "Goraria",
                 "icon": "bx bx-file",
                 "available": true,
                 "link": "#"

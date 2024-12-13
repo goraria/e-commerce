@@ -8,6 +8,8 @@ import axios from "axios";
 import Overview from "../../layouts/Overview.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
+import {AuthWrapper} from "./AuthWrapper.jsx";
+import {GoogleLogin} from "@react-oauth/google";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
@@ -32,6 +34,7 @@ const Register = () => {
     const [error, setError] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);  // trạng thái cho NotifySuccess
     const [showError, setShowError] = useState(false);  // trạng thái cho NotifyError
+    const [loading, setLoading] = useState(false);  // Thêm trạng thái loading
 
     const navigate = useNavigate();
 
@@ -50,7 +53,7 @@ const Register = () => {
 
             if (formData.password === formData.retypepass) {
                 try {
-                    const response = await axios.put('http://localhost:5172/authentication/register', formData);
+                    const response = await axios.post('http://localhost:5172/authentication/register', formData);
 
                     if (response.status === 201) {
                         setShowSuccess(true)
@@ -58,6 +61,7 @@ const Register = () => {
                         // setTimeout(() => navigate('/login'), 2000);
                     }
                 } catch (error) {
+                    console.log(error)
                     setError(error.response ? error.response.data.message : 'Registration failed');
                     setShowError(true);
                 }
@@ -71,221 +75,603 @@ const Register = () => {
 
     return (
         <>
-            <Overview mt={112} me={56}>
-                <div>
-                    <h2>Register</h2>
-                    <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>
-                        <Image
-                            className="d-block"
-                            src={jp}
-                            alt="Second slide"
-                            style={{objectFit: 'cover', width: 224, height: 224, borderRadius: '5px'}}
-                        />
-                    </div>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} md={7} controlId="email">
-                                <Form.Label>Email address</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="inputGroupPrepend">
-                                        <i className='bx bx-at' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        required
-                                        type="email"
-                                        name="email"
-                                        placeholder="email@email.com"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please choose a email.
-                                    </Form.Control.Feedback>
-                                    {/*<Form.Control.Feedback>*/}
-                                    {/*    Looks good!*/}
-                                    {/*</Form.Control.Feedback>*/}
-                                </InputGroup>
-                            </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="username">
-                                <Form.Label>Username</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="inputGroupPrepend">
-                                        <i className='bx bx-user' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        name="username"
-                                        placeholder="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
-                                        aria-describedby="inputGroupPrepend"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please choose a username.
-                                    </Form.Control.Feedback>
-                                    {/*<Form.Control.Feedback>*/}
-                                    {/*    Looks good!*/}
-                                    {/*</Form.Control.Feedback>*/}
-                                </InputGroup>
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} md={6} controlId="password">
-                                <Form.Label>Password</Form.Label>
-                                <InputGroup hasValidation>
-                                    <Form.Control
-                                        required
-                                        name="password"
-                                        type="password"
-                                        placeholder="Password"
-                                        minLength={8}
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your password.
-                                    </Form.Control.Feedback>
-                                    {/*<Form.Control.Feedback>*/}
-                                    {/*    Looks good!*/}
-                                    {/*</Form.Control.Feedback>*/}
-                                </InputGroup>
-                            </Form.Group>
-                            <Form.Group as={Col} md={6} controlId="retypepass">
-                                <Form.Label>Verify Password</Form.Label>
-                                <InputGroup hasValidation>
-                                    <Form.Control
-                                        type="password"
-                                        name="retypepass"
-                                        placeholder="Re-type password"
-                                        minLength={8}
-                                        value={formData.retypepass}
-                                        onChange={handleChange}
-                                        aria-describedby="inputGroupPrepend"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please retype your password.
-                                    </Form.Control.Feedback>
-                                    {/*<Form.Control.Feedback>*/}
-                                    {/*    Looks good!*/}
-                                    {/*</Form.Control.Feedback>*/}
-                                </InputGroup>
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} md={4} controlId="firstname">
-                                <Form.Label>First name</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    name="firstname"
-                                    placeholder="First name"
-                                    value={formData.firstname}
-                                    onChange={handleChange}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter your Firstname.
-                                </Form.Control.Feedback>
-                                {/*<Form.Control.Feedback>*/}
-                                {/*    Looks good!*/}
-                                {/*</Form.Control.Feedback>*/}
-                            </Form.Group>
-                            <Form.Group as={Col} md={4} controlId="lastname">
-                                <Form.Label>Last name</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    name="lastname"
-                                    placeholder="Last name"
-                                    value={formData.lastname}
-                                    onChange={handleChange}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter your Lastname.
-                                </Form.Control.Feedback>
-                                {/*<Form.Control.Feedback>*/}
-                                {/*    Looks good!*/}
-                                {/*</Form.Control.Feedback>*/}
-                            </Form.Group>
-                            <Form.Group as={Col} md={4} controlId="phone">
-                                <Form.Label>Phone</Form.Label>
-                                {/*<Form.Control type="list-number" placeholder="Phone" required />*/}
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="inputGroupPrepend">
-                                        <i className='bx bx-phone'></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        name="phone"
-                                        placeholder="Phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        minLength={10}
-                                        maxLength={10}
-                                        aria-describedby="inputGroupPrepend"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please provide a valid state.
-                                        Please enter your phone number.
-                                    </Form.Control.Feedback>
-                                    {/*<Form.Control.Feedback>*/}
-                                    {/*    Looks good!*/}
-                                    {/*</Form.Control.Feedback>*/}
-                                </InputGroup>
-                            </Form.Group>
-                        </Row>
-                        {/*<hr/>*/}
-                        <Row className="mb-3">
-                            <Col xs={6}>
-                                <Form.Group controlId="formBasicCheckbox">
-                                    <Form.Check
-                                        required
-                                        type="checkbox"
-                                        label="Agree to terms and conditions"
-                                        feedback="You must agree before submitting."
-                                        feedbackType="invalid"
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Button variant="primary" type="submit" style={{width: '100%'}}>
-                                    Register
-                                </Button>
-                            </Col>
-                        </Row>
-                        <hr/>
-                        {/*<div className="text-center" style={{marginBottom: 16}}>or sign up with</div>*/}
-                        {/*<div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>*/}
-                        {/*    {sclItems.map(socialItem => (*/}
-                        {/*        <SocialFormButton key={socialItem.id} socialItems={socialItem}/>*/}
-                        {/*    ))}*/}
-                        {/*</div>*/}
-                        {/*<hr/>*/}
-                        <div className="text-center" style={{marginBottom: 16}}>
-                            you have an acoount
-                            <Link to="/login">
-                                <Button variant="link" style={{
-                                    padding: 0,
-                                    color: '#696cff',
-                                    textDecoration: "none",
-                                    fontWeight: 'bold',
-                                    paddingLeft: 4
-                                }}>Log in</Button>
-                            </Link>
+            <AuthWrapper>
+                <h4 className="mb-2">Adventure starts here 🚀</h4>
+                <p className="mb-4">Make your app management easy and fun!</p>
+
+                {/*<Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
+                {/*    <Row className="mb-3">*/}
+                {/*        <Form.Group as={Col} md={7} controlId="email">*/}
+                {/*            <Form.Label>Email address</Form.Label>*/}
+                {/*            <InputGroup hasValidation>*/}
+                {/*                <InputGroup.Text id="inputGroupPrepend">*/}
+                {/*                    <i className='bx bx-at'></i>*/}
+                {/*                </InputGroup.Text>*/}
+                {/*                <Form.Control*/}
+                {/*                    required*/}
+                {/*                    type="email"*/}
+                {/*                    name="email"*/}
+                {/*                    placeholder="email@email.com"*/}
+                {/*                    value={formData.email}*/}
+                {/*                    onChange={handleChange}*/}
+                {/*                />*/}
+                {/*                <Form.Control.Feedback type="invalid">*/}
+                {/*                    Please choose a email.*/}
+                {/*                </Form.Control.Feedback>*/}
+                {/*                /!*<Form.Control.Feedback>*!/*/}
+                {/*                /!*    Looks good!*!/*/}
+                {/*                /!*</Form.Control.Feedback>*!/*/}
+                {/*            </InputGroup>*/}
+                {/*        </Form.Group>*/}
+                {/*        <Form.Group as={Col} md={5} controlId="username">*/}
+                {/*            <Form.Label>Username</Form.Label>*/}
+                {/*            <InputGroup hasValidation>*/}
+                {/*                <InputGroup.Text id="inputGroupPrepend">*/}
+                {/*                    <i className='bx bx-user'></i>*/}
+                {/*                </InputGroup.Text>*/}
+                {/*                <Form.Control*/}
+                {/*                    type="text"*/}
+                {/*                    name="username"*/}
+                {/*                    placeholder="username"*/}
+                {/*                    value={formData.username}*/}
+                {/*                    onChange={handleChange}*/}
+                {/*                    aria-describedby="inputGroupPrepend"*/}
+                {/*                    required*/}
+                {/*                />*/}
+                {/*                <Form.Control.Feedback type="invalid">*/}
+                {/*                    Please choose a username.*/}
+                {/*                </Form.Control.Feedback>*/}
+                {/*                /!*<Form.Control.Feedback>*!/*/}
+                {/*                /!*    Looks good!*!/*/}
+                {/*                /!*</Form.Control.Feedback>*!/*/}
+                {/*            </InputGroup>*/}
+                {/*        </Form.Group>*/}
+                {/*    </Row>*/}
+                {/*    <Row className="mb-3">*/}
+                {/*        <Form.Group as={Col} md={6} controlId="password">*/}
+                {/*            <Form.Label>Password</Form.Label>*/}
+                {/*            <InputGroup hasValidation>*/}
+                {/*                <Form.Control*/}
+                {/*                    required*/}
+                {/*                    name="password"*/}
+                {/*                    type="password"*/}
+                {/*                    placeholder="Password"*/}
+                {/*                    minLength={8}*/}
+                {/*                    value={formData.password}*/}
+                {/*                    onChange={handleChange}*/}
+                {/*                />*/}
+                {/*                <Form.Control.Feedback type="invalid">*/}
+                {/*                    Please enter your password.*/}
+                {/*                </Form.Control.Feedback>*/}
+                {/*                /!*<Form.Control.Feedback>*!/*/}
+                {/*                /!*    Looks good!*!/*/}
+                {/*                /!*</Form.Control.Feedback>*!/*/}
+                {/*            </InputGroup>*/}
+                {/*        </Form.Group>*/}
+                {/*        <Form.Group as={Col} md={6} controlId="retypepass">*/}
+                {/*            <Form.Label>Verify Password</Form.Label>*/}
+                {/*            <InputGroup hasValidation>*/}
+                {/*                <Form.Control*/}
+                {/*                    type="password"*/}
+                {/*                    name="retypepass"*/}
+                {/*                    placeholder="Re-type password"*/}
+                {/*                    minLength={8}*/}
+                {/*                    value={formData.retypepass}*/}
+                {/*                    onChange={handleChange}*/}
+                {/*                    aria-describedby="inputGroupPrepend"*/}
+                {/*                    required*/}
+                {/*                />*/}
+                {/*                <Form.Control.Feedback type="invalid">*/}
+                {/*                    Please retype your password.*/}
+                {/*                </Form.Control.Feedback>*/}
+                {/*                /!*<Form.Control.Feedback>*!/*/}
+                {/*                /!*    Looks good!*!/*/}
+                {/*                /!*</Form.Control.Feedback>*!/*/}
+                {/*            </InputGroup>*/}
+                {/*        </Form.Group>*/}
+                {/*    </Row>*/}
+                {/*    <Row className="mb-3">*/}
+                {/*        <Form.Group as={Col} md={4} controlId="firstname">*/}
+                {/*            <Form.Label>First name</Form.Label>*/}
+                {/*            <Form.Control*/}
+                {/*                required*/}
+                {/*                type="text"*/}
+                {/*                name="firstname"*/}
+                {/*                placeholder="First name"*/}
+                {/*                value={formData.firstname}*/}
+                {/*                onChange={handleChange}*/}
+                {/*            />*/}
+                {/*            <Form.Control.Feedback type="invalid">*/}
+                {/*                Please enter your Firstname.*/}
+                {/*            </Form.Control.Feedback>*/}
+                {/*            /!*<Form.Control.Feedback>*!/*/}
+                {/*            /!*    Looks good!*!/*/}
+                {/*            /!*</Form.Control.Feedback>*!/*/}
+                {/*        </Form.Group>*/}
+                {/*        <Form.Group as={Col} md={4} controlId="lastname">*/}
+                {/*            <Form.Label>Last name</Form.Label>*/}
+                {/*            <Form.Control*/}
+                {/*                required*/}
+                {/*                type="text"*/}
+                {/*                name="lastname"*/}
+                {/*                placeholder="Last name"*/}
+                {/*                value={formData.lastname}*/}
+                {/*                onChange={handleChange}*/}
+                {/*            />*/}
+                {/*            <Form.Control.Feedback type="invalid">*/}
+                {/*                Please enter your Lastname.*/}
+                {/*            </Form.Control.Feedback>*/}
+                {/*            /!*<Form.Control.Feedback>*!/*/}
+                {/*            /!*    Looks good!*!/*/}
+                {/*            /!*</Form.Control.Feedback>*!/*/}
+                {/*        </Form.Group>*/}
+                {/*        <Form.Group as={Col} md={4} controlId="phone">*/}
+                {/*            <Form.Label>Phone</Form.Label>*/}
+                {/*            /!*<Form.Control type="list-number" placeholder="Phone" required />*!/*/}
+                {/*            <InputGroup hasValidation>*/}
+                {/*                <InputGroup.Text id="inputGroupPrepend">*/}
+                {/*                    <i className='bx bx-phone'></i>*/}
+                {/*                </InputGroup.Text>*/}
+                {/*                <Form.Control*/}
+                {/*                    type="text"*/}
+                {/*                    name="phone"*/}
+                {/*                    placeholder="Phone"*/}
+                {/*                    value={formData.phone}*/}
+                {/*                    onChange={handleChange}*/}
+                {/*                    minLength={10}*/}
+                {/*                    maxLength={10}*/}
+                {/*                    aria-describedby="inputGroupPrepend"*/}
+                {/*                    required*/}
+                {/*                />*/}
+                {/*                <Form.Control.Feedback type="invalid">*/}
+                {/*                    Please provide a valid state.*/}
+                {/*                    Please enter your phone number.*/}
+                {/*                </Form.Control.Feedback>*/}
+                {/*                /!*<Form.Control.Feedback>*!/*/}
+                {/*                /!*    Looks good!*!/*/}
+                {/*                /!*</Form.Control.Feedback>*!/*/}
+                {/*            </InputGroup>*/}
+                {/*        </Form.Group>*/}
+                {/*    </Row>*/}
+                {/*    /!*<hr/>*!/*/}
+                {/*    <Row className="mb-3">*/}
+                {/*        <Col xs={6}>*/}
+                {/*            <Form.Group controlId="formBasicCheckbox">*/}
+                {/*                <Form.Check*/}
+                {/*                    required*/}
+                {/*                    type="checkbox"*/}
+                {/*                    label="Agree to terms and conditions"*/}
+                {/*                    feedback="You must agree before submitting."*/}
+                {/*                    feedbackType="invalid"*/}
+                {/*                />*/}
+                {/*            </Form.Group>*/}
+                {/*        </Col>*/}
+                {/*    </Row>*/}
+                {/*</Form>*/}
+                <Form id="formAuthentication" className="mb-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Email address</label>
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <i className='bx bx-at'></i>
+                            </span>
+                            <input
+                                required
+                                type="email"
+                                name="email"
+                                placeholder="email@email.com"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="form-control"
+                                aria-label="Username"
+                                aria-describedby="basic-addon11"
+                            />
                         </div>
-                    </Form>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Username</label>
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <i className='bx bx-user'></i>
+                            </span>
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                required
+                                className="form-control"
+                                aria-label="Username"
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Password</label>
+                        <div className="input-group">
+                            <input
+                                required
+                                name="password"
+                                type="password"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                minLength={8}
+                                value={formData.password}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                className="form-control"
+                                aria-label="Password"
+                            />
+                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Verify Password</label>
+                        <div className="input-group">
+                            <input
+                                required
+                                type="password"
+                                name="retypepass"
+                                minLength={8}
+                                value={formData.retypepass}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                className="form-control"
+                                aria-label="Password"
+                            />
+                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="firstname" className="form-label">Firstname</label>
+                        <div className="input-group">
+                            <input
+                                required
+                                type="text"
+                                name="firstname"
+                                placeholder="First name"
+                                value={formData.firstname}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                className="form-control"
+                                aria-label="Firstname"
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="lastname" className="form-label">Lastname</label>
+                        <div className="input-group">
+                            <input
+                                required
+                                type="text"
+                                name="lastname"
+                                placeholder="Last name"
+                                value={formData.lastname}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                className="form-control"
+                                aria-label="Lastname"
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="phone" className="form-label">Phone</label>
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <i className='bx bx-phone'></i>
+                            </span>
+                            <input
+                                required
+                                type="text"
+                                name="phone"
+                                placeholder="Phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                minLength={10}
+                                maxLength={10}
+                                aria-describedby="inputGroupPrepend"
+                                className="form-control"
+                                aria-label="Phone"
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <div className="form-check">
+                            <input
+                                required
+                                type="checkbox"
+                                className="form-check-input"
+                                id="terms-conditions"
+                                name="terms"
+                                value={formData.terms}
+                                onChange={handleChange}
+                            />
+                            <label className="form-check-label" htmlFor="terms-conditions">
+                                I agree to
+                                <a aria-label="pricacy policy and terms" href="#"> privacy policy & terms</a>
+                            </label>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">Register</button>
+                        {/*<Button variant="primary" type="submit" style={{width: '100%'}}>*/}
+                        {/*    Register*/}
+                        {/*</Button>*/}
+                    </div>
+                </Form>
+
+                <p className="text-center">
+                    <span>Already have an account? </span>
+                    <Link aria-label="Go to Login Page" to='/auth/login' className="registration-link">
+                        <span>Sign in instead</span>
+                    </Link>
+                </p>
+
+                <p className="text-center">
+                    <span>Already have an account?</span>
+                    <Link aria-label="Go to Login Page" to="/auth/login"
+                          className="d-flex align-items-center justify-content-center">
+                        <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                        Back to login
+                    </Link>
+                </p>
+
+                <div className="divider my-6">
+                    <div className="divider-text">or</div>
                 </div>
-            </Overview>
+                {/*<div className="text-center mb-3">or log in with</div>*/}
+                <div className="row d-flex justify-content-center flex-wrap">
+                    <div className="col-lg-12">
+                        <div className="d-flex justify-content-center"
+                             style={{minWidth: '120px', width: '100%'}}>
+                            <GoogleLogin
+                                onSuccess={(response) => handleGoogleLogin(response)}
+                                onError={() => console.log("Japtor")}
+                                style={{width: '100%'}}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </AuthWrapper>
+
+            {/*<Overview mt={112} me={56}>*/}
+            {/*    <div>*/}
+            {/*        <h2>Register</h2>*/}
+            {/*        <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>*/}
+            {/*            <Image*/}
+            {/*                className="d-block"*/}
+            {/*                src={jp}*/}
+            {/*                alt="Second slide"*/}
+            {/*                style={{objectFit: 'cover', width: 224, height: 224, borderRadius: '5px'}}*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*        <Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
+            {/*            <Row className="mb-3">*/}
+            {/*                <Form.Group as={Col} md={7} controlId="email">*/}
+            {/*                    <Form.Label>Email address</Form.Label>*/}
+            {/*                    <InputGroup hasValidation>*/}
+            {/*                        <InputGroup.Text id="inputGroupPrepend">*/}
+            {/*                            <i className='bx bx-at'></i>*/}
+            {/*                        </InputGroup.Text>*/}
+            {/*                        <Form.Control*/}
+            {/*                            required*/}
+            {/*                            type="email"*/}
+            {/*                            name="email"*/}
+            {/*                            placeholder="email@email.com"*/}
+            {/*                            value={formData.email}*/}
+            {/*                            onChange={handleChange}*/}
+            {/*                        />*/}
+            {/*                        <Form.Control.Feedback type="invalid">*/}
+            {/*                            Please choose a email.*/}
+            {/*                        </Form.Control.Feedback>*/}
+            {/*                        /!*<Form.Control.Feedback>*!/*/}
+            {/*                        /!*    Looks good!*!/*/}
+            {/*                        /!*</Form.Control.Feedback>*!/*/}
+            {/*                    </InputGroup>*/}
+            {/*                </Form.Group>*/}
+            {/*                <Form.Group as={Col} md={5} controlId="username">*/}
+            {/*                    <Form.Label>Username</Form.Label>*/}
+            {/*                    <InputGroup hasValidation>*/}
+            {/*                        <InputGroup.Text id="inputGroupPrepend">*/}
+            {/*                            <i className='bx bx-user'></i>*/}
+            {/*                        </InputGroup.Text>*/}
+            {/*                        <Form.Control*/}
+            {/*                            type="text"*/}
+            {/*                            name="username"*/}
+            {/*                            placeholder="username"*/}
+            {/*                            value={formData.username}*/}
+            {/*                            onChange={handleChange}*/}
+            {/*                            aria-describedby="inputGroupPrepend"*/}
+            {/*                            required*/}
+            {/*                        />*/}
+            {/*                        <Form.Control.Feedback type="invalid">*/}
+            {/*                            Please choose a username.*/}
+            {/*                        </Form.Control.Feedback>*/}
+            {/*                        /!*<Form.Control.Feedback>*!/*/}
+            {/*                        /!*    Looks good!*!/*/}
+            {/*                        /!*</Form.Control.Feedback>*!/*/}
+            {/*                    </InputGroup>*/}
+            {/*                </Form.Group>*/}
+            {/*            </Row>*/}
+            {/*            <Row className="mb-3">*/}
+            {/*                <Form.Group as={Col} md={6} controlId="password">*/}
+            {/*                    <Form.Label>Password</Form.Label>*/}
+            {/*                    <InputGroup hasValidation>*/}
+            {/*                        <Form.Control*/}
+            {/*                            required*/}
+            {/*                            name="password"*/}
+            {/*                            type="password"*/}
+            {/*                            placeholder="Password"*/}
+            {/*                            minLength={8}*/}
+            {/*                            value={formData.password}*/}
+            {/*                            onChange={handleChange}*/}
+            {/*                        />*/}
+            {/*                        <Form.Control.Feedback type="invalid">*/}
+            {/*                            Please enter your password.*/}
+            {/*                        </Form.Control.Feedback>*/}
+            {/*                        /!*<Form.Control.Feedback>*!/*/}
+            {/*                        /!*    Looks good!*!/*/}
+            {/*                        /!*</Form.Control.Feedback>*!/*/}
+            {/*                    </InputGroup>*/}
+            {/*                </Form.Group>*/}
+            {/*                <Form.Group as={Col} md={6} controlId="retypepass">*/}
+            {/*                    <Form.Label>Verify Password</Form.Label>*/}
+            {/*                    <InputGroup hasValidation>*/}
+            {/*                        <Form.Control*/}
+            {/*                            type="password"*/}
+            {/*                            name="retypepass"*/}
+            {/*                            placeholder="Re-type password"*/}
+            {/*                            minLength={8}*/}
+            {/*                            value={formData.retypepass}*/}
+            {/*                            onChange={handleChange}*/}
+            {/*                            aria-describedby="inputGroupPrepend"*/}
+            {/*                            required*/}
+            {/*                        />*/}
+            {/*                        <Form.Control.Feedback type="invalid">*/}
+            {/*                            Please retype your password.*/}
+            {/*                        </Form.Control.Feedback>*/}
+            {/*                        /!*<Form.Control.Feedback>*!/*/}
+            {/*                        /!*    Looks good!*!/*/}
+            {/*                        /!*</Form.Control.Feedback>*!/*/}
+            {/*                    </InputGroup>*/}
+            {/*                </Form.Group>*/}
+            {/*            </Row>*/}
+            {/*            <Row className="mb-3">*/}
+            {/*                <Form.Group as={Col} md={4} controlId="firstname">*/}
+            {/*                    <Form.Label>First name</Form.Label>*/}
+            {/*                    <Form.Control*/}
+            {/*                        required*/}
+            {/*                        type="text"*/}
+            {/*                        name="firstname"*/}
+            {/*                        placeholder="First name"*/}
+            {/*                        value={formData.firstname}*/}
+            {/*                        onChange={handleChange}*/}
+            {/*                    />*/}
+            {/*                    <Form.Control.Feedback type="invalid">*/}
+            {/*                        Please enter your Firstname.*/}
+            {/*                    </Form.Control.Feedback>*/}
+            {/*                    /!*<Form.Control.Feedback>*!/*/}
+            {/*                    /!*    Looks good!*!/*/}
+            {/*                    /!*</Form.Control.Feedback>*!/*/}
+            {/*                </Form.Group>*/}
+            {/*                <Form.Group as={Col} md={4} controlId="lastname">*/}
+            {/*                    <Form.Label>Last name</Form.Label>*/}
+            {/*                    <Form.Control*/}
+            {/*                        required*/}
+            {/*                        type="text"*/}
+            {/*                        name="lastname"*/}
+            {/*                        placeholder="Last name"*/}
+            {/*                        value={formData.lastname}*/}
+            {/*                        onChange={handleChange}*/}
+            {/*                    />*/}
+            {/*                    <Form.Control.Feedback type="invalid">*/}
+            {/*                        Please enter your Lastname.*/}
+            {/*                    </Form.Control.Feedback>*/}
+            {/*                    /!*<Form.Control.Feedback>*!/*/}
+            {/*                    /!*    Looks good!*!/*/}
+            {/*                    /!*</Form.Control.Feedback>*!/*/}
+            {/*                </Form.Group>*/}
+            {/*                <Form.Group as={Col} md={4} controlId="phone">*/}
+            {/*                    <Form.Label>Phone</Form.Label>*/}
+            {/*                    /!*<Form.Control type="list-number" placeholder="Phone" required />*!/*/}
+            {/*                    <InputGroup hasValidation>*/}
+            {/*                        <InputGroup.Text id="inputGroupPrepend">*/}
+            {/*                            <i className='bx bx-phone'></i>*/}
+            {/*                        </InputGroup.Text>*/}
+            {/*                        <Form.Control*/}
+            {/*                            type="text"*/}
+            {/*                            name="phone"*/}
+            {/*                            placeholder="Phone"*/}
+            {/*                            value={formData.phone}*/}
+            {/*                            onChange={handleChange}*/}
+            {/*                            minLength={10}*/}
+            {/*                            maxLength={10}*/}
+            {/*                            aria-describedby="inputGroupPrepend"*/}
+            {/*                            required*/}
+            {/*                        />*/}
+            {/*                        <Form.Control.Feedback type="invalid">*/}
+            {/*                            Please provide a valid state.*/}
+            {/*                            Please enter your phone number.*/}
+            {/*                        </Form.Control.Feedback>*/}
+            {/*                        /!*<Form.Control.Feedback>*!/*/}
+            {/*                        /!*    Looks good!*!/*/}
+            {/*                        /!*</Form.Control.Feedback>*!/*/}
+            {/*                    </InputGroup>*/}
+            {/*                </Form.Group>*/}
+            {/*            </Row>*/}
+            {/*            /!*<hr/>*!/*/}
+            {/*            <Row className="mb-3">*/}
+            {/*                <Col xs={6}>*/}
+            {/*                    <Form.Group controlId="formBasicCheckbox">*/}
+            {/*                        <Form.Check*/}
+            {/*                            required*/}
+            {/*                            type="checkbox"*/}
+            {/*                            label="Agree to terms and conditions"*/}
+            {/*                            feedback="You must agree before submitting."*/}
+            {/*                            feedbackType="invalid"*/}
+            {/*                        />*/}
+            {/*                    </Form.Group>*/}
+            {/*                </Col>*/}
+            {/*            </Row>*/}
+            {/*            <Row>*/}
+            {/*                <Col>*/}
+            {/*                    <Button variant="primary" type="submit" style={{width: '100%'}}>*/}
+            {/*                        Register*/}
+            {/*                    </Button>*/}
+            {/*                </Col>*/}
+            {/*            </Row>*/}
+            {/*            /!*<hr/>*!/*/}
+            {/*            /!*<div className="text-center mb-3">or sign up with</div>*!/*/}
+                        {/*/!*<div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>*!/*/}
+                        {/*/!*    {sclItems.map(socialItem => (*!/*/}
+                        {/*/!*        <SocialFormButton key={socialItem.id} socialItems={socialItem}/>*!/*/}
+                        {/*/!*    ))}*!/*/}
+                        {/*/!*</div>*!/*/}
+            {/*            /!*<div className="d-flex justify-content-between flex-wrap row">*!/*/}
+            {/*            /!*    /!*{socials.map(socialItem => (*!/*!/*/}
+            {/*            /!*    /!*    <>*!/*!/*/}
+            {/*            /!*    /!*        <div className="col-lg-4">*!/*!/*/}
+            {/*            /!*    /!*            <SocialFormButton key={socialItem.id} element={socialItem}/>*!/*!/*/}
+            {/*            /!*    /!*        </div>*!/*!/*/}
+            {/*            /!*    /!*    </>*!/*!/*/}
+            {/*            /!*    /!*))}*!/*!/*/}
+            {/*            /!*    <div className="col-lg-12">*!/*/}
+            {/*            /!*        <Button*!/*/}
+            {/*            /!*            variant="secondary" type="button"*!/*/}
+            {/*            /!*            className="flex-grow-1 w-100"*!/*/}
+            {/*            /!*            style={{minWidth: '120px'}}*!/*/}
+            {/*            /!*        >*!/*/}
+            {/*            /!*            <i className="bx bxl-google me-2"></i>*!/*/}
+            {/*            /!*            Google*!/*/}
+            {/*            /!*        </Button>*!/*/}
+            {/*            /!*    </div>*!/*/}
+            {/*            /!*</div>*!/*/}
+            {/*            <hr/>*/}
+            {/*            <div className="text-center" style={{marginBottom: 16}}>*/}
+            {/*                you have an acoount*/}
+            {/*                <Link to="/auth/login">*/}
+            {/*                    <Button variant="link" style={{*/}
+            {/*                        padding: 0,*/}
+            {/*                        color: '#696cff',*/}
+            {/*                        textDecoration: "none",*/}
+            {/*                        fontWeight: 'bold',*/}
+            {/*                        paddingLeft: 4*/}
+            {/*                    }}>Log in</Button>*/}
+            {/*                </Link>*/}
+            {/*            </div>*/}
+            {/*        </Form>*/}
+            {/*    </div>*/}
+            {/*</Overview>*/}
 
             <NotifySuccess
                 title="'Registration successful'"
                 message="You have register in successfully."
                 show={showSuccess}  // truyền showSuccess vào NotifySuccess
-                onHide={() => setShowSuccess(false)}  // đóng khi người dùng click
+                onHide={() => {
+                    setShowSuccess(false)
+                    navigate('/auth/login');
+                }}  // đóng khi người dùng click
             />
 
             <NotifyError

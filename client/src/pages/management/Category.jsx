@@ -267,7 +267,7 @@ export const Category = () => {
                                 Category Name
                             </th>
                             <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 156}}>Actions
+                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
                         </tr>
                         </thead>
@@ -301,10 +301,18 @@ export const Category = () => {
                                 {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
                                 <td>{item.phone_number}</td> */}
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.idcategory)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-edit' ></i></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.idcategory)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-trash' ></i></Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleEdit(item.idcategory)}
+                                        className="p-2">
+                                        <i className='bx bx-edit' ></i>
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleDelete(item.idcategory)}
+                                        className="p-2">
+                                        <i className='bx bx-trash' ></i>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

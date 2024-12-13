@@ -5,9 +5,11 @@ const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware
 const AdministratorMiddleware = require('../middleware/AdministratorMiddleware');
 
 // router.post('/login/authen', AuthenticationController.login.bind(AuthenticationController))
+router.post('/google', AuthenticationController.google)
+
 router.post('/login', AuthenticationController.login)
 
-router.put('/register', AuthenticationController.register)
+router.post('/register', AuthenticationController.register)
 
 router.post('/logout', AuthenticationMiddleware, AuthenticationController.logout);
 

@@ -278,7 +278,7 @@ export const ProductDescription = () => {
                                 ))
                             }
                             <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 156}}>Actions
+                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
                         </tr>
                         </thead>
@@ -305,12 +305,19 @@ export const ProductDescription = () => {
                                 <td>{item.title_description}</td>
                                 <td>{item.sub_description}</td>
                                 <td>{item.img_description}</td>
-
                                 <td>
-                                    <Button variant="link" onClick={() => handleEdit(item.iddescription)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-edit' ></i></Button>
-                                    <Button variant="link" onClick={() => handleDelete(item.iddescription)}
-                                            style={{marginLeft: 'auto'}}><i className='bx bx-trash' ></i></Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleEdit(item.iddescription)}
+                                        className="p-2">
+                                        <i className='bx bx-edit'></i>
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => handleDelete(item.iddescription)}
+                                        className="p-2">
+                                        <i className='bx bx-trash'></i>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

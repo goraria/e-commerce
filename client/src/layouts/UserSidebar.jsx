@@ -49,7 +49,7 @@ const UserSidebar = () => {
             });
             localStorage.removeItem('token');  // Xóa JWT
             setShowModal(false)
-            navigate('/login');
+            navigate('/auth/login');
         } catch (error) {
             console.error('Logout failed', error);
         }

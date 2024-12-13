@@ -13,6 +13,7 @@ import NotFound from "./pages/overview/NotFound.jsx";
 import Loading from "./pages/overview/Loading.jsx";
 import Login from "./pages/authentication/Login.jsx";
 import Panel from "./layouts/Panel.jsx";
+import {AuthenticationRoutes} from "./router/AuthenticationRoutes.jsx";
 
 const App = () => {
     const [auth, setAuth] = useState({
@@ -84,9 +85,16 @@ const App = () => {
             />
 
             <Route
+                path="/auth/*"
+                element={
+                    <AuthenticationRoutes />
+                }
+            />
+
+            <Route
                 path="/user/*"
                 element={
-                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/404">
+                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
                         <Panel role={auth.role}>
                             <UserRoutes />
                         </Panel>
@@ -97,7 +105,7 @@ const App = () => {
             <Route
                 path="/pay/*"
                 element={
-                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/404">
+                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
                         <Frame role={auth.role}>
                             <CustomerRoutes />
                         </Frame>
@@ -108,7 +116,7 @@ const App = () => {
             <Route
                 path="/admin/*"
                 element={
-                    <Protected isAllowed={auth.isAuthenticated && auth.role === 1} redirectTo="/404">
+                    <Protected isAllowed={auth.isAuthenticated && auth.role === 1} redirectTo="/auth/error">
                         <Layout role={auth.role}>
                             <AdministratorRoutes />
                         </Layout>
