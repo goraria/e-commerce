@@ -7,9 +7,7 @@ import UserProfile from "../pages/profile/UserProfile.jsx";
 import AddressManagement from "../pages/user-information/AddressManagement.jsx";
 
 import NotFound from "../pages/overview/NotFound.jsx";
-import Order from '../pages/user-component/Order.jsx';
-import CheckOut from '../pages/user-component/Checkout.jsx';
-import VoucherWallet from "../pages/user-infomation/VoucherWallet.jsx";
+import VoucherWallet from "../pages/user-information/VoucherWallet.jsx";
 import ChangePassword from '../pages/authentication/ChangePassword.jsx';
 import {Preview} from "../pages/dashboard/Preview.jsx";
 import OrderHistory from "../pages/user-information/OrderHistory.jsx";

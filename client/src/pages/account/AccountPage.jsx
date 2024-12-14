@@ -180,6 +180,7 @@ export const AccountPage = ({ onReload }) => {
                                     </span>
                                     <input
                                         required
+                                        readOnly
                                         type="text"
                                         name="username"
                                         placeholder="username"
