@@ -1,10 +1,8 @@
-import AddressList from "./AddressList.jsx";
-import AddressItem from "../../components/address/AddressItem.jsx";
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import VoucherItem from "../../components/voucher/VoucherItem.jsx";
 import {Button} from "react-bootstrap";
 import jp from "../../assets/images/jp.jpeg";
+import axios from "axios";
 
 const VoucherWallet = () => {
     const [addresses, setAddresses] = useState([]);

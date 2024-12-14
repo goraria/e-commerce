@@ -18,31 +18,33 @@ const AccountInfo = ({ onReload }) => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    // navigate('/login');
-                    return;
-                }
-
-                const response = await axios.get('http://localhost:5172/account/get-info', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                const data = response.data;
-                setFormData({
-                    username: data.username,
-                    email: data.email,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
-                    phone: data.phone
-                });
-            } catch (error) {
-                setError('Error fetching user data');
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // navigate('/login');
+                return;
             }
-        };
+
+            const response = await axios.get('http://localhost:5172/account/get-info', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const data = response.data;
+            setFormData({
+                username: data.username,
+                email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                phone: data.phone
+            });
+        } catch (error) {
+            setError('Error fetching user data');
+        }
+    };
+
+    useEffect(() => {
+
 
         fetchData();
     }, []);

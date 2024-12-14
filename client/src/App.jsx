@@ -21,7 +21,7 @@ const App = () => {
         role: null
     });
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const authenticationCheck = async () => {
         const token = localStorage.getItem('token');
@@ -60,7 +60,7 @@ const App = () => {
                 role: null
             });
             // localStorage.removeItem('token');
-            // navigate('/404');
+            // navigate('/auth/error');
             return auth;
         } finally {
             setLoading(false);
@@ -71,7 +71,7 @@ const App = () => {
         authenticationCheck();
     }, []); // navigate
 
-    if (loading) return <Frame><Loading/></Frame>;
+    if (loading) return <Loading/>;
 
     return (
         <Routes>

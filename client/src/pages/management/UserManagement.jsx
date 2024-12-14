@@ -10,23 +10,23 @@ export const UserManagement = () => {
     const [data, setData] = useState([])
     const fetchAPI = async () => {
         const response = await axios.get("http://localhost:5172/admin/get-user")
-        console.log(response.data)
+        // console.log(response.data)
         setData(response.data)
     };
     const [data1, setData1] = useState([])
     const fetchAPI1 = async () => {
         const response = await axios.get("http://localhost:5172/admin/get-account")
-        console.log(response.data)
+        // console.log(response.data)
         setData1(response.data)
     };
     const mergedData = data.map(user => {
         const account = data1.find(acc => acc.idaccount === user.idaccount);
         return { ...user, ...account };
     });
-    console.log(mergedData)
+    // console.log(mergedData)
     const handleModalClose = () => {
         fetchAPI1();
-        fetchAPI1();
+        // fetchAPI1();
         setModalShow(false);
         setSelectedUser(null);
     };

@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'
-import AddressList from "../user-infomation/AddressList.jsx";
 
 const Cart = () => {
     const [carts, setCart] = useState();

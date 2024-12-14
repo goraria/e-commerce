@@ -4,10 +4,12 @@ const BillController = require('../controllers/BillController')
 const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware');
 
 router.get('/list-all', BillController.getAllBill);
-router.get('/list-all', BillController.getAllBill);
-router.put('/add-bill',AuthenticationMiddleware ,BillController.createBill);
-router.put('/add-billDetail', BillController.createBillDetail);
 
+router.get('/list-bill', AuthenticationMiddleware, BillController.getAllBillByAccount);
+
+router.put('/add-bill',AuthenticationMiddleware ,BillController.createBill);
+
+router.put('/add-billDetail', BillController.createBillDetail);
 
 // router.get('/list', AuthenticationMiddleware, BillController.getAllBillByAccount);
 

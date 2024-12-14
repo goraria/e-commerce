@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const UserManagement = () => {
+const UserManagementDemo = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -50,4 +50,4 @@ const UserManagement = () => {
     );
 };
 
-export default UserManagement;
+export default UserManagementDemo;

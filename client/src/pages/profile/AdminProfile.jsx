@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from "react";
-import AccountInfo from "../user-infomation/AccountInfo.jsx";
-import {Button} from "react-bootstrap";
 import {AccountPage} from "../account/AccountPage.jsx";
 
 export const AdminProfile = () => {

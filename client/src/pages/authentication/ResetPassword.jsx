@@ -76,7 +76,7 @@ const ResetPassword = () => {
         setToken(tokenFromUrl);  // Lưu token vào state
     }, [location]);
 
-    if (loading) return <Frame><Loading /></Frame>
+    if (loading) return <Loading/>
 
     return (
         <>

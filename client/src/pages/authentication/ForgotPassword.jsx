@@ -58,7 +58,7 @@ const ForgotPassword = () => {
     //     authenticationCheck();
     // }, [navigate]);
 
-    if (loading) return <Frame><Loading /></Frame>
+    if (loading) return <Loading/>
 
     return (
         <>
