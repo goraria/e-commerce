@@ -20,7 +20,7 @@ const UserManagementDemo = () => {
 
     return (
         <div>
-            <h2>Quản lý người dùng</h2>
+            <h5>Quản lý người dùng</h5>
             <table className="table">
                 <thead>
                     <tr>

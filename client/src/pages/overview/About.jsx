@@ -64,7 +64,7 @@ const About = () => {
             </Carousel>
             <Overview>
                 <div>
-                    <h2>About us</h2>
+                    <h5>About us</h5>
                     <p className="lead">
                         A laptop e-commerce website serves as a dynamic platform where customers can explore
                         a wide variety of laptops from different brands, compare features, read reviews, and
@@ -94,7 +94,7 @@ const About = () => {
                         </li>
                     </ul>
                     <ImageAbout imageItems={imgItems[2]}/>
-                    <h2>Way to see</h2>
+                    <h5>Way to see</h5>
                     <p className="lead">
                         A laptop e-commerce website serves as a dynamic platform where customers can explore
                         a wide variety of laptops from different brands, compare features, read reviews, and
@@ -115,7 +115,7 @@ const About = () => {
                         needs.
                     </p>
                     <ImageAbout imageItems={imgItems[4]}/>
-                    <h2>High Quanlity</h2>
+                    <h5>High Quanlity</h5>
                     <p className="lead">
                         ASUS is a Taiwan-based, multinational computer hardware and consumer electronics company that
                         was

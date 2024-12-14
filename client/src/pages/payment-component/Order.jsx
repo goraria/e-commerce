@@ -148,7 +148,7 @@ const Order = () => {
                                 border: "none",
                             }}>
                             <div className="container d-flex py-0 px-1">
-                                <h2 className="m-0">Order</h2>
+                                <h5 className="m-0">Order</h5>
                                 {/*<Button variant="primary" style={{marginLeft: 'auto'}}>*/}
                                 {/*    <i className='bx bx-plus me-2' ></i>*/}
                                 {/*    <span>Thêm sản phẩm</span>*/}

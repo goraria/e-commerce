@@ -98,10 +98,11 @@ const ProductList = () => {
             {/*    </Row>*/}
             {/*</Overview>*/}
             <Overview>
-                <h2>Laptop</h2>
-                <h5 className="p-2">
-                    Laptop là một thiết bị máy tính có kích thước nhỏ gọn và di động...
-                </h5>
+                <h5 className="card-title">Laptop</h5>
+                <h6 className="card-subtitle text-muted">
+                    Laptop is best mobile device to work...
+                </h6>
+                <hr/>
                 <row className="justify-content-center my-3">
                     <Stack direction="horizontal" gap={3}>
                         {brands.map((brand, index) => (
@@ -117,10 +118,11 @@ const ProductList = () => {
                 </row>
             </Overview>
             <Overview>
-                <h2>Chọn theo tiêu chí</h2>
-                <h5 className="p-2">
-                    Lọc theo các tiêu chí...
-                </h5>
+                <h5 className="card-title">Sort by</h5>
+                <h6 className="card-subtitle text-muted">
+                    Choose one of config to sort...
+                </h6>
+                <hr/>
                 <row className="justify-content-center my-3">
                     <Stack direction="horizontal" gap={3}>
                         {categories.map((category, index) => (
@@ -130,11 +132,11 @@ const ProductList = () => {
                 </row>
             </Overview>
             <Overview>
-                <h2 className="text-center m-0">Sản phẩm nổi bật</h2>
+                <h3 className="text-center m-0">Sản phẩm nổi bật</h3>
             </Overview>
 
             <div className="container">
-            {/*<h2 className="text-center mb-4">Sản phẩm nổi bật</h2>*/}
+                {/*<h2 className="text-center mb-4">Sản phẩm nổi bật</h2>*/}
                 <Row>
                     {productList.map(product => (
                         <div key={product.idproduct} className="col col-xxl-3 col-md-6 col-sm-12 mb-4">

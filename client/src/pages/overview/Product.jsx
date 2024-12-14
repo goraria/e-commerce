@@ -314,7 +314,7 @@ const Product = () => {
                 </div>
             </div>
             <Overview>
-                <h2 className="text-center m-0">Sản phẩm tương tự</h2>
+                <h3 className="text-center m-0">Sản phẩm tương tự</h3>
                 {/* <Row>
                         {products.map(product =>
                             <Col key={product.id} sm={12} md={6} lg={3} className="mb-3">

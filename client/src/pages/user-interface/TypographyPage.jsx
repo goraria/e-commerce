@@ -21,7 +21,7 @@ export const TypographyPage = () => {
                                 <tr>
                                     <td className="align-middle"><small className="text-light fw-medium">Heading 2</small></td>
                                     <td className="py-3">
-                                        <h2 className="mb-0">Bootstrap heading</h2>
+                                        <h5 className="mb-0">Bootstrap heading</h5>
                                     </td>
                                 </tr>
                                 <tr>
