@@ -181,6 +181,69 @@ class AuthenticationController {
             res.send('Link xác minh không hợp lệ hoặc đã hết hạn.');
         }
     };
+    static async sendResetPasswordEmail(email, token, req, res) {
+        const resetUrl = `http://localhost:5173/auth/reset-password?token=${token}`;
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_APSS,
+            },
+        });
+        //process.env.EMAIL_USER
+        const mailOptions = {
+            from: "Gorth Inc.",
+            to: email,
+            subject: 'Reset Password',
+            html: `<p>Click the link to reset your password:</p><a href="${resetUrl}">Reset password</a>`,
+        };
+
+        try {
+            await transporter.sendMail(mailOptions);
+            // console.log('Confirmation email sent successfully');
+        } catch (error) {
+            // console.error('Error sending confirmation email:', error);
+            console.log(error)
+            return res.status(500).json({ error: 'Error reset password' });
+        }
+    }
+    async ForgotPassword(req, res) {
+        try {
+            const { email } = req.body;
+            const user = await Account.findOne({ where: { email: email } });
+            if (!user) {
+                return res.status(400).json({ message: 'Email không tồn tại!' });
+            }
+            const token = crypto.randomBytes(20).toString('hex');
+            const accountToken = {
+                verificationtoken: token
+            }
+            await user.update(accountToken);
+            await AuthenticationController.sendResetPasswordEmail(email, token, req, res);
+            res.json({ message: 'Một email đã được gửi để bạn đặt lại mật khẩu!' });
+        } catch (error) {
+            console.log(error)
+        }
+    };
+    async ResetPassword(req, res) {
+        const { token, newPassword } = req.body;
+        console.log(req.body);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const user = await Account.findOne({
+            where: {
+                verificationtoken: token,
+            }
+        });
+        if (!user) {
+            return res.status(400).json({ message: 'Token không hợp lệ!' });
+        }
+        const userData = {
+            password: hashedPassword,
+            verificationtoken: null
+        }
+        await user.update(userData);
+        res.json({ message: 'Mật khẩu của bạn đã được đặt lại' });
+    };
 }
 
 module.exports = new AuthenticationController();

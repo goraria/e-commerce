@@ -14,7 +14,7 @@ import Frame from "../../layouts/Frame.jsx";
 import Loading from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 
-const ResetPassword = () => {
+const ChangePassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -81,15 +81,15 @@ const ResetPassword = () => {
     return (
         <>
             <AuthWrapper>
-                <h4 className="mb-2">Reset Password? 🔒</h4>
-                <p className="mb-4">Enter your new password and we&#39;ll instructions to reset your password</p>
+                <h4 className="mb-2">Change Password? 🔒</h4>
+                <p className="mb-4">Enter your new password and we&#39;ll instructions to change your password</p>
                 <Form id="formAuthentication" className="mb-3" noValidate validated={validated} onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="password" className="form-label">New Password</label>
+                        <label htmlFor="oldPassword" className="form-label">Old Password</label>
                         <div className="input-group">
                             <input
                                 required
-                                name="password"
+                                name="oldPassword"
                                 type="password"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 minLength={8}
@@ -102,7 +102,24 @@ const ResetPassword = () => {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="retypePassword" className="form-label">Verify Password</label>
+                        <label htmlFor="newPassword" className="form-label">New Password</label>
+                        <div className="input-group">
+                            <input
+                                required
+                                type="password"
+                                name="newPassword"
+                                minLength={8}
+                                onChange={handleChange}
+                                aria-describedby="inputGroupPrepend"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                className="form-control"
+                                aria-label="Password"
+                            />
+                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="retypePassword" className="form-label">Retype Password</label>
                         <div className="input-group">
                             <input
                                 required
@@ -125,7 +142,7 @@ const ResetPassword = () => {
                             type="submit"
                             onClick={() => setCheck(true)}
                         >
-                            Reset Password
+                            Change Password
                         </button>
                         {/* <Button variant="primary" type="submit" style={{ width: '100%' }}
                             onClick={() => setCheck(true)}>
@@ -141,55 +158,6 @@ const ResetPassword = () => {
                     </Link>
                 </div>
             </AuthWrapper>
-            {/* <Overview mt={112} me={56}>
-                <div>
-                    <h2>Forgot Password</h2>
-                    <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>
-                        <Image
-                            className="d-block"
-                            src={jp}
-                            alt="Second slide"
-                            style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}
-                        />
-                    </div>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>New Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                name="password"
-                                onChange={handleChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your password.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="retypePassword">
-                            <Form.Label>Retype password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="RetypePassword"
-                                name="retypePassword"
-
-                                onChange={handleChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your retype password.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button>
-                    </Form>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                    </Form>
-                </div>
-            </Overview> */}
             <NotifySuccess
                 title="Reset password Successful"
                 message="You have reset password successfully."
@@ -210,4 +178,4 @@ const ResetPassword = () => {
     )
 }
 
-export default ResetPassword
+export default ChangePassword

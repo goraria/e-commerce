@@ -7,7 +7,6 @@ const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware
 
 router.get('/get-info', AuthenticationMiddleware, AccountController.getAccountInfo);
 router.put('/set-info', AuthenticationMiddleware, AccountController.setAccountInfo);
-router.post('/forgot-password', AccountController.ForgotPassword);
-router.post('/reset-password', AccountController.ResetPassword);
+
 
 module.exports = router;

@@ -12,7 +12,7 @@ import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import Frame from "../../layouts/Frame.jsx";
 import Loading from "../overview/Loading.jsx";
-import {AuthWrapper} from "./AuthWrapper.jsx";
+import { AuthWrapper } from "./AuthWrapper.jsx";
 
 const ForgotPassword = () => {
     const [check, setCheck] = useState(false);
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
         } else {
             setLoading(true);
             try {
-                const response = await axios.post('http://localhost:5172/account/forgot-password', {
+                const response = await axios.post('http://localhost:5172/authentication/forgot-password', {
                     email: formData.email
                 });
                 setShowSuccess(true);
@@ -76,7 +76,7 @@ const ForgotPassword = () => {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
-                            autoFocus/>
+                            autoFocus />
                     </div>
                     <div className="mb-3">
                         <button
@@ -94,8 +94,8 @@ const ForgotPassword = () => {
                     </div>
                 </Form>
                 <div className="text-center">
-                <Link aria-label="Go to Login Page" to="/auth/login"
-                          className="d-flex align-items-center justify-content-center">
+                    <Link aria-label="Go to Login Page" to="/auth/login"
+                        className="d-flex align-items-center justify-content-center">
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>
