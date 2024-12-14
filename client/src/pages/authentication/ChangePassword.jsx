@@ -35,7 +35,7 @@ const ChangePassword = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
-        if (formData.password !== formData.retypePassword) {
+        if (formData.newPassword !== formData.retypePassword) {
             event.stopPropagation();
             setError("Password do not match.");
             setShowError(true);
@@ -46,10 +46,16 @@ const ChangePassword = () => {
             setShowError(true);
             return;
         }
+        else if (formData.oldPassword === false) {
+            event.stopPropagation();
+            setError("Make sure your new password is more than 8 characters.");
+            setShowError(true);
+            return;
+        }
         else {
             setLoading(true);
             try {
-                const response = await axios.post('http://localhost:5172/authentication/reset-password', {
+                const response = await axios.post('http://localhost:5172/account/change-password', {
                     token: token,
                     newPassword: formData.password
                 });
@@ -57,7 +63,7 @@ const ChangePassword = () => {
                 // navigate('/auth/login');
 
             } catch (error) {
-                setError(error.response ? error.response.data.message : 'Reset password failed');
+                setError(error.response ? error.response.data.message : 'Change password failed');
                 setShowError(true);
             } finally {
                 setLoading(false);
@@ -159,17 +165,17 @@ const ChangePassword = () => {
                 </div>
             </AuthWrapper>
             <NotifySuccess
-                title="Reset password Successful"
-                message="You have reset password successfully."
+                title="Change password Successful"
+                message="You have Change password successfully."
                 show={showSuccess}  // truyền showSuccess vào NotifySuccess
                 onHide={() => {
                     setShowSuccess(false)
-                    navigate('/auth/login');
+                    navigate('/user');
                 }}  // đóng khi người dùng click
             />
 
             <NotifyError
-                title="Reset password Failed"
+                title="Change password Failed"
                 message={error}
                 show={showError}  // truyền showError vào NotifyError
                 onHide={() => setShowError(false)}  // đóng khi người dùng click
