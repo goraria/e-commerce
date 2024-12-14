@@ -20,6 +20,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
     useEffect(() => {
         if (address) {
             setFormData({
+                type: address.type || '',
                 tower: address.tower || '',
                 street: address.street || '',
                 district: address.district || '',
@@ -32,6 +33,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
         if (!show) {
             // Reset form data và trạng thái khi modal đóng
             setFormData({
+                type: '',
                 tower: '',
                 street: '',
                 district: '',
@@ -72,20 +74,12 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
         try {
             const token = localStorage.getItem('token');
             const response = address
-                ? await axios.post(`http://localhost:5172/address/update/${address.idaddress}`, formData, {
+                ? await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
-                : await axios.put('http://localhost:5172/address/addition', formData, {
+                : await axios.post('http://localhost:5172/address/addition', formData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-
-            // const response = address ?
-            //     await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
-            //     await axios.post('http://localhost:5172/address/addition', formData, {
-            //         headers: {
-            //             Authorization: `Bearer ${token}`
-            //         }
-            //     });
 
             if (response.status === 200 || response.status === 201) {
                 // alert(address ? 'Address updated successfully' : 'Address added successfully');
@@ -133,13 +127,35 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                     <p>
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
                     </p>
-                    <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
-                        <Row className="mb-3">
+                    <Form noValidate
+                          validated={validated}
+                          onSubmit={handleInvalid}
+                    > {/*onSubmit={handleSubmit, openConfirmModal}*/}
+                        <div className="mb-3">
+                            <label htmlFor="address" className="form-label">Address Type</label>
+                            <select
+                                className="form-select"
+                                id="address"
+                                name="type"
+                                defaultValue=""
+                                value={formData.type}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Choose type of address</option>
+                                <option value="Home">Home</option>
+                                <option value="Company">Company</option>
+                            </select>
+                            <Form.Control.Feedback type="invalid">
+                                Please select a type of address.
+                            </Form.Control.Feedback>
+                        </div>
+                        <div className="row mb-3">
                             <Form.Group as={Col} md={4} controlId="tower">
                                 <Form.Label>Tower</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="tower">
-                                        <i className='bx bx-buildings' ></i>
+                                        <i className='bx bx-buildings'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -189,13 +205,13 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                        </Row>
+                        </div>
                         <Row className="mb-3">
                             <Form.Group as={Col} md={4} controlId="city">
                                 <Form.Label>City</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="city">
-                                        <i className='bx bxs-city' ></i>
+                                        <i className='bx bxs-city'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -253,8 +269,8 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <i className='bx bx-x' ></i>
+                    <Button onClick={onHide} variant="secondary" style={{marginRight: "auto"}}>
+                        <i className='bx bx-x'></i>
                         <span>Close</span>
                     </Button>
                     {address ?

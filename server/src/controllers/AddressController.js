@@ -5,6 +5,7 @@ class AddressController {
     async getAllAddresses(req, res) {
         try {
             const addresses = await Address.findAll({ where: { idaccount: req.user.id } });
+            // console.log(addresses);
             res.json(addresses);
         } catch (error) {
             res.status(500).json({ error: 'Có lỗi xảy ra khi lấy dữ liệu' });
@@ -33,11 +34,12 @@ class AddressController {
 
     async createAddress(req, res) {
         const idaccount = req.user.id;
-        const { tower, street, district, city, state, country } = req.body;
+        const { type, tower, street, district, city, state, country } = req.body;
         console.log(idaccount, req.body);
         try {
             const newAddress = await Address.create({
                 idaccount: req.user.id,
+                type,
                 tower,
                 street,
                 district,

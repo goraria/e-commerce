@@ -1,12 +1,8 @@
 import React, {Component, useEffect, useState} from "react";
-import {Alert, Button, Card, Col, Container, Form, Image, InputGroup, Nav, Row} from "react-bootstrap";
-import jp from "../../assets/images/jp.jpeg";
-import UserSidebar from "../../layouts/UserSidebar";
-import AddressList from "./AddressList.jsx";
+import { Button } from "react-bootstrap";
 import AddressItem from "../../components/address/AddressItem.jsx";
-import axios from "axios";
-import Profile from "../../layouts/Profile.jsx";
 import AddressForm from "../../components/modal/form/AddressForm.jsx";
+import axios from "axios";
 
 const AddressManagement = () => {
     const [addresses, setAddresses] = useState([]);
@@ -21,7 +17,7 @@ const AddressManagement = () => {
         setReloadTrigger(!reloadTrigger);
     };
 
-    const fetchAddresses = async () => {
+    const listAddresses = async () => {
         try {
             // setLoading(true);
             const token = localStorage.getItem('token');
@@ -41,7 +37,7 @@ const AddressManagement = () => {
     useEffect(() => {
         // handleReload()
 
-        fetchAddresses();
+        listAddresses();
     }, [reloadTrigger]);  // Khi reloadTrigger thay đổi, useEffect sẽ gọi lại API //
 
     // if (loading) {
@@ -68,14 +64,7 @@ const AddressManagement = () => {
             <div className="row">
                 {addresses.map((address, index) => (
                     <div className="col-lg-4 col-md-6 col-sm-12 mb-0" key={index}>
-                        <div
-                            className="card sticky-summary p-0 mb-4"
-                            style={{
-                                position: "sticky",
-                                padding: '15px 12px 15px 12px',
-                                top: 80,
-                                border: "none",
-                            }}>
+                        <div className="card position-sticky sticky-summary p-0 mb-4">
                             <AddressItem item={address} key={reloadTrigger} onReload={handleReload}/>
                         </div>
                     </div>

@@ -6,12 +6,16 @@ const Copyright = () => {
         <footer className="content-footer footer bg-footer-theme">
             <div className="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                 <div className="mb-2 mb-md-0">
-                    <Row style={{margin: '24px 0'}}>
-                        <Col className="text-center">  {/* text-muted */}
-                            <h5 className="mb-2 mb-md-0">Copyright &copy; 2020 - 2024 Gorth Inc. All rights reserved.</h5>
+                    <div className="row my-4">
+                        <div className="col text-center">  {/* text-muted */}
+                            <h5 className="mb-2 mb-md-0">
+                                Copyright &copy; 2020 - {(new Date().getFullYear())} Gorth Inc. All rights reserved.
+                            </h5>
+                            {/*made with ❤️ by Japtor, Payhd, Locst, Zamcha, Ichibulup, Goraria, Schweitzenburg, Braunschweig*/}
                             {/*<h6>Address: La Gorta, San Siro, Milano, Italia. Hotline: 999-9999999</h6>*/}
-                        </Col>
-                    </Row>
+                        </div>
+
+                    </div>
                 </div>
                 {/*<div className="mb-2 mb-md-0">*/}
                 {/*    ©*/}

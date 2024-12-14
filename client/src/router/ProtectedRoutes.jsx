@@ -1,11 +1,11 @@
 import { React, useState, useEffect, Component } from 'react';
 import {BrowserRouter, Route, Router, Routes} from "react-router-dom";
 
-import UserProfile from "../pages/user-component/UserProfile.jsx";
-import AddressManagement from "../pages/user-infomation/AddressManagement.jsx";
+import UserProfile from "../pages/profile/UserProfile.jsx";
+import AddressManagement from "../pages/user-information/AddressManagement.jsx";
 
 import NotFound from "../pages/overview/NotFound.jsx";
-import VoucherWallet from "../pages/user-infomation/VoucherWallet.jsx";
+import VoucherWallet from "../pages/user-information/VoucherWallet.jsx";
 
 export const ProtectedRoutes = () => {
     return (

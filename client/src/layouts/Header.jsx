@@ -146,7 +146,7 @@ const Header = () => {
                 role: null,
             });
             localStorage.removeItem("token");
-            navigate("/404");
+            navigate("/auth/error");
         } finally {
             setLoading(false); // Dừng loading sau khi fetch
         }
