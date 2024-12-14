@@ -1,8 +1,5 @@
 import React, {Component, useEffect, useState} from "react";
 import {Alert, Button, Card, Col, Container, Form, Image, InputGroup, Nav, Row} from "react-bootstrap";
-import jp from "../assets/images/jp.jpeg";
-import UserSidebar from "./UserSidebar";
-import AddressList from "../../pages/user-infomation/AddressList.jsx";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 

@@ -8,15 +8,12 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import Frame from "../../layouts/Frame.jsx";
 import Loading from "../overview/Loading.jsx";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import {AuthWrapper} from "./AuthWrapper.jsx";
 
 import {jwtDecode} from "jwt-decode";
 import axios from "axios";
 
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
-
 import jp from '../../assets/images/jp.jpeg'
-import {AuthWrapper} from "./AuthWrapper.jsx";
-
 
 const socials = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
@@ -26,7 +23,7 @@ const socials = [
     // { id: 4, name: "Twitter", icon: faTwitter },
 ]
 
-const Login = ({ authenticationCheck }) => {
+const Login = () => {
     // const [modalShow, setModalShow] = useState(false);
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -44,15 +41,31 @@ const Login = ({ authenticationCheck }) => {
     const navigate = useNavigate();
     let role = null;
 
-    const handleNavigate = (r) => {
-        if (r === 1) {
+    const handleNavigate = (role) => {
+        if (role === 1) {
             navigate("/admin");
-        } else if (r === 0) {
+        } else if (role === 0) {
             navigate("/user");
         } else {
-            navigate("/404");
+            navigate("/auth/error");
         }
-    }
+    };
+
+    const handleCheck = () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const role = decoded.role || null;
+
+                handleNavigate(role); // Chuyển hướng nếu token hợp lệ
+            } catch (error) {
+                console.error("Invalid token:", error);
+                localStorage.removeItem("token");
+                navigate("/auth/login");
+            }
+        }
+    };
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -65,51 +78,25 @@ const Login = ({ authenticationCheck }) => {
             event.stopPropagation();
         } else {
             setLoading(true);
+            let role = null;
             try {
-                const response = await axios.post('http://localhost:5172/authentication/login', {
+                const response = await axios.post("http://localhost:5172/authentication/login", {
                     username: formData.username,
                     password: formData.password
                 });
 
-                // if (response.data.token) {
-                //     localStorage.setItem('token', response.data.token);
-                //     setShowSuccess(true);
-                //
-                //     const checker = await authenticationCheck();
-                //     console.log(checker)
-                //     if (checker.role === 1) {
-                //         navigate("/admin");
-                //     } else if (checker.role === 0) {
-                //         navigate("/user/profile");
-                //     }
-                // }
-
                 if (response.data.token) {
-                    // Lưu token vào localStorage
-                    localStorage.setItem('token', response.data.token);
+                    const token = response.data.token;
+                    localStorage.setItem("token", token);
+
+                    const decoded = jwtDecode(token);
+                    role = decoded.role || null;
 
                     setShowSuccess(true);
-
-                    // Gọi authenticationCheck để xác thực và lấy role
-                    const token = localStorage.getItem('token');
-                    const authResponse = await axios.get('http://localhost:5172/authentication/check', {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-
-                    role = authResponse.data.role;
-                    // if (role === 1) {
-                    //     navigate("/admin");
-                    // } else if (role === 0) {
-                    //     navigate("/user/profile");
-                    // }
-
-                    // setTimeout(() => {
-                    //     handleNavigate(role)
-                    // }, 3000)
-                    handleNavigate(role)
+                    handleNavigate(role);
                 }
             } catch (error) {
-                setError(error.response ? error.response.data.message : 'Login failed');
+                setError(error.response?.data?.message || "Login failed");
                 setShowError(true);
             } finally {
                 setLoading(false);
@@ -143,11 +130,11 @@ const Login = ({ authenticationCheck }) => {
 
     }
 
-    // useEffect(() => {
-    //     authenticationCheck();
-    // }, [navigate]);
+    useEffect(() => {
+        // handleCheck();
+    }, []);
 
-    if (loading) return <Frame><Loading /></Frame>
+    if (loading) return <Loading/>
 
     return (
         <>

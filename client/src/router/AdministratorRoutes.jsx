@@ -47,8 +47,8 @@ import { BasicInputPage } from "../pages/form-element/BasicInputPage";
 import { InputGroupPage } from "../pages/form-element/InputGroupPage";
 import { HorizontalFormPage } from "../pages/form-layout/HorizontalFormPage";
 import { VerticalFormPage } from "../pages/form-layout/VerticalFormPage";
-import { TablesPage } from "../pages/TablesPage";
-import { DashboardPage } from "../pages/DashboardPage";
+import { TablesPage } from "../pages/dashboard/TablesPage.jsx";
+import { DashboardPage } from "../pages/dashboard/DashboardPage.jsx";
 
 import { PerfectScrollbarPage } from "../pages/extended-ui/PerfectScrollbar";
 import { TextDividerPage } from "../pages/extended-ui/TextDividerPage";
@@ -60,8 +60,7 @@ import { ProductConfiguration } from "../pages/management/ProductConfiguration"
 import { ProductAccessory } from "../pages/management/ProductAccessory"
 import { ProductDescription } from "../pages/management/ProductDescription"
 import { ProductColor } from "../pages/management/ProductColor"
-import { AdminProfile } from "../pages/admin-component/AdminProfile.jsx";
-import { UserProfileid } from "../pages/admin-component/UserProfileId.jsx";
+import { AdminProfile } from "../pages/profile/AdminProfile.jsx";
 
 ///////////////////////////////////////
 
@@ -142,7 +141,6 @@ export const AdministratorRoutes = () => {
             <Route path="/profile-old" element={<AccountPage />} />
             <Route path="/profile" element={<AdminProfile />} />
 
-            <Route path="/profile_user/:idaccount" element={<UserProfileid />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/categories" element={<Category />} />
             <Route path="/product/name" element={<ProductName />} />

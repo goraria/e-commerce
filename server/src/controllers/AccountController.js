@@ -76,8 +76,9 @@ class AccountController {
             const account = await Account.findByPk(req.user.id);
             const accuser = await User.findOne({ where: { idaccount: req.user.id } });
             // console.log(account, accuser)
-            if (account) {
+            if (account && accuser) {
                 res.json({
+                    iduser: account.idaccount,
                     username: account.username,
                     email: account.email,
                     firstname: accuser.firstname,

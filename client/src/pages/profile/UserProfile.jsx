@@ -1,9 +1,4 @@
 import React, { Component, useEffect, useState } from "react";
-import { Alert, Button, Card, Col, Container, Form, Image, InputGroup, Nav, Row } from "react-bootstrap";
-import jp from "../../assets/images/jp.jpeg";
-import UserSidebar from "../../layouts/UserSidebar";
-import AccountInfo from "../user-infomation/AccountInfo";
-import Profile from "../../layouts/Profile.jsx";
 import {AccountPage} from "../account/AccountPage.jsx";
 
 const UserProfile = () => {

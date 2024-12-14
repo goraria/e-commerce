@@ -16,6 +16,10 @@ const Address = sequelize.define('Address', {
             key: 'idaccount',
         },
     },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     tower: {
         type: DataTypes.STRING,
         allowNull: false,

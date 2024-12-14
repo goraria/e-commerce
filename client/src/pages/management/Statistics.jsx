@@ -95,9 +95,10 @@ export const Statistics = () => {
         try {
             const response = await axios.get('http://localhost:5172/bill/list-all');
             setData(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu:', error);
+            // console.error('Lỗi khi lấy dữ liệu:', error);
+            setError(`Lỗi khi lấy dữ liệu: ${error}`);
         } finally {
             // setLoading(false);
         }
@@ -284,10 +285,10 @@ export const Statistics = () => {
                 return <Badge bg="label-success">Delivered</Badge>;
             case 0: // "Ordered"
                 return <Badge bg="label-warning">Ordered</Badge>;
-            case 3: // "Delivering"
-                return <Badge bg="label-primary">Delivering</Badge>;
-            case 1: // "Paid"
-                return <Badge bg="label-info">Paid</Badge>;
+            case 3: // "Dispatched"
+                return <Badge bg="label-primary">Dispatched</Badge>;
+            case 1: // "Pickup"
+                return <Badge bg="label-info">Pickup</Badge>;
             case 6: // "Rejected"
                 return <Badge bg="label-danger">Rejected</Badge>;
             case 2: // "Arrival"
@@ -299,12 +300,26 @@ export const Statistics = () => {
         }
     };
 
+    const formatDateTime = (inputDateTime) => {
+        const date = new Date(inputDateTime);
+
+        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        const hours = date.getUTCHours(); // Giờ theo UTC
+        const minutes = date.getUTCMinutes(); // Phút theo UTC
+
+        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+        return `${formattedDate}, ${formattedTime}`;
+    }
+
     const handleOpenModal = (item) => {
         setModalData(item); // Cập nhật dữ liệu cho modal
         setShowModal(true);  // Mở modal
     };
 
-    console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
+    // console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
     // setFromDate(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`);
 
     return (
@@ -454,7 +469,7 @@ export const Statistics = () => {
                                         />
                                     </th>
                                     {
-                                        ["Fullname", "Username", "Order Date", "Price", "Status"].map((item, index) => (
+                                        ["Fullname", "Order Date", "Spent", "Status"].map((item, index) => (
                                             <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
                                                 {item}
                                             </th>
@@ -474,11 +489,31 @@ export const Statistics = () => {
                                             onChange={() => handleSelectItem(item.id)}
                                         />
                                     </td>
-                                    <td>
-                                        {item.account?.user ? `${item.account.user.firstname} ${item.account.user.lastname}` : "N/A"}
+                                    <td className="sorting_1">
+                                        <div className="d-flex justify-content-start align-items-center user-name">
+                                            <div className="avatar-wrapper">
+                                                <div className="avatar avatar-sm me-4">
+                                                <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
+                                                    {item.account.user.firstname[0]}{item.account.user.lastname[0]}
+                                                </span>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column">
+                                                <a className="text-heading text-truncate">
+                                                    <span
+                                                        className="fw-medium">{`${item.account.user.firstname} ${item.account.user.lastname}`}</span>
+                                                </a>
+                                                <small>
+                                                    {`${item.account.email}  |  ${item.account.username}`}
+                                                    {/*{item.account.email}*/}
+                                                    {/*<i className='bx bx-space-bar bx-sm px-2'></i>*/}
+                                                    {/*{item.account?.username}*/}
+                                                </small>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td>{item.account?.username || "N/A"}</td>
-                                    <td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>
+                                    {/*<td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>*/}
+                                    <td>{formatDateTime(item.date)}</td>
                                     <td>{item.price ? item.price : "$?"}</td>
                                     <td>{renderStatusBadge(item.status)}</td>
                                     <td>
@@ -499,7 +534,8 @@ export const Statistics = () => {
                                             <span>Showing from </span>
                                             <span className="text-primary">{indexOfFirstItem + 1}</span>
                                             <span> to </span>
-                                            <span className="text-primary">{Math.min(indexOfLastItem, filteredData.length)}</span>
+                                            <span
+                                                className="text-primary">{Math.min(indexOfLastItem, filteredData.length)}</span>
                                             <span> of </span>
                                             <span className="text-primary">{filteredData.length}</span>
                                             <span> entries</span>

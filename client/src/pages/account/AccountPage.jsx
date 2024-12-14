@@ -19,57 +19,57 @@ export const AccountPage = ({ onReload }) => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    // navigate('/login');
-                    return;
-                }
-
-                const response = await axios.get('http://localhost:5172/account/get-info', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                const data = response.data;
-                setFormData({
-                    username: data.username,
-                    email: data.email,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
-                    phone: data.phone
-                });
-            } catch (error) {
-                setError('Error fetching user data');
+    const getInformation = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // navigate('/login');
+                return;
             }
-        };
 
-        const getAvatar = () => {
-            const deactivateAcc = document.querySelector('#formAccountDeactivation');
+            const response = await axios.get('http://localhost:5172/account/get-info', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-            // Update/reset user image of account page
-            let accountUserImage = document.getElementById('uploadedAvatar');
-            const fileInput = document.querySelector('.account-file-input');
-            const resetFileInput = document.querySelector('.account-image-reset');
-
-            if (accountUserImage) {
-                const resetImage = accountUserImage.src;
-
-                fileInput.onchange = () => {
-                    if (fileInput.files[0]) {
-                        accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-                    }
-                };
-
-                resetFileInput.onclick = () => {
-                    fileInput.value = '';
-                    accountUserImage.src = resetImage;
-                };
-            }
+            const data = response.data;
+            setFormData({
+                username: data.username,
+                email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                phone: data.phone
+            });
+        } catch (error) {
+            setError('Error fetching user data');
         }
+    };
 
-        fetchData();
+    const getAvatar = () => {
+        const deactivateAcc = document.querySelector('#formAccountDeactivation');
+
+        // Update/reset user image of account page
+        let accountUserImage = document.getElementById('uploadedAvatar');
+        const fileInput = document.querySelector('.account-file-input');
+        const resetFileInput = document.querySelector('.account-image-reset');
+
+        if (accountUserImage) {
+            const resetImage = accountUserImage.src;
+
+            fileInput.onchange = () => {
+                if (fileInput.files[0]) {
+                    accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+                }
+            };
+
+            resetFileInput.onclick = () => {
+                fileInput.value = '';
+                accountUserImage.src = resetImage;
+            };
+        }
+    }
+
+    useEffect(() => {
+        getInformation();
         getAvatar();
     }, []);
 
