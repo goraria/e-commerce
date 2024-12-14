@@ -167,7 +167,7 @@ const Cart = () => {
                                 border: "none",
                             }}>
                             <Container style={{ display: "flex", padding: '0 8px' }}>
-                                <h2 className="m-0">Giỏ hàng</h2>
+                                <h5 className="m-0">Giỏ hàng</h5>
                                 <Button as={Link} to={'/search'} variant="primary" style={{ marginLeft: 'auto' }}>
                                     <i className='bx bx-plus me-2'></i>
                                     <span>Thêm sản phẩm</span>
@@ -184,7 +184,7 @@ const Cart = () => {
                     {/* Right Section: Order Summary */}
                     <Col sm={12} md={6} lg={4} className="mb-4">
                         <div className="card p-3 sticky-summary" style={{ position: 'sticky', top: 120 }}>
-                            <h2>Khuyến mãi</h2>
+                            <h5>Khuyến mãi</h5>
                             <Form.Select aria-label="Default select example" style={{ padding: 10, margin: '1px 0 10px 0' }}>
                                 <option> Chọn hoặc nhập khuyến mãi</option>
                                 <option value="1">One</option>

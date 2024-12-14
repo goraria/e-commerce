@@ -45,7 +45,7 @@ const DataTable = () => {
 
     return (
         <div>
-            <h2>DataTable with Buttons</h2>
+            <h5>DataTable with Buttons</h5>
             <div className="d-flex justify-content-between mb-3">
                 <Form.Control
                     type="text"

@@ -9,7 +9,7 @@ const Blank = () => {
     return (
         <Overview>
             <div>
-                <h2>Cipher</h2>
+                <h5>Cipher</h5>
                 <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>
                     <img
                         className="d-block"
