@@ -13,20 +13,93 @@ const generateToken = () => {
 };
 class AuthenticationController {
     async google(req, res) {
+        // try {
+        //     const { token } = req.body;
+        //     console.log(req.body);
+        //
+        //     // const ticket = await client.verifyIdToken({
+        //     //     idToken: token,
+        //     //     audience: "YOUR_GOOGLE_CLIENT_ID",
+        //     // });
+        //     // const payload = ticket.getPayload();
+        //     // const userId = payload.sub;
+        //
+        //     res.status(200).json({ success: true, token: "JWT_TOKEN_HERE" });
+        // } catch (error) {
+        //     console.error('Google login error:', error);
+        //     return res.status(500).json({ message: 'Server error' });
+        // }
+
         try {
-            const { token } = req.body;
+            // const { data } = req.body;
+            const data = req.body;
+            // console.log(data);
 
-            const ticket = await client.verifyIdToken({
-                idToken: token,
-                audience: "YOUR_GOOGLE_CLIENT_ID",
-            });
-            const payload = ticket.getPayload();
-            const userId = payload.sub;
+            if (!data) {
+                return res.status(400).json({ success: false, message: 'Token is required' });
+            }
 
-            res.status(200).json({ success: true, token: "JWT_TOKEN_HERE" });
+            // const ticket = await client.verifyIdToken({
+            //     idToken: token,
+            //     audience: process.env.GOOGLE_CLIENT_ID,
+            // });
+
+            // const payload = ticket.getPayload();
+            // const { email, name, picture } = payload;
+
+            console.log(data.merge.email);
+
+            let account = await Account.findOne({ where: { email: data.merge.email.toString() } });
+            console.log(account)
+
+            if (!account) {
+                account = await Account.create({
+                    username: data.merge.email.split('@')[0],
+                    email: data.merge.email,
+                    password: '', // Vì dùng Google login nên không cần mật khẩu
+                    role: 0,
+                    status: 1,
+                    isverify: 1,
+                    method: 'google',
+                });
+
+                // const [firstname, ...lastnameParts] = name.split(' ');
+                // const lastname = lastnameParts.join(' ');
+
+                await User.create({
+                    idaccount: account.idaccount,
+                    firstname: data.merge.given_name || null,
+                    lastname: data.merge.family_name || null,
+                    phone_number: '', // Google không trả số điện thoại, có thể để trống
+                    avatar: data.merge.picture, // Sử dụng ảnh đại diện từ Google
+                });
+            }
+
+            await Account.update({ status: 1 }, { where: { idaccount: account.idaccount } });
+
+            const jwtToken = jwt.sign({
+                id: account.idaccount,
+                // email: account.email,
+                role: account.role,
+                status: account.status
+            }, process.env.JWT_SECRET || 'gorth', { expiresIn: '7d' });
+
+            // Trả về thông tin người dùng và token
+            // return res.status(200).json({
+            //     success: true,
+            //     token: jwtToken,
+            //     user: {
+            //         id: account.idaccount,
+            //         email: account.email,
+            //         username: account.username,
+            //         role: account.role,
+            //     },
+            // });
+
+            return res.json({ message: 'Login successful', token: jwtToken });
         } catch (error) {
             console.error('Google login error:', error);
-            return res.status(500).json({ message: 'Server error' });
+            return res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
 
@@ -49,7 +122,7 @@ class AuthenticationController {
                 id: account.idaccount,
                 role: account.role,
                 status: account.status
-            }, process.env.JWT_SECRET || 'gorth', { expiresIn: '1h' });
+            }, process.env.JWT_SECRET || 'gorth', { expiresIn: '1d' });
 
             return res.json({ message: 'Login successful', token });
         } catch (error) {

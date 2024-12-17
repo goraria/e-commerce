@@ -119,11 +119,11 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Address Details</h3>
+                        <h5>Address Details</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h4>Note</h4>
+                    {/*<h4>Note</h4>*/}
                     <p>
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
                     </p>
@@ -265,7 +265,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                             </Form.Group>
                         </Row>
                         <hr/>
-                        {error && <p className="text-danger">{error}</p>}
+                        {/*{error && <p className="text-danger">{error}</p>}*/}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

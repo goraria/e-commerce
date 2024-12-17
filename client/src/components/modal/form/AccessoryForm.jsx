@@ -149,11 +149,11 @@ export const AccessoryForm = ({ address, show, onHide, onReload }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Address Details</h3>
+                        <h5>Address Details</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h4>Note</h4>
+                    <h6>Note</h6>
                     <p>
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
                     </p>

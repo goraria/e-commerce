@@ -322,13 +322,13 @@ export const ProductConfiguration = () => {
                                     <Button
                                         variant="link"
                                         onClick={() => handleEdit(item.idconfiguration)}
-                                        className="p-2">
+                                        className="text-body p-2">
                                         <i className='bx bx-edit'></i>
                                     </Button>
                                     <Button
                                         variant="link"
                                         onClick={() => handleDelete(item.idconfiguration)}
-                                        className="p-2">
+                                        className="text-body p-2">
                                         <i className='bx bx-trash'></i>
                                     </Button>
                                 </td>

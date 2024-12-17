@@ -96,7 +96,7 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
             >
                 <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Edit Color</h3>
+                        <h5>Edit Color</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

@@ -5,7 +5,7 @@ const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware
 const AdministratorMiddleware = require('../middleware/AdministratorMiddleware');
 
 // router.post('/login/authen', AuthenticationController.login.bind(AuthenticationController))
-router.post('/google', AuthenticationController.google)
+router.post('/login-google', AuthenticationController.google)
 
 router.post('/login', AuthenticationController.login)
 
@@ -17,8 +17,8 @@ router.get('/check', AuthenticationMiddleware, AuthenticationController.check)
 
 router.get('/verify-email', AuthenticationController.verifyEmail)
 
-
 router.post('/forgot-password', AuthenticationController.ForgotPassword);
+
 router.post('/reset-password', AuthenticationController.ResetPassword);
 
 module.exports = router

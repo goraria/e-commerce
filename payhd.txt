@@ -4,3 +4,9 @@ dependentcies{
     sequelize
 }
 
+To do {
+    Avatar Upload
+    Fix Payment - Cart - Order
+    Statistics - Chart.js
+}
+

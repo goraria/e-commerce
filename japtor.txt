@@ -39,3 +39,12 @@ Verify {
     "@eslint/plugin-kit": "0.2.3",
     "cross-spawn": "7.0.5"
 },
+
+To Do {
+    Fix đăng nhập
+    Thêm login register với google
+    Rating
+    Toast
+    Header Fix
+    Order History - View Order
+}

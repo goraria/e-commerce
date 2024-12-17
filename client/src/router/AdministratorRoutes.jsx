@@ -60,7 +60,7 @@ import { ProductConfiguration } from "../pages/management/ProductConfiguration"
 import { ProductAccessory } from "../pages/management/ProductAccessory"
 import { ProductDescription } from "../pages/management/ProductDescription"
 import { ProductColor } from "../pages/management/ProductColor"
-import { AdminProfile } from "../pages/profile/AdminProfile.jsx";
+import { ProfilePage } from "../pages/account/ProfilePage.jsx";
 
 ///////////////////////////////////////
 
@@ -139,7 +139,7 @@ export const AdministratorRoutes = () => {
 
             <Route path="/tables" element={<TablesPage />} />
             <Route path="/profile-old" element={<AccountPage />} />
-            <Route path="/profile" element={<AdminProfile />} />
+            <Route path="/profile" element={<ProfilePage />} />
 
             <Route path="/users" element={<UserManagement />} />
             <Route path="/categories" element={<Category />} />
