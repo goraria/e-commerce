@@ -8,8 +8,7 @@ import AddressManagement from "../pages/user-information/AddressManagement.jsx";
 
 import NotFound from "../pages/overview/NotFound.jsx";
 import VoucherWallet from "../pages/user-information/VoucherWallet.jsx";
-import ChangePassword from '../pages/authentication/ChangePassword.jsx';
-import {Preview} from "../pages/dashboard/Preview.jsx";
+import { Preview } from "../pages/dashboard/Preview.jsx";
 import OrderHistory from "../pages/user-information/OrderHistory.jsx";
 
 export const UserRoutes = () => {
@@ -19,7 +18,6 @@ export const UserRoutes = () => {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/address" element={<AddressManagement />} />
             <Route path="/voucher" element={<VoucherWallet />} />
-            <Route path="/change-password" element={<ChangePassword />} />
 
             <Route path="/bill" element={<OrderHistory />} />
             <Route path="/rating" element={<NotFound />} />

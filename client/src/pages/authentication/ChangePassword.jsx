@@ -18,7 +18,10 @@ const ChangePassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
-        email: '',
+        oldPassword: '',
+        newPassword: '',
+        retypePassword: '',
+        username: ''
     });
 
     const [error, setError] = useState(null);
@@ -31,7 +34,26 @@ const ChangePassword = () => {
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // navigate('/login');
+                return;
+            }
 
+            const response = await axios.get('http://localhost:5172/account/get-info', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const data = response.data;
+            setFormData({
+                username: data.username
+            });
+        } catch (error) {
+            setError('Error fetching user data');
+        }
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -42,26 +64,27 @@ const ChangePassword = () => {
             return;
         } else if (form.checkValidity() === false) {
             event.stopPropagation();
-            setError("Make sure your new password is more than 8 characters.");
+            setError("Make sure your password is more than 8 characters.");
             setShowError(true);
             return;
         }
-        else if (formData.oldPassword === false) {
+        else if (!formData.oldPassword || !formData.newPassword || !formData.retypePassword) {
             event.stopPropagation();
-            setError("Make sure your new password is more than 8 characters.");
+            setError("Please fill in all the fields.");
             setShowError(true);
             return;
         }
         else {
             setLoading(true);
             try {
-                const response = await axios.post('http://localhost:5172/account/change-password', {
-                    token: token,
-                    newPassword: formData.password
+                const response = await axios.post('http://localhost:5172/authentication/change-password', {
+                    oldPassword: formData.oldPassword,
+                    newPassword: formData.newPassword,
+                    retypePassword: formData.retypePassword,
+                    username: formData.username,
                 });
                 setShowSuccess(true);
                 // navigate('/auth/login');
-
             } catch (error) {
                 setError(error.response ? error.response.data.message : 'Change password failed');
                 setShowError(true);
@@ -76,11 +99,8 @@ const ChangePassword = () => {
     //     authenticationCheck();
     // }, [navigate]);
     useEffect(() => {
-        // Lấy token từ URL query string
-        const queryParams = new URLSearchParams(location.search);
-        const tokenFromUrl = queryParams.get('token');
-        setToken(tokenFromUrl);  // Lưu token vào state
-    }, [location]);
+        fetchData()
+    }, []);
 
     if (loading) return <Frame><Loading /></Frame>
 
@@ -99,6 +119,7 @@ const ChangePassword = () => {
                                 type="password"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 minLength={8}
+                                value={formData.oldPassword || ''}
                                 onChange={handleChange}
                                 aria-describedby="inputGroupPrepend"
                                 className="form-control"
@@ -116,6 +137,8 @@ const ChangePassword = () => {
                                 name="newPassword"
                                 minLength={8}
                                 onChange={handleChange}
+                                // setFormData=formData.newPassword
+                                value={formData.newPassword || ''}
                                 aria-describedby="inputGroupPrepend"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 className="form-control"
@@ -133,6 +156,7 @@ const ChangePassword = () => {
                                 name="retypePassword"
                                 minLength={8}
                                 onChange={handleChange}
+                                value={formData.retypePassword || ''}
                                 aria-describedby="inputGroupPrepend"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 className="form-control"
@@ -157,7 +181,7 @@ const ChangePassword = () => {
                     </div>
                 </Form>
                 <div className="text-center">
-                    <Link aria-label="Go to Login Page" to="/auth/login"
+                    <Link aria-label="Go to Login Page" to="/user"
                         className="d-flex align-items-center justify-content-center">
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
@@ -170,7 +194,10 @@ const ChangePassword = () => {
                 show={showSuccess}  // truyền showSuccess vào NotifySuccess
                 onHide={() => {
                     setShowSuccess(false)
-                    navigate('/user');
+                    console.log(1)
+                    setTimeout(() => {
+                        navigate('/user'); // Điều hướng sau một khoảng thời gian
+                    }, 500)
                 }}  // đóng khi người dùng click
             />
 
