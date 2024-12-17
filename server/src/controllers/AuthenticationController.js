@@ -317,6 +317,30 @@ class AuthenticationController {
         await user.update(userData);
         res.json({ message: 'Mật khẩu của bạn đã được đặt lại' });
     };
+    async changePassword(req, res) {
+        try {
+            const account = await Account.findOne({
+                where: {
+                    username: req.body.username
+                }
+            });
+            const isMatch = await bcrypt.compare(req.body.oldPassword, account.password)
+            const hashedPassword1 = await bcrypt.hash(req.body.newPassword, 10);
+            // console.log(account, accuser)
+            if (isMatch) {
+                const dataAccount = {
+                    password: hashedPassword1
+                }
+                await account.update(dataAccount);
+                res.status(200).json({ error: 'Your password have been change.' });
+            } else {
+                res.status(404).json({ error: 'Old password is not correct.' });
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
 }
 
 module.exports = new AuthenticationController();

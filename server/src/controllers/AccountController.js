@@ -6,25 +6,6 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 class AccountController {
-    async changePassword(req, res) {
-        try {
-            const account = await Account.findByPk(req.user.id);
-            // console.log(account, accuser)
-            if (account) {
-                res.json({
-                    username: account.username,
-                    email: account.email,
-                    firstname: accuser.firstname,
-                    lastname: accuser.lastname,
-                    phone: accuser.phone_number
-                });
-            } else {
-                res.status(404).json({ error: 'User not found' });
-            }
-        } catch (error) {
-            res.status(500).json({ error: 'Server error' });
-        }
-    }
     async getAccountInfo(req, res) {
         try {
             const account = await Account.findByPk(req.user.id);
