@@ -26,14 +26,18 @@ const ForgotPassword = () => {
     const [showError, setShowError] = useState(false);  // trạng thái cho NotifyError
     const [loading, setLoading] = useState(false);  // Thêm trạng thái loading
     const navigate = useNavigate();
+
+    const [captchaVerified, setCaptchaVerified] = useState(false); // New state
     const handleSuccess = (data) => {
         console.log('Captcha verification success:', data);
-        alert('Verification successful, proceed with form submission!');
+        // alert('Verification successful, proceed with form submission!');
+        setCaptchaVerified(true);
     };
 
     const handleError = (error) => {
         console.log('Captcha verification failed:', error);
-        alert('Verification failed, please try again!');
+        // alert('Verification failed, please try again!');
+        setCaptchaVerified(false);
     };
 
     const handleChange = (event) => {
@@ -43,11 +47,16 @@ const ForgotPassword = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
+        if (!captchaVerified) {
+            alert('Please verify the captcha before submitting.');
+            return;
+        }
         if (form.checkValidity() === false) {
             event.stopPropagation();
         } else {
             setLoading(true);
             try {
+                console.log(1)
                 const response = await axios.post('http://localhost:5172/authentication/forgot-password', {
                     email: formData.email
                 });
@@ -100,6 +109,12 @@ const ForgotPassword = () => {
                         {/*    Submit*/}
                         {/*</Button>*/}
                     </div>
+                    <ReCaptchaComponent
+                        siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
+                        verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
+                        onSuccess={handleSuccess}
+                        onError={handleError}
+                    />
                 </Form>
                 <div className="text-center">
                     <Link aria-label="Go to Login Page" to="/auth/login"
@@ -107,12 +122,6 @@ const ForgotPassword = () => {
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>
-                    <ReCaptchaComponent
-                        siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
-                        verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
-                        onSuccess={handleSuccess}
-                        onError={handleError}
-                    />
                 </div>
             </AuthWrapper>
 
