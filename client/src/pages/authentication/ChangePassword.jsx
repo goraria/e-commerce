@@ -6,12 +6,10 @@ import axios from "axios";
 import SocialFormButton from "../../components/button/SocialFormButton.jsx";
 
 import jp from '../../assets/images/jp.jpeg'
-import Overview from "../../layouts/Overview.jsx";
 import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
-import Frame from "../../layouts/Frame.jsx";
-import Loading from "../overview/Loading.jsx";
+import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 
 const ChangePassword = () => {
@@ -102,7 +100,7 @@ const ChangePassword = () => {
         fetchData()
     }, []);
 
-    if (loading) return <Frame><Loading /></Frame>
+    if (loading) return <Loading />
 
     return (
         <>

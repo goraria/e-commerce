@@ -106,11 +106,11 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Address Details</h3>
+                        <h5>Details</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h4>Details</h4>
+                    {/*<h4>Details</h4>*/}
                     <p>
                         Bill Details.
                     </p>

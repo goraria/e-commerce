@@ -4,74 +4,58 @@ import axios from 'axios';
 
 import Layout from "./layouts/Layout";
 import Frame from "./layouts/Frame";
+import Panel from "./layouts/Panel.jsx";
 import { AdministratorRoutes } from "./router/AdministratorRoutes.jsx";
 import { UserRoutes } from "./router/UserRoutes.jsx";
 import { CustomerRoutes } from "./router/CustomerRoutes.jsx";
 import { ShareRoutes } from "./router/ShareRoutes.jsx";
+import { Loading } from "./pages/overview/Loading.jsx";
 import Protected from "./utils/Protected.jsx";
-import NotFound from "./pages/overview/NotFound.jsx";
-import Loading from "./pages/overview/Loading.jsx";
 import Login from "./pages/authentication/Login.jsx";
-import Panel from "./layouts/Panel.jsx";
-import {AuthenticationRoutes} from "./router/AuthenticationRoutes.jsx";
+import Register from "./pages/authentication/Register.jsx";
+import { AuthenticationRoutes } from "./router/AuthenticationRoutes.jsx";
+import { ErrorPage } from "./pages/misc/ErrorPage.jsx";
 
 const App = () => {
     const [auth, setAuth] = useState({
         isAuthenticated: false,
-        role: null
+        role: null,
     });
     const [loading, setLoading] = useState(true);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    const authenticationCheck = async () => {
+    const authentication = async () => {
         const token = localStorage.getItem('token');
         setLoading(true);
 
         if (!token) {
-            setAuth({
-                isAuthenticated: false,
-                role: null
-            });
+            setAuth({ isAuthenticated: false, role: null });
             setLoading(false);
-            // navigate('/login');
             return;
-            // return auth;
         }
 
         try {
             const response = await axios.get('http://localhost:5172/authentication/check', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             setAuth({
                 isAuthenticated: true,
-                role: response.data.role
+                role: response.data.role,
             });
-
-            // if (rolex === 1) {
-            //     navigate("/admin");
-            // } else if (rolex === 0) {
-            //     navigate("/user/profile");
-            // }
-            return auth
         } catch (error) {
-            setAuth({
-                isAuthenticated: false,
-                role: null
-            });
-            // localStorage.removeItem('token');
-            // navigate('/auth/error');
-            return auth;
+            setAuth({ isAuthenticated: false, role: null });
+            localStorage.removeItem('token');
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        authenticationCheck();
-    }, []); // navigate
+        authentication(); // Gọi hàm authentication một lần khi App mount
+    }, []);
 
-    if (loading) return <Loading/>;
+    if (loading) return <Loading />; // Hiển thị loading nếu đang tải
 
     return (
         <Routes>
@@ -84,12 +68,7 @@ const App = () => {
                 }
             />
 
-            <Route
-                path="/auth/*"
-                element={
-                    <AuthenticationRoutes />
-                }
-            />
+            <Route path="/auth/*" element={<AuthenticationRoutes />} />
 
             <Route
                 path="/user/*"
@@ -124,9 +103,16 @@ const App = () => {
                 }
             />
 
-            {/*<Route path="/login" element={<Frame role={auth.role}><Login authenticationCheck={authenticationCheck} /></Frame>} />*/}
+            <Route
+                path="/auth/login"
+                element={<Login checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+            />
+            <Route
+                path="/auth/register"
+                element={<Register checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+            />
 
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<ErrorPage />} />
         </Routes>
     );
 };

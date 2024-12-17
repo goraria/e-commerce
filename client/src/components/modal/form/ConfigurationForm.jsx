@@ -121,7 +121,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
             >
                 <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Edit Configuration</h3>
+                        <h5>Edit Configuration</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -129,7 +129,48 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                     {/* <p>
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
                     </p> */}
-                    <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
+                    <Form noValidate validated={validated}
+                          onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
+                        <div className="mb-3">
+                            <label htmlFor="product_name" className="form-label">Address Type</label>
+                            <select
+                                className="form-select"
+                                id="product_name"
+                                name="product_name"
+                                defaultValue=""
+                                value={formData.product_name}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Choose product</option>
+                                {
+                                    // product.map((item, index) => (item) => (
+                                    //     <option key={index} value={item.idproduct}>{item.product_name}</option>
+                                    // ))
+                                }
+                            </select>
+                            <Form.Control.Feedback type="invalid">
+                                Please select a type of address.
+                            </Form.Control.Feedback>
+                        </div>
+                        <Form.Group as={Col} md={7} controlId="product_name">
+                            <Form.Label>Product Name</Form.Label>
+                            <InputGroup hasValidation>
+                                <InputGroup.Text id="product_name">
+                                    <i className='bx bx-globe'></i>
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="text"
+                                    name="product_name"
+                                    value={formData.product_name}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please enter Product Name.
+                                </Form.Control.Feedback>
+                            </InputGroup>
+                        </Form.Group>
                         <Row className="mb-3">
                             <Form.Group as={Col} md={8} controlId="cpu">
                                 <Form.Label>CPU</Form.Label>
@@ -171,7 +212,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                                 <i className='bx bx-pie-chart-alt-2'></i>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="gpu">
-                                        <i className='bx bx-user' ></i>
+                                        <i className='bx bx-user'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
@@ -245,7 +286,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                                 <Form.Label>Price</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="price">
-                                        <i className='bx bxs-flag-alt' ></i>
+                                        <i className='bx bxs-flag-alt'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -259,33 +300,14 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-
-                            <Form.Group as={Col} md={7} controlId="product_name">
-                                <Form.Label>Product Name</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="product_name">
-                                        <i className='bx bx-globe' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        name="product_name"
-                                        value={formData.product_name}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter Product Name.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
                         </Row>
-                        <hr />
+                        <hr/>
                         {error && <p className="text-danger">{error}</p>}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <i className='bx bx-x' ></i>
+                    <Button onClick={onHide} variant="secondary" style={{marginRight: "auto"}}>
+                        <i className='bx bx-x'></i>
                         <span>Close</span>
                     </Button>
                     {/*<Button type="submit" variant="info"*/}

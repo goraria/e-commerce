@@ -88,8 +88,10 @@ const Footer = () => {
                         </div>
                         <div className="col mt-5 mb-5">
                             <h5 className="text-dark">Phản hồi, góp ý, khiếu nại</h5>
-                            <p className="p-2">Phản hồi nóng về chất lượng sản phẩm và dịch vụ. Đội ngũ Kiểm Soát Chất
-                                Lượng của chúng tôi sẵn sàng lắng nghe quý khách.</p>
+                            <p className="p-2">
+                                Phản hồi nóng về chất lượng sản phẩm và dịch vụ.
+                                Đội ngũ Kiểm Soát Chất Lượng của chúng tôi sẵn sàng lắng nghe quý khách.
+                            </p>
                             <Button href="#" variant="secondary">
                                 Gửi phản hồi ngay
                             </Button>
@@ -97,9 +99,12 @@ const Footer = () => {
                     </div>
                     <div className="row">
                         <div className="col text-center mb-4">  {/* text-muted */}
-                            <h5 className="text-dark">Copyright &copy; 2020 - 2025 Gorth Inc. All rights reserved.</h5>
-                            <h6 className="text-dark">Address: La Gorta, San Siro, Milano, Italia. Hotline:
-                                999-9999999</h6>
+                            <h5 className="text-dark">
+                                Copyright &copy; 2020 - {(new Date().getFullYear())} Gorth Inc. All rights reserved.
+                            </h5>
+                            <h6 className="text-dark">
+                                Address: La Gorta, San Siro, Milano, Italia. Hotline: 999-9999999
+                            </h6>
                         </div>
                     </div>
                 </div>

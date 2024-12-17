@@ -1,10 +1,9 @@
-import React, { Component, useEffect, useState } from "react";
-import {AccountPage} from "../account/AccountPage.jsx";
+import React, {useEffect, useState} from "react";
+import {AccountPage} from "./AccountPage.jsx";
 
-const UserProfile = () => {
+export const ProfilePage = () => {
     const [reloadAccountInfo, setReloadAccountInfo] = useState(0);
 
-    // Hàm reload được truyền vào AccountInfo dưới dạng callback
     const handleReloadAccountInfo = () => {
         setReloadAccountInfo(reloadAccountInfo + 1);  // Tăng giá trị để force re-render
     };
@@ -32,20 +31,9 @@ const UserProfile = () => {
             };
         }
     }, []);
-
     return (
         <>
             <AccountPage key={reloadAccountInfo} onReload={handleReloadAccountInfo} />
-
-            {/*<div className="card mb-4">*/}
-            {/*    <h5 className="card-header">Profile Details</h5>*/}
-            {/*    <hr className="my-0" />*/}
-            {/*    <div className="card-body">*/}
-            {/*        <AccountInfo key={reloadAccountInfo} onReload={handleReloadAccountInfo} />*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </>
     )
 }
-
-export default UserProfile

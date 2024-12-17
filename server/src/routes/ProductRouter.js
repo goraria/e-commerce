@@ -18,10 +18,4 @@ router.post('/update-productname/:idProduct', productController.updateProductNam
 router.delete('/delete-productname/:idProduct', productController.deleteProductName);
 router.put('/create-productname', productController.createProductName);
 
-
-
-
-
-
-
 module.exports = router;

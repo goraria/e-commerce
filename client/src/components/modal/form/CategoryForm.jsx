@@ -14,6 +14,7 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     useEffect(() => {
         setError(null);
         if (category) {
@@ -23,15 +24,26 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                 category_description: category.category_description || '',
                 category_image: category.category_image || ''
             });
-        } else {
+        // } else {
+        //     setFormData({
+        //         idcategory: '',
+        //         category_name: '',
+        //         category_description: '',
+        //         category_image: ''
+        //     });
+        }
+
+        if (!show) {
             setFormData({
                 idcategory: '',
                 category_name: '',
                 category_description: '',
                 category_image: ''
             });
+            setValidated(false);
+            setError(null);
         }
-    }, [category]);
+    }, [show]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -77,23 +89,30 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
         }
     };
 
+    // const handleDelete = async (id) => {
+    //     try {
+    //         // await axios.delete(`http://localhost:5172/admin/delete-category/${id}`);
+    //         await axios.delete(`http://localhost:5172/category/delete-category/${id}`);
+    //
+    //         fetchAPI();
+    //     } catch (error) {
+    //         console.error("Error deleting category:", error);
+    //     }
+    // };
+
     const handleDelete = async () => {
         try {
-            const token = localStorage.getItem('token');
-            // await axios.delete(`http://localhost:5172/admin/delete/${category.idaddress}`, {
-            //     headers: { Authorization: `Bearer ${token}` }
-            // });
-            await axios.delete(`http://localhost:5172/category/delete-category/${category.idaddress}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axios.delete(`http://localhost:5172/category/delete-category/${category.idcategory}`);
             setShowConfirmDelete(false);
+
             onHide();
             onReload()
         } catch (error) {
-            console.error("Error deleting address:", error);
+            // console.error("Error deleting address:", error);
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal
@@ -106,12 +125,12 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
             >
                 <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Edit Category</h3>
+                        <h5>Edit Category</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
-                        <Row className="mb-3">
+                        <div className="row mb-3">
                             <div className="d-flex align-items-start align-items-sm-center gap-4 rounded-2 col-7 mb-3">
                                 <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                     <img
@@ -179,9 +198,9 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                                     onChange={handleChange}>
                                 </textarea>
                             </div>
-                        </Row>
+                        </div>
                         <hr/>
-                        {error && <p className="text-danger">{error}</p>}
+                        {/*{error && <p className="text-danger">{error}</p>}*/}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -191,6 +210,10 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                     </Button>
                     {category ?
                         <>
+                            <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
+                                <i className='bx bx-trash me-2'></i>
+                                <span>Delete Category</span>
+                            </Button>
                             <Button onClick={handleInvalid} variant="info">
                                 <i className='bx bx-check me-2' ></i>
                                 <span>Save changes</span>

@@ -144,7 +144,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h3>Edit User</h3>
+                        <h5>Edit User</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

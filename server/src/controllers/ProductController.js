@@ -6,8 +6,8 @@ const Rating = require("../models/Rating")
 const Color = require("../models/Color")
 const { Op, where } = require("sequelize");
 const Category = require("../models/Category")
-class ProductController {
 
+class ProductController {
     async loadProduct(req, res) {
         try {
             const products = await Product.findAll();

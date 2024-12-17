@@ -309,13 +309,13 @@ export const ProductDescription = () => {
                                     <Button
                                         variant="link"
                                         onClick={() => handleEdit(item.iddescription)}
-                                        className="p-2">
+                                        className="text-body p-2">
                                         <i className='bx bx-edit'></i>
                                     </Button>
                                     <Button
                                         variant="link"
                                         onClick={() => handleDelete(item.iddescription)}
-                                        className="p-2">
+                                        className="text-body p-2">
                                         <i className='bx bx-trash'></i>
                                     </Button>
                                 </td>

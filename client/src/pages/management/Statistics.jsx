@@ -517,7 +517,10 @@ export const Statistics = () => {
                                     <td>{item.price ? item.price : "$?"}</td>
                                     <td>{renderStatusBadge(item.status)}</td>
                                     <td>
-                                        <Button variant="link" onClick={() => handleItemClick(item)}>
+                                        <Button
+                                            variant="link"
+                                            className="text-body p-2"
+                                            onClick={() => handleItemClick(item)}>
                                             <i className='bx bx-bullseye'></i>
                                         </Button>
                                     </td>
@@ -527,7 +530,7 @@ export const Statistics = () => {
                         </Table>
                         <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                             <div className="row">
-                                <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                                <div className="d-flex col-sm-12 col-md-6">
                                     <div className="dataTables_info d-flex justify-content-start align-items-center">
                                         <div className="text-center mt-2">
                                             {/*{`Showing from ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredData.length)} of ${filteredData.length} entries`}*/}

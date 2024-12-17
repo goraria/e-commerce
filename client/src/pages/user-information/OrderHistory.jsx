@@ -67,7 +67,6 @@ const OrderHistory = () => {
                     </div>
                 ))
             }
-            <OrderExpand/>
             <OrderDetails/>
         </>
     );

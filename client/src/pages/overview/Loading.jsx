@@ -6,7 +6,7 @@ import jp from '../../assets/images/jp.jpeg'
 import Overview from "../../layouts/Overview.jsx";
 import {AuthWrapper} from "../authentication/AuthWrapper.jsx";
 
-const Loading = () => {
+export const Loading = () => {
     return (
         // <Overview mt={112} me={56}>
         //     <div>
@@ -30,5 +30,3 @@ const Loading = () => {
         </>
     )
 }
-
-export default Loading

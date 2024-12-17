@@ -58,9 +58,9 @@ class CategoryController {
 
     async getCategory(req, res) {
         try {
-            console.log('Fetching categories...');
+            // console.log('Fetching categories...');
             const categories = await Category.findAll();
-            console.log('Categories fetched successfully:', categories);
+            // console.log('Categories fetched successfully:', categories);
             res.status(200).json(categories);
         } catch (error) {
             console.error('Error fetching category:', error);

@@ -11,7 +11,7 @@ import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import Frame from "../../layouts/Frame.jsx";
-import Loading from "../overview/Loading.jsx";
+import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
 const ForgotPassword = () => {
