@@ -13,7 +13,7 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import Frame from "../../layouts/Frame.jsx";
 import Loading from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
-
+import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
 const ForgotPassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -26,7 +26,15 @@ const ForgotPassword = () => {
     const [showError, setShowError] = useState(false);  // trạng thái cho NotifyError
     const [loading, setLoading] = useState(false);  // Thêm trạng thái loading
     const navigate = useNavigate();
+    const handleSuccess = (data) => {
+        console.log('Captcha verification success:', data);
+        alert('Verification successful, proceed with form submission!');
+    };
 
+    const handleError = (error) => {
+        console.log('Captcha verification failed:', error);
+        alert('Verification failed, please try again!');
+    };
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -58,7 +66,7 @@ const ForgotPassword = () => {
     //     authenticationCheck();
     // }, [navigate]);
 
-    if (loading) return <Loading/>
+    if (loading) return <Loading />
 
     return (
         <>
@@ -99,6 +107,12 @@ const ForgotPassword = () => {
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>
+                    <ReCaptchaComponent
+                        siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
+                        verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
+                        onSuccess={handleSuccess}
+                        onError={handleError}
+                    />
                 </div>
             </AuthWrapper>
 

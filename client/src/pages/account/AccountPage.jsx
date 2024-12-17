@@ -1,8 +1,8 @@
-import {useLocation, useNavigate} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AccountWrapper } from "../../components/wrapper/AccountWrapper";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Form} from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 
 export const AccountPage = ({ onReload }) => {
@@ -143,7 +143,7 @@ export const AccountPage = ({ onReload }) => {
                                 />
                             </label>
                             <button aria-label='Click me' type="button"
-                                    className="btn btn-outline-secondary account-image-reset mb-4">
+                                className="btn btn-outline-secondary account-image-reset mb-4">
                                 <i className="bx bx-reset d-block d-sm-none"></i>
                                 <span className="d-none d-sm-block">Reset</span>
                             </button>
@@ -151,7 +151,7 @@ export const AccountPage = ({ onReload }) => {
                         </div>
                     </div>
                 </div>
-                <hr className="my-0"/>
+                <hr className="my-0" />
                 <div className="card-body">
                     <Form id="formAccountSettings" noValidate validated={validated} onSubmit={handleInvalid}>
                         <div className="row">
@@ -169,7 +169,7 @@ export const AccountPage = ({ onReload }) => {
                                         className="form-control"
                                         aria-label="Username"
                                         value={formData.email}
-                                        onChange={handleChange}/>
+                                        onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="mb-3 col-md-5">
@@ -180,13 +180,14 @@ export const AccountPage = ({ onReload }) => {
                                     </span>
                                     <input
                                         required
+                                        readOnly
                                         type="text"
                                         name="username"
                                         placeholder="username"
                                         className="form-control"
                                         aria-label="username"
                                         value={formData.username}
-                                        onChange={handleChange}/>
+                                        onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="mb-3 col-md-4">
@@ -200,7 +201,7 @@ export const AccountPage = ({ onReload }) => {
                                         className="form-control"
                                         aria-label="firstname"
                                         value={formData.firstname}
-                                        onChange={handleChange}/>
+                                        onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="mb-3 col-md-4">
@@ -214,7 +215,7 @@ export const AccountPage = ({ onReload }) => {
                                         className="form-control"
                                         aria-label="lastname"
                                         value={formData.lastname}
-                                        onChange={handleChange}/>
+                                        onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="mb-3 col-md-4">
@@ -233,7 +234,7 @@ export const AccountPage = ({ onReload }) => {
                                         minLength={10}
                                         maxLength={10}
                                         value={formData.phone}
-                                        onChange={handleChange}/>
+                                        onChange={handleChange} />
                                 </div>
                             </div>
                         </div>
@@ -242,7 +243,7 @@ export const AccountPage = ({ onReload }) => {
                                 Save changes
                             </button>
                             <button aria-label='Click me' type="reset"
-                                    className="btn btn-outline-secondary">Cancel
+                                className="btn btn-outline-secondary">Cancel
                             </button>
                         </div>
                     </Form>
@@ -264,20 +265,23 @@ export const AccountPage = ({ onReload }) => {
                                 className="form-check-input"
                                 type="checkbox"
                                 name="accountActivation"
-                                id="accountActivation"/>
+                                id="accountActivation" />
                             <label className="form-check-label" htmlFor="accountActivation">
                                 I confirm my account deactivation</label>
                         </div>
                         <button aria-label='Click me'
-                                className="btn btn-danger me-3 deactivate-account">Deactivate Account
+                            className="btn btn-danger me-3 deactivate-account">Deactivate Account
                         </button>
-                        <button aria-label='Click me'
-                                className="btn btn-warning me-3">Change Password
-                        </button>
+                        <Button aria-label='Click me'
+                            variant="warning"
+                            as={Link}
+                            to="/auth/change-password"
+                            className="btn btn-warning me-3">Change Password
+                        </Button>
                     </form>
                 </div>
             </div>
-            <SaveChange show={showModal} onHide={() => setShowModal(false)} onSave={handleSaveChanges}/>
+            <SaveChange show={showModal} onHide={() => setShowModal(false)} onSave={handleSaveChanges} />
         </>
     )
 }
