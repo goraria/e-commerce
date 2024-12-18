@@ -11,7 +11,7 @@ export const ProductName = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const [data, setData] = useState([])
     const [data1, setData1] = useState([])
@@ -188,6 +188,74 @@ export const ProductName = () => {
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
+    const renderCategory = (idcategory) => {
+        switch (idcategory) {
+            case 1:
+                return (
+                    <span className="text-truncate d-flex align-items-center text-heading">
+                        <span className="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-warning me-4">
+                            <i className="bx bx-briefcase"></i>
+                        </span>
+                        Household
+                    </span>
+                );
+            case 2:
+                return (
+                    <span className="text-truncate d-flex align-items-center text-heading">
+                        <span className="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-info me-4 p-3">
+                            <i className="bx bx-home-smile"></i>
+                        </span>
+                        Office
+                    </span>
+                );
+            case 3:
+                return (
+                    <span className="text-truncate d-flex align-items-center text-heading">
+                        <span
+                            className="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-primary me-4">
+                            <i className="bx bx-laptop"></i>
+                        </span>
+                        Game
+                    </span>
+                );
+            case 4:
+                return (
+                    <span className="text-truncate d-flex align-items-center text-heading">
+                        <span
+                            className="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-danger me-4">
+                            <i className="bx bx-headphone"></i>
+                        </span>
+                        Electronics
+                    </span>
+                );
+            case 5:
+                return (
+                    <span className="text-truncate d-flex align-items-center text-heading">
+                        <span
+                            className="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-secondary me-4">
+                            <i className="bx bxs-watch"></i>
+                        </span>
+                        Accessories
+                    </span>
+                );
+            case 6:
+                return <Badge bg="info">Info</Badge>;
+            case 7:
+                return <Badge bg="light">Light</Badge>;
+            case 8:
+                return <Badge bg="dark">Dark</Badge>;
+            default:
+                return (
+                    <span className="text-truncate d-flex align-items-center text-heading">
+                        <span className="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success me-4">
+                            <i className="bx bx-walk"></i>
+                        </span>
+                        Shoes
+                    </span>
+                );
+        }
+    }
+
     useEffect(() => {
         fetchAPI();
         fetchAPI1();
@@ -197,7 +265,7 @@ export const ProductName = () => {
         <>
             <div className="card">
                 <div className="card-datatable table-responsive">
-                    <div className="dataTables_wrapper dt-bootstrap5 no-footer">
+                <div className="dataTables_wrapper dt-bootstrap5 no-footer">
                         <div className="card-header flex-column flex-md-row pb-0">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div className="col-sm-12 col-md-6 d-flex">
@@ -222,9 +290,12 @@ export const ProductName = () => {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
+                                                <option value="10">7</option>
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="25">20</option>
                                                 <option value="50">50</option>
+                                                <option value="50">70</option>
+                                                <option value="50">100</option>
                                             </select>
                                             {/*<span>entries</span>*/}
                                         </label>
