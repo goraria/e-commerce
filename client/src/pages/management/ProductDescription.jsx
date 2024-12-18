@@ -98,13 +98,16 @@ export const ProductDescription = () => {
     // const getInitials = (firstname, lastname) => {
     //     return (firstname + lastname);
     // };
+
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
     };
+
     const renderPagination = () => {
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
         if (totalPages <= 1) return null;
 
         const paginationItems = [];
@@ -118,84 +121,70 @@ export const ProductDescription = () => {
             </Pagination.Item>
         );
 
-        // Thêm nút 'First' và 'Previous' với Font Awesome icons
+        // Thêm nút 'First' và 'Previous'
         paginationItems.push(
             <Pagination.First
                 key="first"
                 onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}>
-                <i className='bx bx-chevrons-left' ></i> {/* << */}
-            </Pagination.First>,
-
+                disabled={currentPage === 1}
+            />,
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}>
-                <i className='bx bx-chevron-left'></i> {/* < */}
-            </Pagination.Prev>
+                disabled={currentPage === 1}
+            />
         );
 
-        // Nếu đang ở các trang đầu (1-3), hiển thị 5 trang đầu và trang cuối cùng
-        if (currentPage <= 3) {
-            for (let i = 1; i <= Math.min(5, totalPages); i++) {
+        if (totalPages <= 7) {
+            // Hiển thị tất cả các trang nếu số trang <= 7
+            for (let i = 1; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
             }
-            if (totalPages > 5) {
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-                </Pagination.Ellipsis>);
+        } else {
+            // Hiển thị phân trang với dấu `...`
+            if (currentPage <= 4) {
+                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
+                for (let i = 1; i <= 5; i++) {
+                    paginationItems.push(addPageButton(i));
+                }
+                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
+                paginationItems.push(addPageButton(totalPages));
+            } else if (currentPage >= totalPages - 3) {
+                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
+                paginationItems.push(addPageButton(1));
+                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
+                for (let i = totalPages - 4; i <= totalPages; i++) {
+                    paginationItems.push(addPageButton(i));
+                }
+            } else {
+                // Trường hợp trang hiện tại ở giữa
+                paginationItems.push(addPageButton(1));
+                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
+                paginationItems.push(addPageButton(currentPage - 1));
+                paginationItems.push(addPageButton(currentPage));
+                paginationItems.push(addPageButton(currentPage + 1));
+                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
                 paginationItems.push(addPageButton(totalPages));
             }
         }
-        // Nếu đang ở các trang cuối (từ totalPages - 2 trở lên), hiển thị 5 trang cuối và trang đầu tiên
-        else if (currentPage >= totalPages - 2) {
-            paginationItems.push(addPageButton(1));
-            paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-            for (let i = totalPages - 4; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        }
-        // Nếu đang ở giữa (trang 4 đến totalPages - 3), hiển thị trang đầu, ... trang hiện tại, và dấu ... cuối
-        else {
-            paginationItems.push(addPageButton(1)); // Trang đầu tiên
-            paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
 
-            const startPage = currentPage - 1; // Trang trước
-            const endPage = currentPage + 1;   // Trang sau
-
-            for (let i = startPage; i <= endPage; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-
-            paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-            paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
-        }
-
-        // Thêm nút 'Next' và 'Last' với Font Awesome icons
+        // Thêm nút 'Next' và 'Last'
         paginationItems.push(
             <Pagination.Next
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}>
-                <i className='bx bx-chevron-right' ></i> {/* > */}
-            </Pagination.Next>,
-
+                disabled={currentPage === totalPages}
+            />,
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}>
-                <i className='bx bx-chevrons-right' ></i> {/* >> */}
-            </Pagination.Last>
+                disabled={currentPage === totalPages}
+            />
         );
 
-        return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
+        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
+
     useEffect(() => {
         // fetchAPI();
         // fetchAPI1();
