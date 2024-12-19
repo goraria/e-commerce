@@ -8,16 +8,8 @@ import { Loading } from "../overview/Loading.jsx";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-
-const socials = [
-    // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
-    { id: 1, name: "Apple", box: 'bx bxl-apple', color: "dark" },
-    { id: 2, name: "Google", box: 'bx bxl-google', color: "danger" },
-    { id: 3, name: "Meta", box: 'bx bxl-facebook-circle', color: "info" },
-    // { id: 4, name: "Twitter", icon: faTwitter },
-]
 
 const Login = ({ checker }) => {
     // const [modalShow, setModalShow] = useState(false);
@@ -52,9 +44,9 @@ const Login = ({ checker }) => {
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                const role = decoded.role || null;
+                // const role = decoded.role || null;
 
-                handleNavigate(role); // Chuyển hướng nếu token hợp lệ
+                handleNavigate(decoded.role); // Chuyển hướng nếu token hợp lệ
             } catch (error) {
                 console.error("Invalid token:", error);
                 localStorage.removeItem("token");

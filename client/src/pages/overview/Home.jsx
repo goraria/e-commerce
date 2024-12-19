@@ -90,7 +90,7 @@ const Home = () => {
                 )}
             </Carousel>
             <Overview mt={24}>
-                <h3 className="text-center m-0">Sản phẩm nổi bật</h3>
+                <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
             <Container className="my-4">
                 {/*<Row style={{height: 100}}>*/}

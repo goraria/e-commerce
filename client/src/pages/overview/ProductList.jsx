@@ -132,11 +132,11 @@ const ProductList = () => {
                 </row>
             </Overview>
             <Overview>
-                <h3 className="text-center m-0">Sản phẩm nổi bật</h3>
+                <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
 
             <div className="container">
-                {/*<h2 className="text-center mb-4">Sản phẩm nổi bật</h2>*/}
+                {/*<h2 className="text-center mb-4">Spotlight</h2>*/}
                 <Row>
                     {productList.map(product => (
                         <div key={product.idproduct} className="col col-xxl-3 col-md-6 col-sm-12 mb-4">

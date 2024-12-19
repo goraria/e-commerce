@@ -73,6 +73,10 @@ class AuthenticationController {
                     phone_number: '', // Google không trả số điện thoại, có thể để trống
                     avatar: data.merge.picture, // Sử dụng ảnh đại diện từ Google
                 });
+
+                await Cart.create({
+                    idaccount: account.idaccount
+                });
             }
 
             await Account.update({ status: 1 }, { where: { idaccount: account.idaccount } });
