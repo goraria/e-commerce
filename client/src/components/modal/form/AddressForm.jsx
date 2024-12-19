@@ -41,6 +41,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                 state: '',
                 country: ''
             });
+
             setValidated(false);
             setError(null);
         }

@@ -36,7 +36,7 @@ export const ProductColor = () => {
         try {
             const [colorsResponse, productsResponse] = await Promise.all([
                 axios.get("http://localhost:5172/admin/get-color"),
-                axios.get("http://localhost:5172/products/load-product"),
+                axios.get("http://localhost:5172/products/get-product"),
                 // axios.get("http://localhost:5172/admin/payhd"),
             ]);
             setData(colorsResponse.data);
@@ -330,11 +330,24 @@ export const ProductColor = () => {
                                 </td>
                                 <td>
                                     <div className="d-flex align-items-center">
-                                        <div className="avatar-circle me-2">
-
+                                        <div
+                                            className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                            <div className="avatar">
+                                                <img
+                                                    // src={`../assets/img/categories/product-7.png`}
+                                                    src={item.product_image}
+                                                    alt="Product-8"
+                                                    className="rounded"
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            {item.product_name}
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <span className="text-heading text-wrap fw-medium">
+                                                {`${item.brand} ${item.product_name}`}
+                                            </span>
+                                            {/*<span className="text-truncate mb-0 d-none d-sm-block">*/}
+                                            {/*    <small>Pro</small>*/}
+                                            {/*</span>*/}
                                         </div>
                                     </div>
                                 </td>

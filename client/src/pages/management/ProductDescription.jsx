@@ -11,7 +11,7 @@ export const ProductDescription = () => {
         try {
             const [descriptionResponse, productsResponse] = await Promise.all([
                 axios.get("http://localhost:5172/admin/get-description"),
-                axios.get("http://localhost:5172/products/load-product"),
+                axios.get("http://localhost:5172/products/get-product"),
                 // axios.get("http://localhost:5172/admin/payhd"),
             ]);
             setData(descriptionResponse.data);
@@ -263,7 +263,7 @@ export const ProductDescription = () => {
                                 />
                             </th>
                             {
-                                ["Product Name", "Title Description", "Sub Description", "Image Description"].map((item, index) => (
+                                ["Product Name", "Description"].map((item, index) => (
                                     <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
                                         {item}
                                     </th>
@@ -286,17 +286,39 @@ export const ProductDescription = () => {
                                 </td>
                                 <td>
                                     <div className="d-flex align-items-center">
-                                        <div className="avatar-circle me-2">
-
+                                        <div
+                                            className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                            <div className="avatar">
+                                                <img
+                                                    // src={`../assets/img/categories/product-7.png`}
+                                                    src={item.product_image}
+                                                    alt="Product-8"
+                                                    className="rounded"
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            {item.product_name}
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <span className="text-heading text-wrap fw-medium">
+                                                {`${item.brand} ${item.product_name}`}
+                                            </span>
+                                            <span className="text-truncate mb-0 d-none d-sm-block">
+                                                <small>{item.img_description}</small>
+                                            </span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item.title_description}</td>
-                                <td>{item.sub_description}</td>
-                                <td>{item.img_description}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <span className="text-heading text-wrap fw-medium">
+                                                {`${item.title_description}`}
+                                            </span>
+                                            <span className="text-truncate mb-0 d-none d-sm-block">
+                                                <small>{item.sub_description}</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td>
                                     <Button
                                         variant="link"

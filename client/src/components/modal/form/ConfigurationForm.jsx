@@ -15,9 +15,12 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
         resolution: '',
         product_name: ''
     });
+    const [products, setProductList] = useState([]);
+
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     useEffect(() => {
         if (configuration) {
             setFormData({
@@ -30,7 +33,9 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                 resolution: configuration.resolution || '',
                 product_name: configuration.product_name || '',
             });
-        } else {
+        }
+
+        if (!show) {
             setFormData({
                 cpu: '',
                 gpu: '',
@@ -42,34 +47,41 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                 product_name: ''
             });
         }
-    }, [configuration]);
+
+        setValidated(false);
+        setError(null);
+
+        getProducts()
+    }, [show]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
     };
+
     const convertFormDataToString = (data) => {
         return Object.fromEntries(
             Object.entries(data).map(([key, value]) => [key, String(value || "")])
         );
     };
+
     const handleInvalid = (event) => {
         event.preventDefault();
         event.stopPropagation();
 
         const form = event.currentTarget;
         const datastring = convertFormDataToString(formData)
-        console.log(datastring)
+        // console.log(datastring)
         if (form.checkValidity() === false) {
             setValidated(true);
         } else {
             const allFieldsFilled = Object.values(datastring).every(value => value.trim() !== "");
 
             if (allFieldsFilled) {
-                console.log("1")
+                // console.log("1")
                 setShowConfirmModal(true);
             } else {
-                console.log("2")
+                // console.log("2")
                 setValidated(true);
             }
         }
@@ -78,7 +90,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
     const handleConfirmSave = async () => {
         try {
             // const token = localStorage.getItem('token');
-            console.log(formData)
+            // console.log(formData)
             const response = configuration
                 ? await axios.post(`http://localhost:5172/admin/update-configuration/${configuration.idconfiguration}`, formData)
                 : await axios.put('http://localhost:5172/admin/create-configuration', formData);
@@ -109,6 +121,16 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
+    const getProducts = async () => {
+        try {
+            const response = await axios.get('http://localhost:5172/products/get-product');
+            setProductList(response.data);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    }
+
     return (
         <>
             <Modal
@@ -132,7 +154,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                     <Form noValidate validated={validated}
                           onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <div className="mb-3">
-                            <label htmlFor="product_name" className="form-label">Address Type</label>
+                            <label htmlFor="product_name" className="form-label">Product</label>
                             <select
                                 className="form-select"
                                 id="product_name"
@@ -144,33 +166,15 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                             >
                                 <option value="">Choose product</option>
                                 {
-                                    // product.map((item, index) => (item) => (
-                                    //     <option key={index} value={item.idproduct}>{item.product_name}</option>
-                                    // ))
+                                    products.map((item, index) => (
+                                        <option key={index} value={item.product_name}>{`${item.brand} ${item.product_name}`}</option>
+                                    ))
                                 }
                             </select>
                             <Form.Control.Feedback type="invalid">
                                 Please select a type of address.
                             </Form.Control.Feedback>
                         </div>
-                        <Form.Group as={Col} md={7} controlId="product_name">
-                            <Form.Label>Product Name</Form.Label>
-                            <InputGroup hasValidation>
-                                <InputGroup.Text id="product_name">
-                                    <i className='bx bx-globe'></i>
-                                </InputGroup.Text>
-                                <Form.Control
-                                    type="text"
-                                    name="product_name"
-                                    value={formData.product_name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Please enter Product Name.
-                                </Form.Control.Feedback>
-                            </InputGroup>
-                        </Form.Group>
                         <Row className="mb-3">
                             <Form.Group as={Col} md={8} controlId="cpu">
                                 <Form.Label>CPU</Form.Label>
@@ -317,10 +321,10 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                     {/*</Button>*/}
                     {configuration ?
                         <>
-                            {/* <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
+                            <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
                                 <i className='bx bx-trash' ></i>
                                 <span>Delete Address</span>
-                            </Button> */}
+                            </Button>
                             <Button onClick={handleInvalid} variant="info">
                                 <i className='bx bx-check' ></i>
                                 <span>Save changes</span>

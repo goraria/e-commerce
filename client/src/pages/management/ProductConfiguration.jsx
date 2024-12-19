@@ -16,7 +16,7 @@ export const ProductConfiguration = () => {
     };
 
     const productList = async () => {
-        const response = await axios.get("http://localhost:5172/products/load-product")
+        const response = await axios.get("http://localhost:5172/products/get-product")
         setProducts(response.data)
     };
 
