@@ -69,13 +69,9 @@ const Navbar = ({ children }) => {
     const handleLogout = async () => {
         if (token) {
             try {
-                await axios.post(
-                    "http://localhost:5172/authentication/logout",
-                    {},
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
-                );
+                await axios.post("http://localhost:5172/authentication/logout", {}, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
                 localStorage.removeItem("token"); // Xóa JWT
                 setShowModal(false);

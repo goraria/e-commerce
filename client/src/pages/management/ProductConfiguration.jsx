@@ -360,7 +360,7 @@ export const ProductConfiguration = () => {
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                         <div className="row">
-                            <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                            <div className="d-flex col-sm-12 col-md-6">
                                 <div className="dataTables_info"
                                      style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
                                     <div className="text-center mt-2">

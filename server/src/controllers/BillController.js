@@ -86,6 +86,8 @@ class BillController {
     };
 
     async getAllBillByAccount(req, res) {
+        const user = req.user.id;
+        // console.log(user);
         try {
             const bills = await Bill.findAll({
                 where: { idaccount: req.user.id }, // Lọc theo idaccount

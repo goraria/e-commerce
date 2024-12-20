@@ -400,26 +400,26 @@ const Activitybar = ({ children }) => {
                                             className="bx bx-user bx-sm me-2"></i>Profile</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        to={"/user/address"}
-                                        aria-label="address"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bx-location-plus bx-sm me-2"></i>Address</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={"/user/bill"}
-                                        aria-label="bill"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bx-receipt bx-sm me-2"></i>Bill</span>
-                                    </Link>
-                                </li>
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={"/user/address"}*/}
+                                {/*        aria-label="address"*/}
+                                {/*        className="dropdown-item"*/}
+                                {/*    >*/}
+                                {/*        <span className="align-middle"><i*/}
+                                {/*            className="bx bx-location-plus bx-sm me-2"></i>Address</span>*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={"/user/bill"}*/}
+                                {/*        aria-label="bill"*/}
+                                {/*        className="dropdown-item"*/}
+                                {/*    >*/}
+                                {/*        <span className="align-middle"><i*/}
+                                {/*            className="bx bx-receipt bx-sm me-2"></i>Bill</span>*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
                                 <li>
                                     <div className="dropdown-divider"></div>
                                 </li>

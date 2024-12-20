@@ -6,6 +6,7 @@ import OrderHistory from "../user-information/OrderHistory.jsx";
 import {Badge, Button, Form, Pagination, Table} from "react-bootstrap";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
+import {DataTables} from "../../components/datatables/DataTables.jsx";
 
 export const Preview = () => {
     const [formData, setFormData] = useState({
@@ -14,7 +15,8 @@ export const Preview = () => {
         email: '',
         firstname: '',
         lastname: '',
-        phone: ''
+        phone: '',
+        avatar: ''
     });
 
     const [data, setData] = useState([]);
@@ -22,7 +24,7 @@ export const Preview = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
@@ -49,10 +51,15 @@ export const Preview = () => {
     };
 
     const fetchPreviews = async () => {
+        const token = localStorage.getItem("token");
+
         try {
-            const response = await axios.get('http://localhost:5172/bill/list-all');
+            const response = await axios.get('http://localhost:5172/bill/list-bill', {
+                headers: {Authorization: `Bearer ${token}`}
+            });
+
             setData(response.data);
-            // console.log(response.data);
+            console.log(response.data);
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu:', error);
             setError(`Lỗi khi lấy dữ liệu: ${error}`);
@@ -276,7 +283,8 @@ export const Preview = () => {
                 email: data.email,
                 firstname: data.firstname,
                 lastname: data.lastname,
-                phone: data.phone
+                phone: data.phone,
+                avatar: data.avatar
             });
         } catch (error) {
             setError('Error fetching user data');
@@ -292,6 +300,7 @@ export const Preview = () => {
     useEffect(() => {
         getInformation()
         fetchPreviews()
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
@@ -304,7 +313,7 @@ export const Preview = () => {
                         <div className="card-body pt-12">
                             <div className="customer-avatar-section">
                                 <div className="d-flex align-items-center flex-column">
-                                    <img className="img-fluid rounded mb-4" src="../assets/img/avatars/1.png"
+                                    <img className="img-fluid rounded mb-4" src={formData.avatar}
                                          height="120" width="120" alt="User avatar"/>
                                     <div className="customer-info text-center mb-4">
                                         <h5 className="mb-0">{`${formData.firstname} ${formData.lastname}`}</h5>
@@ -621,7 +630,7 @@ export const Preview = () => {
                                         </Table>
                                         <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                                             <div className="row">
-                                                <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                                                <div className="d-flex col-sm-12 col-md-6">
                                                     <div
                                                         className="dataTables_info d-flex justify-content-start align-items-center">
                                                         <div className="text-center mt-2">
@@ -657,6 +666,7 @@ export const Preview = () => {
                     </div>
                 </div>
             </div>
+            <DataTables/>
             <StatisticView
                 show={showModal}
                 onHide={() => setShowModal(false)}
