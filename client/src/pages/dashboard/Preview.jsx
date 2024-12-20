@@ -666,7 +666,7 @@ export const Preview = () => {
                     </div>
                 </div>
             </div>
-            <DataTables/>
+            {/*<DataTables/>*/}
             <StatisticView
                 show={showModal}
                 onHide={() => setShowModal(false)}
