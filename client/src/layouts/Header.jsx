@@ -1,52 +1,17 @@
 import React, { Component, useEffect, useState } from "react";
 // import ReactDOM from 'react-dom/client';
 import { Link, useNavigate } from "react-router-dom";
-import {
-    Container,
-    Button,
-    Nav,
-    Navbar,
-    NavDropdown,
-    Form,
-    DropdownButton,
-    ButtonGroup,
-} from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 import axios from "axios";
 
-import DropdownConfig from "../components/button/DropdownConfig.jsx";
 import SaveChange from "../components/modal/notify/SaveChange.jsx";
-import getGreetingMessage from "../utils/greetingHandler.js";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import Activitybar from "./Activitybar.jsx";
 import Outbar from "./Outbar.jsx";
-// import { search } from '../../../server/src/routes/ProductRouter.js';
-
-const dropdownContains = [
-    {
-        id: 1,
-        // title: <FontAwesomeIcon icon={faShoppingCart} />,
-        align: "end",
-        className: "ms-2 me-2",
-        item: [
-            { key: 1, name: "Profile", href: "#" },
-            { key: 2, name: "Bill", href: "#" },
-            { key: 2, name: "Full Cart", href: "#" },
-        ],
-    },
-    {
-        id: 2,
-        // title: <i className='bx bx-user' ></i>,
-        align: "end",
-        className: "",
-        item: [
-            { key: 1, name: "Profile", href: "#" },
-            { key: 2, name: "Bill", href: "#" },
-            { key: 2, name: "Logout", href: "#" },
-        ],
-    },
-];
+import {jwtDecode} from "jwt-decode";
+import Overside from "./Overside.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -122,51 +87,54 @@ const Header = () => {
     const [loading, setLoading] = useState(true); // Thêm trạng thái loading
     const token = localStorage.getItem("token");
 
-    const authenticationCheck = async () => {
-        const token = localStorage.getItem("token");
+    const authentication = async () => {
+        setLoading(true);
+
         if (!token) {
+            setAuth({ isAuthenticated: false, role: null });
             setLoading(false);
             return;
         }
 
         try {
-            const response = await axios.get(
-                "http://localhost:5172/authentication/check",
-                {
-                    headers: {Authorization: `Bearer ${token}`},
-                }
-            );
+            const decoded = jwtDecode(token);
+
+            const currentTime = Date.now() / 1000; // thời gian hiện tại (tính bằng giây)
+            if (decoded.exp < currentTime) {
+                throw new Error('Token expired');
+            }
+
             setAuth({
                 isAuthenticated: true,
-                role: response.data.role,
+                role: decoded.role,
             });
         } catch (error) {
-            setAuth({
-                isAuthenticated: false,
-                role: null,
-            });
-            localStorage.removeItem("token");
-            navigate("/auth/error");
+            setAuth({ isAuthenticated: false, role: null });
+            localStorage.removeItem('token');
         } finally {
-            setLoading(false); // Dừng loading sau khi fetch
+            setLoading(false);
         }
     };
 
     const handleLogout = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            await axios.post(
-                "http://localhost:5172/authentication/logout",
-                {},
-                {
-                    headers: {Authorization: `Bearer ${token}`},
-                }
-            );
-            localStorage.removeItem("token"); // Xóa JWT
-            setShowModalHeader(false);
+        if (token) {
+            try {
+                await axios.post(
+                    "http://localhost:5172/authentication/logout",
+                    {},
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                localStorage.removeItem("token"); // Xóa JWT
+                setShowModal(false);
+                navigate("/auth/login");
+            } catch (error) {
+                // console.error("Logout failed", error);
+            }
+        } else {
             navigate("/auth/login");
-        } catch (error) {
-            console.error("Logout failed", error);
         }
     };
 
@@ -188,44 +156,18 @@ const Header = () => {
     };
 
     useEffect(() => {
-        authenticationCheck();
+
     }, []);
 
     return (
         <>
             <nav
                 className="light bg-body-tertiary layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme mb-4">
-                <div className="container p-0">
-                    <Link
-                        className="navbar-brand app-brand-text demo menu-text fw-bold text-capitalize"
-                        to={"/"}
-                    >
-                        <span>Cipher</span>
-                    </Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <ul className="navbar-nav me-auto">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/search">
-                                <h5 className="m-0">Product</h5>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/contact">
-                                <h5 className="m-0">Contact</h5>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/about">
-                                <h5 className="m-0">About</h5>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+
                 <ul className="navbar-nav flex-row align-items-center ms-auto">
+
+                    <Overside/>
+
                     <li className="nav-item navbar-search-wrapper me-2 me-xl-0">
                         <a className="nav-link search-toggler" href="#">
                             <i className="bx bx-search bx-sm"></i>
@@ -558,7 +500,7 @@ const Header = () => {
                             </li>
                             <li>
                                 <Link
-                                    to={"/user/faq"}
+                                    to={"/faq"}
                                     aria-label="faq"
                                     className="dropdown-item"
                                 >

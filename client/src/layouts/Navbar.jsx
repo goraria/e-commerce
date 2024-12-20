@@ -7,6 +7,7 @@ import SaveChange from "../components/modal/notify/SaveChange.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
+import {jwtDecode} from "jwt-decode";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -35,24 +36,55 @@ const baskets = [
 const Navbar = ({ children }) => {
     useEffect(() => {
         Main();
+
+        useLoad();
     },[])
 
+    const [account, setAccount] = useState({});
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const token = localStorage.getItem('token');
+
+    const token = localStorage.getItem("token");
+
+    const useLoad = async () => {
+        if (token) {
+            try {
+                // const decoded = jwtDecode(token);
+
+                const response = await axios.get('http://localhost:5172/account/get-info', {
+                    headers: {Authorization: `Bearer ${token}`}
+                });
+
+                setAccount(response.data);
+                // console.log(response.data);
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        } else {
+            // navigate("/auth/login");
+        }
+    }
 
     const handleLogout = async () => {
-        const token = localStorage.getItem('token');
-        try {
-            await axios.post('http://localhost:5172/authentication/logout', {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            localStorage.removeItem('token');  // Xóa JWT
-            setShowModal(false)
-            navigate('/auth/login');
-        } catch (error) {
-            console.error('Logout failed', error);
+        if (token) {
+            try {
+                await axios.post(
+                    "http://localhost:5172/authentication/logout",
+                    {},
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                localStorage.removeItem("token"); // Xóa JWT
+                setShowModal(false);
+                navigate("/auth/login");
+            } catch (error) {
+                // console.error("Logout failed", error);
+            }
+        } else {
+            navigate("/auth/login");
         }
     };
 
@@ -392,7 +424,7 @@ const Navbar = ({ children }) => {
                             >
                                 <div className="avatar avatar-online">
                                     <img
-                                        src="../assets/img/avatars/1.png"
+                                        src={account.avatar}
                                         className="w-px-40 h-auto rounded-circle"
                                         alt="avatar-image"
                                         aria-label="Avatar Image"
@@ -410,7 +442,7 @@ const Navbar = ({ children }) => {
                                             <div className="flex-shrink-0 me-3">
                                                 <div className="avatar avatar-online">
                                                     <img
-                                                        src="../assets/img/avatars/1.png"
+                                                        src={account.avatar}
                                                         className="w-px-40 h-auto rounded-circle"
                                                         alt="avatar-image"
                                                         aria-label="Avatar Image"
@@ -418,7 +450,7 @@ const Navbar = ({ children }) => {
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">Schweitzenburg</span>
+                                                <span className="fw-medium d-block">{`Mr. ${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">Administrator</small>
                                             </div>
                                         </div>
@@ -442,7 +474,7 @@ const Navbar = ({ children }) => {
                                 </li>
                                 <li>
                                     <Link
-                                        to={"/user/faq"}
+                                        to={"/faq"}
                                         aria-label="faq"
                                         className="dropdown-item"
                                     >

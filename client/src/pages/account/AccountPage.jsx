@@ -12,7 +12,8 @@ export const AccountPage = ({ onReload }) => {
         email: '',
         firstname: '',
         lastname: '',
-        phone: ''
+        phone: '',
+        avatar: ''
     });
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -37,7 +38,8 @@ export const AccountPage = ({ onReload }) => {
                 email: data.email,
                 firstname: data.firstname,
                 lastname: data.lastname,
-                phone: data.phone
+                phone: data.phone,
+                avatar: data.avatar
             });
         } catch (error) {
             setError('Error fetching user data');
@@ -121,7 +123,7 @@ export const AccountPage = ({ onReload }) => {
                 <div className="card-body">
                     <div className="d-flex align-items-start align-items-sm-center gap-4">
                         <img
-                            src="../assets/img/avatars/1.png"
+                            src={formData.avatar}
                             alt="user-avatar"
                             className="d-block rounded"
                             height="100"

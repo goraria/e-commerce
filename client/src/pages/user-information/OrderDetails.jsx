@@ -231,7 +231,7 @@ const OrderDetails = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="card mb-4">
+                    <div className="card">
                         <div className="card-header">
                             <h5 className="card-title m-0">Shipping activity</h5>
                         </div>

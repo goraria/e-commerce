@@ -36,65 +36,57 @@ const baskets = [
 const Activitybar = ({ children }) => {
     useEffect(() => {
         Main();
+
+        useLoad();
     },[])
+
+    const [account, setAccount] = useState({});
 
     const [showModalHeader, setShowModalHeader] = useState(false);
     const [submit, setSubmit] = useState({ search: "" });
 
     const navigate = useNavigate();
 
-    const [auth, setAuth] = useState({
-        isAuthenticated: false,
-        role: null,
-    });
-    const [loading, setLoading] = useState(true); // Thêm trạng thái loading
     const token = localStorage.getItem("token");
 
-    const authenticationCheck = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setLoading(false);
-            return;
-        }
+    const useLoad = async () => {
+        if (token) {
+            try {
+                // const decoded = jwtDecode(token);
 
-        try {
-            const response = await axios.get(
-                "http://localhost:5172/authentication/check",
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            setAuth({
-                isAuthenticated: true,
-                role: response.data.role,
-            });
-        } catch (error) {
-            setAuth({
-                isAuthenticated: false,
-                role: null,
-            });
-            localStorage.removeItem("token");
-            navigate("/auth/error");
-        } finally {
-            setLoading(false); // Dừng loading sau khi fetch
+                const response = await axios.get('http://localhost:5172/account/get-info', {
+                    headers: {Authorization: `Bearer ${token}`}
+                });
+
+                setAccount(response.data);
+                // console.log(response.data);
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        } else {
+            // navigate("/auth/login");
         }
-    };
+    }
 
     const handleLogout = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            await axios.post(
-                "http://localhost:5172/authentication/logout",
-                {},
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            localStorage.removeItem("token"); // Xóa JWT
-            setShowModalHeader(false);
+        if (token) {
+            try {
+                await axios.post(
+                    "http://localhost:5172/authentication/logout",
+                    {},
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                localStorage.removeItem("token"); // Xóa JWT
+                setShowModalHeader(false);
+                navigate("/auth/login");
+            } catch (error) {
+                // console.error("Logout failed", error);
+            }
+        } else {
             navigate("/auth/login");
-        } catch (error) {
-            console.error("Logout failed", error);
         }
     };
 
@@ -105,9 +97,9 @@ const Activitybar = ({ children }) => {
             setTimeout(() => {
                 window.location.reload();
             }, 50);
-            console.log("tìm kiếm thành công");
+            // console.log("tìm kiếm thành công");
         } catch (error) {
-            console.log("tìm kiếm ko thành công", error);
+            // console.log("tìm kiếm ko thành công", error);
         }
     };
 
@@ -363,7 +355,7 @@ const Activitybar = ({ children }) => {
                             >
                                 <div className="avatar avatar-online">
                                     <img
-                                        src="../assets/img/avatars/1.png"
+                                        src={account.avatar}
                                         className="w-px-40 h-auto rounded-circle"
                                         alt="avatar-image"
                                         aria-label="Avatar Image"
@@ -381,7 +373,7 @@ const Activitybar = ({ children }) => {
                                             <div className="flex-shrink-0 me-3">
                                                 <div className="avatar avatar-online">
                                                     <img
-                                                        src="../assets/img/avatars/1.png"
+                                                        src={account.avatar}
                                                         className="w-px-40 h-auto rounded-circle"
                                                         alt="avatar-image"
                                                         aria-label="Avatar Image"
@@ -389,7 +381,7 @@ const Activitybar = ({ children }) => {
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">Braunschweig</span>
+                                                <span className="fw-medium d-block">{`Mr. ${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">User</small>
                                             </div>
                                         </div>
@@ -433,7 +425,7 @@ const Activitybar = ({ children }) => {
                                 </li>
                                 <li>
                                     <Link
-                                        to={"/user/faq"}
+                                        to={"/faq"}
                                         aria-label="faq"
                                         className="dropdown-item"
                                     >

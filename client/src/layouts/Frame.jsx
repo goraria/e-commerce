@@ -10,6 +10,7 @@ import Activitybar from "./Activitybar.jsx";
 import getGreetingMessage from "../utils/greetingHandler.js";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 const Frame = ({ children, role }) => {
     useEffect(() => {
@@ -37,13 +38,16 @@ const Frame = ({ children, role }) => {
         }
 
         try {
-            const response = await axios.get('http://localhost:5172/authentication/check', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const decoded = jwtDecode(token);
+
+            const currentTime = Date.now() / 1000; // thời gian hiện tại (tính bằng giây)
+            if (decoded.exp < currentTime) {
+                throw new Error('Token expired');
+            }
 
             setAuth({
                 isAuthenticated: true,
-                role: response.data.role,
+                role: decoded.role,
             });
         } catch (error) {
             setAuth({ isAuthenticated: false, role: null });

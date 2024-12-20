@@ -13,7 +13,7 @@ const OrderHistory = () => {
     const getOrders = async () => {
         try {
             const response = await axios.get('http://localhost:5172/bill/get-all');
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -28,7 +28,7 @@ const OrderHistory = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             setOrders(response.data);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu:', error);

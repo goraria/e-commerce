@@ -19,7 +19,8 @@ class AccountController {
                     email: account.email,
                     firstname: accuser.firstname,
                     lastname: accuser.lastname,
-                    phone: accuser.phone_number
+                    phone: accuser.phone_number,
+                    avatar: accuser.avatar
                 });
             } else {
                 res.status(404).json({ error: 'User not found' });

@@ -403,7 +403,7 @@ const Outbar = ({ children }) => {
                                 </li>
                                 <li>
                                     <Link
-                                        to={"/user/faq"}
+                                        to={"/faq"}
                                         aria-label="faq"
                                         className="dropdown-item"
                                     >
