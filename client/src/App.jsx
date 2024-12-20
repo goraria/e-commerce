@@ -74,7 +74,7 @@ const App = () => {
                 path="/user/*"
                 element={
                     <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
-                        <Panel role={auth.role}>
+                        <Panel>
                             <UserRoutes />
                         </Panel>
                     </Protected>
@@ -96,7 +96,7 @@ const App = () => {
                 path="/admin/*"
                 element={
                     <Protected isAllowed={auth.isAuthenticated && auth.role === 1} redirectTo="/auth/error">
-                        <Layout role={auth.role}>
+                        <Layout>
                             <AdministratorRoutes />
                         </Layout>
                     </Protected>

@@ -3,6 +3,7 @@ import Sidebar from './Sidebar';
 import Activitybar from "./Activitybar.jsx";
 import Navbar from './Navbar';
 import Copyright from './Copyright.jsx';
+import getGreetingMessage from "../utils/greetingHandler.js";
 
 const menu = [
     {
@@ -23,27 +24,27 @@ const menu = [
                     {
                         "text": "Without menu",
                         "available": true,
-                        "link": "/admin/layout/without-menu"
+                        "link": "#"
                     },
                     {
                         "text": "Without navbar",
                         "available": true,
-                        "link": "/admin/layout/without-navbar"
+                        "link": "#"
                     },
                     {
                         "text": "Container",
                         "available": true,
-                        "link": "/admin/layout/container"
+                        "link": "#"
                     },
                     {
                         "text": "Fluid",
                         "available": true,
-                        "link": "/admin/layout/fluid"
+                        "link": "#"
                     },
                     {
                         "text": "Blank",
                         "available": true,
-                        "link": "/admin/layout/blank"
+                        "link": "#"
                     }
                 ]
             }
@@ -92,16 +93,19 @@ const menu = [
     }
 ]
 
-const Panel = ({ children, role }) => {
+const Panel = ({ children }) => {
     useEffect(() => {
         Main();
     },[])
+
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
                 <Sidebar menu={menu} source={"/"}/>
                 <div className="layout-page">
-                    <Activitybar />
+                    <Activitybar>
+                        {getGreetingMessage('from Bill')}
+                    </Activitybar>
                     <div className="content-wrapper">
                         <div className="container-xxl flex-grow-1 container-p-y">
                             {children}

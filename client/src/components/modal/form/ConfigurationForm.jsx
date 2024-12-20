@@ -322,16 +322,16 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                     {configuration ?
                         <>
                             <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
-                                <i className='bx bx-trash' ></i>
+                                <i className='bx bx-trash'></i>
                                 <span>Delete Address</span>
                             </Button>
                             <Button onClick={handleInvalid} variant="info">
-                                <i className='bx bx-check' ></i>
+                                <i className='bx bx-check'></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <i className='bx bx-plus' ></i>
+                                <i className='bx bx-plus'></i>
                                 <span>Create Configuration</span>
                             </Button>
                         </>

@@ -5,12 +5,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const { Op } = require('sequelize');
-require('dotenv').config();
 const crypto = require('crypto');
+require('dotenv').config();
 
 const generateToken = () => {
     return crypto.randomBytes(20).toString('hex');
 };
+
 class AuthenticationController {
     async google(req, res) {
         // try {
@@ -47,10 +48,10 @@ class AuthenticationController {
             // const payload = ticket.getPayload();
             // const { email, name, picture } = payload;
 
-            console.log(data.merge.email);
+            // console.log(data.merge.email);
 
             let account = await Account.findOne({ where: { email: data.merge.email.toString() } });
-            console.log(account)
+            // console.log(account)
 
             if (!account) {
                 account = await Account.create({
@@ -100,9 +101,9 @@ class AuthenticationController {
             //     },
             // });
 
-            return res.json({ message: 'Login successful', token: jwtToken });
+            return res.json({ success: true, message: 'Login successful', token: jwtToken });
         } catch (error) {
-            console.error('Google login error:', error);
+            // console.error('Google login error:', error);
             return res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
@@ -140,7 +141,7 @@ class AuthenticationController {
             await Account.update({ status: 0 }, { where: { idaccount: req.user.id } });
             return res.json({ message: 'Logout successful' });
         } catch (error) {
-            console.error('Logout error:', error);
+            // console.error('Logout error:', error);
             res.status(500).json({ message: 'Logout failed', error });
         }
     }
@@ -196,8 +197,8 @@ class AuthenticationController {
             });
 
         } catch (error) {
-            console.error('Registration error:', error);
-            // return res.status(500).json({ error: 'Error registering user' });
+            // console.error('Registration error:', error);
+            return res.status(500).json({ error: 'Error registering user' });
         }
     }
 
@@ -224,7 +225,7 @@ class AuthenticationController {
             // console.log('Confirmation email sent successfully');
         } catch (error) {
             // console.error('Error sending confirmation email:', error);
-            console.log(error)
+            // console.log(error)
             return res.status(500).json({ error: 'Error registering user' });
         }
     }
@@ -258,6 +259,7 @@ class AuthenticationController {
             res.send('Link xác minh không hợp lệ hoặc đã hết hạn.');
         }
     };
+
     static async sendResetPasswordEmail(email, token, req, res) {
         const resetUrl = `http://localhost:5173/auth/reset-password?token=${token}`;
         const transporter = nodemailer.createTransport({
@@ -280,10 +282,11 @@ class AuthenticationController {
             // console.log('Confirmation email sent successfully');
         } catch (error) {
             // console.error('Error sending confirmation email:', error);
-            console.log(error)
+            // console.log(error)
             return res.status(500).json({ error: 'Error reset password' });
         }
     }
+
     async ForgotPassword(req, res) {
         try {
             const { email } = req.body;
@@ -291,10 +294,12 @@ class AuthenticationController {
             if (!user) {
                 return res.status(400).json({ message: 'Email không tồn tại!' });
             }
+
             const token = crypto.randomBytes(20).toString('hex');
             const accountToken = {
                 verificationtoken: token
             }
+
             await user.update(accountToken);
             await AuthenticationController.sendResetPasswordEmail(email, token, req, res);
             res.json({ message: 'Một email đã được gửi để bạn đặt lại mật khẩu!' });
@@ -302,6 +307,7 @@ class AuthenticationController {
             console.log(error)
         }
     };
+
     async ResetPassword(req, res) {
         const { token, newPassword } = req.body;
         console.log(req.body);
@@ -321,6 +327,7 @@ class AuthenticationController {
         await user.update(userData);
         res.json({ message: 'Mật khẩu của bạn đã được đặt lại' });
     };
+
     async changePassword(req, res) {
         try {
             const account = await Account.findOne({

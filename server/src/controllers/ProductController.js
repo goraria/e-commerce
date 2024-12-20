@@ -1,11 +1,11 @@
 const Product = require('../models/Product');
-const jwt = require('jsonwebtoken');
 const Description = require('../models/Description');
 const Configuration = require('../models/Configuration')
 const Rating = require("../models/Rating")
 const Color = require("../models/Color")
-const { Op, where } = require("sequelize");
 const Category = require("../models/Category")
+const { Op, where } = require("sequelize");
+const jwt = require('jsonwebtoken');
 
 class ProductController {
     async loadProduct(req, res) {
@@ -236,6 +236,7 @@ class ProductController {
             res.status(500).json({ message: 'Error fetching products', error });
         }
     }
+
     async updateProductName(req, res) {
         const { idProduct } = req.params;
         const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
@@ -272,6 +273,7 @@ class ProductController {
             res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
     }
+
     async deleteProductName(req, res) {
         try {
             const { idProduct } = req.params

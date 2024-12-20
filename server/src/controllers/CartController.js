@@ -34,7 +34,7 @@ class CartController {
     async LoadCart(req,res){
         try {
             const  id  = req.user.id;
-            console.log(id,  req.user.id);
+            // console.log(id,  req.user.id);
             const cart = await Cart.findOne({
                 where: {
                     idaccount: id
@@ -47,6 +47,7 @@ class CartController {
         }
 
     }
+
     async loadCartItem(req,res){
         const { idCart } = req.params; 
         try {
@@ -137,11 +138,6 @@ class CartController {
             res.status(500).json({ message: 'Error updating cart item quantity', error });
         }
     }
-    
-    
-    
-
-
 }
 
 module.exports = new CartController();

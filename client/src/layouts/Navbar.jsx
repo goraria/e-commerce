@@ -1,7 +1,7 @@
 import getGreetingMessage from '../utils/greetingHandler';
-import {Button, ButtonToolbar, Nav} from "react-bootstrap";
+import {Button, ButtonToolbar, Form, Nav} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import SaveChange from "../components/modal/notify/SaveChange.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
@@ -32,7 +32,11 @@ const baskets = [
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
 
-const Navbar = () => {
+const Navbar = ({ children }) => {
+    useEffect(() => {
+        Main();
+    },[])
+
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -72,13 +76,36 @@ const Navbar = () => {
                         <i className="bx bx-menu bx-sm"></i>
                     </a>
                 </div>
+
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+                    {children}
+
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <a className="nav-link search-toggler" href="#">
-                                <i className="bx bx-search bx-sm"></i>
-                            </a>
-                        </li>
+                        {/*<li className="nav-item navbar-search-wrapper me-3 me-xl-2">*/}
+                        {/*    <a className="nav-link search-toggler" href="#">*/}
+                        {/*        <i className="bx bx-search bx-sm"></i>*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
+                        <Form className="d-flex"> {/* onSubmit={handleSearch} */}
+                            <input
+                                className="form-control search-input container-xxl border-0 tt-input me-2"
+                                placeholder="Search..."
+                                aria-label="Search..."
+                                autoComplete="off"
+                                spellCheck="false"
+                                type="search"
+                                dir="auto"
+                                name="search"
+                                // value={submit.search}
+                                // onChange={handleChange}
+                            />
+                            <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                                <Button as={Link} to={'/search'} className="nav-link search-toggler" variant="link">
+                                    <i className="bx bx-search bx-sm"></i>
+                                </Button>
+                            </li>
+                        </Form>
                         <li className="nav-item dropdown-style-switcher dropdown me-3 me-xl-2">
                             <a
                                 className="nav-link dropdown-toggle hide-arrow"
@@ -203,11 +230,6 @@ const Navbar = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <Link className="nav-link search-toggler" to="/">
-                                <i className="bx bx-home bx-sm"></i>
-                            </Link>
-                        </li>
                         <li className="nav-item dropdown-shortcuts navbar-dropdown dropdown me-3 me-xl-2">
                             <a className="nav-link dropdown-toggle hide-arrow" href="/admin" data-bs-toggle="dropdown"
                                data-bs-auto-close="outside"
@@ -227,71 +249,139 @@ const Navbar = () => {
                                 </div>
                                 <div className="dropdown-shortcuts-list scrollable-container ps">
                                     <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-calendar bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> Calendar </a>
-                                            <small>Appointments</small>
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-calendar bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/*<span className="dropdown-shortcuts-icon rounded-circle mb-3">*/}
+                                            {/*    <i className="bx bx-calendar bx-26px text-heading"></i>*/}
+                                            {/*</span>*/}
+                                            <span className="d-block text-center fw-semibold text-body"> Calendar </span>
+                                            <small className="d-block text-center">Appointments</small>
                                         </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-food-menu bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> Invoice App </a>
-                                            <small>Manage Accounts</small>
-                                        </div>
-                                    </div>
-                                    <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-user bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> User App </a>
-                                            <small>Manage Users</small>
-                                        </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-check-shield bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> Role Management </a>
-                                            <small>Permission</small>
-                                        </div>
-                                    </div>
-                                    <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-pie-chart-alt-2 bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> Dashboard </a>
-                                            <small>User Dashboard</small>
-                                        </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-cog bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> Setting </a>
-                                            <small>Account Settings</small>
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-food-menu bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span className="d-block text-center fw-semibold text-body"> Invoice App </span>
+                                            <small className="d-block text-center">Manage Accounts</small>
                                         </div>
                                     </div>
                                     <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-help-circle bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> FAQs </a>
-                                            <small>FAQs &amp; Articles</small>
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-user bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span className="d-block text-center fw-semibold text-body"> User App </span>
+                                            <small className="d-block text-center">Manage Users</small>
                                         </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                        <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                            <i className="bx bx-window-open bx-26px text-heading"></i>
-                                        </span>
-                                            <a href="#" className="stretched-link"> Modals </a>
-                                            <small>Useful Popups</small>
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-check-shield bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span className="d-block text-center fw-semibold text-body"> Role Based </span>
+                                            <small className="d-block text-center">Permission</small>
+                                        </div>
+                                    </div>
+                                    <div className="row row-bordered overflow-visible g-0">
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-pie-chart-alt-2 bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span
+                                                className="d-block text-center fw-semibold text-body"> Dashboard </span>
+                                            <small className="d-block text-center">Statistics</small>
+                                        </div>
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-cog bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span
+                                                className="d-block text-center fw-semibold text-body"> Setting </span>
+                                            <small className="d-block text-center">Account Settings</small>
+                                        </div>
+                                    </div>
+                                    <div className="row row-bordered overflow-visible g-0">
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-help-circle bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span
+                                                className="d-block text-center fw-semibold text-body"> FAQs </span>
+                                            <small className="d-block text-center">FAQs &amp; Articles</small>
+                                        </div>
+                                        <div className="dropdown-shortcuts-item col p-4">
+                                            <div className="d-flex justify-content-center align-items-center user-name">
+                                                <div className="avatar-wrapper mb-3">
+                                                    <div className="avatar avatar-md">
+                                                        <span
+                                                            className="avatar-initial rounded-circle bg-label-secondary">
+                                                            <i className="bx bx-window-open bx-sm text-heading"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span
+                                                className="d-block text-center fw-semibold text-body"> Modals </span>
+                                            <small className="d-block text-center">Useful Popups</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </li>
+                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                            <Link className="nav-link search-toggler" to="/">
+                                <i className="bx bx-home bx-sm"></i>
+                            </Link>
                         </li>
                         <li className="nav-item navbar-dropdown dropdown-user dropdown me-3 me-xl-2">
                             <a

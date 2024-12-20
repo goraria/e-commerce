@@ -361,7 +361,7 @@ export const Preview = () => {
                                     </li>
                                     <li className="mb-2">
                                         <span className="h6 me-1">Contact:</span>
-                                        <span>{handlePhoneNumber(formData.phone)}</span>
+                                        <span>{formData.phone ? handlePhoneNumber(formData.phone) : "Invalid phone number"}</span>
                                     </li>
 
                                     {/*<li className="mb-2">*/}

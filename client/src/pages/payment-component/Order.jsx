@@ -14,7 +14,7 @@ const Order = () => {
     const [address, setAdress] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(""); // State to track selected address
     const [selectedStoreAddress, setSelectedStoreAddress] = useState("");
-    const [deliveryMethod, setDeliveryMethod] = useState("Tại cửa hàng"); // State for delivery method
+    const [deliveryMethod, setDeliveryMethod] = useState("Delivery"); // State for delivery method
     const [status, setStatus] = useState(1); // State for delivery method
     const [date, setDate] = useState(new Date()); // State for delivery method
 
@@ -138,107 +138,91 @@ const Order = () => {
                 <div className="row">
                     {/* Left Section */}
                     <div className="col col-sm-12 col-md-6 col-lg-8">
-                        {/* Delivery Method Selection */}
-                        <div
-                            className="card sticky-summary mb-4 p-3"
-                            style={{
-                                position: "sticky",
-                                top: 80,
-                                zIndex: 1,
-                                border: "none",
-                            }}>
-                            <div className="container d-flex py-0 px-1">
-                                <h5 className="m-0">Order</h5>
-                                {/*<Button variant="primary" style={{marginLeft: 'auto'}}>*/}
-                                {/*    <i className='bx bx-plus me-2' ></i>*/}
-                                {/*    <span>Thêm sản phẩm</span>*/}
-                                {/*</Button>*/}
+                        <div className="row">
+                            <div className="col-12 mb-4">
+                                <div
+                                    className="card px-3 py-3 light bg-body-tertiary align-items-center bg-navbar-theme">
+                                    <div className="container d-flex ps-2 p-0 align-items-center">
+                                        <h5 className="m-0">Order</h5>
+                                        <Button disabled to={'/search'} variant="light" style={{marginLeft: 'auto'}}>
+                                            <i className='bx bx-plus text-white me-2'></i>
+                                            <span></span>
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="card p-3 mb-4">
-                            <h4>Phương thức nhận hàng</h4>
-                            <Form.Check
-                                type="radio"
-                                label="Tại cửa hàng"
-                                name="deliveryMethod"
-                                value="Tại cửa hàng"
-                                checked={deliveryMethod === 'Tại cửa hàng'} // Always checked by default
-                                onChange={handleDeliveryMethodChange}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="Giao tận nơi"
-                                name="deliveryMethod"
-                                value="Giao tận nơi"
-                                checked={deliveryMethod === 'Giao tận nơi'}
-                                onChange={handleDeliveryMethodChange}
-                            />
+                            <div className="rounded p-3">
+                                <h5>Preferable Address</h5>
+                                <Form.Check
+                                    className="mb-2"
+                                    type="radio"
+                                    label="Delivery"
+                                    name="deliveryMethod"
+                                    value="Delivery"
+                                    checked={deliveryMethod === 'Delivery'}
+                                    onChange={handleDeliveryMethodChange}
+                                />
+                                <Form.Check
+                                    disabled
+                                    type="radio"
+                                    label="Shop"
+                                    name="deliveryMethod"
+                                    value="Shop"
+                                    checked={deliveryMethod === 'Shop'} // Always checked by default
+                                    onChange={handleDeliveryMethodChange}
+                                />
+                            </div>
                         </div>
                         {/* Store Locations */}
-                        <div className="card p-3 mb-4">
-                            <h4>Địa chỉ cửa hàng</h4>
-                            <Form.Check
-                                type="radio"
-                                label="Đại học kiến trúc"
-                                value="Đại học kiến trúc"
-                                name="storeLocation"
-                                checked={selectedStoreAddress === "Đại học kiến trúc"}
-                                onChange={handleStoreAddressChange}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="Ngõ 2 Ao Sen"
-                                value="Ngõ 2 Ao Sen"
-                                name="storeLocation"
-                                checked={selectedStoreAddress === "Ngõ 2 Ao Sen"}
-                                onChange={handleStoreAddressChange}
-                            />
-                        </div>
                         {/* Recipient Information */}
                         <div className="card p-3 mb-4">
-                            <h4>Thông tin người nhận</h4>
-                            <Form.Group controlId="formRecipientName">
-                                <Form.Label>Họ và tên</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nhập họ và tên"
-                                    name="recipientName"
-                                    defaultValue={`${user.firstname} ${user.lastname}`}
-                                // value={recipientName}
-                                // onChange={this.handleInputChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formPhoneNumber" className="mt-3">
-                                <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nhập số điện thoại"
-                                    name="phoneNumber"
-                                    defaultValue={user.phone}
-                                // value={phoneNumber}
-                                // onChange={this.handleInputChange}
-                                />
-                            </Form.Group>
-                            {deliveryMethod === 'Giao tận nơi' && (
-                                <Form.Group controlId="formAddress" className="mt-3">
-                                    <Form.Label>Địa chỉ giao hàng</Form.Label>
-                                    <Form.Select
-                                        aria-label="Chọn địa chỉ giao hàng"
-                                        value={selectedAddress}
-                                        onChange={(e) => {
-                                            setSelectedAddress(e.target.value);
-
-                                        }}
-                                    >
-                                        <option value="">Chọn địa chỉ</option>
-                                        {address.map((addr, index) => (
-                                            <option key={index} value={addr.idaddress}>
-                                                {addr.street}, {addr.city}, {addr.district}
-                                            </option>
-                                        ))}
-                                    </Form.Select>
+                            <div className="rounded p-3">
+                                <h5>Customer Information</h5>
+                                <Form.Group controlId="formRecipientName">
+                                    <Form.Label>Fullname</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Enter your fullname"
+                                        name="recipientName"
+                                        defaultValue={user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : ""}
+                                        // value={recipientName}
+                                        // onChange={this.handleInputChange}
+                                    />
                                 </Form.Group>
-                            )}
+                                <Form.Group controlId="formPhoneNumber" className="mt-3">
+                                    <Form.Label>Số điện thoại</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập số điện thoại"
+                                        name="phoneNumber"
+                                        defaultValue={user.phone}
+                                        // value={phoneNumber}
+                                        // onChange={this.handleInputChange}
+                                    />
+                                </Form.Group>
+                                {deliveryMethod === 'Delivery' && (
+                                    <Form.Group controlId="formAddress" className="mt-3">
+                                        <Form.Label>Địa chỉ giao hàng</Form.Label>
+                                        <Form.Select
+                                            aria-label="Chọn địa chỉ giao hàng"
+                                            value={selectedAddress}
+                                            onChange={(e) => {
+                                                setSelectedAddress(e.target.value);
+
+                                            }}
+                                        >
+                                            <option value="">Chọn địa chỉ</option>
+                                            {address.map((addr, index) => (
+                                                <option key={index} value={addr.idaddress}>
+                                                    {addr.street}, {addr.city}, {addr.district}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                    </Form.Group>
+                                )}
+                            </div>
                         </div>
                         {/* Product List */}
                         {/* <Card className="p-3">
@@ -246,11 +230,80 @@ const Order = () => {
                         </Card> */}
                     </div>
                     {/* Right Section: Order Summary */}
-                    <div className="col col-sm-12 col-md-6 col-lg-4 mb-2">
-                        <div className="card sticky-summary mb-3 shadow-none" style={{ position: 'sticky', top: 100, backgroundColor: 'transparent', boxShadow: 'none' }}>
+
+                    <div className="col col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
+                            <div className="card p-3 mb-4">
+                                <div className="rounded p-3">
+                                    <h5>Offer</h5>
+                                    <div className="row g-4 mb-4">
+                                        <div className="col-8 col-xxl-8 col-xl-12">
+                                            <Form.Select
+                                                className="mb-4"
+                                                aria-label="Default select example">
+                                                <option>Choose voucher</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </Form.Select>
+                                            <input type="text" className="form-control" placeholder="Enter Promo Code"
+                                                   aria-label="Enter Promo Code"/>
+                                        </div>
+                                        <div className="col-4 col-xxl-4 col-xl-12">
+                                            <div className="d-grid">
+                                                <Button variant="outline-primary" type="button"
+                                                        className="btn btn-label-primary">Apply</Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5>Price Details</h5>
+                                    <dl className="row mb-0 text-heading">
+                                        <dt className="col-6 fw-normal">Bag Total</dt>
+                                        <dd className="col-6 text-end">${prePrice}</dd>
+
+                                        <dt className="col-6 fw-normal">Coupon Discount</dt>
+                                        <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+
+                                        <dt className="col-6 fw-normal">Order Total</dt>
+                                        <dd className="col-6 text-end">- ${prePrice * discount}</dd>
+
+                                        <dt className="col-6 fw-normal">Delivery Charges</dt>
+                                        <dd className="col-6 text-end">
+                                            <s className="text-muted">$5.00</s>
+                                            <span className="badge bg-label-success ms-1">Free</span>
+                                        </dd>
+                                    </dl>
+                                    <hr className="my-4"/>
+                                    <dl className="row mb-0">
+                                        <dt className="col-6 text-heading">Total</dt>
+                                        <dd className="col-6 fw-medium text-end text-heading mb-0">${totalPrice}</dd>
+                                    </dl>
+                                </div>
+                                <div className="p-3">
+                                <Button className="w-100" variant="danger" onClick={handleOrderClick}>
+                                        Order
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="card p-3">
+                                <div className="rounded p-3">
+                                    <h5>Sản phẩm trong đơn</h5>
+
+                                    <hr className="my-4"/>
+                                    {cartData.map((item, index) => (
+                                        <OrderItem key={index} Item={item}/>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="d-none col col-sm-12 col-md-6 col-lg-4 mb-2">
+                        <div className="card sticky-summary mb-3 shadow-none"
+                             style={{position: 'sticky', top: 100, backgroundColor: 'transparent', boxShadow: 'none'}}>
                             <div className="card p-3 sticky-summary">
                                 <h4>Khuyến mãi</h4>
-                                <Form.Select aria-label="Default select example" style={{ padding: 10, margin: '1px 0 10px 0' }}>
+                                <Form.Select aria-label="Default select example"
+                                             style={{padding: 10, margin: '1px 0 10px 0'}}>
                                     <option> Chọn hoặc nhập khuyến mãi</option>
                                     <option value="1">One</option>
                                     <option value="2">Two</option>
@@ -269,7 +322,7 @@ const Order = () => {
 
                                 <div className="d-flex justify-content-between mt-2">
                                     <span>Tổng cộng</span>
-                                    <span style={{ fontWeight: 'bold', fontSize: '1.5em' }}>${totalPrice}</span>
+                                    <span style={{fontWeight: 'bold', fontSize: '1.5em'}}>${totalPrice}</span>
                                 </div>
                                 <Button className="w-100 mt-3" variant="danger" size="lg" onClick={handleOrderClick}>
                                     Đặt hàng
@@ -278,7 +331,7 @@ const Order = () => {
                             <div className="card p-3 sticky-summary mb-4 mt-4">
                                 <h4>Sản phẩm trong đơn</h4>
                                 {cartData.map((item, index) => (
-                                    <OrderItem key={index} Item={item} />
+                                    <OrderItem key={index} Item={item}/>
                                 ))}
                             </div>
                         </div>
