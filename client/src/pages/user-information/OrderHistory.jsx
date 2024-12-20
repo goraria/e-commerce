@@ -4,10 +4,10 @@ import {Badge, Button, Form, Pagination, Table} from "react-bootstrap";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
 import {Statistics} from "../management/Statistics.jsx";
-import OrderDetails from "./OrderDetails.jsx";
+import {OrderDetails} from "./OrderDetails.jsx";
 import OrderExpand from "../../components/order-elements/OrderExpand.jsx";
 
-const OrderHistory = () => {
+export const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
 
     const getOrders = async () => {
@@ -71,5 +71,3 @@ const OrderHistory = () => {
         </>
     );
 }
-
-export default OrderHistory

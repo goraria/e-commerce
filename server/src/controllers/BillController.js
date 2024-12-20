@@ -192,14 +192,107 @@ class BillController {
     };
 
     async getBillById(req, res) {
+        const user = req.user.id;
         const { id } = req.params;
+
         try {
-            const address = await Bill.findByPk(id);
-            if (address) {
-                res.json(address);
-            } else {
-                res.status(404).json({ error: 'Địa chỉ không tồn tại' });
-            }
+            const bills = await Bill.findAll({
+                where: { idaccount: req.user.id, idbill: id }, // Lọc theo idaccount
+                attributes: ['idbill', 'price', 'date', 'status'], // Các trường từ Bill
+                include: [
+                    {
+                        model: Account,
+                        attributes: ['idaccount', 'username', 'email'], // Thông tin Account
+                        include: [
+                            {
+                                model: User,
+                                attributes: ['iduser', 'firstname', 'lastname', 'phone_number'], // Thông tin User
+                            },
+                        ],
+                    },
+                    {
+                        model: Discount,
+                        attributes: ['iddiscount', 'discount_name', 'percentage_discount', 'start_date', 'end_date'], // Thông tin Discount
+                    },
+                    {
+                        model: Address,
+                        attributes: ['idaddress', 'tower', 'street', 'district', 'city', 'state', 'country'], // Thông tin Address
+                    },
+                    {
+                        model: BillDetail,
+                        attributes: ['idbill_details', 'product_name', 'quantity', 'price'], // Các trường từ BillDetail
+                        include: [
+                            {
+                                model: Product,
+                                attributes: ['product_name', 'brand'], // Thông tin Product
+                            },
+                            {
+                                model: Color,
+                                attributes: ['color'], // Thông tin Color
+                            },
+                            {
+                                model: Configuration,
+                                attributes: ['cpu', 'ram', 'gpu', 'storage', 'screen', 'resolution'], // Thông tin Configuration
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            const result = bills.map(bill => ({
+                id: bill.idbill,
+                date: bill.date,
+                price: bill.price,
+                status: bill.status,
+                account: bill.Account ? {
+                    idaccount: bill.Account.idaccount,
+                    username: bill.Account.username,
+                    email: bill.Account.email,
+                    user: bill.Account.User ? {
+                        iduser: bill.Account.User.iduser,
+                        firstname: bill.Account.User.firstname,
+                        lastname: bill.Account.User.lastname,
+                        phone_number: bill.Account.User.phone_number,
+                    } : null,
+                } : null,
+                address: bill.Address ? {
+                    idaddress: bill.Address.idaddress,
+                    tower: bill.Address.tower,
+                    street: bill.Address.street,
+                    district: bill.Address.district,
+                    city: bill.Address.city,
+                    state: bill.Address.state,
+                    country: bill.Address.country,
+                } : null,
+                discount: bill.Discount ? {
+                    iddiscount: bill.Discount.iddiscount,
+                    discount_name: bill.Discount.discount_name,
+                    percentage_discount: bill.Discount.percentage_discount,
+                    start_date: bill.Discount.start_date,
+                    end_date: bill.Discount.end_date,
+                } : null,
+                bill_details: bill.BillDetails.map(detail => ({
+                    idbill_detail: detail.idbill_details,
+                    product: detail.Product ? detail.Product.product_name : null,
+                    brand: detail.Product ? detail.Product.brand : null,
+                    price: detail.price,
+                    quantity: detail.quantity,
+                    color: detail.Color ? detail.Color.color : null,
+                    configuration: detail.Configuration ? {
+                        cpu: detail.Configuration.cpu,
+                        ram: detail.Configuration.ram,
+                        gpu: detail.Configuration.gpu,
+                        storage: detail.Configuration.storage,
+                        screen: detail.Configuration.screen,
+                        resolution: detail.Configuration.resolution,
+                    } : null,
+                })),
+            }));
+
+            result.sort((up, down) => new Date(down.date) - new Date(up.date));
+
+            // console.log(result);
+            res.json(result);
         } catch (error) {
             res.status(500).json({ error: 'Có lỗi xảy ra khi lấy dữ liệu' });
         }

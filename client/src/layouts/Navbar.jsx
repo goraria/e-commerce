@@ -446,7 +446,7 @@ const Navbar = ({ children }) => {
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">{`Mr. ${account.lastname}`}</span>{/*${account.firstname}*/}
+                                                <span className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">Administrator</small>
                                             </div>
                                         </div>

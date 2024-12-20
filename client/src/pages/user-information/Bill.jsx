@@ -1,8 +1,8 @@
+import {useLocation} from "react-router-dom";
 import React, {useState} from "react";
 import {Form, Table} from "react-bootstrap";
-import {useLocation} from "react-router-dom";
 
-export const OrderDetails = () => {
+export const Bill = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');

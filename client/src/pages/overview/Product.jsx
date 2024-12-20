@@ -53,6 +53,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const fetchProductDecription = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-description/${id}`);
@@ -64,6 +65,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
+
     const fetchProductColor = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-color/${id}`);
@@ -74,6 +76,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const fetchProductConfiguration = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-configuration/${id}`);
@@ -85,6 +88,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const handleConfigurationChange = (config) => {
         setdefaultconfig(config);
     };

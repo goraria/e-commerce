@@ -381,7 +381,7 @@ const Activitybar = ({ children }) => {
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">{`Mr. ${account.lastname}`}</span>{/*${account.firstname}*/}
+                                                <span className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">User</small>
                                             </div>
                                         </div>
@@ -412,7 +412,7 @@ const Activitybar = ({ children }) => {
                                 {/*</li>*/}
                                 {/*<li>*/}
                                 {/*    <Link*/}
-                                {/*        to={"/user/bill"}*/}
+                                {/*        to={"/user/order"}*/}
                                 {/*        aria-label="bill"*/}
                                 {/*        className="dropdown-item"*/}
                                 {/*    >*/}

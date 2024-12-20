@@ -63,7 +63,7 @@ const menu = [
                 "text": "Order History",
                 "icon": "bx bx-receipt",
                 "available": true,
-                "link": "/user/bill"
+                "link": "/user/order"
             },
             {
                 "text": "Voucher Wallet",

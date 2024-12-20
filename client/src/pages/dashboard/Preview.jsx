@@ -1,12 +1,9 @@
 import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {Statistics} from "../management/Statistics.jsx";
-import OrderHistory from "../user-information/OrderHistory.jsx";
 import {Badge, Button, Form, Pagination, Table} from "react-bootstrap";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
-import {DataTables} from "../../components/datatables/DataTables.jsx";
 
 export const Preview = () => {
     const [formData, setFormData] = useState({

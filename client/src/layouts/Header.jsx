@@ -487,7 +487,7 @@ const Header = () => {
                             </li>
                             <li>
                                 <Link
-                                    to={"/user/bill"}
+                                    to={"/user/order"}
                                     aria-label="bill"
                                     className="dropdown-item"
                                 >
