@@ -29,13 +29,13 @@ const ForgotPassword = () => {
 
     const [captchaVerified, setCaptchaVerified] = useState(false); // New state
     const handleSuccess = (data) => {
-        console.log('Captcha verification success:', data);
+        // console.log('Captcha verification success:', data);
         // alert('Verification successful, proceed with form submission!');
         setCaptchaVerified(true);
     };
 
     const handleError = (error) => {
-        console.log('Captcha verification failed:', error);
+        // console.log('Captcha verification failed:', error);
         // alert('Verification failed, please try again!');
         setCaptchaVerified(false);
     };
