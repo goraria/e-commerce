@@ -37,7 +37,7 @@ export const UserManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const [reloadTrigger, setReloadTrigger] = useState(0);
     const handleSearch = (e) => {
@@ -247,9 +247,12 @@ export const UserManagement = () => {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
+                                                <option value="10">7</option>
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="25">20</option>
                                                 <option value="50">50</option>
+                                                <option value="50">70</option>
+                                                <option value="50">100</option>
                                             </select>
                                             {/*<span>entries</span>*/}
                                         </label>
@@ -327,7 +330,7 @@ export const UserManagement = () => {
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                         <div className="row">
-                            <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                            <div className="d-flex col-sm-12 col-md-6">
                                 <div className="dataTables_info"
                                      style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
                                     <div className="text-center mt-2">

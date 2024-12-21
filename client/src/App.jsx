@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 import Layout from "./layouts/Layout";
 import Frame from "./layouts/Frame";
@@ -25,6 +26,36 @@ const App = () => {
     const navigate = useNavigate();
 
     const authentication = async () => {
+        const token = localStorage.getItem('token');
+        setLoading(true);
+
+        if (!token) {
+            setAuth({ isAuthenticated: false, role: null });
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const decoded = jwtDecode(token);
+
+            const currentTime = Date.now() / 1000; // thời gian hiện tại (tính bằng giây)
+            if (decoded.exp < currentTime) {
+                throw new Error('Token expired');
+            }
+
+            setAuth({
+                isAuthenticated: true,
+                role: decoded.role,
+            });
+        } catch (error) {
+            setAuth({ isAuthenticated: false, role: null });
+            localStorage.removeItem('token');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const authentication0 = async () => {
         const token = localStorage.getItem('token');
         setLoading(true);
 
@@ -74,7 +105,7 @@ const App = () => {
                 path="/user/*"
                 element={
                     <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
-                        <Panel role={auth.role}>
+                        <Panel>
                             <UserRoutes />
                         </Panel>
                     </Protected>
@@ -96,7 +127,7 @@ const App = () => {
                 path="/admin/*"
                 element={
                     <Protected isAllowed={auth.isAuthenticated && auth.role === 1} redirectTo="/auth/error">
-                        <Layout role={auth.role}>
+                        <Layout>
                             <AdministratorRoutes />
                         </Layout>
                     </Protected>

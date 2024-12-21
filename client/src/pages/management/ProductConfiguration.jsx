@@ -7,49 +7,56 @@ import {ConfigurationForm} from "../../components/modal/form/ConfigurationForm.j
 export const ProductConfiguration = () => {
     const navigate = useNavigate();
 
-    const [data, setData] = useState([])
+    const [data, setdata] = useState([])
+    const [products, setProducts] = useState([])
+
     const fetchAPI = async () => {
         const response = await axios.get("http://localhost:5172/admin/get-configration")
-        setData(response.data)
+        setdata(response.data)
     };
-    const [data1, setData1] = useState([])
-    const fetchAPI1 = async () => {
-        const response = await axios.get("http://localhost:5172/products/load-product")
-        setData1(response.data)
+
+    const productList = async () => {
+        const response = await axios.get("http://localhost:5172/products/get-product")
+        setProducts(response.data)
     };
+
     const mergedData = data.map(user => {
-        const account = data1.find(acc => acc.idproduct === user.idproduct);
+        const account = products.find(acc => acc.idproduct === user.idproduct);
         return { ...user, ...account };
     });
-    console.log(mergedData)
+    // console.log(mergedData)
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);
     };
+
     const handleEdit = (idconfiguration) => {
         // Tìm user theo ID
-        console.log(idconfiguration)
+        // console.log(idconfiguration)
         const configurationToEdit = mergedData.find(product => product.idconfiguration === idconfiguration);
-        console.log(configurationToEdit)
+        // console.log(configurationToEdit)
         if (configurationToEdit) {
             setSelectedConfiguration(configurationToEdit); // Lưu thông tin user vào state `selectedUser`
             setModalShow(true); // Hiển thị modal để chỉnh sửa thông tin
         }
     };
+
     const handleModalClose = () => {
         fetchAPI();
-        fetchAPI1();
+        productList();
         setModalShow(false);
         setSelectedConfiguration(null);
     };
+
     const [selectedConfiguration, setSelectedConfiguration] = useState(null);
     const [modalShow, setModalShow] = useState(false);
+
     const handleSelectAll = (e) => {
         if (e.target.checked) {
             const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idconfi);
@@ -58,9 +65,11 @@ export const ProductConfiguration = () => {
             setSelectedEntries([]);
         }
     };
+
     const handleNavigate = (idproduct) => {
         navigate(`/admin/profile_user/${idproduct}`); // điều hướng tới URL động với userId
     };
+
     const handleSelectItem = (idproduct) => {
         if (selectedEntries.includes(idproduct)) {
             setSelectedEntries(selectedEntries.filter(item => item !== idproduct));
@@ -68,9 +77,9 @@ export const ProductConfiguration = () => {
             setSelectedEntries([...selectedEntries, idproduct]);
         }
     };
+
     const handleDelete = async (id) => {
         try {
-
             // Send delete request to the server
             await axios.delete(`http://localhost:5172/admin/delete-configuration/${id}`);
 
@@ -82,19 +91,19 @@ export const ProductConfiguration = () => {
     };
 
     const filteredData = mergedData.filter(item => {
-            const searchNumber = Number(searchTerm); // Chuyển đổi searchTerm thành số
-            const isNumberSearch = !isNaN(searchNumber); // Kiểm tra xem searchNumber có phải là số
+        const searchNumber = Number(searchTerm); // Chuyển đổi searchTerm thành số
+        const isNumberSearch = !isNaN(searchNumber); // Kiểm tra xem searchNumber có phải là số
 
-            return (item.cpu.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (isNumberSearch && item.ram === searchNumber) || // So sánh chỉ khi là số
-                (isNumberSearch && item.screen === searchNumber) || // So sánh chỉ khi là số
-                (isNumberSearch && item.price === searchNumber) ||
-                item.resolution.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (isNumberSearch && item.storage === searchNumber) ||
-                item.gpu.toLowerCase().includes(searchTerm.toLowerCase()))
+        return (item.cpu.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (isNumberSearch && item.ram === searchNumber) || // So sánh chỉ khi là số
+            (isNumberSearch && item.screen === searchNumber) || // So sánh chỉ khi là số
+            (isNumberSearch && item.price === searchNumber) ||
+            item.resolution.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (isNumberSearch && item.storage === searchNumber) ||
+            item.gpu.toLowerCase().includes(searchTerm.toLowerCase()))
 
-        }
-    );
+    });
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
@@ -108,13 +117,16 @@ export const ProductConfiguration = () => {
     // const getInitials = (firstname, lastname) => {
     //     return (firstname + lastname);
     // };
+
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
     };
+
     const renderPagination = () => {
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
         if (totalPages <= 1) return null;
 
         const paginationItems = [];
@@ -128,87 +140,73 @@ export const ProductConfiguration = () => {
             </Pagination.Item>
         );
 
-        // Thêm nút 'First' và 'Previous' với Font Awesome icons
+        // Thêm nút 'First' và 'Previous'
         paginationItems.push(
             <Pagination.First
                 key="first"
                 onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}>
-                <i className='bx bx-chevrons-left' ></i> {/* << */}
-            </Pagination.First>,
-
+                disabled={currentPage === 1}
+            />,
             <Pagination.Prev
                 key="prev"
                 onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}>
-                <i className='bx bx-chevron-left'></i> {/* < */}
-            </Pagination.Prev>
+                disabled={currentPage === 1}
+            />
         );
 
-        // Nếu đang ở các trang đầu (1-3), hiển thị 5 trang đầu và trang cuối cùng
-        if (currentPage <= 3) {
-            for (let i = 1; i <= Math.min(5, totalPages); i++) {
+        if (totalPages <= 7) {
+            // Hiển thị tất cả các trang nếu số trang <= 7
+            for (let i = 1; i <= totalPages; i++) {
                 paginationItems.push(addPageButton(i));
             }
-            if (totalPages > 5) {
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-                </Pagination.Ellipsis>);
+        } else {
+            // Hiển thị phân trang với dấu `...`
+            if (currentPage <= 4) {
+                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
+                for (let i = 1; i <= 5; i++) {
+                    paginationItems.push(addPageButton(i));
+                }
+                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
+                paginationItems.push(addPageButton(totalPages));
+            } else if (currentPage >= totalPages - 3) {
+                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
+                paginationItems.push(addPageButton(1));
+                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
+                for (let i = totalPages - 4; i <= totalPages; i++) {
+                    paginationItems.push(addPageButton(i));
+                }
+            } else {
+                // Trường hợp trang hiện tại ở giữa
+                paginationItems.push(addPageButton(1));
+                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
+                paginationItems.push(addPageButton(currentPage - 1));
+                paginationItems.push(addPageButton(currentPage));
+                paginationItems.push(addPageButton(currentPage + 1));
+                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
                 paginationItems.push(addPageButton(totalPages));
             }
         }
-        // Nếu đang ở các trang cuối (từ totalPages - 2 trở lên), hiển thị 5 trang cuối và trang đầu tiên
-        else if (currentPage >= totalPages - 2) {
-            paginationItems.push(addPageButton(1));
-            paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-            for (let i = totalPages - 4; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        }
-        // Nếu đang ở giữa (trang 4 đến totalPages - 3), hiển thị trang đầu, ... trang hiện tại, và dấu ... cuối
-        else {
-            paginationItems.push(addPageButton(1)); // Trang đầu tiên
-            paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
 
-            const startPage = currentPage - 1; // Trang trước
-            const endPage = currentPage + 1;   // Trang sau
-
-            for (let i = startPage; i <= endPage; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-
-            paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-            paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
-        }
-
-        // Thêm nút 'Next' và 'Last' với Font Awesome icons
+        // Thêm nút 'Next' và 'Last'
         paginationItems.push(
             <Pagination.Next
                 key="next"
                 onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}>
-                <i className='bx bx-chevron-right' ></i> {/* > */}
-            </Pagination.Next>,
-
+                disabled={currentPage === totalPages}
+            />,
             <Pagination.Last
                 key="last"
                 onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}>
-                <i className='bx bx-chevrons-right' ></i> {/* >> */}
-            </Pagination.Last>
+                disabled={currentPage === totalPages}
+            />
         );
 
-        return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
+        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
+
     useEffect(() => {
         fetchAPI();
-        fetchAPI1();
+        productList();
     }, []);
 
     return (
@@ -243,9 +241,12 @@ export const ProductConfiguration = () => {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
+                                                <option value="10">7</option>
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="25">20</option>
                                                 <option value="50">50</option>
+                                                <option value="50">70</option>
+                                                <option value="50">100</option>
                                             </select>
                                             {/*<span>entries</span>*/}
                                         </label>
@@ -280,12 +281,15 @@ export const ProductConfiguration = () => {
                                 />
                             </th>
                             {
-                                ["Product Name", "CPU", "GPU", "RAM", "Storage", "Screen", "Resolution", "Price"].map((item, index) => (
+                                ["Product Name", "Screen"].map((item, index) => (
                                     <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
                                         {item}
                                     </th>
                                 ))
                             }
+                            <th className="sorting text-center"
+                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Price
+                            </th>
                             <th className="sorting_disabled text-center"
                                 style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
@@ -303,21 +307,39 @@ export const ProductConfiguration = () => {
                                 </td>
                                 <td>
                                     <div className="d-flex align-items-center">
-                                        <div className="avatar-circle me-2">
-
+                                        <div
+                                            className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                            <div className="avatar">
+                                                <img
+                                                    // src={`../assets/img/categories/product-7.png`}
+                                                    src={item.product_image}
+                                                    alt="Product-8"
+                                                    className="rounded"
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            {item.product_name}
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <span className="text-heading text-wrap fw-medium">
+                                                {`${item.brand} ${item.product_name}`}
+                                            </span>
+                                            <span className="text-truncate mb-0 d-none d-sm-block">
+                                                <small>{item.cpu}</small>
+                                                <small> | </small>
+                                                <small>{item.gpu}</small>
+                                                <small> | </small>
+                                                <small>{item.ram} GB</small>
+                                                <small> | </small>
+                                                <small>{item.storage} GB</small>
+                                            </span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item.cpu}</td>
-                                <td>{item.gpu}</td>
-                                <td>{item.ram}</td>
-                                <td>{item.storage}</td>
-                                <td>{item.screen}</td>
-                                <td>{item.resolution}</td>
-                                <td>{item.price}</td>
+                                <td>
+                                    <span>
+                                        {item.screen} &#39; | {item.resolution}
+                                    </span>
+                                </td>
+                                <td><span>${item.price}</span></td>
                                 <td>
                                     <Button
                                         variant="link"
@@ -338,7 +360,7 @@ export const ProductConfiguration = () => {
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                         <div className="row">
-                            <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                            <div className="d-flex col-sm-12 col-md-6">
                                 <div className="dataTables_info"
                                      style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
                                     <div className="text-center mt-2">

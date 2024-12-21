@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
+import { Table, Button, Form, Pagination } from "react-bootstrap";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 // import "./DataTables.css"; // Add custom styling here
 import { ProductForm } from "../../components/modal/form/ProductForm.jsx";
+import { CategoryBadge } from "../../components/badge/CategoryBadge.jsx";
 
 export const ProductName = () => {
     const navigate = useNavigate();
@@ -11,17 +12,17 @@ export const ProductName = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const [data, setData] = useState([])
     const [data1, setData1] = useState([])
 
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/products/load-product")
+        const response = await axios.get("http://localhost:5172/products/get-product")
         setData(response.data)
     };
 
-    const fetchAPI1 = async () => {
+    const getCategory = async () => {
         const response = await axios.get("http://localhost:5172/admin/get-category")
         setData1(response.data)
     };
@@ -47,11 +48,12 @@ export const ProductName = () => {
     };
     const handleModalClose = () => {
         fetchAPI();
-        fetchAPI1();
+        getCategory();
 
         setModalShow(false);
         setSelectedProduct(null);
     };
+
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const handleSelectAll = (e) => {
@@ -62,9 +64,7 @@ export const ProductName = () => {
             setSelectedEntries([]);
         }
     };
-    const handleNavigate = (idproduct) => {
-        navigate(`/admin/profile_user/${idproduct}`); // điều hướng tới URL động với userId
-    };
+
     const handleSelectItem = (idproduct) => {
         if (selectedEntries.includes(idproduct)) {
             setSelectedEntries(selectedEntries.filter(item => item !== idproduct));
@@ -72,6 +72,7 @@ export const ProductName = () => {
             setSelectedEntries([...selectedEntries, idproduct]);
         }
     };
+
     const handleDelete = async (id) => {
         try {
 
@@ -92,6 +93,7 @@ export const ProductName = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const [item, setItem] = useState({ status: false });
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -102,6 +104,28 @@ export const ProductName = () => {
     // const getInitials = (firstname, lastname) => {
     //     return (firstname + lastname);
     // };
+
+    const handleChange = async (e, idproduct) => {
+        const newStatus = e.target.checked;
+
+        try {
+            await axios.patch(`http://localhost:5172/products/update-status/${idproduct}`, {
+                status: newStatus
+            });
+
+            setData(prevData =>
+                prevData.map(product =>
+                    product.idproduct === idproduct
+                        ? { ...product, status: newStatus }
+                        : product
+                )
+            );
+
+        } catch (error) {
+            console.error("Error updating status:", error);
+        }
+    };
+
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
@@ -188,16 +212,57 @@ export const ProductName = () => {
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
+    const renderCategory = (category) => {
+        switch (category) {
+            case "Laptop":
+                return <CategoryBadge cate="Laptop" icon="bx-laptop" color="primary"/>
+            case "Keyboard":
+                return <CategoryBadge cate="Keyboard" icon="bxs-keyboard" color="warning"/>
+            case "Mouse":
+                return <CategoryBadge cate="Mouse" icon="bx-mouse-alt" color="success"/>
+            case "Tablet":
+                return <CategoryBadge cate="Tablet" icon="bx-devices" color="danger"/>
+            case "Smartphone":
+                return <CategoryBadge cate="Smartphone" icon="bx-mobile-alt" color="info"/>
+            case "Smartwatch":
+                return <CategoryBadge cate="Smartwatch" icon="bxs-watch-alt" color="secondary"/>
+            case "Screen":
+                return <CategoryBadge cate="Screen" icon="bx-desktop" color="primary"/>
+            case "Monitor":
+                return <CategoryBadge cate="Monitor" icon="bx-desktop" color="danger"/>
+            case "Play Station":
+                return <CategoryBadge cate="Play Station" icon="bx-coin-stack" color="secondary"/>
+            case "Camera":
+                return <CategoryBadge cate="Camera" icon="bx-camera" color="secondary"/>
+            case "Sound":
+                return <CategoryBadge cate="Sound" icon="bx-headphone" color="secondary"/>
+            case "Household":
+                return <CategoryBadge cate="Household" icon="bx-briefcase" color="warning"/>
+            case "Office":
+                return <CategoryBadge cate="Office" icon="bx-home-smile" color="info"/>
+            case "Game":
+                return <CategoryBadge cate="Game" icon="bx-laptop" color="primary"/>
+            case "Electronics":
+                return <CategoryBadge cate="Electronics" icon="bx-headphone" color="danger"/>
+            case "Accessories":
+                return <CategoryBadge cate="Accessories" icon="bxs-watch" color="secondary"/>
+            case "Shoes":
+                return <CategoryBadge cate="Shoes" icon="bx-walk" color="success"/>
+            default:
+                return <CategoryBadge cate="Unknown" icon="bx-question-mark" color="dark"/>
+        }
+    }
+
     useEffect(() => {
         fetchAPI();
-        fetchAPI1();
+        getCategory();
     }, []);
 
     return (
         <>
             <div className="card">
                 <div className="card-datatable table-responsive">
-                    <div className="dataTables_wrapper dt-bootstrap5 no-footer">
+                <div className="dataTables_wrapper dt-bootstrap5 no-footer">
                         <div className="card-header flex-column flex-md-row pb-0">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div className="col-sm-12 col-md-6 d-flex">
@@ -222,9 +287,12 @@ export const ProductName = () => {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
+                                                <option value="10">7</option>
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="25">20</option>
                                                 <option value="50">50</option>
+                                                <option value="50">70</option>
+                                                <option value="50">100</option>
                                             </select>
                                             {/*<span>entries</span>*/}
                                         </label>
@@ -273,7 +341,7 @@ export const ProductName = () => {
                         <tbody>
                         {currentItems.map((item, index) => (
                             <tr key={index}>
-                            <td>
+                                <td>
                                     <Form.Check
                                         type="checkbox"
                                         checked={selectedEntries.includes(item.idproduct)}
@@ -316,11 +384,16 @@ export const ProductName = () => {
                                     {/*    <span className="d-none">Out_of_Stock</span>*/}
                                     {/*</span>*/}
                                     <div className="form-check form-switch mb-2">
-                                        <input className="form-check-input" type="checkbox"
-                                               id="flexSwitchCheckDefault"/>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id={`flexSwitchCheck${item.idproduct}`}
+                                            checked={item.status}
+                                            onChange={(e) => handleChange(e, item.idproduct)}
+                                        />
                                     </div>
                                 </td>
-                                <td>{item.category_name}</td>
+                                <td>{renderCategory(item.category_name)}</td>
                                 {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
                                 <td>{item.phone_number}</td> */}
                                 <td>
@@ -343,7 +416,7 @@ export const ProductName = () => {
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                         <div className="row">
-                            <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                            <div className="d-flex col-sm-12 col-md-6">
                                 <div className="dataTables_info"
                                      style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
                                     <div className="text-center mt-2">

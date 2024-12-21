@@ -18,4 +18,7 @@ router.post('/update-productname/:idProduct', productController.updateProductNam
 router.delete('/delete-productname/:idProduct', productController.deleteProductName);
 router.put('/create-productname', productController.createProductName);
 
+router.get('/get-product', productController.loadAllProduct);
+router.patch('/update-status/:idProduct', productController.updateStatus);
+
 module.exports = router;

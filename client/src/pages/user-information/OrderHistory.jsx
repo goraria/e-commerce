@@ -4,16 +4,16 @@ import {Badge, Button, Form, Pagination, Table} from "react-bootstrap";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
 import {Statistics} from "../management/Statistics.jsx";
-import OrderDetails from "./OrderDetails.jsx";
+import {OrderDetails} from "./OrderDetails.jsx";
 import OrderExpand from "../../components/order-elements/OrderExpand.jsx";
 
-const OrderHistory = () => {
+export const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
 
     const getOrders = async () => {
         try {
             const response = await axios.get('http://localhost:5172/bill/get-all');
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -28,7 +28,7 @@ const OrderHistory = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             setOrders(response.data);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu:', error);
@@ -71,5 +71,3 @@ const OrderHistory = () => {
         </>
     );
 }
-
-export default OrderHistory

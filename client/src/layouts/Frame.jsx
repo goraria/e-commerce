@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import Copyright from './Copyright.jsx';
@@ -7,55 +7,87 @@ import Outbar from "./Outbar.jsx";
 import Overside from "./Overside.jsx";
 import Navbar from "./Navbar.jsx";
 import Activitybar from "./Activitybar.jsx";
+import getGreetingMessage from "../utils/greetingHandler.js";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 const Frame = ({ children, role }) => {
     useEffect(() => {
         Main();
+
+        authentication();
     }, [])
 
-    const renderComponentByRole = async (r) => {
+
+    const [auth, setAuth] = useState({
+        isAuthenticated: false,
+        role: null,
+    });
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    const authentication = async () => {
+        const token = localStorage.getItem('token');
+        setLoading(true);
+
+        if (!token) {
+            setAuth({ isAuthenticated: false, role: null });
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const decoded = jwtDecode(token);
+
+            const currentTime = Date.now() / 1000; // thời gian hiện tại (tính bằng giây)
+            if (decoded.exp < currentTime) {
+                throw new Error('Token expired');
+            }
+
+            setAuth({
+                isAuthenticated: true,
+                role: decoded.role,
+            });
+        } catch (error) {
+            setAuth({ isAuthenticated: false, role: null });
+            localStorage.removeItem('token');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const renderComponentByRole = (r) => {
         if (r === 1) {
-            return <Navbar/>;
+            return (
+                <Navbar>
+                    <Overside/>
+                </Navbar>
+            );
         } else if (r === 0) {
-            return <Activitybar/>;
+            return (
+                <Activitybar>
+                    <Overside/>
+                </Activitybar>
+            );
         } else {
-            return <Outbar/>;
+            return (
+                <Outbar>
+                    <Overside/>
+                </Outbar>
+            );
         }
     }
 
     return (
         <>
-            {/*<Outbar/>*/}
-            {/*<Header role={role}/>*/}
             <div className="mb-4">
-                {/*{renderComponentByRole(role)}*/}
-                <Outbar/>
+                {renderComponentByRole(auth.role)}
             </div>
             <div>
-                {/*<Overside/>*/}
-                {/*className="container flex-grow-1 container-p-y"*/}
                 {children}
             </div>
-
-            {/*<Overside/>*/}
             <Footer/>
-
-            {/*<div className="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">*/}
-            {/*    <div className="layout-container">*/}
-            {/*        <Outbar/>*/}
-            {/*        <div className="layout-page">*/}
-            {/*            <div className="content-wrapper">*/}
-            {/*                /!*<Outbar/>*!/*/}
-            {/*                /!*<Overside/>*!/*/}
-            {/*                <div className="container-xxl flex-grow-1 container-p-y">*/}
-            {/*                    {children}*/}
-            {/*                </div>*/}
-            {/*                <Footer/>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*        <div className="layout-overlay layout-menu-toggle"></div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </>
     );
 };

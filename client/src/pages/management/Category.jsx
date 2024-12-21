@@ -50,7 +50,7 @@ export const Category = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
@@ -183,6 +183,84 @@ export const Category = () => {
 
     return (
         <>
+            <div className="card mb-4">
+                <div className="card-widget-separator-wrapper">
+                    <div className="card-body card-widget-separator">
+                        <div className="row gy-4 gy-sm-1">
+                            <div className="col-sm-6 col-lg-3">
+                                <div
+                                    className="d-flex justify-content-between align-items-start card-widget-1 border-end pb-4 pb-sm-0">
+                                    <div>
+                                        <p className="mb-1">In-store Sales</p>
+                                        <h4 className="mb-1">$5,345.43</h4>
+                                        <p className="mb-0">
+                                            <span className="me-2">5k orders</span>
+                                            <span className="badge bg-label-success">+5.7%</span>
+                                        </p>
+                                    </div>
+                                    <span className="avatar  me-sm-4">
+                                        <span className="avatar-initial rounded bg-label-secondary w-px-44 h-px-44">
+                                            <i className="bx bx-store-alt bx-sm text-heading"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                                <hr className="d-none d-sm-block d-lg-none me-6"/>
+                            </div>
+                            <div className="col-sm-6 col-lg-3">
+                                <div
+                                    className="d-flex justify-content-between align-items-start card-widget-2 border-end pb-4 pb-sm-0">
+                                    <div>
+                                        <p className="mb-1">Website Sales</p>
+                                        <h4 className="mb-1">$674,347.12</h4>
+                                        <p className="mb-0">
+                                            <span className="me-2">21k orders</span>
+                                            <span className="badge bg-label-success">+12.4%</span>
+                                        </p>
+                                    </div>
+                                    <span className="avatar p-2 me-sm-4">
+                                        <span className="avatar-initial rounded bg-label-secondary w-px-44 h-px-44">
+                                            <i className="bx bx-laptop bx-sm text-heading"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                                <hr className="d-none d-sm-block d-lg-none"/>
+                            </div>
+                            <div className="col-sm-6 col-lg-3">
+                                <div
+                                    className="d-flex justify-content-between align-items-start border-end pb-4 pb-sm-0 card-widget-3">
+                                    <div>
+                                        <p className="mb-1">Discount</p>
+                                        <h4 className="mb-1">$14,235.12</h4>
+                                        <p className="mb-0">6k orders</p>
+                                    </div>
+                                    <span className="avatar p-2 me-sm-4">
+                                        <span className="avatar-initial rounded bg-label-secondary w-px-44 h-px-44">
+                                            <i className="bx bx-gift bx-sm text-heading"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-lg-3">
+                                <div className="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p className="mb-1">Affiliate</p>
+                                        <h4 className="mb-1">$8,345.23</h4>
+                                        <p className="mb-0">
+                                            <span className="me-2">150 orders</span>
+                                            <span className="badge bg-label-danger">-3.5%</span>
+                                        </p>
+                                    </div>
+                                    <span className="avatar p-2 me-sm-4">
+                                        <span className="avatar-initial rounded bg-label-secondary w-px-44 h-px-44">
+                                            <i className="bx bx-wallet bx-sm text-heading"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="card">
                 <div className="card-datatable table-responsive">
                     <div className="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -213,9 +291,12 @@ export const Category = () => {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
+                                                <option value="10">7</option>
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="25">20</option>
                                                 <option value="50">50</option>
+                                                <option value="50">70</option>
+                                                <option value="50">100</option>
                                             </select>
                                             {/*<span>entries</span>*/}
                                         </label>

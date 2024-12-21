@@ -72,23 +72,25 @@ const Home = () => {
                 {/*        <p>Famous Brand in our website</p>*/}
                 {/*    </Carousel.Caption>*/}
                 {/*</Carousel.Item>*/}
-                {banners.map((banner, index) => (
-                    <Carousel.Item key={index}>
-                        <Image
-                            className="d-block w-100"
-                            src={banner.name}
-                            alt={banner.alt}
-                            style={{ objectFit: 'cover', height: '480px' }}
-                        />
-                        <Carousel.Caption>
-                            <h3>{banner.title}</h3>
-                            <p>{banner.description}</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                ))}
+                {
+                    banners.map((banner, index) => (
+                        <Carousel.Item key={index}>
+                            <Image
+                                className="d-block w-100 object-fit-cover"
+                                src={banner.name}
+                                alt={banner.alt}
+                                style={{ height: '500px' }}
+                            />
+                            <Carousel.Caption>
+                                <h3>{banner.title}</h3>
+                                <p>{banner.description}</p>
+                            </Carousel.Caption>
+                        </Carousel.Item>
+                    )
+                )}
             </Carousel>
             <Overview mt={24}>
-                <h3 className="text-center m-0">Sản phẩm nổi bật</h3>
+                <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
             <Container className="my-4">
                 {/*<Row style={{height: 100}}>*/}

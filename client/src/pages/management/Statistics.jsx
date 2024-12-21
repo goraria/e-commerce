@@ -67,7 +67,7 @@ export const Statistics = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
@@ -354,9 +354,12 @@ export const Statistics = () => {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
+                                                <option value="10">7</option>
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="25">20</option>
                                                 <option value="50">50</option>
+                                                <option value="50">70</option>
+                                                <option value="50">100</option>
                                             </select>
                                             {/*<span>entries</span>*/}
                                         </label>

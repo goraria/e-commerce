@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import Copyright from './Copyright.jsx';
+import getGreetingMessage from "../utils/greetingHandler.js";
 
 const menu = [
     {
@@ -165,16 +166,19 @@ const menu = [
     }
 ]
 
-const Layout = ({ children, role }) => {
+const Layout = ({ children }) => {
     useEffect(() => {
         Main();
     },[])
+
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
                 <Sidebar menu={menu} source={"/admin"}/>
                 <div className="layout-page">
-                    <Navbar />
+                    <Navbar>
+                        {getGreetingMessage('from Bill')}
+                    </Navbar>
                     <div className="content-wrapper">
                         <div className="container-xxl flex-grow-1 container-p-y">
                             {children}
