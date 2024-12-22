@@ -3,9 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
 import axios from "axios";
 
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
-
-import jp from '../../assets/images/jp.jpeg'
 import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
@@ -172,10 +169,6 @@ const ChangePassword = () => {
                         >
                             Change Password
                         </button>
-                        {/* <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button> */}
                     </div>
                 </Form>
                 <div className="text-center">

@@ -397,26 +397,26 @@ export const Statistics = () => {
                                 {/*</div>*/}
                                 <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                     <div className="dt-buttons btn-group flex-wrap">
-                                        <div style={{position: 'relative'}}
+                                        <div className="position-relative"
                                              ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
                                             <Button variant="outline-primary" className="me-3"
                                                     onClick={handleFromDateClick} style={{width: 200}}>
                                                 From date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}
                                             </Button>
                                             {showFromCalendar && (
-                                                <div style={{position: 'absolute', zIndex: 1, top: '100%', left: 0}}>
+                                                <div className="position-absolute" style={{zIndex: 1, top: '100%', left: 0}}>
                                                     <Calendar onChange={onFromDateChange} value={fromDate}/>
                                                 </div>
                                             )}
                                         </div>
-                                        <div style={{position: 'relative'}}
+                                        <div className="position-relative"
                                              ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
                                             <Button variant="outline-primary" onClick={handleToDateClick}
                                                     style={{width: 200}}>
                                                 To date: {toDate ? toDate.toLocaleDateString() : "Select date"}
                                             </Button>
                                             {showToCalendar && (
-                                                <div style={{position: 'absolute', zIndex: 1, top: '100%', right: 0}}>
+                                                <div className="position-absolute" style={{zIndex: 1, top: '100%', right: 0}}>
                                                     <Calendar onChange={onToDateChange} value={toDate}/>
                                                 </div>
                                             )}
@@ -427,7 +427,7 @@ export const Statistics = () => {
                             {/*<div className="row mb-3">*/}
                             {/*    <div className="col-sm-12 col-md-6">*/}
                             {/*        <div className="dataTables_length">*/}
-                            {/*            <label style={{display: "flex", justifyContent: "left", alignItems: "center"}}>*/}
+                            {/*            <label className="d-flex justify-content-start align-items-center">*/}
                             {/*                /!*<span>Show</span>*!/*/}
                             {/*                <select*/}
                             {/*                    name="DataTables_Table_0_length"*/}

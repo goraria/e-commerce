@@ -185,7 +185,7 @@ export const VoucherForm = ({ category, show, onHide, onReload }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
+                    <Button onClick={onHide} variant="secondary" className="me-auto">
                         <i className='bx bx-x me-2' ></i>
                         <span>Close</span>
                     </Button>

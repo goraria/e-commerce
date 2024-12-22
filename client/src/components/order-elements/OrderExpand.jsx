@@ -126,20 +126,6 @@ const OrderExpand = ({ order }) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        {/*<td>*/}
-                                        {/*    <div className="d-flex justify-content-start align-items-center">*/}
-                                        {/*        <img*/}
-                                        {/*            src={product.image}*/}
-                                        {/*            alt={product.name}*/}
-                                        {/*            className="rounded"*/}
-                                        {/*            style={{width: 50, height: 50}}*/}
-                                        {/*        />*/}
-                                        {/*        <div className="ms-3">*/}
-                                        {/*            <h6 className="mb-0">{product.name}</h6>*/}
-                                        {/*            <p className="mb-0 text-muted">{product.category}</p>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</td>*/}
                                         <td>
                                             <span>${item?.price}</span>
                                         </td>

@@ -186,7 +186,7 @@ export const UserManagement = () => {
             </Pagination.Last>
         );
 
-        return <Pagination style={{ margin: 0 }}>{paginationItems}</Pagination>;
+        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
 
@@ -331,35 +331,18 @@ export const UserManagement = () => {
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                         <div className="row">
                             <div className="d-flex col-sm-12 col-md-6">
-                                <div className="dataTables_info"
-                                     style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                                <div className="dataTables_info d-flex justify-content-start align-items-center">
                                     <div className="text-center mt-2">
                                         Showing {currentItems.length} of {filteredData.length} entries
                                     </div>
                                 </div>
                                 <div className="ms-2 me-2"></div>
-                                <div className="dataTables_select"
-                                     style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                                <div className="dataTables_select d-flex justify-content-start align-items-center">
                                     <div className="text-center mt-2">
                                         Selected {selectedEntries.length} entries
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="col-sm-12 col-md-6">
-                            <div className="dataTables_paginate paging_simple_numbers" style={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                                <Pagination className="d-flex justify-content-center" style={{ margin: 0 }}>
-                                    {Array.from({ length: totalPages }, (_, index) => (
-                                        <Pagination.Item
-                                            key={index}
-                                            active={index + 1 === currentPage}
-                                            onClick={() => setCurrentPage(index + 1)}
-                                        >
-                                            {index + 1}
-                                        </Pagination.Item>
-                                    ))}
-                                </Pagination>
-                            </div>
-                        </div> */}
 
                             <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
                                 {renderPagination()}

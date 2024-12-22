@@ -241,7 +241,7 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
+                    <Button onClick={onHide} variant="secondary" className="me-auto">
                         <i className='bx bx-x' ></i>
                         <span>Close</span>
                     </Button>

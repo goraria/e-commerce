@@ -259,8 +259,8 @@ const CheckOut = () => {
                     {/* Right Section: Order Summary & Product List */}
                     <Col sm={12} md={6} lg={4} className="mb-4">
                         {/* First Card: Order Summary */}
-                        <div className="card sticky-summary mb-4 shadow-none"
-                            style={{ position: 'sticky', top: 120, backgroundColor: 'transparent', boxShadow: 'none' }}>
+                        <div className="card sticky-summary mb-4 shadow-none position-sticky bg-transparent"
+                            style={{ top: 120 }}>
                             <div className="card p-3 sticky-summary mb-4">
                                 <h5>Tóm tắt đơn hàng</h5>
                                 <div className="d-flex justify-content-between">

@@ -156,14 +156,14 @@ const Cart = () => {
             <div className="container">
                 <div className="row">
                     {/* Left Section: Product List */}
-                    <div className="col col-sm-12 col-md-6 col-lg-8">
+                    <div className="col col-sm-12 col-md-12 col-lg-8">
                         <div className="row">
                             <div className="col-12 mb-4">
                                 <div
                                     className="card px-3 py-3 light bg-body-tertiary align-items-center bg-navbar-theme">
                                     <div className="container d-flex ps-2 p-0 align-items-center">
                                         <h5 className="m-0">Cart</h5>
-                                        <Button as={Link} to={'/search'} variant="primary" style={{marginLeft: 'auto'}}>
+                                        <Button as={Link} to={'/search'} variant="primary" className="ms-auto">
                                             <i className='bx bx-plus me-2'></i>
                                             <span>Add Product</span>
                                         </Button>
@@ -173,14 +173,14 @@ const Cart = () => {
                         </div>
                         {cartItems.map((item) => (
                             <div className="card p-3 mb-4" key={item.idcart_item}>
-                                <CardItem Item={item} onCheckboxChange={handleCheckboxChange}
+                                <CardItem element={item} onCheckboxChange={handleCheckboxChange}
                                           onRemoveItem={removeCartItem}/>
                             </div>
                         ))}
                     </div>
 
                     {/* Right Section: Order Summary */}
-                    <div className="col col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div className="col col-lg-4 col-md-12 col-sm-12 mb-4">
                         <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
                             <div className="card p-3">
                                 <div className="rounded p-3">

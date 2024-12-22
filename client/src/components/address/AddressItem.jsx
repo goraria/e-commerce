@@ -42,23 +42,6 @@ const AddressItem = ({ item, onReload }) => {
                     {item.country}
                 </p>
             </div>
-            {/*<div className="container p-0">*/}
-            {/*    <div className="d-flex text-center align-items-center justify-content-center px-2 mx-2 my-3">*/}
-            {/*        <h5 className="m-0 ps-2 me-auto">{item.type}</h5>*/}
-
-            {/*    </div>*/}
-            {/*    <hr/>*/}
-            {/*    <div className="m-3">*/}
-            {/*        /!*<h6 style={{margin: 8}}>{item.idaddress}</h6>*!/*/}
-            {/*        {*/}
-            {/*            [item.tower, item.street, item.district, item.city, item.state, item.country].map((element, index) => (*/}
-            {/*                <h6 key={index} className="m-2">*/}
-            {/*                    {element ? element : 'N/A'}*/}
-            {/*                </h6>*/}
-            {/*            ))*/}
-            {/*        }*/}
-            {/*    </div>*/}
-            {/*</div>*/}
             <AddressForm
                 show={modalShow}
                 // onHide={() => setModalShow(false)}

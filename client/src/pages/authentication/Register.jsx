@@ -1,15 +1,14 @@
 import React, {Component, useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import { Button, Col, Row, Container, Card, Form, Image, InputGroup } from "react-bootstrap";
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
+import { Form } from "react-bootstrap";
 
-import jp from '../../assets/images/jp.jpeg'
 import axios from "axios";
 import Overview from "../../layouts/Overview.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import {AuthWrapper} from "./AuthWrapper.jsx";
 import {GoogleLogin} from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
@@ -19,7 +18,7 @@ const sclItems = [
     // { id: 4, name: "Twitter", icon: faTwitter },
 ]
 
-const Register = () => {
+const Register = ({ checker }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
@@ -37,6 +36,17 @@ const Register = () => {
     const [loading, setLoading] = useState(false);  // Thêm trạng thái loading
 
     const navigate = useNavigate();
+    let role = null;
+
+    const handleNavigate = (role) => {
+        if (role === 1) {
+            navigate("/admin");
+        } else if (role === 0) {
+            navigate("/user");
+        } else {
+            navigate("/auth/error");
+        }
+    };
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -71,6 +81,37 @@ const Register = () => {
             }
         }
         setValidated(true);
+    };
+
+    const handleGoogleLogin = async (response) => {
+        setLoading(true);
+        try {
+            const merge = jwtDecode(response.credential);
+
+            const fetch = await axios.post("http://localhost:5172/authentication/login-google", {
+                merge,
+                token: response.credential,
+            });
+
+            if (fetch.data.token) {
+                const token = fetch.data.token;
+                localStorage.setItem("token", token);
+
+                const decoded = jwtDecode(token);
+                // role = decoded.role || null;
+
+                setShowSuccess(true);
+                await checker(); // Cập nhật trạng thái trong App
+                handleNavigate(decoded.role);
+            } else {
+                setError("Google Login failed.");
+            }
+        } catch (err) {
+            setError("An error occurred during Google Login.");
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -394,10 +435,9 @@ const Register = () => {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">Register</button>
-                        {/*<Button variant="primary" type="submit" style={{width: '100%'}}>*/}
-                        {/*    Register*/}
-                        {/*</Button>*/}
+                        <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">
+                            Register
+                        </button>
                     </div>
                 </Form>
 
@@ -423,10 +463,10 @@ const Register = () => {
                 {/*<div className="text-center mb-3">or log in with</div>*/}
                 <div className="row d-flex justify-content-center flex-wrap">
                     <div className="col-lg-12">
-                        <div className="d-flex justify-content-center"
-                             style={{minWidth: '120px', width: '100%'}}>
+                        <div className="d-flex justify-content-center w-100"
+                             style={{minWidth: '120px'}}>
                             <GoogleLogin
-                                onSuccess={(response) => handleGoogleLogin(response)}
+                                onSuccess={handleGoogleLogin}
                                 onError={() => console.log("Japtor")}
                                 style={{width: '100%'}}
                             />
@@ -434,235 +474,6 @@ const Register = () => {
                     </div>
                 </div>
             </AuthWrapper>
-
-            {/*<Overview mt={112} me={56}>*/}
-            {/*    <div>*/}
-            {/*        <h2>Register</h2>*/}
-            {/*        <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>*/}
-            {/*            <Image*/}
-            {/*                className="d-block"*/}
-            {/*                src={jp}*/}
-            {/*                alt="Second slide"*/}
-            {/*                style={{objectFit: 'cover', width: 224, height: 224, borderRadius: '5px'}}*/}
-            {/*            />*/}
-            {/*        </div>*/}
-            {/*        <Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
-            {/*            <Row className="mb-3">*/}
-            {/*                <Form.Group as={Col} md={7} controlId="email">*/}
-            {/*                    <Form.Label>Email address</Form.Label>*/}
-            {/*                    <InputGroup hasValidation>*/}
-            {/*                        <InputGroup.Text id="inputGroupPrepend">*/}
-            {/*                            <i className='bx bx-at'></i>*/}
-            {/*                        </InputGroup.Text>*/}
-            {/*                        <Form.Control*/}
-            {/*                            required*/}
-            {/*                            type="email"*/}
-            {/*                            name="email"*/}
-            {/*                            placeholder="email@email.com"*/}
-            {/*                            value={formData.email}*/}
-            {/*                            onChange={handleChange}*/}
-            {/*                        />*/}
-            {/*                        <Form.Control.Feedback type="invalid">*/}
-            {/*                            Please choose a email.*/}
-            {/*                        </Form.Control.Feedback>*/}
-            {/*                        /!*<Form.Control.Feedback>*!/*/}
-            {/*                        /!*    Looks good!*!/*/}
-            {/*                        /!*</Form.Control.Feedback>*!/*/}
-            {/*                    </InputGroup>*/}
-            {/*                </Form.Group>*/}
-            {/*                <Form.Group as={Col} md={5} controlId="username">*/}
-            {/*                    <Form.Label>Username</Form.Label>*/}
-            {/*                    <InputGroup hasValidation>*/}
-            {/*                        <InputGroup.Text id="inputGroupPrepend">*/}
-            {/*                            <i className='bx bx-user'></i>*/}
-            {/*                        </InputGroup.Text>*/}
-            {/*                        <Form.Control*/}
-            {/*                            type="text"*/}
-            {/*                            name="username"*/}
-            {/*                            placeholder="username"*/}
-            {/*                            value={formData.username}*/}
-            {/*                            onChange={handleChange}*/}
-            {/*                            aria-describedby="inputGroupPrepend"*/}
-            {/*                            required*/}
-            {/*                        />*/}
-            {/*                        <Form.Control.Feedback type="invalid">*/}
-            {/*                            Please choose a username.*/}
-            {/*                        </Form.Control.Feedback>*/}
-            {/*                        /!*<Form.Control.Feedback>*!/*/}
-            {/*                        /!*    Looks good!*!/*/}
-            {/*                        /!*</Form.Control.Feedback>*!/*/}
-            {/*                    </InputGroup>*/}
-            {/*                </Form.Group>*/}
-            {/*            </Row>*/}
-            {/*            <Row className="mb-3">*/}
-            {/*                <Form.Group as={Col} md={6} controlId="password">*/}
-            {/*                    <Form.Label>Password</Form.Label>*/}
-            {/*                    <InputGroup hasValidation>*/}
-            {/*                        <Form.Control*/}
-            {/*                            required*/}
-            {/*                            name="password"*/}
-            {/*                            type="password"*/}
-            {/*                            placeholder="Password"*/}
-            {/*                            minLength={8}*/}
-            {/*                            value={formData.password}*/}
-            {/*                            onChange={handleChange}*/}
-            {/*                        />*/}
-            {/*                        <Form.Control.Feedback type="invalid">*/}
-            {/*                            Please enter your password.*/}
-            {/*                        </Form.Control.Feedback>*/}
-            {/*                        /!*<Form.Control.Feedback>*!/*/}
-            {/*                        /!*    Looks good!*!/*/}
-            {/*                        /!*</Form.Control.Feedback>*!/*/}
-            {/*                    </InputGroup>*/}
-            {/*                </Form.Group>*/}
-            {/*                <Form.Group as={Col} md={6} controlId="retypepass">*/}
-            {/*                    <Form.Label>Verify Password</Form.Label>*/}
-            {/*                    <InputGroup hasValidation>*/}
-            {/*                        <Form.Control*/}
-            {/*                            type="password"*/}
-            {/*                            name="retypepass"*/}
-            {/*                            placeholder="Re-type password"*/}
-            {/*                            minLength={8}*/}
-            {/*                            value={formData.retypepass}*/}
-            {/*                            onChange={handleChange}*/}
-            {/*                            aria-describedby="inputGroupPrepend"*/}
-            {/*                            required*/}
-            {/*                        />*/}
-            {/*                        <Form.Control.Feedback type="invalid">*/}
-            {/*                            Please retype your password.*/}
-            {/*                        </Form.Control.Feedback>*/}
-            {/*                        /!*<Form.Control.Feedback>*!/*/}
-            {/*                        /!*    Looks good!*!/*/}
-            {/*                        /!*</Form.Control.Feedback>*!/*/}
-            {/*                    </InputGroup>*/}
-            {/*                </Form.Group>*/}
-            {/*            </Row>*/}
-            {/*            <Row className="mb-3">*/}
-            {/*                <Form.Group as={Col} md={4} controlId="firstname">*/}
-            {/*                    <Form.Label>First name</Form.Label>*/}
-            {/*                    <Form.Control*/}
-            {/*                        required*/}
-            {/*                        type="text"*/}
-            {/*                        name="firstname"*/}
-            {/*                        placeholder="First name"*/}
-            {/*                        value={formData.firstname}*/}
-            {/*                        onChange={handleChange}*/}
-            {/*                    />*/}
-            {/*                    <Form.Control.Feedback type="invalid">*/}
-            {/*                        Please enter your Firstname.*/}
-            {/*                    </Form.Control.Feedback>*/}
-            {/*                    /!*<Form.Control.Feedback>*!/*/}
-            {/*                    /!*    Looks good!*!/*/}
-            {/*                    /!*</Form.Control.Feedback>*!/*/}
-            {/*                </Form.Group>*/}
-            {/*                <Form.Group as={Col} md={4} controlId="lastname">*/}
-            {/*                    <Form.Label>Last name</Form.Label>*/}
-            {/*                    <Form.Control*/}
-            {/*                        required*/}
-            {/*                        type="text"*/}
-            {/*                        name="lastname"*/}
-            {/*                        placeholder="Last name"*/}
-            {/*                        value={formData.lastname}*/}
-            {/*                        onChange={handleChange}*/}
-            {/*                    />*/}
-            {/*                    <Form.Control.Feedback type="invalid">*/}
-            {/*                        Please enter your Lastname.*/}
-            {/*                    </Form.Control.Feedback>*/}
-            {/*                    /!*<Form.Control.Feedback>*!/*/}
-            {/*                    /!*    Looks good!*!/*/}
-            {/*                    /!*</Form.Control.Feedback>*!/*/}
-            {/*                </Form.Group>*/}
-            {/*                <Form.Group as={Col} md={4} controlId="phone">*/}
-            {/*                    <Form.Label>Phone</Form.Label>*/}
-            {/*                    /!*<Form.Control type="list-number" placeholder="Phone" required />*!/*/}
-            {/*                    <InputGroup hasValidation>*/}
-            {/*                        <InputGroup.Text id="inputGroupPrepend">*/}
-            {/*                            <i className='bx bx-phone'></i>*/}
-            {/*                        </InputGroup.Text>*/}
-            {/*                        <Form.Control*/}
-            {/*                            type="text"*/}
-            {/*                            name="phone"*/}
-            {/*                            placeholder="Phone"*/}
-            {/*                            value={formData.phone}*/}
-            {/*                            onChange={handleChange}*/}
-            {/*                            minLength={10}*/}
-            {/*                            maxLength={10}*/}
-            {/*                            aria-describedby="inputGroupPrepend"*/}
-            {/*                            required*/}
-            {/*                        />*/}
-            {/*                        <Form.Control.Feedback type="invalid">*/}
-            {/*                            Please provide a valid state.*/}
-            {/*                            Please enter your phone number.*/}
-            {/*                        </Form.Control.Feedback>*/}
-            {/*                        /!*<Form.Control.Feedback>*!/*/}
-            {/*                        /!*    Looks good!*!/*/}
-            {/*                        /!*</Form.Control.Feedback>*!/*/}
-            {/*                    </InputGroup>*/}
-            {/*                </Form.Group>*/}
-            {/*            </Row>*/}
-            {/*            /!*<hr/>*!/*/}
-            {/*            <Row className="mb-3">*/}
-            {/*                <Col xs={6}>*/}
-            {/*                    <Form.Group controlId="formBasicCheckbox">*/}
-            {/*                        <Form.Check*/}
-            {/*                            required*/}
-            {/*                            type="checkbox"*/}
-            {/*                            label="Agree to terms and conditions"*/}
-            {/*                            feedback="You must agree before submitting."*/}
-            {/*                            feedbackType="invalid"*/}
-            {/*                        />*/}
-            {/*                    </Form.Group>*/}
-            {/*                </Col>*/}
-            {/*            </Row>*/}
-            {/*            <Row>*/}
-            {/*                <Col>*/}
-            {/*                    <Button variant="primary" type="submit" style={{width: '100%'}}>*/}
-            {/*                        Register*/}
-            {/*                    </Button>*/}
-            {/*                </Col>*/}
-            {/*            </Row>*/}
-            {/*            /!*<hr/>*!/*/}
-            {/*            /!*<div className="text-center mb-3">or sign up with</div>*!/*/}
-                        {/*/!*<div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>*!/*/}
-                        {/*/!*    {sclItems.map(socialItem => (*!/*/}
-                        {/*/!*        <SocialFormButton key={socialItem.id} socialItems={socialItem}/>*!/*/}
-                        {/*/!*    ))}*!/*/}
-                        {/*/!*</div>*!/*/}
-            {/*            /!*<div className="d-flex justify-content-between flex-wrap row">*!/*/}
-            {/*            /!*    /!*{socials.map(socialItem => (*!/*!/*/}
-            {/*            /!*    /!*    <>*!/*!/*/}
-            {/*            /!*    /!*        <div className="col-lg-4">*!/*!/*/}
-            {/*            /!*    /!*            <SocialFormButton key={socialItem.id} element={socialItem}/>*!/*!/*/}
-            {/*            /!*    /!*        </div>*!/*!/*/}
-            {/*            /!*    /!*    </>*!/*!/*/}
-            {/*            /!*    /!*))}*!/*!/*/}
-            {/*            /!*    <div className="col-lg-12">*!/*/}
-            {/*            /!*        <Button*!/*/}
-            {/*            /!*            variant="secondary" type="button"*!/*/}
-            {/*            /!*            className="flex-grow-1 w-100"*!/*/}
-            {/*            /!*            style={{minWidth: '120px'}}*!/*/}
-            {/*            /!*        >*!/*/}
-            {/*            /!*            <i className="bx bxl-google me-2"></i>*!/*/}
-            {/*            /!*            Google*!/*/}
-            {/*            /!*        </Button>*!/*/}
-            {/*            /!*    </div>*!/*/}
-            {/*            /!*</div>*!/*/}
-            {/*            <hr/>*/}
-            {/*            <div className="text-center" style={{marginBottom: 16}}>*/}
-            {/*                you have an acoount*/}
-            {/*                <Link to="/auth/login">*/}
-            {/*                    <Button variant="link" style={{*/}
-            {/*                        padding: 0,*/}
-            {/*                        color: '#696cff',*/}
-            {/*                        textDecoration: "none",*/}
-            {/*                        fontWeight: 'bold',*/}
-            {/*                        paddingLeft: 4*/}
-            {/*                    }}>Log in</Button>*/}
-            {/*                </Link>*/}
-            {/*            </div>*/}
-            {/*        </Form>*/}
-            {/*    </div>*/}
-            {/*</Overview>*/}
 
             <NotifySuccess
                 title="'Registration successful'"
@@ -683,31 +494,5 @@ const Register = () => {
         </>
     )
 }
-
-// class Register extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//
-//         }
-//     }
-//
-//     render() {
-//         // eslint-disable-next-line react-hooks/rules-of-hooks
-//         // const [validated, setValidated] = useState(false);
-//         //
-//         // const handleSubmit = (event) => {
-//         //     const form = event.currentTarget;
-//         //     if (form.checkValidity() === false) {
-//         //         event.preventDefault();
-//         //         event.stopPropagation();
-//         //     }
-//         //
-//         //     setValidated(true);
-//         // };
-//
-//
-//     }
-// }
 
 export default Register

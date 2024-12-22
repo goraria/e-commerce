@@ -3,14 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
 import axios from "axios";
 
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
-
-import jp from '../../assets/images/jp.jpeg'
-import Overview from "../../layouts/Overview.jsx";
-import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
-import Frame from "../../layouts/Frame.jsx";
 import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 
@@ -127,10 +121,6 @@ const ResetPassword = () => {
                         >
                             Reset Password
                         </button>
-                        {/* <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button> */}
                     </div>
                 </Form>
                 <div className="text-center">
@@ -141,55 +131,7 @@ const ResetPassword = () => {
                     </Link>
                 </div>
             </AuthWrapper>
-            {/* <Overview mt={112} me={56}>
-                <div>
-                    <h2>Forgot Password</h2>
-                    <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>
-                        <Image
-                            className="d-block"
-                            src={jp}
-                            alt="Second slide"
-                            style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}
-                        />
-                    </div>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>New Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                name="password"
-                                onChange={handleChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your password.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="retypePassword">
-                            <Form.Label>Retype password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="RetypePassword"
-                                name="retypePassword"
 
-                                onChange={handleChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please enter your retype password.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button>
-                    </Form>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                    </Form>
-                </div>
-            </Overview> */}
             <NotifySuccess
                 title="Reset password Successful"
                 message="You have reset password successfully."

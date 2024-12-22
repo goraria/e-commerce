@@ -2,10 +2,7 @@ import { Link } from 'react-router-dom'
 import React, { Component } from "react";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Card } from "react-bootstrap";
-import jp from '../../assets/images/jp.jpeg'
 import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
-
 
 const renderStars = (rating) => {
     // Sanitize rating to be between 0 and 5
@@ -16,7 +13,6 @@ const renderStars = (rating) => {
 
     // Ensure valid star counts
     return (
-
         <>
             {/* Full stars */}
             {Array.from({ length: fullStars }).map((index) => (
@@ -62,6 +58,7 @@ const ProductItem = (product, state) => {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
+
     const fetchProductDetails = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-productid/${obj.idproduct}`);
@@ -72,6 +69,7 @@ const ProductItem = (product, state) => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const fetchProductDecription = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-description/${obj.idproduct}`);
@@ -81,6 +79,7 @@ const ProductItem = (product, state) => {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
+
     const fetchProductRating = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-rating/${obj.idproduct}`);
@@ -91,6 +90,7 @@ const ProductItem = (product, state) => {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
+
     const fetchProductColor = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-color/${obj.idproduct}`);
@@ -101,6 +101,7 @@ const ProductItem = (product, state) => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const fetchProductConfiguration = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-configuration/${obj.idproduct}`);
@@ -117,8 +118,8 @@ const ProductItem = (product, state) => {
         fetchProductConfiguration();
         fetchProductDecription();
         fetchProductRating();
-        fetchCart();
         fetchProductColor();
+        fetchCart();
         // fetchAPI();
         // fetchAPI1();
         // fetchAPI2();
@@ -145,7 +146,6 @@ const ProductItem = (product, state) => {
         }
     };
 
-
     const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
     const averageScore = totalScore / ratings.length;
     const cardWidth = state;
@@ -154,38 +154,29 @@ const ProductItem = (product, state) => {
     return (
         <>
             <div className="card border-0 bg-light rounded-3" style={{height: cardWidth * 6 / 5, width: cardWidth}}>
-                <a href={`/product?id=${obj.idproduct}`} style={{textDecoration: 'none'}}>
+                <Link to={`/product?id=${obj.idproduct}`} style={{textDecoration: 'none'}}>
                     <img
                         src={products.product_image}
                         alt={products.product_name}
-                        className="card-img-top object-fit-cover"
-                        style={{width: '100%', height: '100%'}}
+                        className="card-img-top object-fit-cover w-100 h-100"
                     />
-                </a>
+                </Link>
                 <div className="card-body">
-                    {/* Price and Name in the same line */}
                     <div className="d-flex justify-content-between align-items-center">
                         <h5 className="card-title m-0 text-truncate" style={{maxWidth: '70%'}}>
                             {products.product_name}
                         </h5>
                         <span className="fw-bold fs-5">${configurations.price}</span>
                     </div>
-
-                    {/* Truncated Description */}
                     <p className="card-text text-truncate" style={{maxWidth: '100%'}}>
                         {descriptions.title_description}
                     </p>
-
-                    {/* Rating and Buy Button */}
                     <div className="d-flex justify-content-between align-items-center">
-                        {/* Rating Section */}
                         <div className="text-warning fs-4">
                             {renderStars(averageScore)}
                         </div>
-                        {/* Buy Button */}
                         <button className="btn btn-primary d-flex align-items-center" onClick={handleAddToCart}>
                             <i className='bx bxs-cart-add me-2'></i>
-                            {/*<span>Buy now</span>*/}
                             <span>Add</span>
                         </button>
                     </div>

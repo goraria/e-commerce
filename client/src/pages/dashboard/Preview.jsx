@@ -56,7 +56,7 @@ export const Preview = () => {
             });
 
             setData(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu:', error);
             setError(`Lỗi khi lấy dữ liệu: ${error}`);
@@ -533,7 +533,7 @@ export const Preview = () => {
                                                 </div>
                                                 <div className="dt-action-buttons text-end pt-6 pt-md-0">
                                                     <div className="dt-buttons btn-group flex-wrap">
-                                                        <div style={{position: 'relative'}}
+                                                        <div className="position-relative"
                                                              ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
                                                             <Button variant="outline-primary" className="me-3"
                                                                     onClick={handleFromDateClick} style={{width: 200}}>
@@ -541,8 +541,7 @@ export const Preview = () => {
                                                                 date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}
                                                             </Button>
                                                             {showFromCalendar && (
-                                                                <div style={{
-                                                                    position: 'absolute',
+                                                                <div className="position-absolute" style={{
                                                                     zIndex: 1,
                                                                     top: '100%',
                                                                     left: 0
@@ -552,7 +551,7 @@ export const Preview = () => {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div style={{position: 'relative'}}
+                                                        <div className="position-relative"
                                                              ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
                                                             <Button variant="outline-primary"
                                                                     onClick={handleToDateClick}
@@ -561,8 +560,7 @@ export const Preview = () => {
                                                                 date: {toDate ? toDate.toLocaleDateString() : "Select date"}
                                                             </Button>
                                                             {showToCalendar && (
-                                                                <div style={{
-                                                                    position: 'absolute',
+                                                                <div className="position-absolute" style={{
                                                                     zIndex: 1,
                                                                     top: '100%',
                                                                     right: 0
