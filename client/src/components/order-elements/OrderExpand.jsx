@@ -1,6 +1,7 @@
-import {Button, Form, Table} from "react-bootstrap";
+import {Badge, Button, Form, Table} from "react-bootstrap";
 import React from "react";
 import order from "../../pages/payment-component/Order.jsx";
+import {Link} from "react-router-dom";
 
 const OrderExpand = ({ order }) => {
     // console.log(order)
@@ -26,6 +27,27 @@ const OrderExpand = ({ order }) => {
         return `${formattedDate}, ${formattedTime}`;
     }
 
+    const renderStatusBadge = (status) => {
+        switch (status) {
+            case 5: // "Delivered"
+                return <Badge bg="label-success">Delivered</Badge>;
+            case 0: // "Ordered"
+                return <Badge bg="label-warning">Ordered</Badge>;
+            case 3: // "Dispatched"
+                return <Badge bg="label-primary">Dispatched</Badge>;
+            case 1: // "Pickup"
+                return <Badge bg="label-info">Pickup</Badge>;
+            case 6: // "Rejected"
+                return <Badge bg="label-danger">Rejected</Badge>;
+            case 2: // "Arrival"
+                return <Badge bg="label-dark">Arrival</Badge>;
+            case 4: // "Arrival"
+                return <Badge bg="label-secondary">Arrival</Badge>;
+            default:
+                return <Badge bg="label-light">{status}</Badge>;
+        }
+    };
+
     return (
         <>
             <div className="card mb-4">
@@ -37,17 +59,18 @@ const OrderExpand = ({ order }) => {
                     {/*</Button>*/}
                     <div className="d-flex flex-column justify-content-center">
                         <div className="mb-1">
-                            <span className="h5">Order #{order?.id} </span><span
-                            className="badge bg-label-success me-1 ms-2">Paid</span> <span
-                            className="badge bg-label-info">Ready to Pickup</span>
+                            <span className="h5 me-3">Order #{order?.id}</span>
+                            {/*<span className="badge bg-label-success me-1 ms-2">Paid</span>*/}
+                            {/*<span className="badge bg-label-info">Ready to Pickup</span>*/}
+                            {renderStatusBadge(order?.status)}
                         </div>
                         <p className="mb-0">{formatDateTime(order?.date)}</p>
                     </div>
                     <div className="d-flex align-content-center flex-wrap gap-2">
-                        <button className="btn btn-info delete-order">
+                        <Button as={Link} to={`/user/bill?id=${order.id}`} className="btn btn-info delete-order">
                             <i className='bx bx-book-content text-white me-2'></i>
                             <span>Details</span>
-                        </button>
+                        </Button>
                     </div>
                 </div>
                 <div className="card-datatable table-responsive pb-3">

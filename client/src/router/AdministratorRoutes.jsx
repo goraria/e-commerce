@@ -138,7 +138,7 @@ export const AdministratorRoutes = () => {
             <Route path="/form-layout/vertical-form" element={<VerticalFormPage />} />
 
             <Route path="/tables" element={<TablesPage />} />
-            <Route path="/profile-old" element={<AccountPage />} />
+            {/*<Route path="/profile-old" element={<AccountPage />} />*/}
             <Route path="/profile" element={<ProfilePage />} />
 
             <Route path="/users" element={<UserManagement />} />
@@ -148,6 +148,8 @@ export const AdministratorRoutes = () => {
             <Route path="/product/configurarion" element={<ProductConfiguration />} />
             <Route path="/product/color" element={<ProductColor />} />
             <Route path="/product/description" element={<ProductDescription />} />
+
+            <Route path="*" element={<ErrorPage />} />
         </Routes>
     )
 }

@@ -19,6 +19,8 @@ export const AuthenticationRoutes = () => {
             {/*<Route path="/500" element={<ServerError />} />*/}
             <Route path="/maintenance" element={<MaintenancePage />} />
             {/*<Route path="/coming-soon" element={<ComingSoon />} />*/}
+
+            <Route path="*" element={<ErrorPage />} />
         </Routes>
     );
 }
