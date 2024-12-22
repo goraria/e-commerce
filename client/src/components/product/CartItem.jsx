@@ -78,12 +78,13 @@ const CardItem = ({ element, onCheckboxChange, onRemoveItem }) => {
             console.error('Lỗi khi cập nhật vào giỏ hàng:', error);
         }
     };
+
     const handleQuantityChange = (newQuantity) => {
         if (newQuantity < 1) return;
 
         setQuantity(newQuantity);
         handleUpdateQuantityItem(newQuantity);  // Update quantity in the backend
-        console.log(newQuantity) // Update local quantity state
+        // console.log(newQuantity) // Update local quantity state
     };
     
     useEffect(() => {

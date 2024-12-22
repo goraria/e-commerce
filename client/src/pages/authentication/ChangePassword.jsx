@@ -26,9 +26,11 @@ const ChangePassword = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [token, setToken] = useState('');
+
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
+
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -49,9 +51,11 @@ const ChangePassword = () => {
             setError('Error fetching user data');
         }
     };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
+
         if (formData.newPassword !== formData.retypePassword) {
             event.stopPropagation();
             setError("Password do not match.");
@@ -62,14 +66,12 @@ const ChangePassword = () => {
             setError("Make sure your password is more than 8 characters.");
             setShowError(true);
             return;
-        }
-        else if (!formData.oldPassword || !formData.newPassword || !formData.retypePassword) {
+        } else if (!formData.oldPassword || !formData.newPassword || !formData.retypePassword) {
             event.stopPropagation();
             setError("Please fill in all the fields.");
             setShowError(true);
             return;
-        }
-        else {
+        } else {
             setLoading(true);
             try {
                 const response = await axios.post('http://localhost:5172/authentication/change-password', {
@@ -185,7 +187,7 @@ const ChangePassword = () => {
                 show={showSuccess}  // truyền showSuccess vào NotifySuccess
                 onHide={() => {
                     setShowSuccess(false)
-                    console.log(1)
+                    // console.log(1)
                     setTimeout(() => {
                         navigate('/user'); // Điều hướng sau một khoảng thời gian
                     }, 500)

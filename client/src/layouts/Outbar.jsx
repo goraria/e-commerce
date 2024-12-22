@@ -81,9 +81,9 @@ const Outbar = ({ children }) => {
             setTimeout(() => {
                 window.location.reload();
             }, 50);
-            console.log("tìm kiếm thành công");
+            // console.log("tìm kiếm thành công");
         } catch (error) {
-            console.log("tìm kiếm ko thành công", error);
+            // console.log("tìm kiếm ko thành công", error);
         }
     };
 

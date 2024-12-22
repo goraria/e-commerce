@@ -71,7 +71,7 @@ const Register = ({ checker }) => {
                         // setTimeout(() => navigate('/login'), 2000);
                     }
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                     setError(error.response ? error.response.data.message : 'Registration failed');
                     setShowError(true);
                 }
@@ -467,7 +467,7 @@ const Register = ({ checker }) => {
                              style={{minWidth: '120px'}}>
                             <GoogleLogin
                                 onSuccess={handleGoogleLogin}
-                                onError={() => console.log("Japtor")}
+                                onError={() => false}
                                 style={{width: '100%'}}
                             />
                         </div>

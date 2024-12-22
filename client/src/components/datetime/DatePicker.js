@@ -7,7 +7,7 @@ const DatePicker = () => {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        console.log("Ngày được chọn:", date);
+        // console.log("Ngày được chọn:", date);
     };
 
     return (

@@ -12,6 +12,7 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     useEffect(() => {
         if (color) {
             setFormData({
@@ -53,7 +54,7 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
     const handleConfirmSave = async () => {
         try {
             // const token = localStorage.getItem('token');
-            console.log(formData);
+            // console.log(formData);
             const response = color
                 ? await axios.post(`http://localhost:5172/admin/update-color/${color.idcolor}`, formData)
                 : await axios.put('http://localhost:5172/admin/create-color', formData);
@@ -84,6 +85,7 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal

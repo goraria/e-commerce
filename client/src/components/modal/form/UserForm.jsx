@@ -15,6 +15,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     useEffect(() => {
         if (user) {
             setFormData({
@@ -94,7 +95,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
         try {
             if (user) {
                 // Chỉ thực hiện cập nhật nếu có đối tượng `user`
-                console.log('formData:', formData);
+                // console.log('formData:', formData);
                 const response = await axios.post(`http://localhost:5172/admin/update-user/${user.idaccount}`, formData);
 
                 if (response.status === 200 || response.status === 201) {
@@ -132,6 +133,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal

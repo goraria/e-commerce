@@ -48,7 +48,7 @@ const Product = () => {
             const response = await fetch(`http://localhost:5172/products/load-productid/${id}`);
             const data = await response.json();
             setProduct(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            console.log(data[0])
+            // console.log(data[0])
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -71,7 +71,7 @@ const Product = () => {
             const response = await fetch(`http://localhost:5172/products/load-color/${id}`);
             const data = await response.json();
             setcolor(data); // Cập nhật thông tin sản phẩm từ backend
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -83,7 +83,7 @@ const Product = () => {
             const data = await response.json();
             setconfig(data)
             setdefaultconfig(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }

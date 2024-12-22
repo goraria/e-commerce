@@ -36,7 +36,7 @@ const CheckOut = () => {
             const data = await response.json();
             setAdress(data[0])
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             console.error('Lỗi khi lấy địa chỉ:', error);
         }
     };
@@ -118,7 +118,7 @@ const CheckOut = () => {
 
     const handleStatusChange = (status) => {
         setStatus(status);
-        console.log(status)
+        // console.log(status)
     };
 
     const handleRemoveItem = async () => {
@@ -127,10 +127,9 @@ const CheckOut = () => {
                 idcartItem: item.idcart_item,
             });
             if (response.status === 201) {
-                alert("Sản phẩm đã được xóa vào giỏ hàng!");
+                // alert("Sản phẩm đã được xóa vào giỏ hàng!");
                 onRemoveItem();
             }
-
         } catch (error) {
             console.error('Lỗi khi xóa vào giỏ hàng:', error);
         }
@@ -152,6 +151,7 @@ const CheckOut = () => {
             };
         }
     }, [isPaypalSelected]); // Only run when PayPal is selected
+
     return (
         <>
             <Transitionbar />

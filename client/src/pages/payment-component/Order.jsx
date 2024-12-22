@@ -109,9 +109,10 @@ const Order = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             const data = await response.json();
             setAdress(data)
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }

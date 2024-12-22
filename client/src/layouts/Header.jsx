@@ -3,6 +3,7 @@ import React, { Component, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 import SaveChange from "../components/modal/notify/SaveChange.jsx";
 import Message from "../components/bar-elements/Message.jsx";
@@ -10,7 +11,6 @@ import Basket from "../components/bar-elements/Basket.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import Activitybar from "./Activitybar.jsx";
 import Outbar from "./Outbar.jsx";
-import {jwtDecode} from "jwt-decode";
 import Overside from "./Overside.jsx";
 
 const notifies = [
@@ -36,43 +36,6 @@ const baskets = [
     { id: 4, name: "DELL Precision 16' 5690", description: "Best Workstation", quantity: 1 },
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
-
-const Header0 = ({ role }) => {
-    const [loading, setLoading] = useState(true);
-    const setHeader = () => {
-        if (role === 1) {
-            return (
-                <>
-                    <Navbar/>
-                </>
-            )
-        } else if (role === 0) {
-            return (
-                <>
-                    <Activitybar/>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <Outbar/>
-                </>
-            )
-        }
-    }
-
-    useEffect(() => {
-        // setHeader()
-    }, [loading])
-
-    if (loading) return <div>Load</div>;
-
-    return (
-        <>
-            {setHeader()}
-        </>
-    )
-}
 
 const Header = () => {
     const [showModalHeader, setShowModalHeader] = useState(false);
@@ -145,9 +108,9 @@ const Header = () => {
             setTimeout(() => {
                 window.location.reload();
             }, 50);
-            console.log("tìm kiếm thành công");
+            // console.log("tìm kiếm thành công");
         } catch (error) {
-            console.log("tìm kiếm ko thành công", error);
+            // console.log("tìm kiếm ko thành công", error);
         }
     };
 

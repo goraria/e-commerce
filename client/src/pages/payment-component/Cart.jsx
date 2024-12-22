@@ -57,9 +57,9 @@ const Cart = () => {
                 const response = await fetch(`http://localhost:5172/products/load-productid/${CartItems.idproduct}`);
                 const data = await response.json();
                 setProduct(data[0]);
-                console.log(data)
+                // console.log(data)
             } catch (error) {
-                console.error('Error fetching product details:', error);
+                // console.error('Error fetching product details:', error);
             }
         }
     };
@@ -127,8 +127,6 @@ const Cart = () => {
 
     const removeCartItem = () => {
         fetchCartItem(carts);
-
-
     };
 
     // Calculate total based on selected prices
@@ -147,7 +145,6 @@ const Cart = () => {
         // fetchProductDetails();
         // fetchProductConfiguration();
         // fetchProductDecription();
-
     }, [carts]); // Run fetchProductDetails when cartItems is updated
 
     return (

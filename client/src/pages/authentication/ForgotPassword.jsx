@@ -6,6 +6,7 @@ import axios from "axios";
 import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
+
 const ForgotPassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -48,7 +49,7 @@ const ForgotPassword = () => {
         } else {
             setLoading(true);
             try {
-                console.log(1)
+                // console.log(1)
                 const response = await axios.post('http://localhost:5172/authentication/forgot-password', {
                     email: formData.email
                 });

@@ -11,9 +11,11 @@ export const DescriptionForm = ({ description, show, onHide, onReload }) => {
         sub_description: ' ',
         img_description: ' ',
     });
+
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     useEffect(() => {
         if (description) {
             setFormData({
@@ -59,11 +61,10 @@ export const DescriptionForm = ({ description, show, onHide, onReload }) => {
     const handleConfirmSave = async () => {
         try {
             // const token = localStorage.getItem('token');
-            console.log(formData);
+            // console.log(formData);
             const response = description
                 ? await axios.post(`http://localhost:5172/admin/update-description/${description.iddescription}`, formData)
                 : await axios.put('http://localhost:5172/admin/create-description', formData);
-
 
             if (response.status === 200 || response.status === 201) {
                 // alert(address ? 'Address updated successfully' : 'Address added successfully');
@@ -90,6 +91,7 @@ export const DescriptionForm = ({ description, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal

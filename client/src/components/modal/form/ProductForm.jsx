@@ -62,6 +62,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
             Object.entries(data).map(([key, value]) => [key, String(value || "")])
         );
     };
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData(prevData => ({ ...prevData, [name]: String(value) }));
@@ -80,17 +81,15 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
         // console.log(formData)
 
         if (form.checkValidity() === false) {
-            console.log("0")
+            // console.log("0")
             setValidated(true);
         } else {
             const allFieldsFilled = Object.values(dataAsString).every(value => value.trim() !== "");
 
             if (allFieldsFilled) {
                 setShowConfirmModal(true);
-
             } else {
                 setValidated(true);
-
             }
         }
     };

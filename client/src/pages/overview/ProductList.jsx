@@ -39,9 +39,8 @@ const ProductList = () => {
            const response = await axios.get(`http://localhost:5172/products/load-productName/${searchQuery}`);
             setProductList(response.data);
         } catch (error) {
-            console.log('chưa nhập tên tìm kiếm')
+            // console.log('chưa nhập tên tìm kiếm')
         }
-        
     };
 
     useEffect(() => {
