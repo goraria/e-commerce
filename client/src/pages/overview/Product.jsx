@@ -31,7 +31,7 @@ const Product = () => {
     const token = localStorage.getItem('token');
     const fetchCart = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/cart/loadcart`,{
+            const response = await fetch(`http://localhost:5172/cart/loadcart`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -53,6 +53,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const fetchProductDecription = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-description/${id}`);
@@ -64,6 +65,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
+
     const fetchProductColor = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-color/${id}`);
@@ -74,6 +76,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const fetchProductConfiguration = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-configuration/${id}`);
@@ -85,6 +88,7 @@ const Product = () => {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
+
     const handleConfigurationChange = (config) => {
         setdefaultconfig(config);
     };
@@ -116,10 +120,10 @@ const Product = () => {
         try {
             const response = await axios.put(`http://localhost:5172/cart/add-cartitem`, {
                 idcart: carts.idcart,
-                idproduct:  parseInt(id),
+                idproduct: parseInt(id),
                 quantity: 1,
                 idcolor: ChoosedColor,
-                idconfiguration:default_config.idconfiguration,
+                idconfiguration: default_config.idconfiguration,
             });
             if (response.status === 201) {
                 // alert("Sản phẩm đã được thêm vào giỏ hàng!");
@@ -142,7 +146,7 @@ const Product = () => {
 
     return (
         <>
-            <Transitionbar/>
+            <Transitionbar />
             <div className="container">
                 <div className="row">
                     <Col sm={12} md={8} lg={8} style={{ alignItems: 'center' }}>
@@ -280,12 +284,12 @@ const Product = () => {
                                             </div>
                                             <h5>Colors</h5>
                                             <div className="d-flex gap-3 mb-3">
-                                                {colors.map((colours,index) =>
-                                                    <Button key= {index}
-                                                            variant= {colours.color}
-                                                            style={{ boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}
-                                                            onClick={() => handleColorSelect(colours.idcolor)}
-                                                    > {colours.color}</Button>) }
+                                                {colors.map((colours, index) =>
+                                                    <Button key={index}
+                                                        variant={colours.color}
+                                                        style={{ boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}
+                                                        onClick={() => handleColorSelect(colours.idcolor)}
+                                                    > {colours.color}</Button>)}
                                             </div>
                                         </Form>
                                     </Col>
@@ -303,7 +307,7 @@ const Product = () => {
                                         <Button variant="outline-danger" className="me-2" style={{ width: '100%' }} onClick={handleAddToCart}>Add to cart</Button>
                                     </Col>
                                     <Col sm={12} md={3} lg={6} className="mb-3">
-                                        <Button as={Link} to={"/cart"} variant="danger" style={{ width: '100%' }}>Buy now</Button>
+                                        <Button as={Link} to={"/pay/cart"} variant="danger" style={{ width: '100%' }}>Buy now</Button>
                                     </Col>
                                 </div>
                                 <h5>Đánh giá sản phẩm</h5>

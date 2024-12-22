@@ -1,14 +1,23 @@
 const Product = require('../models/Product');
-const jwt = require('jsonwebtoken');
 const Description = require('../models/Description');
 const Configuration = require('../models/Configuration')
 const Rating = require("../models/Rating")
 const Color = require("../models/Color")
-const { Op, where } = require("sequelize");
 const Category = require("../models/Category")
+const { Op, where } = require("sequelize");
+const jwt = require('jsonwebtoken');
 
 class ProductController {
     async loadProduct(req, res) {
+        try {
+            const products = await Product.findAll({ where: { status: 1 } });
+            res.status(200).json(products);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching products', error });
+        }
+    }
+
+    async loadAllProduct(req, res) {
         try {
             const products = await Product.findAll();
             res.status(200).json(products);
@@ -24,18 +33,17 @@ class ProductController {
                 where: {
                     idProduct: idProduct
                 }
-            }
-            );
+            });
+
             res.status(200).json(products);
         } catch (error) {
             res.status(500).json({ message: 'Error fetching products', error });
         }
     }
 
-
     async loadDescription(req, res) {
         const { idProduct } = req.params; // Retrieve idProduct from request parameters
-        console.log(req.params)
+        // console.log(req.params)
         try {
             // Find descriptions where idProduct matches the provided id
             const description = await Description.findAll({
@@ -153,7 +161,8 @@ class ProductController {
             // Find descriptions where idProduct matches the provided id
             const product = await Product.findAll({
                 where: {
-                    brand: Brand
+                    brand: Brand,
+                    status: 1
                 }
             });
 
@@ -227,6 +236,7 @@ class ProductController {
             res.status(500).json({ message: 'Error fetching products', error });
         }
     }
+
     async updateProductName(req, res) {
         const { idProduct } = req.params;
         const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
@@ -259,14 +269,15 @@ class ProductController {
             res.status(200).json({ success: true, message: 'User updated successfully', data: updatedData });
 
         } catch (error) {
-            console.error('Error updating product name:', error);
+            // console.error('Error updating product name:', error);
             res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
     }
+
     async deleteProductName(req, res) {
         try {
             const { idProduct } = req.params
-            console.log(idProduct)
+            // console.log(idProduct)
             const product = await Product.findOne({
                 where: {
                     idProduct: idProduct
@@ -276,7 +287,7 @@ class ProductController {
             await product.destroy();
             res.status(200).json({ success: true, message: 'Product name deleted successfully' });
         } catch (error) {
-            console.error('Error deleting product name:', error);
+            // console.error('Error deleting product name:', error);
             res.status(500).json({ success: false, message: 'Error deleting product name', error });
         }
     }
@@ -292,12 +303,55 @@ class ProductController {
                 product_image: Data.product_image
             });
 
-            console.log('Product created successfully:', newProduct);
+            // console.log('Product created successfully:', newProduct);
             return res.status(201).json({
                 product: newProduct,
             });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error create user', error });
+        }
+    }
+
+    async createDescription(req, res) {
+        const Data = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
+        try {
+
+            const newDescription = await Description.create({
+                idProduct: Data.idProduct,
+                description: Data.description,
+            });
+
+            // console.log('Description created successfully:', newDescription);
+            return res.status(201).json({
+                description: newDescription,
+            });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error create user', error });
+        }
+    }
+
+    async updateStatus(req, res) {
+        const { idProduct } = req.params;
+        const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
+
+        try {
+            const product = await Product.findOne({
+                where: { idProduct: idProduct },
+            });
+
+            if (!product) {
+                return res.status(404).json({ message: `No account found with id ${idProduct}` });
+            }
+
+            await product.update({
+                status: updatedData.status
+            });
+
+            res.status(200).json({ success: true, message: 'User updated successfully', data: updatedData });
+
+        } catch (error) {
+            // console.error('Error updating product name:', error);
+            res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
     }
 }

@@ -5,12 +5,17 @@ import {
 } from "react-bootstrap";
 
 import jp from '../../assets/images/jp.jpeg'
-import sfc from '../../assets/images/sfc.jpeg'
+import xps from '../../assets/images/xps.jpeg'
 import asusStore from '../../assets/images/asus-store.jpg'
 import dellStore from '../../assets/images/dell-store.jpg'
 import rogStore from '../../assets/images/rog-store.jpeg'
 import lenovoStore from '../../assets/images/lenovo-store.jpg'
 import Overview from "../../layouts/Overview.jsx";
+
+const carouselItems = [
+    { id: 0, name: "jg", src: jp, caption: "Bill", description: "Famous Brand in our website" },
+    { id: 1, name: "bill", src: xps, caption: "Cipher", description: "Famous Brand in our website" },
+]
 
 const imgItems = [
     { id: 0, name: "jg", src: jp, },
@@ -37,30 +42,22 @@ const Contact = () => {
     return (
         <div className="mt-4">
             <Carousel fade>
-                <Carousel.Item>
-                    <Image
-                        className="d-block w-100"
-                        src={jp}
-                        alt="Second slide"
-                        style={{objectFit: 'cover', height: '500px'}}
-                    />
-                    <Carousel.Caption>
-                        <h3>Cipher</h3>
-                        <p>Famous Brand in our website</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <Image
-                        className="d-block w-100"
-                        src={sfc}
-                        alt="Second slide"
-                        style={{objectFit: 'cover', height: '500px'}}
-                    />
-                    <Carousel.Caption>
-                        <h3>Bill Gortheia</h3>
-                        <p>Famous Brand in our website</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
+                {
+                    carouselItems.map((item, index) => (
+                        <Carousel.Item key={index}>
+                            <Image
+                                className="d-block w-100 object-fit-cover"
+                                src={item.src}
+                                alt={item.name}
+                                style={{height: '500px'}}
+                            />
+                            <Carousel.Caption>
+                                <h3>{item.caption}</h3>
+                                <p>Famous Brand in our website</p>
+                            </Carousel.Caption>
+                        </Carousel.Item>
+                    ))
+                }
             </Carousel>
             <Overview mt={56} me={56}>
                 <div>

@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+
 class AccountController {
     async getAccountInfo(req, res) {
         try {
@@ -18,7 +19,8 @@ class AccountController {
                     email: account.email,
                     firstname: accuser.firstname,
                     lastname: accuser.lastname,
-                    phone: accuser.phone_number
+                    phone: accuser.phone_number,
+                    avatar: accuser.avatar
                 });
             } else {
                 res.status(404).json({ error: 'User not found' });

@@ -1,22 +1,18 @@
-import React, {Component} from "react";
-import {Button, Carousel, Col, Container, Dropdown, Form, Image, Row} from "react-bootstrap";
-import {
-    faApple, faMeta, faGoogle, faTwitter, faXTwitter, faGithub
-} from '@fortawesome/free-brands-svg-icons';
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
+import React, { Component } from "react";
+import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
 
 import jp from "../resources/images/jp.jpeg";
 import {Link} from "react-router-dom";
 
-const sclItems = [
-    // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
-    { id: 1, name: "Apple", icon: faApple, color: "dark" },
-    { id: 2, name: "Google", icon: faGoogle, color: "success" },
-    { id: 3, name: "Meta", icon: faMeta, color: "primary" },
-    // { id: 4, name: "Twitter", icon: faTwitter },
-]
+export const Signup = () => {
+    return (
+        <>
 
-class Signup extends Component {
+        </>
+    )
+}
+
+class Signup0 extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -78,9 +74,9 @@ class Signup extends Component {
                                     <hr/>
                                     <div className="text-center" style={{marginBottom: 16}}>or sign up with</div>
                                     <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
-                                        {sclItems.map(socialItem => (
-                                            <SocialFormButton key={socialItem.id} socialItems={socialItem}/>
-                                        ))}
+                                        {/*{sclItems.map(socialItem => (*/}
+                                        {/*    <SocialFormButton key={socialItem.id} socialItems={socialItem}/>*/}
+                                        {/*))}*/}
                                     </div>
                                     <hr/>
                                     <div className="text-center" style={{marginBottom: 16}}>
@@ -104,5 +100,3 @@ class Signup extends Component {
         )
     }
 }
-
-export default Signup

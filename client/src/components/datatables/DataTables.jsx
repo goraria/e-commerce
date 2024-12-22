@@ -108,7 +108,7 @@ export const DataTables = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
@@ -231,105 +231,8 @@ export const DataTables = () => {
             />
         );
 
-        return <Pagination>{paginationItems}</Pagination>;
+        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
-
-
-    const renderPagination0 = () => {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-        if (totalPages <= 1) return null;
-
-        const paginationItems = [];
-        const addPageButton = (pageNumber) => (
-            <Pagination.Item
-                key={pageNumber}
-                active={pageNumber === currentPage}
-                onClick={() => setCurrentPage(pageNumber)}
-            >
-                {pageNumber}
-            </Pagination.Item>
-        );
-
-        // Thêm nút 'First' và 'Previous' với Font Awesome icons
-        paginationItems.push(
-            <Pagination.First
-                key="first"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}>
-                <i className='bx bx-chevrons-left' ></i> {/* << */}
-            </Pagination.First>,
-
-            <Pagination.Prev
-                key="prev"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}>
-                <i className='bx bx-chevron-left'></i> {/* < */}
-            </Pagination.Prev>
-        );
-
-        // Nếu đang ở các trang đầu (1-3), hiển thị 5 trang đầu và trang cuối cùng
-        if (currentPage <= 3) {
-            for (let i = 1; i <= Math.min(5, totalPages); i++) {
-                paginationItems.push(addPageButton(i));
-            }
-            if (totalPages > 5) {
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                    <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-                </Pagination.Ellipsis>);
-                paginationItems.push(addPageButton(totalPages));
-            }
-        }
-        // Nếu đang ở các trang cuối (từ totalPages - 2 trở lên), hiển thị 5 trang cuối và trang đầu tiên
-        else if (currentPage >= totalPages - 2) {
-            paginationItems.push(addPageButton(1));
-            paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-            for (let i = totalPages - 4; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        }
-        // Nếu đang ở giữa (trang 4 đến totalPages - 3), hiển thị trang đầu, ... trang hiện tại, và dấu ... cuối
-        else {
-            paginationItems.push(addPageButton(1)); // Trang đầu tiên
-            paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-
-            const startPage = currentPage - 1; // Trang trước
-            const endPage = currentPage + 1;   // Trang sau
-
-            for (let i = startPage; i <= endPage; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-
-            paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" disabled>
-                <i className='bx bx-dots-horizontal-rounded' ></i> {/* ... */}
-            </Pagination.Ellipsis>);
-            paginationItems.push(addPageButton(totalPages)); // Trang cuối cùng
-        }
-
-        // Thêm nút 'Next' và 'Last' với Font Awesome icons
-        paginationItems.push(
-            <Pagination.Next
-                key="next"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}>
-                <i className='bx bx-chevron-right' ></i> {/* > */}
-            </Pagination.Next>,
-
-            <Pagination.Last
-                key="last"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}>
-                <i className='bx bx-chevrons-right' ></i> {/* >> */}
-            </Pagination.Last>
-        );
-
-        return <Pagination style={{margin: 0}}>{paginationItems}</Pagination>;
-    };
-
 
     const renderStatusBadge = (status) => {
         switch (status) {
@@ -392,9 +295,12 @@ export const DataTables = () => {
                                             onChange={handleItemsPerPageChange}
                                             value={itemsPerPage}
                                         >
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
+                                            <option value="10">7</option>
+                                            <option value="25">10</option>
+                                            <option value="50">25</option>
                                             <option value="50">50</option>
+                                            <option value="50">70</option>
+                                            <option value="50">100</option>
                                         </select>
                                         <span>entries</span>
                                     </label>
@@ -408,65 +314,72 @@ export const DataTables = () => {
                                     placeholder="Search..."
                                     value={searchTerm}
                                     onChange={handleSearch}
-                                    style={{ width: "295px" }}
+                                    style={{ width: 300 }}
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
-                <Table striped bordered hover responsive className="datatable">
-                    <thead>
-                        <tr>
-                            <th>
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Date</th>
-                            <th>Salary</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
+                <Table hover responsive className="table border-top dataTable no-footer dtr-column">
+                    <thead style={{height: 64}}>
+                    <tr>
+                        <th
+                            className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                            style={{verticalAlign: "middle", fontSize: 16, width: 18}}
+                        >
+                            <Form.Check
+                                type="checkbox"
+                                onChange={handleSelectAll}
+                                checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
+                            />
+                        </th>
+                        {
+                            ["Name", "Email", "Date", "Salary", "Status"].map((item, index) => (
+                                <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
+                                    {item}
+                                </th>
+                            ))
+                        }
+                        <th className="sorting_disabled"
+                            style={{verticalAlign: "middle", fontSize: 13, width: 164}}>Actions
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <Form.Check
-                                        type="checkbox"
-                                        checked={selectedEntries.includes(item.id)}
-                                        onChange={() => handleSelectItem(item.id)}
-                                    />
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div className="avatar-circle me-2">
-                                            {getInitials(item.name)}
-                                        </div>
-                                        <div>
-                                            {item.name}
-                                        </div>
+                    {currentItems.map((item, index) => (
+                        <tr key={index}>
+                            <td>
+                                <Form.Check
+                                    type="checkbox"
+                                    checked={selectedEntries.includes(item.id)}
+                                    onChange={() => handleSelectItem(item.id)}
+                                />
+                            </td>
+                            <td>
+                                <div className="d-flex align-items-center">
+                                    <div className="avatar-circle me-2">
+                                        {getInitials(item.name)}
                                     </div>
-                                </td>
-                                <td>{item.email}</td>
-                                <td>{item.date}</td>
-                                <td>{item.salary}</td>
-                                <td>{renderStatusBadge(item.status)}</td>
-                                <td>
-                                    <Button variant="link"><i className='bx bx-edit' ></i></Button>
-                                    <Button variant="link"><i className='bx bx-trash'></i></Button>
-                                </td>
-                            </tr>
-                        ))}
+                                    <div>
+                                        {item.name}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{item.email}</td>
+                            <td>{item.date}</td>
+                            <td>{item.salary}</td>
+                            <td>{renderStatusBadge(item.status)}</td>
+                            <td>
+                                <Button variant="link"><i className='bx bx-edit'></i></Button>
+                                <Button variant="link"><i className='bx bx-trash'></i></Button>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </Table>
                 <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                     <div className="row">
-                        <div className="col-sm-12 col-md-6" style={{display: "flex"}}>
+                        <div className="d-flex col-sm-12 col-md-6">
                             {/*<div className="dataTables_info" style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>*/}
                             {/*    <div className="text-center mt-2">*/}
                             {/*        Showing {currentItems.length} of {filteredData.length} entries*/}
@@ -505,230 +418,6 @@ export const DataTables = () => {
 
                         <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
                             {renderPagination()}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export const DataTabless = () => {
-    const [data, setData] = useState([
-        { name: "Glyn Giacoppo", email: "ggiacoppo2r@apache.org", date: "04/15/2021", salary: "$24973.48", status: "Professional" },
-        { name: "Evangelina Carnock", email: "ecarnock2q@washington.edu", date: "01/26/2021", salary: "$23704.82", status: "Resigned" },
-        { name: "Glyn Giacoppo", email: "ggiacoppo2r@apache.org", date: "04/15/2021", salary: "$24973.48", status: "Professional" },
-        { name: "Evangelina Carnock", email: "ecarnock2q@washington.edu", date: "01/26/2021", salary: "$23704.82", status: "Resigned" },
-        { name: "Olivette Gudgin", email: "ogudgin2p@gizmodo.com", date: "04/09/2021", salary: "$15211.60", status: "Professional" },
-        { name: "Reina Peckett", email: "rpeckett2o@timesonline.co.uk", date: "05/20/2021", salary: "$16619.40", status: "Resigned" },
-        { name: "Alaric Beslier", email: "abeslier2n@zimbio.com", date: "04/16/2021", salary: "$19366.53", status: "Rejected" },
-        { name: "Edwina Ebsworth", email: "eebsworth2m@sbwire.com", date: "09/27/2021", salary: "$19586.23", status: "Current" },
-        { name: "Ronica Hasted", email: "rhasted2l@hexun.com", date: "07/04/2021", salary: "$24866.66", status: "Resigned" },
-        { name: "Glyn Giacoppo", email: "ggiacoppo2r@apache.org", date: "04/15/2021", salary: "$24973.48", status: "Professional" },
-        { name: "Evangelina Carnock", email: "ecarnock2q@washington.edu", date: "01/26/2021", salary: "$23704.82", status: "Resigned" },
-        { name: "Olivette Gudgin", email: "ogudgin2p@gizmodo.com", date: "04/09/2021", salary: "$15211.60", status: "Professional" },
-        { name: "Reina Peckett", email: "rpeckett2o@timesonline.co.uk", date: "05/20/2021", salary: "$16619.40", status: "Resigned" },
-        { name: "Alaric Beslier", email: "abeslier2n@zimbio.com", date: "04/16/2021", salary: "$19366.53", status: "Resigned" },
-        { name: "Edwina Ebsworth", email: "eebsworth2m@sbwire.com", date: "09/27/2021", salary: "$19586.23", status: "Current" },
-        { name: "Ronica Hasted", email: "rhasted2l@hexun.com", date: "07/04/2021", salary: "$24866.66", status: "Rejected" },
-        { name: "Glyn Giacoppo", email: "ggiacoppo2r@apache.org", date: "04/15/2021", salary: "$24973.48", status: "Professional" },
-        { name: "Evangelina Carnock", email: "ecarnock2q@washington.edu", date: "01/26/2021", salary: "$23704.82", status: "Resigned" },
-        { name: "Olivette Gudgin", email: "ogudgin2p@gizmodo.com", date: "04/09/2021", salary: "$15211.60", status: "Professional" },
-        { name: "Reina Peckett", email: "rpeckett2o@timesonline.co.uk", date: "05/20/2021", salary: "$16619.40", status: "Rejected" },
-        { name: "Alaric Beslier", email: "abeslier2n@zimbio.com", date: "04/16/2021", salary: "$19366.53", status: "Resigned" },
-        { name: "Edwina Ebsworth", email: "eebsworth2m@sbwire.com", date: "09/27/2021", salary: "$19586.23", status: "Current" },
-        { name: "Ronica Hasted", email: "rhasted2l@hexun.com", date: "07/04/2021", salary: "$24866.66", status: "Resigned" },
-    ]);
-
-    const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-        setCurrentPage(1);
-    };
-
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.email);
-            setSelectedEntries(allVisibleItems);
-        } else {
-            setSelectedEntries([]);
-        }
-    };
-
-    const handleSelectItem = (email) => {
-        if (selectedEntries.includes(email)) {
-            setSelectedEntries(selectedEntries.filter(item => item !== email));
-        } else {
-            setSelectedEntries([...selectedEntries, email]);
-        }
-    };
-
-    const filteredData = data.filter(item =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-    const getInitials = (name) => {
-        const initials = name.split(" ").map(n => n[0]).join("");
-        return initials;
-    };
-
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case "Professional":
-                return <Badge bg="label-success">Professional</Badge>;
-            case "Resigned":
-                return <Badge bg="label-warning">Resigned</Badge>;
-            case "Current":
-                return <Badge bg="label-primary">Current</Badge>;
-            case "Rejected":
-                return <Badge bg="label-danger">Rejected</Badge>;
-            default:
-                return <Badge bg="label-secondary">{status}</Badge>;
-        }
-    };
-
-    const handleItemsPerPageChange = (e) => {
-        setItemsPerPage(Number(e.target.value));
-        setCurrentPage(1);
-    };
-
-    return (
-        <div className="card">
-            <div className="card-datatable table-responsive">
-                <div className="dataTables_wrapper dt-bootstrap5 no-footer">
-                    <div className="card-header flex-column flex-md-row pb-0">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <div className="head-label text-center">
-                                <h5 className="card-title mb-0">DataTable</h5>
-                            </div>
-                            <div className="dt-action-buttons text-end pt-6 pt-md-0">
-                                <div className="dt-buttons btn-group flex-wrap">
-                                    <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }}>
-                                        <i className='bx bx-plus me-2' ></i>
-                                        Add New Record
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row mb-3">
-                            <div className="col-sm-12 col-md-6">
-                                <div className="dataTables_length">
-                                    <label style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
-                                        <span>Show</span>
-                                        <select
-                                            name="DataTables_Table_0_length"
-                                            aria-controls="DataTables_Table_0"
-                                            className="form-select ms-3 me-3"
-                                            style={{ width: "80px" }}
-                                            onChange={handleItemsPerPageChange}
-                                            value={itemsPerPage}
-                                        >
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                        </select>
-                                        <span>entries</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0">
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Search..."
-                                    value={searchTerm}
-                                    onChange={handleSearch}
-                                    style={{ width: "290px" }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <Table striped bordered hover responsive className="datatable">
-                    <thead>
-                        <tr>
-                            <th>
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Date</th>
-                            <th>Salary</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <Form.Check
-                                        type="checkbox"
-                                        checked={selectedEntries.includes(item.email)}
-                                        onChange={() => handleSelectItem(item.email)}
-                                    />
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div className="avatar-circle me-2">
-                                            {getInitials(item.name)}
-                                        </div>
-                                        <div>
-                                            {item.name}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{item.email}</td>
-                                <td>{item.date}</td>
-                                <td>{item.salary}</td>
-                                <td>{renderStatusBadge(item.status)}</td>
-                                <td>
-                                    <Button variant="link"><i className='bx bx-edit' ></i></Button>
-                                    <Button variant="link"><i className='bx bx-trash'></i></Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-                <div className="card-footer flex-column flex-md-row pb-0 pb-4">
-                    <div className="row">
-                        <div className="col-sm-12 col-md-6">
-                            <div className="dataTables_info" style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
-                                <div className="text-center mt-2">
-                                    {selectedEntries.length > 0
-                                        ? `Selected ${selectedEntries.length} entries`
-                                        : `Showing ${currentItems.length} of ${filteredData.length} entries`}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6">
-                            <div className="dataTables_paginate paging_simple_numbers" style={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                                <Pagination className="d-flex justify-content-center" style={{ margin: 0 }}>
-                                    {Array.from({ length: totalPages }, (_, index) => (
-                                        <Pagination.Item
-                                            key={index}
-                                            active={index + 1 === currentPage}
-                                            onClick={() => setCurrentPage(index + 1)}
-                                        >
-                                            {index + 1}
-                                        </Pagination.Item>
-                                    ))}
-                                </Pagination>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -45,16 +45,16 @@ class CategoryController {
     //     }
     // }
 
-    // async delete(req, res) {
-    //     try {
-    //         const { id } = req.params;
-    //         const category = await Category.findByPk(id);
-    //         await category.destroy();
-    //         return res.json(category);
-    //     } catch (error) {
-    //         return res.status(500).json({ error: error.message });
-    //     }
-    // }
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+            const category = await Category.findByPk(id);
+            await category.destroy();
+            return res.json(category);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
     async getCategory(req, res) {
         try {

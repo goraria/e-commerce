@@ -154,63 +154,89 @@ const Cart = () => {
         <>
             <Transitionbar />
             <div className="container">
-                <Row>
+                <div className="row">
                     {/* Left Section: Product List */}
-                    <Col sm={12} md={6} lg={8}>
-                        <div
-                            className="card sticky-summary mb-4"
-                            style={{
-                                position: "sticky",
-                                padding: '15px 12px 15px 12px',
-                                top: 80,
-                                zIndex: 1,
-                                border: "none",
-                            }}>
-                            <Container style={{ display: "flex", padding: '0 8px' }}>
-                                <h5 className="m-0">Giỏ hàng</h5>
-                                <Button as={Link} to={'/search'} variant="primary" style={{ marginLeft: 'auto' }}>
-                                    <i className='bx bx-plus me-2'></i>
-                                    <span>Thêm sản phẩm</span>
-                                </Button>
-                            </Container>
+                    <div className="col col-sm-12 col-md-6 col-lg-8">
+                        <div className="row">
+                            <div className="col-12 mb-4">
+                                <div
+                                    className="card px-3 py-3 light bg-body-tertiary align-items-center bg-navbar-theme">
+                                    <div className="container d-flex ps-2 p-0 align-items-center">
+                                        <h5 className="m-0">Cart</h5>
+                                        <Button as={Link} to={'/search'} variant="primary" style={{marginLeft: 'auto'}}>
+                                            <i className='bx bx-plus me-2'></i>
+                                            <span>Add Product</span>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         {cartItems.map((item) => (
                             <div className="card p-3 mb-4" key={item.idcart_item}>
-                                <CardItem Item={item} onCheckboxChange={handleCheckboxChange} onRemoveItem={removeCartItem} />
+                                <CardItem Item={item} onCheckboxChange={handleCheckboxChange}
+                                          onRemoveItem={removeCartItem}/>
                             </div>
                         ))}
-                    </Col>
+                    </div>
 
                     {/* Right Section: Order Summary */}
-                    <Col sm={12} md={6} lg={4} className="mb-4">
-                        <div className="card p-3 sticky-summary" style={{ position: 'sticky', top: 120 }}>
-                            <h5>Khuyến mãi</h5>
-                            <Form.Select aria-label="Default select example" style={{ padding: 10, margin: '1px 0 10px 0' }}>
-                                <option> Chọn hoặc nhập khuyến mãi</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </Form.Select>
+                    <div className="col col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
+                            <div className="card p-3">
+                                <div className="rounded p-3">
+                                    <h5>Offer</h5>
+                                    <div className="row g-4 mb-4">
+                                        <div className="col-8 col-xxl-8 col-xl-12">
+                                            <Form.Select
+                                                className="mb-4"
+                                                aria-label="Default select example">
+                                                <option>Choose voucher</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </Form.Select>
+                                            <input type="text" className="form-control" placeholder="Enter Promo Code"
+                                                   aria-label="Enter Promo Code"/>
+                                        </div>
+                                        <div className="col-4 col-xxl-4 col-xl-12">
+                                            <div className="d-grid">
+                                                <Button variant="outline-primary" type="button"
+                                                        className="btn btn-label-primary">Apply</Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5>Price Details</h5>
+                                    <dl className="row mb-0 text-heading">
+                                        <dt className="col-6 fw-normal">Bag Total</dt>
+                                        <dd className="col-6 text-end">${pre_total}</dd>
 
-                            <h5>Tóm tắt đơn hàng</h5>
-                            <div className="d-flex justify-content-between">
-                                <span>Tạm tính</span>
-                                <span>{pre_total}$</span>
+                                        <dt className="col-6 fw-normal">Coupon Discount</dt>
+                                        <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+
+                                        <dt className="col-6 fw-normal">Order Total</dt>
+                                        <dd className="col-6 text-end">- ${pre_total * discount}</dd>
+
+                                        <dt className="col-6 fw-normal">Delivery Charges</dt>
+                                        <dd className="col-6 text-end">
+                                            <s className="text-muted">$5.00</s>
+                                            <span className="badge bg-label-success ms-1">Free</span>
+                                        </dd>
+                                    </dl>
+                                    <hr className="my-4"/>
+                                    <dl className="row mb-0">
+                                        <dt className="col-6 text-heading">Total</dt>
+                                        <dd className="col-6 fw-medium text-end text-heading mb-0">${total}</dd>
+                                    </dl>
+                                </div>
+                                <div className="rounded p-3">
+                                    <Button className="w-100" variant="danger" onClick={handleOrderClick}>
+                                        Order
+                                    </Button>
+                                </div>
                             </div>
-                            <div className="d-flex justify-content-between">
-                                <span>Được giảm</span>
-                                <span>{pre_total * discount}$</span>
-                            </div>
-                            <div className="d-flex justify-content-between mt-2">
-                                <span>Tổng cộng</span>
-                                <span style={{ fontWeight: 'bold', fontSize: '1.5em' }}>{total}$</span>
-                            </div>
-                            <Button className="w-100 mt-3" variant="danger" size="lg" onClick={handleOrderClick}>
-                                Đặt hàng
-                            </Button>
                         </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
         </>
     );

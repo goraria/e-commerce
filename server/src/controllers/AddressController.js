@@ -35,7 +35,7 @@ class AddressController {
     async createAddress(req, res) {
         const idaccount = req.user.id;
         const { type, tower, street, district, city, state, country } = req.body;
-        console.log(idaccount, req.body);
+        // console.log(idaccount, req.body);
         try {
             const newAddress = await Address.create({
                 idaccount: req.user.id,

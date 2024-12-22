@@ -7,8 +7,13 @@ import Overside from "./Overside.jsx";
 import axios from "axios";
 import {Button, Form, Nav, Navbar} from "react-bootstrap";
 import SaveChange from "../components/modal/notify/SaveChange.jsx";
+import getGreetingMessage from "../utils/greetingHandler.js";
 
-const Outbar = () => {
+const Outbar = ({ children }) => {
+    useEffect(() => {
+        Main();
+    },[])
+
     const [showModalHeader, setShowModalHeader] = useState(false);
     const [submit, setSubmit] = useState({search: ""});
 
@@ -101,34 +106,7 @@ const Outbar = () => {
                 </div>
 
                 {/*<Overside/>*/}
-
-                <div className="navbar-nav">
-                    <ul className="navbar-nav flex-row align-items-center ms-auto">
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <Link
-                                className="navbar-brand app-brand-text demo menu-text fw-bold text-capitalize"
-                                to={"/"}
-                            >
-                                <span>Cipher</span>
-                            </Link>
-                        </li>
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <Link className="nav-link" to="/search">
-                                <h5 className="m-0">Product</h5>
-                            </Link>
-                        </li>
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <Link className="nav-link" to="/contact">
-                                <h5 className="m-0">Contact</h5>
-                            </Link>
-                        </li>
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <Link className="nav-link" to="/about">
-                                <h5 className="m-0">About</h5>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+                {children}
 
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
@@ -141,6 +119,9 @@ const Outbar = () => {
                         {/*        </a>*/}
                         {/*    </div>*/}
                         {/*</div>*/}
+
+                        {/*{getGreetingMessage('from Bill')}*/}
+
                         <Form className="d-flex" onSubmit={handleSearch}>
                             <input
                                 className="form-control search-input container-xxl border-0 tt-input me-2"
@@ -422,7 +403,7 @@ const Outbar = () => {
                                 </li>
                                 <li>
                                     <Link
-                                        to={"/user/faq"}
+                                        to={"/faq"}
                                         aria-label="faq"
                                         className="dropdown-item"
                                     >

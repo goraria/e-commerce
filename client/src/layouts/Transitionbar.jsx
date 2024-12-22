@@ -1,14 +1,13 @@
 import { Component } from "react";
 
 import {
-    Container, Button, Form, ButtonGroup, DropdownButton, Dropdown, Row, Col, Card, Image, Stack, Carousel, Nav, Navbar
+    Container, DropdownButton, Dropdown, Stack, Navbar
 } from 'react-bootstrap';
 
 const clsifications = [
     { category: "Laptop", box: "bx-laptop", items: ['#a', '#b', '#c',] },
     { category: "Mouse", box: "bx-mouse-alt", items: ['#action1', '#action1', '#action1',] },
     { category: "Keyboard", box: "bxs-keyboard", items: ['#action1', '#action1', '#action1',] },
-
 ]
 
 const Transitionbar = () => {

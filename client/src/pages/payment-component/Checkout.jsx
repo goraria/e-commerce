@@ -227,7 +227,7 @@ const CheckOut = () => {
                                             <p>Số tiền: <strong>${totalPrice}</strong></p>
                                         </Col>
                                         <Col>
-                                            <img src="https://via.placeholder.com/150" alt="QR Code"/>
+                                            <img src="https://via.placeholder.com/150" alt="QR Code" />
                                             <p className="text-center">Quét mã QR bằng ứng dụng ngân hàng</p>
                                         </Col>
                                     </Row>
@@ -260,7 +260,7 @@ const CheckOut = () => {
                     <Col sm={12} md={6} lg={4} className="mb-4">
                         {/* First Card: Order Summary */}
                         <div className="card sticky-summary mb-4 shadow-none"
-                             style={{position: 'sticky', top: 120, backgroundColor: 'transparent', boxShadow: 'none'}}>
+                            style={{ position: 'sticky', top: 120, backgroundColor: 'transparent', boxShadow: 'none' }}>
                             <div className="card p-3 sticky-summary mb-4">
                                 <h5>Tóm tắt đơn hàng</h5>
                                 <div className="d-flex justify-content-between">
@@ -273,7 +273,7 @@ const CheckOut = () => {
                                 </div>
                                 <div className="d-flex justify-content-between mt-2">
                                     <span>Tổng cộng</span>
-                                    <span style={{fontWeight: 'bold', fontSize: '1.5em'}}>${totalPrice} </span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '1.5em' }}>${totalPrice} </span>
                                 </div>
                                 {/* <div className="d-flex justify-content-between mt-2">
                                     <span>Đã thanh toán</span>

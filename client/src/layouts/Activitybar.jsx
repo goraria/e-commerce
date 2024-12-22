@@ -5,6 +5,9 @@ import SaveChange from "../components/modal/notify/SaveChange.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
+import {Button, Form} from "react-bootstrap";
+import getGreetingMessage from "../utils/greetingHandler.js";
+import Overside from "./Overside.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -30,64 +33,60 @@ const baskets = [
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
 
-const Activitybar = () => {
+const Activitybar = ({ children }) => {
+    useEffect(() => {
+        Main();
+
+        useLoad();
+    },[])
+
+    const [account, setAccount] = useState({});
+
     const [showModalHeader, setShowModalHeader] = useState(false);
     const [submit, setSubmit] = useState({ search: "" });
 
     const navigate = useNavigate();
 
-    const [auth, setAuth] = useState({
-        isAuthenticated: false,
-        role: null,
-    });
-    const [loading, setLoading] = useState(true); // Thêm trạng thái loading
     const token = localStorage.getItem("token");
 
-    const authenticationCheck = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setLoading(false);
-            return;
-        }
+    const useLoad = async () => {
+        if (token) {
+            try {
+                // const decoded = jwtDecode(token);
 
-        try {
-            const response = await axios.get(
-                "http://localhost:5172/authentication/check",
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            setAuth({
-                isAuthenticated: true,
-                role: response.data.role,
-            });
-        } catch (error) {
-            setAuth({
-                isAuthenticated: false,
-                role: null,
-            });
-            localStorage.removeItem("token");
-            navigate("/auth/error");
-        } finally {
-            setLoading(false); // Dừng loading sau khi fetch
+                const response = await axios.get('http://localhost:5172/account/get-info', {
+                    headers: {Authorization: `Bearer ${token}`}
+                });
+
+                setAccount(response.data);
+                // console.log(response.data);
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        } else {
+            // navigate("/auth/login");
         }
-    };
+    }
 
     const handleLogout = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            await axios.post(
-                "http://localhost:5172/authentication/logout",
-                {},
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            localStorage.removeItem("token"); // Xóa JWT
-            setShowModalHeader(false);
+        if (token) {
+            try {
+                await axios.post(
+                    "http://localhost:5172/authentication/logout",
+                    {},
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                localStorage.removeItem("token"); // Xóa JWT
+                setShowModalHeader(false);
+                navigate("/auth/login");
+            } catch (error) {
+                // console.error("Logout failed", error);
+            }
+        } else {
             navigate("/auth/login");
-        } catch (error) {
-            console.error("Logout failed", error);
         }
     };
 
@@ -98,9 +97,9 @@ const Activitybar = () => {
             setTimeout(() => {
                 window.location.reload();
             }, 50);
-            console.log("tìm kiếm thành công");
+            // console.log("tìm kiếm thành công");
         } catch (error) {
-            console.log("tìm kiếm ko thành công", error);
+            // console.log("tìm kiếm ko thành công", error);
         }
     };
 
@@ -149,13 +148,32 @@ const Activitybar = () => {
                 {/*        </li>*/}
                 {/*    </ul>*/}
                 {/*</div>*/}
+
                 <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+                    {children}
+
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
-                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                            <a className="nav-link search-toggler" href="#">
-                                <i className="bx bx-search bx-sm"></i>
-                            </a>
-                        </li>
+
+                        <Form className="d-flex" onSubmit={handleSearch}>
+                            <input
+                                className="form-control search-input container-xxl border-0 tt-input me-2"
+                                placeholder="Search..."
+                                aria-label="Search..."
+                                autoComplete="off"
+                                spellCheck="false"
+                                type="search"
+                                dir="auto"
+                                name="search"
+                                value={submit.search}
+                                onChange={handleChange}
+                            />
+                            <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                                <Button as={Link} to={'/search'} className="nav-link search-toggler" variant="link">
+                                    <i className="bx bx-search bx-sm"></i>
+                                </Button>
+                            </li>
+                        </Form>
                         <li className="nav-item dropdown-style-switcher dropdown me-3 me-xl-2">
                             <a
                                 className="nav-link dropdown-toggle hide-arrow"
@@ -234,109 +252,24 @@ const Activitybar = () => {
                         </li>
                         <li className="nav-item dropdown-shortcuts navbar-dropdown dropdown me-3 me-xl-2">
                             <a className="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown"
-                                data-bs-auto-close="outside"
-                                aria-expanded="false">
-                                <i className="bx bx-grid-alt bx-sm"></i>
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-end p-0" style={{ width: 352 }}>
-                                <div className="dropdown-menu-header border-bottom">
-                                    <div className="dropdown-header d-flex align-items-center py-3">
-                                        <h6 className="mb-0 me-auto">Shortcuts</h6>
-                                        <a href="#" className="dropdown-shortcuts-add py-2" data-bs-toggle="tooltip"
-                                            data-bs-placement="top"
-                                            aria-label="Add shortcuts" data-bs-original-title="Add shortcuts">
-                                            <i className="bx bx-plus-circle text-heading"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="dropdown-shortcuts-list scrollable-container ps">
-                                    <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-calendar bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> Calendar </a>
-                                            <small>Appointments</small>
-                                        </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-food-menu bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> Invoice App </a>
-                                            <small>Manage Accounts</small>
-                                        </div>
-                                    </div>
-                                    <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-user bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> User App </a>
-                                            <small>Manage Users</small>
-                                        </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-check-shield bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> Role Management </a>
-                                            <small>Permission</small>
-                                        </div>
-                                    </div>
-                                    <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-pie-chart-alt-2 bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> Dashboard </a>
-                                            <small>User Dashboard</small>
-                                        </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-cog bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> Setting </a>
-                                            <small>Account Settings</small>
-                                        </div>
-                                    </div>
-                                    <div className="row row-bordered overflow-visible g-0">
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-help-circle bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> FAQs </a>
-                                            <small>FAQs &amp; Articles</small>
-                                        </div>
-                                        <div className="dropdown-shortcuts-item col">
-                                            <span className="dropdown-shortcuts-icon rounded-circle mb-3">
-                                                <i className="bx bx-window-open bx-26px text-heading"></i>
-                                            </span>
-                                            <a href="#" className="stretched-link"> Modals </a>
-                                            <small>Useful Popups</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="nav-item dropdown-shortcuts navbar-dropdown dropdown me-3 me-xl-2">
-                            <a className="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown"
-                                data-bs-auto-close="outside"
-                                aria-expanded="false">
+                               data-bs-auto-close="outside"
+                               aria-expanded="false">
                                 <span className="position-relative">
                                     <i className="bx bx-bell bx-sm"></i>
                                     <span
                                         className="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
                                 </span>
                             </a>
-                            <ul className="dropdown-menu dropdown-menu-end p-0" style={{ width: 352 }}>
+                            <ul className="dropdown-menu dropdown-menu-end p-0" style={{width: 352}}>
                                 <li className="dropdown-menu-header border-bottom">
                                     <div className="dropdown-header d-flex align-items-center py-3">
                                         <h6 className="mb-0 me-auto">Notification</h6>
                                         <div className="d-flex align-items-center h6 mb-0">
                                             <span className="badge bg-label-primary me-2">8 New</span>
                                             <a href="#" className="dropdown-notifications-all p-2"
-                                                data-bs-toggle="tooltip"
-                                                data-bs-placement="top" aria-label="Mark all as read"
-                                                data-bs-original-title="Mark all as read">
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="top" aria-label="Mark all as read"
+                                               data-bs-original-title="Mark all as read">
                                                 <i className="bx bx-envelope-open text-heading"></i>
                                             </a>
                                         </div>
@@ -346,12 +279,12 @@ const Activitybar = () => {
                                     <ul className="list-group list-group-flush">
                                         {
                                             notifies.map((noty, index) => (
-                                                <Notification key={index} notify={noty} />
+                                                <Notification key={index} notify={noty}/>
                                             ))
                                         }
                                         {
                                             messages.map((mess, index) => (
-                                                <Message key={index} message={mess} />
+                                                <Message key={index} message={mess}/>
                                             ))
                                         }
                                     </ul>
@@ -367,24 +300,24 @@ const Activitybar = () => {
                         </li>
                         <li className="nav-item dropdown-shortcuts navbar-dropdown dropdown me-3 me-xl-2">
                             <a className="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown"
-                                data-bs-auto-close="outside"
-                                aria-expanded="false">
+                               data-bs-auto-close="outside"
+                               aria-expanded="false">
                                 <span className="position-relative">
                                     <i className="bx bx-cart bx-sm"></i>
                                     <span
                                         className="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
                                 </span>
                             </a>
-                            <ul className="dropdown-menu dropdown-menu-end p-0" style={{ width: 352 }}>
+                            <ul className="dropdown-menu dropdown-menu-end p-0" style={{width: 352}}>
                                 <li className="dropdown-menu-header border-bottom">
                                     <div className="dropdown-header d-flex align-items-center py-3">
                                         <h6 className="mb-0 me-auto">Cart</h6>
                                         <div className="d-flex align-items-center h6 mb-0">
                                             <span className="badge bg-label-primary me-2">8 Items</span>
                                             <a href="#" className="dropdown-notifications-all p-2"
-                                                data-bs-toggle="tooltip"
-                                                data-bs-placement="top" aria-label="Find product"
-                                                data-bs-original-title="Find product">
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="top" aria-label="Find product"
+                                               data-bs-original-title="Find product">
                                                 <i className="bx bx-cart-download bx-sm text-heading"></i>
                                             </a>
                                         </div>
@@ -394,19 +327,24 @@ const Activitybar = () => {
                                     <ul className="list-group list-group-flush">
                                         {
                                             baskets.map((bask, index) => (
-                                                <Basket key={index} bask={bask} />
+                                                <Basket key={index} bask={bask}/>
                                             ))
                                         }
                                     </ul>
                                 </li>
                                 <li className="border-top">
                                     <div className="d-grid p-4">
-                                        <Link className="btn btn-primary d-flex" to={"/user/cart"}>
+                                        <Link className="btn btn-primary d-flex" to={"/pay/cart"}>
                                             <small className="align-middle"> View full cart </small>
                                         </Link>
                                     </div>
                                 </li>
                             </ul>
+                        </li>
+                        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                            <Link className="nav-link search-toggler" to="/">
+                                <i className="bx bx-home bx-sm"></i>
+                            </Link>
                         </li>
                         <li className="nav-item navbar-dropdown dropdown-user dropdown me-3 me-xl-2">
                             <a
@@ -417,7 +355,7 @@ const Activitybar = () => {
                             >
                                 <div className="avatar avatar-online">
                                     <img
-                                        src="../assets/img/avatars/1.png"
+                                        src={account.avatar}
                                         className="w-px-40 h-auto rounded-circle"
                                         alt="avatar-image"
                                         aria-label="Avatar Image"
@@ -435,7 +373,7 @@ const Activitybar = () => {
                                             <div className="flex-shrink-0 me-3">
                                                 <div className="avatar avatar-online">
                                                     <img
-                                                        src="../assets/img/avatars/1.png"
+                                                        src={account.avatar}
                                                         className="w-px-40 h-auto rounded-circle"
                                                         alt="avatar-image"
                                                         aria-label="Avatar Image"
@@ -443,7 +381,7 @@ const Activitybar = () => {
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">Braunschweig</span>
+                                                <span className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">User</small>
                                             </div>
                                         </div>
@@ -462,32 +400,32 @@ const Activitybar = () => {
                                             className="bx bx-user bx-sm me-2"></i>Profile</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        to={"/user/address"}
-                                        aria-label="address"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bx-location-plus bx-sm me-2"></i>Address</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={"/user/bill"}
-                                        aria-label="bill"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bx-receipt bx-sm me-2"></i>Bill</span>
-                                    </Link>
-                                </li>
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={"/user/address"}*/}
+                                {/*        aria-label="address"*/}
+                                {/*        className="dropdown-item"*/}
+                                {/*    >*/}
+                                {/*        <span className="align-middle"><i*/}
+                                {/*            className="bx bx-location-plus bx-sm me-2"></i>Address</span>*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={"/user/order"}*/}
+                                {/*        aria-label="bill"*/}
+                                {/*        className="dropdown-item"*/}
+                                {/*    >*/}
+                                {/*        <span className="align-middle"><i*/}
+                                {/*            className="bx bx-receipt bx-sm me-2"></i>Bill</span>*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
                                 <li>
                                     <div className="dropdown-divider"></div>
                                 </li>
                                 <li>
                                     <Link
-                                        to={"/user/faq"}
+                                        to={"/faq"}
                                         aria-label="faq"
                                         className="dropdown-item"
                                     >
@@ -497,16 +435,6 @@ const Activitybar = () => {
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
-                                </li>
-                                <li>
-                                    <Link
-                                        to={"/user/change-password"}
-                                        aria-label="changepassword"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bx-location-plus bx-sm me-2"></i>Change password</span>
-                                    </Link>
                                 </li>
                                 <li>
                                     <Link
