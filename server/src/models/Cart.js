@@ -21,7 +21,7 @@ const Cart = sequelize.define('Cart', {
     timestamps: false,
 });
 
-Account.hasMany(Cart, { foreignKey: 'idaccount' });
+Account.hasOne(Cart, { foreignKey: 'idaccount' });
 Cart.belongsTo(Account, { foreignKey: 'idaccount' });
 
 module.exports = Cart;

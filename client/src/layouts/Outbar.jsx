@@ -343,7 +343,7 @@ const Outbar = ({ children }) => {
                                 {/*    <img*/}
                                 {/*        src="../assets/img/avatars/1.png"*/}
                                 {/*        className="w-px-40 h-auto rounded-circle"*/}
-                                {/*        alt="avatar-image"*/}
+                                {/*        alt="avatar"*/}
                                 {/*        aria-label="Avatar Image"*/}
                                 {/*    />*/}
                                 {/*</div>*/}

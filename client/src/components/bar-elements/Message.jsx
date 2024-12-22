@@ -1,17 +1,17 @@
 import React from "react";
 
-const Message = ({ message }) => {
+const Message = ({ message, user = {firstname: 'Bill', lastname: 'Cipher', avatar: '../assets/img/avatars/1.png'} }) => {
     return (
         <>
             <li className="list-group-item list-group-item-action dropdown-notifications-item">
                 <div className="d-flex">
                     <div className="flex-shrink-0 me-3">
                         <div className="avatar">
-                            <img src="../../assets/img/avatars/1.png" alt="" className="rounded-circle"/>
+                            <img src={user.avatar} alt="" className="rounded-circle"/>
                         </div>
                     </div>
                     <div className="flex-grow-1">
-                        <h6 className="small mb-0">Gorthenburg</h6>
+                        <h6 className="small mb-0">{`${user.firstname} ${user.lastname}`}</h6>
                         <small className="mb-1 d-block text-body">
                             {message.content}
                         </small>

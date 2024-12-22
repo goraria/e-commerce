@@ -310,7 +310,7 @@ const Header = () => {
                                 <div className="dropdown-header d-flex align-items-center py-3">
                                     <h6 className="mb-0 me-auto">Notification</h6>
                                     <div className="d-flex align-items-center h6 mb-0">
-                                        <span className="badge bg-label-primary me-2">8 New</span>
+                                        <span className="badge bg-label-primary me-2">10 New</span>
                                         <a href="#" className="dropdown-notifications-all p-2" data-bs-toggle="tooltip"
                                            data-bs-placement="top" aria-label="Mark all as read"
                                            data-bs-original-title="Mark all as read">
@@ -395,7 +395,7 @@ const Header = () => {
                                 <img
                                     src="../assets/img/avatars/1.png"
                                     className="w-px-40 h-auto rounded-circle"
-                                    alt="avatar-image"
+                                    alt="avatar"
                                     aria-label="Avatar Image"
                                 />
                             </div>
@@ -413,7 +413,7 @@ const Header = () => {
                                                 <img
                                                     src="../assets/img/avatars/1.png"
                                                     className="w-px-40 h-auto rounded-circle"
-                                                    alt="avatar-image"
+                                                    alt="avatar"
                                                     aria-label="Avatar Image"
                                                 />
                                             </div>

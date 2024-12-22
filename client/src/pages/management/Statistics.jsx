@@ -3,66 +3,10 @@ import {Badge, Button, Dropdown, Form, Pagination, Table} from "react-bootstrap"
 import Calendar from "react-calendar";
 import axios from "axios";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
+import {Link} from "react-router-dom";
 
 export const Statistics = () => {
-    const [data, setData] = useState([
-        // {
-        //     idaccount: 1,
-        //     iduser: 1,
-        //     bill: [
-        //         {
-        //             idbill: 1,
-        //             discount: '10',
-        //             date: '2024-11-11',
-        //             bill_details: [
-        //                 {
-        //                     idbill_detail: 1,
-        //                     product: 'M4',
-        //                     price: 1000,
-        //                     configuration: 'Japtor',
-        //                     accessory: 'Nothing',
-        //                     color: 'primary',
-        //                     quantity: 1,
-        //                 },
-        //                 {
-        //                     idbill_detail: 2,
-        //                     product: 'M4 Pro',
-        //                     price: 1001,
-        //                     configuration: 'Goraria',
-        //                     accessory: 'Nothing',
-        //                     color: 'danger',
-        //                     quantity: 2,
-        //                 }
-        //             ]
-        //         },
-        //         {
-        //             idbill: 2,
-        //             discount: '10',
-        //             date: '2024-11-11',
-        //             bill_details: [
-        //                 {
-        //                     idbill_detail: 3,
-        //                     product: 'M5',
-        //                     price: 1002,
-        //                     configuration: 'Japtor',
-        //                     accessory: 'Nothing',
-        //                     color: 'primary',
-        //                     quantity: 2,
-        //                 },
-        //                 {
-        //                     idbill_detail: 4,
-        //                     product: 'M5 Max',
-        //                     price: 1003,
-        //                     configuration: 'Goraria',
-        //                     accessory: 'Nothing',
-        //                     color: 'danger',
-        //                     quantity: 1,
-        //                 }
-        //             ]
-        //         }
-        //     ]
-        // }
-    ]);
+    const [data, setData] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -103,16 +47,6 @@ export const Statistics = () => {
             // setLoading(false);
         }
     }
-
-    const handleFromDateClick = () => {
-        setShowFromCalendar(!showFromCalendar);
-        setShowToCalendar(false);
-    };
-
-    const handleToDateClick = () => {
-        setShowToCalendar(!showToCalendar);
-        setShowFromCalendar(false);
-    };
 
     const onFromDateChange = (date) => {
         if (toDate && date >= toDate) {
@@ -319,7 +253,7 @@ export const Statistics = () => {
         setShowModal(true);  // Mở modal
     };
 
-    // console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
+    console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
     // setFromDate(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`);
 
     return (
@@ -396,32 +330,48 @@ export const Statistics = () => {
                                 {/*    </div>*/}
                                 {/*</div>*/}
                                 <div className="dt-action-buttons text-end pt-6 pt-md-0">
-                                    <div className="dt-buttons btn-group flex-wrap">
-                                        <div className="position-relative"
-                                             ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
-                                            <Button variant="outline-primary" className="me-3"
-                                                    onClick={handleFromDateClick} style={{width: 200}}>
-                                                From date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}
-                                            </Button>
-                                            {showFromCalendar && (
-                                                <div className="position-absolute" style={{zIndex: 1, top: '100%', left: 0}}>
+                                    <ul className="dt-buttons btn-group navbar-nav flex-row align-items-center p-0 m-0">
+                                        <li className="nav-item dropdown-style-switcher dropdown me-3">
+                                            <a
+                                                className="nav-link dropdown-toggle hide-arrow"
+                                                href="#"
+                                                data-bs-toggle="dropdown"
+                                                ref={toCalendarRef}
+                                            >
+                                                <button className="btn btn-outline-primary">
+                                                    <i className='bx bx-calendar me-2'></i>
+                                                    <span>
+                                                        From date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}
+                                                    </span>
+                                                </button>
+                                            </a>
+                                            <ul className="dropdown-menu dropdown-menu-end p-0">
+                                                <li>
                                                     <Calendar onChange={onFromDateChange} value={fromDate}/>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="position-relative"
-                                             ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
-                                            <Button variant="outline-primary" onClick={handleToDateClick}
-                                                    style={{width: 200}}>
-                                                To date: {toDate ? toDate.toLocaleDateString() : "Select date"}
-                                            </Button>
-                                            {showToCalendar && (
-                                                <div className="position-absolute" style={{zIndex: 1, top: '100%', right: 0}}>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li className="nav-item dropdown-style-switcher dropdown">
+                                            <a
+                                                className="nav-link dropdown-toggle hide-arrow"
+                                                href="#"
+                                                data-bs-toggle="dropdown"
+                                                ref={toCalendarRef}
+                                            >
+                                                <button className="btn btn-outline-primary">
+                                                    <i className='bx bx-calendar me-2'></i>
+                                                    <span>
+                                                        To date: {toDate ? toDate.toLocaleDateString() : "Select date"}
+                                                    </span>
+                                                </button>
+                                            </a>
+                                            <ul className="dropdown-menu dropdown-menu-end p-0">
+                                                <li>
                                                     <Calendar onChange={onToDateChange} value={toDate}/>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             {/*<div className="row mb-3">*/}

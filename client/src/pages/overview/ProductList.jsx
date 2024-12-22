@@ -68,7 +68,7 @@ const ProductList = () => {
                     Laptop is best mobile device to work...
                 </h6>
                 <hr/>
-                <row className="justify-content-center my-3">
+                <Row className="justify-content-center">
                     <Stack direction="horizontal" gap={3}>
                         {brands.map((brand, index) => (
                             <button
@@ -80,7 +80,7 @@ const ProductList = () => {
                             </button>
                         ))}
                     </Stack>
-                </row>
+                </Row>
             </Overview>
             <Overview>
                 <h5 className="card-title">Sort by</h5>
@@ -88,13 +88,13 @@ const ProductList = () => {
                     Choose one of config to sort...
                 </h6>
                 <hr/>
-                <row className="justify-content-center my-3">
+                <Row className="justify-content-center">
                     <Stack direction="horizontal" gap={3}>
                         {categories.map((category, index) => (
                             <CustomDropDown key={index} category={category} onSelect={filterProducts}/>
                         ))}
                     </Stack>
-                </row>
+                </Row>
             </Overview>
             <Overview>
                 <h3 className="text-center m-0">Spotlight</h3>

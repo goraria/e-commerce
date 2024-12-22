@@ -531,46 +531,6 @@ export const Preview = () => {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                {/*<div className="dt-action-buttons text-end pt-6 pt-md-0">*/}
-                                                {/*    <div className="dt-buttons btn-group flex-wrap">*/}
-                                                {/*        <div className="position-relative"*/}
-                                                {/*             ref={toCalendarRef}> /!* Đặt vị trí tương đối *!/*/}
-                                                {/*            <Button variant="outline-primary" className="me-3"*/}
-                                                {/*                    onClick={handleFromDateClick} style={{width: 200}}>*/}
-                                                {/*                From*/}
-                                                {/*                date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}*/}
-                                                {/*            </Button>*/}
-                                                {/*            {showFromCalendar && (*/}
-                                                {/*                <div className="position-absolute" style={{*/}
-                                                {/*                    zIndex: 1,*/}
-                                                {/*                    top: '100%',*/}
-                                                {/*                    left: 0*/}
-                                                {/*                }}>*/}
-                                                {/*                    <Calendar onChange={onFromDateChange}*/}
-                                                {/*                              value={fromDate}/>*/}
-                                                {/*                </div>*/}
-                                                {/*            )}*/}
-                                                {/*        </div>*/}
-                                                {/*        <div className="position-relative"*/}
-                                                {/*             ref={toCalendarRef}> /!* Đặt vị trí tương đối *!/*/}
-                                                {/*            <Button variant="outline-primary"*/}
-                                                {/*                    onClick={handleToDateClick}*/}
-                                                {/*                    style={{width: 200}}>*/}
-                                                {/*                To*/}
-                                                {/*                date: {toDate ? toDate.toLocaleDateString() : "Select date"}*/}
-                                                {/*            </Button>*/}
-                                                {/*            {showToCalendar && (*/}
-                                                {/*                <div className="position-absolute" style={{*/}
-                                                {/*                    zIndex: 1,*/}
-                                                {/*                    top: '100%',*/}
-                                                {/*                    right: 0*/}
-                                                {/*                }}>*/}
-                                                {/*                    <Calendar onChange={onToDateChange} value={toDate}/>*/}
-                                                {/*                </div>*/}
-                                                {/*            )}*/}
-                                                {/*        </div>*/}
-                                                {/*    </div>*/}
-                                                {/*</div>*/}
                                             </div>
                                         </div>
                                         <Table hover responsive

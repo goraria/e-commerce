@@ -12,6 +12,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
+import RatingStar from "../../components/product/RatingStar.jsx";
+import {RatingForm} from "../../components/modal/form/RatingForm.jsx";
 
 const Product = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -26,9 +28,11 @@ const Product = () => {
     const [carts, setCart] = useState();
     const [ChoosedColor, setChoosedColor] = useState(null);
 
+    const [showEvaluate, setShowEvaluate] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
     const token = localStorage.getItem('token');
+
     const fetchCart = async () => {
         try {
             const response = await fetch(`http://localhost:5172/cart/loadcart`, {
@@ -61,6 +65,17 @@ const Product = () => {
             setArray(data[0]); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data[0])
 
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+        }
+    };
+
+    const fetchProductRating = async () => {
+        try {
+            const response = await fetch(`http://localhost:5172/products/load-rating/${id}`);
+            const data = await response.json();
+            setRating(data); // Cập nhật thông tin sản phẩm từ backend
+            // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
@@ -134,12 +149,16 @@ const Product = () => {
         }
     };
 
+    const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
+    const averageScore = totalScore / ratings.length;
+
     useEffect(() => {
         // fetchAPI();
         // fetchAPI1();
         fetchProductConfiguration();
         fetchProductDetails();
         fetchProductDecription();
+        fetchProductRating();
         fetchProductColor();
         fetchCart();
     }, [id]);
@@ -194,7 +213,7 @@ const Product = () => {
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <Row>
-                                            <Col md={4}><strong>Revolution:</strong></Col>
+                                            <Col md={4}><strong>Resolution:</strong></Col>
                                             <Col md={8}>{default_config.resolution}</Col>
                                         </Row>
                                     </ListGroup.Item>
@@ -258,7 +277,7 @@ const Product = () => {
                                 <div className="row mt-4">
                                     <div className="col">
                                         <h3>{products.product_name}</h3>
-                                        <p>Chưa có đánh giá</p>
+                                        <p className="text-warning">{averageScore ? <RatingStar rating={averageScore}/> : 'Chưa có đánh giá' }</p>
                                     </div>
                                 </div>
                                 <div className="row mt-4">
@@ -307,7 +326,7 @@ const Product = () => {
                                     <div className="col col-sm-12 col-md-6 col-lg-6 mb-3">
                                         <Button
                                             className="w-100 me-2"
-                                            variant="outline-danger"
+                                            variant="secondary"
                                             onClick={handleAddToCart}
                                         >Add to cart</Button>
                                     </div>
@@ -321,7 +340,13 @@ const Product = () => {
                                     </div>
                                 </div>
                                 <h5>Rating</h5>
-                                <Button variant="primary" className="mb-3 w-100">Rate</Button>
+                                <Button
+                                    variant="primary"
+                                    className="mb-3 w-100"
+                                    onClick={() => setShowEvaluate(true)}
+                                >
+                                    Evaluate
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -329,14 +354,18 @@ const Product = () => {
             </div>
             <Overview>
                 <h3 className="text-center m-0">Sản phẩm tương tự</h3>
-                {/* <Row>
-                        {products.map(product =>
-                            <Col key={product.id} sm={12} md={6} lg={3} className="mb-3">
-                                <ProductItem obj={product} />
-                            </Col>
-                        )}
-                    </Row> */}
+                {/*<Row>*/}
+                {/*    {products.map(product =>*/}
+                {/*        <Col key={product.id} sm={12} md={6} lg={3} className="mb-3">*/}
+                {/*            <ProductItem obj={product} />*/}
+                {/*        </Col>*/}
+                {/*    )}*/}
+                {/*</Row>*/}
             </Overview>
+            <RatingForm
+                show={showEvaluate}
+                onHide={() => setShowEvaluate(false)}
+            />
             <NotifySuccess
                 title="Add to cart successfully"
                 message="Sản phẩm đã được thêm vào giỏ hàng!"

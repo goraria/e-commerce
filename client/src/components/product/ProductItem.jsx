@@ -3,35 +3,9 @@ import React, { Component } from "react";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
-
-const renderStars = (rating) => {
-    // Sanitize rating to be between 0 and 5
-    const sanitizedRating = Math.max(0, Math.min(rating, 5));
-    const fullStars = Math.floor(sanitizedRating); // Full stars count
-    const halfStar = sanitizedRating % 1 >= 0.1 ? 1 : 0; // Half-star check
-    const emptyStars = 5 - fullStars - halfStar; // Remaining empty stars
-
-    // Ensure valid star counts
-    return (
-        <>
-            {/* Full stars */}
-            {Array.from({ length: fullStars }).map((index) => (
-                // <FontAwesomeIcon key={`full-${i}`} icon={faStar} color="#f39c12"/>
-                <i className='bx bxs-star bx-sm' key={index}></i>
-            ))}
-            {/* Half star */}
-            {halfStar === 1 && <i className='bx bxs-star-half bx-sm' ></i>/*<FontAwesomeIcon icon={faStarHalfAlt} color="#f39c12"/>*/}
-            {/* Empty stars */}
-            {Array.from({ length: emptyStars }).map((index) => (
-                // <FontAwesomeIcon key={`empty-${i}`} icon={faStarEmpty} color="#f39c12"/>
-                <i className='bx bx-star bx-sm' key={index}></i>
-            ))}
-        </>
-    );
-}
+import RatingStar from "./RatingStar.jsx";
 
 const ProductItem = (product, state) => {
-
     const [descriptions, setArray] = useState([]);
     const [configurations, setconfig] = useState([]);
     const [ratings, setRating] = useState([]);
@@ -173,7 +147,8 @@ const ProductItem = (product, state) => {
                     </p>
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="text-warning fs-4">
-                            {renderStars(averageScore)}
+                            {/*{renderStars(averageScore)}*/}
+                            <RatingStar rating={averageScore} />
                         </div>
                         <button className="btn btn-primary d-flex align-items-center" onClick={handleAddToCart}>
                             <i className='bx bxs-cart-add me-2'></i>
