@@ -1,4 +1,4 @@
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import AddressForm from "../modal/form/AddressForm.jsx";
 import React from "react";
 
@@ -42,4 +42,4 @@ const VoucherItem = () => {
     )
 }
 
-export default VoucherItem
+export default VoucherItem;

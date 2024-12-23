@@ -104,6 +104,12 @@ const menu = [
                 ]
             },
             {
+                "text": "Voucher",
+                "icon": "bx bxs-discount",
+                "available": true,
+                "link": "/admin/voucher"
+            },
+            {
                 "text": "Tables",
                 "icon": "bx bx-table",
                 "available": true,
@@ -314,12 +320,12 @@ const menu = [
 const Layout = ({ children }) => {
     useEffect(() => {
         Main();
-    },[])
+    }, [])
 
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
-                <Sidebar menu={menu} source={"/admin"}/>
+                <Sidebar menu={menu} source={"/admin"} />
                 <div className="layout-page">
                     <Navbar>
                         {getGreetingMessage('from Bill')}

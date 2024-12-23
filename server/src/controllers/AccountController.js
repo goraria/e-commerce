@@ -4,6 +4,7 @@ const User = require('../models/User');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 require('dotenv').config();
 
 class AccountController {
@@ -62,6 +63,23 @@ class AccountController {
         } catch (error) {
             // console.error('Lỗi khi cập nhật thông tin tài khoản và người dùng:', error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật thông tin' });
+        }
+    }
+    async UploadAvatar(req, res) {
+        try {
+            const avatarPath = path.join(__dirname, 'avatar');
+            if (!fs.existsSync(avatarPath)) {
+                fs.mkdirSync(avatarPath, { recursive: true });
+            }
+            const filePath = path.join('avatar', req.file.filename);
+            // Bạn có thể lưu `filePath` vào database, ví dụ:
+            const user = await User.findOne({ where: { idaccount: req.user.id } });
+            // await User.update({ avatar: filePath }, { where: { id: req.user.id } });
+            await user.update({ avatar: filePath })
+
+            res.status(200).json({ message: 'Avatar uploaded successfully', avatarPath: filePath });
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to upload avatar', error: error.message });
         }
     }
 }
