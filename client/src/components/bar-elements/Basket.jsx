@@ -1,21 +1,25 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 const Basket = ({ bask }) => {
     return (
         <>
+            {/* <li>  to={`/product?id=${bask.product.idproduct}`} */}
             <li className="list-group-item list-group-item-action dropdown-notifications-item">
                 <div className="d-flex">
                     <div className="flex-shrink-0 me-3">
                         <div className="avatar">
-                            <img src="../../assets/img/avatars/1.png" alt="" className="rounded-circle"/>
+                            <img src={bask.product.image} alt="" className="rounded-circle"/>
                         </div>
                     </div>
                     <div className="flex-grow-1">
-                        <h6 className="small mb-0">{bask.name}</h6>
+                        <h6 className="small mb-0">{`${bask.product.brand} ${bask.product.name}`}</h6>
                         <small className="mb-1 d-block text-body">
-                            {bask.description}
+                            {`${bask.configuration.cpu} | ${bask.configuration.gpu}`}
                         </small>
-                        <small className="text-muted">{bask.quantity}</small>
+                        <small className="text-muted">
+                            {`Quantity: ${bask.quantity} | $${bask.configuration.price}`}
+                        </small>
                     </div>
                     <div className="flex-shrink-0 dropdown-notifications-actions">
                         <a href="#" className="dropdown-notifications-read">

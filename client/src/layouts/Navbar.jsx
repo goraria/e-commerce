@@ -225,7 +225,7 @@ const Navbar = ({ children }) => {
                                     <div className="dropdown-header d-flex align-items-center py-3">
                                         <h6 className="mb-0 me-auto">Notification</h6>
                                         <div className="d-flex align-items-center h6 mb-0">
-                                            <span className="badge bg-label-primary me-2">8 New</span>
+                                            <span className="badge bg-label-primary me-2">10 New</span>
                                             <a href="#" className="dropdown-notifications-all p-2"
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top" aria-label="Mark all as read"
@@ -422,7 +422,7 @@ const Navbar = ({ children }) => {
                                     <img
                                         src={account.avatar}
                                         className="w-px-40 h-auto rounded-circle"
-                                        alt="avatar-image"
+                                        alt="avatar"
                                         aria-label="Avatar Image"
                                     />
                                 </div>
@@ -440,13 +440,14 @@ const Navbar = ({ children }) => {
                                                     <img
                                                         src={account.avatar}
                                                         className="w-px-40 h-auto rounded-circle"
-                                                        alt="avatar-image"
+                                                        alt="avatar"
                                                         aria-label="Avatar Image"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
+                                                <span
+                                                    className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">Administrator</small>
                                             </div>
                                         </div>
@@ -454,6 +455,16 @@ const Navbar = ({ children }) => {
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <Link
+                                        to={"/admin"}
+                                        aria-label="dashboard"
+                                        className="dropdown-item"
+                                    >
+                                        <span className="align-middle"><i
+                                            className="bx bxs-dashboard bx-sm me-2"></i>Dashboard</span>
+                                    </Link>
                                 </li>
                                 <li>
                                     <Link

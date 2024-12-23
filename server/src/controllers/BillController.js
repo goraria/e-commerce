@@ -192,11 +192,12 @@ class BillController {
     };
 
     async getBillById(req, res) {
-        const user = req.user.id;
+        // const user = req.user.id;
         const { id } = req.params;
 
         try {
-            const bills = await Bill.findAll({
+            // Tìm hóa đơn theo id và idaccount của người dùng
+            const bill = await Bill.findOne({
                 where: { idaccount: req.user.id, idbill: id }, // Lọc theo idaccount
                 attributes: ['idbill', 'price', 'date', 'status'], // Các trường từ Bill
                 include: [
@@ -206,7 +207,7 @@ class BillController {
                         include: [
                             {
                                 model: User,
-                                attributes: ['iduser', 'firstname', 'lastname', 'phone_number'], // Thông tin User
+                                attributes: ['iduser', 'firstname', 'lastname', 'phone_number', 'avatar'], // Thông tin User
                             },
                         ],
                     },
@@ -224,7 +225,7 @@ class BillController {
                         include: [
                             {
                                 model: Product,
-                                attributes: ['product_name', 'brand'], // Thông tin Product
+                                attributes: ['product_name', 'brand', "product_image"], // Thông tin Product
                             },
                             {
                                 model: Color,
@@ -239,11 +240,18 @@ class BillController {
                 ],
             });
 
-            const result = bills.map(bill => ({
+            const count =  await Bill.count({ where: { idaccount: req.user.id } })
+
+            if (!bill) {
+                return res.status(404).json({ error: 'Không tìm thấy hóa đơn' });
+            }
+
+            const result = {
                 id: bill.idbill,
                 date: bill.date,
                 price: bill.price,
                 status: bill.status,
+                count: count,
                 account: bill.Account ? {
                     idaccount: bill.Account.idaccount,
                     username: bill.Account.username,
@@ -253,6 +261,7 @@ class BillController {
                         firstname: bill.Account.User.firstname,
                         lastname: bill.Account.User.lastname,
                         phone_number: bill.Account.User.phone_number,
+                        avatar: bill.Account.User.avatar,
                     } : null,
                 } : null,
                 address: bill.Address ? {
@@ -275,6 +284,7 @@ class BillController {
                     idbill_detail: detail.idbill_details,
                     product: detail.Product ? detail.Product.product_name : null,
                     brand: detail.Product ? detail.Product.brand : null,
+                    image: detail.Product ? detail.Product.product_image : null,
                     price: detail.price,
                     quantity: detail.quantity,
                     color: detail.Color ? detail.Color.color : null,
@@ -287,16 +297,14 @@ class BillController {
                         resolution: detail.Configuration.resolution,
                     } : null,
                 })),
-            }));
+            };
 
-            result.sort((up, down) => new Date(down.date) - new Date(up.date));
-
-            // console.log(result);
-            res.json(result);
+            res.json(result); // Trả về một phần tử duy nhất
         } catch (error) {
+            console.error(error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi lấy dữ liệu' });
         }
-    };
+    }
 
     async createBill(req, res) {
         const idaccount = req.user.id;

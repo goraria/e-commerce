@@ -13,8 +13,9 @@ export const ForgotPasswordPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Add logic to handle the form submission (e.g., send reset link)
-        console.log('Email submitted:', email);
+        // console.log('Email submitted:', email);
     };
+
     return (
         <AuthWrapper>
 

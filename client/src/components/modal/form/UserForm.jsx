@@ -15,6 +15,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     useEffect(() => {
         if (user) {
             setFormData({
@@ -94,7 +95,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
         try {
             if (user) {
                 // Chỉ thực hiện cập nhật nếu có đối tượng `user`
-                console.log('formData:', formData);
+                // console.log('formData:', formData);
                 const response = await axios.post(`http://localhost:5172/admin/update-user/${user.idaccount}`, formData);
 
                 if (response.status === 200 || response.status === 201) {
@@ -132,6 +133,7 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal
@@ -289,8 +291,8 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{ marginRight: "auto" }}>
-                        <i className='bx bx-x' ></i>
+                    <Button onClick={onHide} variant="secondary" className="me-auto">
+                        <i className='bx bx-x me-2'></i>
                         <span>Close</span>
                     </Button>
                     {/*<Button type="submit" variant="info"*/}
@@ -305,12 +307,12 @@ export const UserForm = ({ user, show, onHide, onReload }) => {
                                 <span>Delete Address</span>
                             </Button> */}
                             <Button onClick={handleInvalid} variant="info">
-                                <i className='bx bx-check' ></i>
+                                <i className='bx bx-check me-2'></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <i className='bx bx-plus' ></i>
+                                <i className='bx bx-plus me-2'></i>
                                 <span>Create Address</span>
                             </Button>
                         </>

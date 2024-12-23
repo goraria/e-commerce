@@ -41,35 +41,4 @@ const Transitionbar = () => {
     )
 }
 
-class TransitionBar0 extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {}
-    }
-
-    render() {
-        return (
-            <>
-                <Navbar fixed="top" bg="light" data-bs-theme="light" expand="lg" className="bg-body-tertiary"
-                        style={{marginTop: 56, zIndex: 1, display: "none"}}>
-                    <Container>
-                        <Stack direction="horizontal" gap={3}>
-                            {clsifications.map((brandS, index) => <DropdownButton
-                                key={index}
-                                id="dropdown-basic-button"
-                                title={<><FontAwesomeIcon icon={brandS.icon}
-                                                          style={{width: 24}}/>{' '}{brandS.category}</>}
-                                variant="outline-primary"
-                            >
-                                {brandS.items.map((item, index) => (
-                                    <Dropdown.Item as="a" href="#action1" key={index}>{item}</Dropdown.Item>))}
-                            </DropdownButton>)}
-                        </Stack>
-                    </Container>
-                </Navbar>
-            </>
-        )
-    }
-}
-
 export default Transitionbar

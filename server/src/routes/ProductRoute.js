@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware');
 const productController = require('../controllers/ProductController');
 
 // Route để lấy tất cả người dùng
@@ -20,5 +21,9 @@ router.put('/create-productname', productController.createProductName);
 
 router.get('/get-product', productController.loadAllProduct);
 router.patch('/update-status/:idProduct', productController.updateStatus);
+
+////////////////////////////
+
+router.post('/load-rating', AuthenticationMiddleware, productController.loadRatingMiddleware);
 
 module.exports = router;

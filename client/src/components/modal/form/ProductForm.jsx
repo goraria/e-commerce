@@ -62,6 +62,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
             Object.entries(data).map(([key, value]) => [key, String(value || "")])
         );
     };
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData(prevData => ({ ...prevData, [name]: String(value) }));
@@ -80,17 +81,15 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
         // console.log(formData)
 
         if (form.checkValidity() === false) {
-            console.log("0")
+            // console.log("0")
             setValidated(true);
         } else {
             const allFieldsFilled = Object.values(dataAsString).every(value => value.trim() !== "");
 
             if (allFieldsFilled) {
                 setShowConfirmModal(true);
-
             } else {
                 setValidated(true);
-
             }
         }
     };
@@ -266,8 +265,8 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{marginRight: "auto"}}>
-                        <i className='bx bx-x'></i>
+                    <Button onClick={onHide} variant="secondary" className="me-auto">
+                        <i className='bx bx-x me-2'></i>
                         <span>Close</span>
                     </Button>
                     {/*<Button type="submit" variant="info"*/}
@@ -278,16 +277,16 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                     {product ?
                         <>
                             <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
-                                <i className='bx bx-trash'></i>
+                                <i className='bx bx-trash me-2'></i>
                                 <span>Delete Product</span>
                             </Button>
                             <Button onClick={handleInvalid} variant="info">
-                                <i className='bx bx-check'></i>
+                                <i className='bx bx-check me-2'></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <i className='bx bx-plus'></i>
+                                <i className='bx bx-plus me-2'></i>
                                 <span>Create Product</span>
                             </Button>
                         </>

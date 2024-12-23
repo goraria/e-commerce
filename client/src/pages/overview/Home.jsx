@@ -48,30 +48,6 @@ const Home = () => {
     return (
         <div>
             <Carousel>
-                {/*<Carousel.Item>*/}
-                {/*    <Image*/}
-                {/*        className="d-block w-100"*/}
-                {/*        src={mbp}*/}
-                {/*        alt="First slide"*/}
-                {/*        style={{ objectFit: 'cover', height: '500px' }}*/}
-                {/*    />*/}
-                {/*    <Carousel.Caption>*/}
-                {/*        <h3>Sale Off 50%</h3>*/}
-                {/*        <p>Sale off all product in September</p>*/}
-                {/*    </Carousel.Caption>*/}
-                {/*</Carousel.Item>*/}
-                {/*<Carousel.Item>*/}
-                {/*    <Image*/}
-                {/*        className="d-block w-100"*/}
-                {/*        src="https://via.placeholder.com/1200x400"*/}
-                {/*        alt="Second slide"*/}
-                {/*        style={{ objectFit: 'cover', height: '500px' }}*/}
-                {/*    />*/}
-                {/*    <Carousel.Caption>*/}
-                {/*        <h3>Newest</h3>*/}
-                {/*        <p>Famous Brand in our website</p>*/}
-                {/*    </Carousel.Caption>*/}
-                {/*</Carousel.Item>*/}
                 {
                     banners.map((banner, index) => (
                         <Carousel.Item key={index}>
@@ -93,36 +69,16 @@ const Home = () => {
                 <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
             <Container className="my-4">
-                {/*<Row style={{height: 100}}>*/}
-                {/*    {array.map((product, index) => (*/}
-                {/*        <Col key={index} sm={12} md={6} lg={4} className="mb-4">*/}
-                {/*            <h1>{product}</h1>*/}
-                {/*        </Col>*/}
-                {/*    ))}*/}
-                {/*</Row>*/}
-                <Row>
+                <div className="row">
                     {products.map(product => (
-                        <Col key={product.id} sm={12} md={6} lg={4} className="mb-4">
+                        <div key={product.id} className="col col-sm-12 col-md-6 col-lg-4 mb-4">
                             {/* <ProductItem obj={product} /> */}
-                        </Col>
+                        </div>
                     ))}
-                </Row>
+                </div>
             </Container>
         </div>
     )
 }
-
-// class Home extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//
-//         }
-//     }
-//
-//     render() {
-//
-//     }
-// }
 
 export default Home

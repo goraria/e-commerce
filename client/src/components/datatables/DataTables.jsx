@@ -274,7 +274,7 @@ export const DataTables = () => {
                                         </Dropdown>
                                     </div>
                                     <div>
-                                        <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary" style={{ display: "flex", textAlign: "center" }}>
+                                        <Button variant="primary" type="button" className="btn btn-secondary create-new btn-primary d-flex text-center">
                                             <i className='bx bx-plus me-2' ></i>
                                             Add New Record
                                         </Button>
@@ -285,13 +285,13 @@ export const DataTables = () => {
                         <div className="row mb-3">
                             <div className="col-sm-12 col-md-6">
                                 <div className="dataTables_length">
-                                    <label style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
+                                    <label className="d-flex justify-content-start align-items-center">
                                         <span>Show</span>
                                         <select
                                             name="DataTables_Table_0_length"
                                             aria-controls="DataTables_Table_0"
                                             className="form-select ms-3 me-3"
-                                            style={{ width: "80px" }}
+                                            style={{ width: 80 }}
                                             onChange={handleItemsPerPageChange}
                                             value={itemsPerPage}
                                         >
@@ -380,42 +380,19 @@ export const DataTables = () => {
                 <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                     <div className="row">
                         <div className="d-flex col-sm-12 col-md-6">
-                            {/*<div className="dataTables_info" style={{ display: "flex", justifyContent: "left", alignItems: "center" }}>*/}
-                            {/*    <div className="text-center mt-2">*/}
-                            {/*        Showing {currentItems.length} of {filteredData.length} entries*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            <div className="dataTables_info"
-                                 style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                            <div className="dataTables_info d-flex justify-content-start align-items-center">
                                 <div className="text-center mt-2">
                                     {/* Calculate starting and ending entries */}
                                     {`Showing entries from ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredData.length)} of ${filteredData.length} entries`}
                                 </div>
                             </div>
                             <div className="ms-2 me-2"></div>
-                            <div className="dataTables_select"
-                                 style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                            <div className="dataTables_select d-flex justify-content-start align-items-center">
                                 <div className="text-center mt-2">
                                     Selected {selectedEntries.length} entries
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="col-sm-12 col-md-6">
-                            <div className="dataTables_paginate paging_simple_numbers" style={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                                <Pagination className="d-flex justify-content-center" style={{ margin: 0 }}>
-                                    {Array.from({ length: totalPages }, (_, index) => (
-                                        <Pagination.Item
-                                            key={index}
-                                            active={index + 1 === currentPage}
-                                            onClick={() => setCurrentPage(index + 1)}
-                                        >
-                                            {index + 1}
-                                        </Pagination.Item>
-                                    ))}
-                                </Pagination>
-                            </div>
-                        </div> */}
-
                         <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
                             {renderPagination()}
                         </div>

@@ -3,17 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
 import axios from "axios";
 
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
-
-import jp from '../../assets/images/jp.jpeg'
-import Overview from "../../layouts/Overview.jsx";
-import SaveChange from "../../components/modal/notify/SaveChange.jsx";
-import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
-import NotifyError from "../../components/modal/notify/NotifyError.jsx";
-import Frame from "../../layouts/Frame.jsx";
 import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
+
 const ForgotPassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -56,7 +49,7 @@ const ForgotPassword = () => {
         } else {
             setLoading(true);
             try {
-                console.log(1)
+                // console.log(1)
                 const response = await axios.post('http://localhost:5172/authentication/forgot-password', {
                     email: formData.email
                 });
@@ -104,10 +97,6 @@ const ForgotPassword = () => {
                         >
                             Send Reset Link
                         </button>
-                        {/*<Button variant="primary" type="submit" style={{width: '100%'}}*/}
-                        {/*        onClick={() => setCheck(true)}>*/}
-                        {/*    Submit*/}
-                        {/*</Button>*/}
                     </div>
                     <ReCaptchaComponent
                         siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
@@ -124,42 +113,6 @@ const ForgotPassword = () => {
                     </Link>
                 </div>
             </AuthWrapper>
-
-            {/*<Overview mt={112} me={56}>*/}
-            {/*    <div>*/}
-            {/*    <h2>Forgot Password</h2>*/}
-            {/*        <div style={{ display: "flex", marginBottom: 16, justifyContent: 'center' }}>*/}
-            {/*            <Image*/}
-            {/*                className="d-block"*/}
-            {/*                src={jp}*/}
-            {/*                alt="Second slide"*/}
-            {/*                style={{ objectFit: 'cover', width: 224, height: 224, borderRadius: '5px' }}*/}
-            {/*            />*/}
-            {/*        </div>*/}
-            {/*        <Form noValidate validated={validated} onSubmit={handleSubmit}>*/}
-            {/*            <Form.Group className="mb-3" controlId="username">*/}
-            {/*                <Form.Label>Email</Form.Label>*/}
-            {/*                <Form.Control*/}
-            {/*                    type="email"*/}
-            {/*                    placeholder="Email"*/}
-            {/*                    name="email"*/}
-            {/*                    value={formData.email}*/}
-            {/*                    onChange={handleChange}*/}
-            {/*                    required*/}
-            {/*                />*/}
-            {/*                <Form.Control.Feedback type="invalid">*/}
-            {/*                    Please enter your Email.*/}
-            {/*                </Form.Control.Feedback>*/}
-            {/*            </Form.Group>*/}
-
-            {/*            <hr/>*/}
-            {/*            <Button variant="primary" type="submit" style={{width: '100%'}}*/}
-            {/*                    onClick={() => setCheck(true)}>*/}
-            {/*                Submit*/}
-            {/*            </Button>*/}
-            {/*        </Form>*/}
-            {/*    </div>*/}
-            {/*</Overview>*/}
         </>
     )
 }

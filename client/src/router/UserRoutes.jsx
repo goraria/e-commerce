@@ -10,6 +10,7 @@ import { Preview } from "../pages/dashboard/Preview.jsx";
 import { OrderHistory } from "../pages/user-information/OrderHistory.jsx";
 import { ProfilePage } from "../pages/account/ProfilePage.jsx";
 import { OrderDetails } from "../pages/user-information/OrderDetails.jsx";
+import {ErrorPage} from "../pages/misc/ErrorPage.jsx";
 
 export const UserRoutes = () => {
     return (
@@ -21,7 +22,8 @@ export const UserRoutes = () => {
             <Route path="/order" element={<OrderHistory />} />
             <Route path="/bill" element={<OrderDetails />} />
             <Route path="/rating" element={<NotFound />} />
-            {/*<Route path="/404" element={<NotFound />} />*/}
+
+            <Route path="*" element={<ErrorPage />} />
         </Routes>
     )
 }

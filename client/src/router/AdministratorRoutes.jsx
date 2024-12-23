@@ -61,7 +61,7 @@ import { ProductAccessory } from "../pages/management/ProductAccessory"
 import { ProductDescription } from "../pages/management/ProductDescription"
 import { ProductColor } from "../pages/management/ProductColor"
 import { ProfilePage } from "../pages/account/ProfilePage.jsx";
-
+import { Voucher } from '../pages/management/Voucher.jsx';
 ///////////////////////////////////////
 
 export const AdministratorRoutes = () => {
@@ -138,16 +138,19 @@ export const AdministratorRoutes = () => {
             <Route path="/form-layout/vertical-form" element={<VerticalFormPage />} />
 
             <Route path="/tables" element={<TablesPage />} />
-            <Route path="/profile-old" element={<AccountPage />} />
+            {/*<Route path="/profile-old" element={<AccountPage />} />*/}
             <Route path="/profile" element={<ProfilePage />} />
 
             <Route path="/users" element={<UserManagement />} />
             <Route path="/categories" element={<Category />} />
+            <Route path="/voucher" element={<Voucher />} />
             <Route path="/product/name" element={<ProductName />} />
             <Route path="/product/accessory" element={<ProductAccessory />} />
             <Route path="/product/configurarion" element={<ProductConfiguration />} />
             <Route path="/product/color" element={<ProductColor />} />
             <Route path="/product/description" element={<ProductDescription />} />
+
+            <Route path="*" element={<ErrorPage />} />
         </Routes>
     )
 }

@@ -340,15 +340,13 @@ export const ProductDescription = () => {
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
                         <div className="row">
                             <div className="d-flex col-sm-12 col-md-6">
-                                <div className="dataTables_info"
-                                     style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                                <div className="dataTables_info d-flex justify-content-start align-items-center">
                                     <div className="text-center mt-2">
                                         Showing {currentItems.length} of {filteredData.length} entries
                                     </div>
                                 </div>
                                 <div className="ms-2 me-2"></div>
-                                <div className="dataTables_select"
-                                     style={{display: "flex", justifyContent: "left", alignItems: "center"}}>
+                                <div className="dataTables_select d-flex justify-content-start align-items-center">
                                     <div className="text-center mt-2">
                                         Selected {selectedEntries.length} entries
                                     </div>

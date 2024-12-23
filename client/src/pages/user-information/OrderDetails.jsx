@@ -1,13 +1,30 @@
-import React, {useState} from "react";
-import {Form, Table} from "react-bootstrap";
-import {useLocation} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Badge, Button, Form, Table} from "react-bootstrap";
+import {Link, useLocation} from "react-router-dom";
+import axios from "axios";
 
 export const OrderDetails = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
+    // console.log('Order ID:', id);
 
-    const [order, setOrder] = useState({});
+    const [bill, setBill] = useState({});
+
+    const handleGetBill = async () => {
+        try {
+            const token = localStorage.getItem('token')
+            const response = await axios.get(`http://localhost:5172/bill/get-bill/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            // console.log(response.data);
+            setBill(response.data);
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu:', error);
+        }
+    }
 
     // const [data, setData] = useState([])
     // const [selectedEntries, setSelectedEntries] = useState([]);
@@ -39,6 +56,53 @@ export const OrderDetails = () => {
     //     item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
     // );
 
+    const subtotal = bill.bill_details?.reduce((value, element) => value + element.price * element.quantity, 0)
+
+    const formatPhoneNumber = (phone) => {
+        const number = phone.split('');
+        const result = `(${number[0]}${number[1]}${number[2]}) ${number[3]}${number[4]}${number[5]}-${number[6]}${number[7]}${number[8]}${number[9]}`;
+        return result;
+    }
+
+    const formatDateTime = (inputDateTime) => {
+        const date = new Date(inputDateTime);
+
+        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        const hours = date.getUTCHours(); // Giờ theo UTC
+        const minutes = date.getUTCMinutes(); // Phút theo UTC
+
+        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+        return `${formattedDate}, ${formattedTime}`;
+    }
+
+    const renderStatusBadge = (status) => {
+        switch (status) {
+            case 5: // "Delivered"
+                return <Badge bg="label-success">Delivered</Badge>;
+            case 0: // "Ordered"
+                return <Badge bg="label-warning">Ordered</Badge>;
+            case 3: // "Dispatched"
+                return <Badge bg="label-primary">Dispatched</Badge>;
+            case 1: // "Pickup"
+                return <Badge bg="label-info">Pickup</Badge>;
+            case 6: // "Rejected"
+                return <Badge bg="label-danger">Rejected</Badge>;
+            case 2: // "Arrival"
+                return <Badge bg="label-dark">Arrival</Badge>;
+            case 4: // "Arrival"
+                return <Badge bg="label-secondary">Arrival</Badge>;
+            default:
+                return <Badge bg="label-light">{status}</Badge>;
+        }
+    };
+
+    useEffect(() => {
+        handleGetBill();
+    }, []);
+
     return (
         <>
             <div className="row">
@@ -47,11 +111,13 @@ export const OrderDetails = () => {
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center p-4 row-gap-4">
                             <div className="d-flex flex-column justify-content-center">
                                 <div className="mb-1">
-                                    <span className="h5">Order #32543 </span><span
-                                    className="badge bg-label-success me-1 ms-2">Paid</span> <span
-                                    className="badge bg-label-info">Ready to Pickup</span>
+                                    <span className="h5 me-3">Order #{bill.id}</span>
+                                    {/*<span className="badge bg-label-success me-1 ms-2">Paid</span>*/}
+                                    {/*<span className="badge bg-label-info">Ready to Pickup</span>*/}
+                                    {renderStatusBadge(bill.status)}
                                 </div>
-                                <p className="mb-0">Aug 17, <span id="orderYear">2024</span>, 5:48 (ET)</p>
+                                {/*<p className="mb-0">Aug 17, <span id="orderYear">2024</span>, 5:48 (ET)</p>*/}
+                                <p className="mb-0">{formatDateTime(bill.date)}</p>
                             </div>
                             <div className="d-flex align-content-center flex-wrap gap-2">
                                 <button className="btn btn-danger delete-order">Delete Order</button>
@@ -71,168 +137,85 @@ export const OrderDetails = () => {
                             <div className="dataTables_wrapper dt-bootstrap5 no-footer">
                                 <Table hover responsive className="table border-top dataTable no-footer dtr-column">
                                     <thead style={{height: 64}}>
-                                    <tr>
-                                        <th
-                                            className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                            style={{verticalAlign: "middle", fontSize: 16, width: 18}}
-                                        >
-                                            <Form.Check
-                                                type="checkbox"
-                                                // onChange={handleSelectAll}
-                                                // checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                            />
-                                        </th>
-                                        <th className="sorting"
-                                            style={{verticalAlign: "middle", fontSize: 13}}>
-                                            Products
-                                        </th>
-                                        {
-                                            ["Price", "Qty", "Total"].map((item, index) => (
-                                                <th className="sorting" key={index}
-                                                    style={{verticalAlign: "middle", fontSize: 13, width: 100}}>
-                                                    {item}
-                                                </th>
-                                            ))
-                                        }
-                                    </tr>
+                                        <tr>
+                                            <th
+                                                className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                                style={{verticalAlign: "middle", fontSize: 16, width: 18}}
+                                            >
+                                                <Form.Check
+                                                    type="checkbox"
+                                                    // onChange={handleSelectAll}
+                                                    // checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
+                                                />
+                                            </th>
+                                            <th className="sorting"
+                                                style={{verticalAlign: "middle", fontSize: 13}}>
+                                                Products
+                                            </th>
+                                            {
+                                                ["Price", "Qty", "Total"].map((item, index) => (
+                                                    <th className="sorting" key={index}
+                                                        style={{verticalAlign: "middle", fontSize: 13, width: 100}}>
+                                                        {item}
+                                                    </th>
+                                                ))
+                                            }
+                                        </tr>
                                     </thead>
+                                    <tbody>
+                                        {bill.bill_details?.map((product, index) => (
+                                            <tr key={index} className={index % 2 === 0 ? "odd" : "even"}>
+                                                {/*<td className="control" tabIndex="0"></td>*/}
+                                                <td className="dt-checkboxes-cell">
+                                                    <input type="checkbox"
+                                                           className="dt-checkboxes form-check-input"/>
+                                                </td>
+                                                <td className="sorting_1">
+                                                    <div
+                                                        className="d-flex justify-content-start align-items-center text-nowrap">
+                                                        <div className="avatar-wrapper">
+                                                            <div className="avatar avatar-sm me-3">
+                                                                <img
+                                                                    src={product.image}
+                                                                    alt="product"
+                                                                    className="rounded-2"/>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex flex-column">
+                                                            <h6 className="text-heading mb-0">{`${product.brand} ${product.product}`}</h6>
+                                                            {/*<small>Material: Wooden</small>*/}
+                                                            <small>
+
+                                                            </small>
+                                                            <small>Material: Wooden</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><span>${product.price}</span></td>
+                                                <td><span className="text-body">{product.quantity}</span></td>
+                                                <td><span className="text-body">${product.price * product.quantity}</span></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
                                 </Table>
                             </div>
-                            {/*<div id="DataTables_Table_0_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer">*/}
-                            {/*    <table*/}
-                            {/*        className="datatables-order-details table border-top dataTable no-footer dtr-column"*/}
-                            {/*        id="DataTables_Table_0" style="width: 918px;">*/}
-                            {/*        <thead>*/}
-                            {/*        <tr>*/}
-                            {/*            <th className="control sorting_disabled dtr-hidden" rowSpan="1" colSpan="1"*/}
-                            {/*                style="width: 0px; display: none;" aria-label=""></th>*/}
-                            {/*            <th className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"*/}
-                            {/*                rowSpan="1" colSpan="1" style="width: 18px;" data-col="1" aria-label="">*/}
-                            {/*                <input type="checkbox" className="form-check-input"/></th>*/}
-                            {/*            <th className="w-50 sorting_disabled" rowSpan="1" colSpan="1"*/}
-                            {/*                style="width: 359px;" aria-label="products">products*/}
-                            {/*            </th>*/}
-                            {/*            <th className="w-25 sorting_disabled" rowSpan="1" colSpan="1"*/}
-                            {/*                style="width: 156px;" aria-label="price">price*/}
-                            {/*            </th>*/}
-                            {/*            <th className="w-25 sorting_disabled" rowSpan="1" colSpan="1"*/}
-                            {/*                style="width: 147px;" aria-label="qty">qty*/}
-                            {/*            </th>*/}
-                            {/*            <th className="sorting_disabled" rowSpan="1" colSpan="1" style="width: 42px;"*/}
-                            {/*                aria-label="total">total*/}
-                            {/*            </th>*/}
-                            {/*        </tr>*/}
-                            {/*        </thead>*/}
-                            {/*        <tbody>*/}
-                            {/*        <tr className="odd">*/}
-                            {/*            <td className="  control" tabIndex="0" style="display: none;"></td>*/}
-                            {/*            <td className="  dt-checkboxes-cell"><input type="checkbox"*/}
-                            {/*                                                        className="dt-checkboxes form-check-input"/>*/}
-                            {/*            </td>*/}
-                            {/*            <td className="sorting_1">*/}
-                            {/*                <div*/}
-                            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
-                            {/*                    <div className="avatar-wrapper">*/}
-                            {/*                        <div className="avatar avatar-sm me-3"><img*/}
-                            {/*                            src="../../assets/img/products/woodenchair.png"*/}
-                            {/*                            alt="product-Wooden Chair" className="rounded-2"/></div>*/}
-                            {/*                    </div>*/}
-                            {/*                    <div className="d-flex flex-column"><h6*/}
-                            {/*                        className="text-heading mb-0">Wooden Chair</h6><small>Material:*/}
-                            {/*                        Wooden</small></div>*/}
-                            {/*                </div>*/}
-                            {/*            </td>*/}
-                            {/*            <td><span>$841</span></td>*/}
-                            {/*            <td><span className="text-body">2</span></td>*/}
-                            {/*            <td><span className="text-body">1682</span></td>*/}
-                            {/*        </tr>*/}
-                            {/*        <tr className="even">*/}
-                            {/*            <td className="  control" tabIndex="0" style="display: none;"></td>*/}
-                            {/*            <td className="  dt-checkboxes-cell"><input type="checkbox"*/}
-                            {/*                                                        className="dt-checkboxes form-check-input"/>*/}
-                            {/*            </td>*/}
-                            {/*            <td className="sorting_1">*/}
-                            {/*                <div*/}
-                            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
-                            {/*                    <div className="avatar-wrapper">*/}
-                            {/*                        <div className="avatar avatar-sm me-3"><img*/}
-                            {/*                            src="../../assets/img/products/oneplus.png"*/}
-                            {/*                            alt="product-Oneplus 10" className="rounded-2"/></div>*/}
-                            {/*                    </div>*/}
-                            {/*                    <div className="d-flex flex-column"><h6*/}
-                            {/*                        className="text-heading mb-0">Oneplus 10</h6>*/}
-                            {/*                        <small>Storage:128gb</small></div>*/}
-                            {/*                </div>*/}
-                            {/*            </td>*/}
-                            {/*            <td><span>$896</span></td>*/}
-                            {/*            <td><span className="text-body">3</span></td>*/}
-                            {/*            <td><span className="text-body">2688</span></td>*/}
-                            {/*        </tr>*/}
-                            {/*        <tr className="odd">*/}
-                            {/*            <td className="  control" tabIndex="0" style="display: none;"></td>*/}
-                            {/*            <td className="  dt-checkboxes-cell"><input type="checkbox"*/}
-                            {/*                                                        className="dt-checkboxes form-check-input"/>*/}
-                            {/*            </td>*/}
-                            {/*            <td className="sorting_1">*/}
-                            {/*                <div*/}
-                            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
-                            {/*                    <div className="avatar-wrapper">*/}
-                            {/*                        <div className="avatar avatar-sm me-3"><img*/}
-                            {/*                            src="../../assets/img/products/nikejordan.png"*/}
-                            {/*                            alt="product-Nike Jordan" className="rounded-2"/></div>*/}
-                            {/*                    </div>*/}
-                            {/*                    <div className="d-flex flex-column"><h6*/}
-                            {/*                        className="text-heading mb-0">Nike Jordan</h6>*/}
-                            {/*                        <small>Size:8UK</small></div>*/}
-                            {/*                </div>*/}
-                            {/*            </td>*/}
-                            {/*            <td><span>$392</span></td>*/}
-                            {/*            <td><span className="text-body">1</span></td>*/}
-                            {/*            <td><span className="text-body">392</span></td>*/}
-                            {/*        </tr>*/}
-                            {/*        <tr className="even">*/}
-                            {/*            <td className="  control" tabIndex="0" style="display: none;"></td>*/}
-                            {/*            <td className="  dt-checkboxes-cell"><input type="checkbox"*/}
-                            {/*                                                        className="dt-checkboxes form-check-input"/>*/}
-                            {/*            </td>*/}
-                            {/*            <td className="sorting_1">*/}
-                            {/*                <div*/}
-                            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
-                            {/*                    <div className="avatar-wrapper">*/}
-                            {/*                        <div className="avatar avatar-sm me-3"><img*/}
-                            {/*                            src="../../assets/img/products/facecream.png"*/}
-                            {/*                            alt="product-Face cream" className="rounded-2"/></div>*/}
-                            {/*                    </div>*/}
-                            {/*                    <div className="d-flex flex-column"><h6*/}
-                            {/*                        className="text-heading mb-0">Face cream</h6>*/}
-                            {/*                        <small>Gender:Women</small></div>*/}
-                            {/*                </div>*/}
-                            {/*            </td>*/}
-                            {/*            <td><span>$813</span></td>*/}
-                            {/*            <td><span className="text-body">2</span></td>*/}
-                            {/*            <td><span className="text-body">1626</span></td>*/}
-                            {/*        </tr>*/}
-                            {/*        </tbody>*/}
-                            {/*    </table>*/}
-                            {/*    <div style="width: 1%;"></div>*/}
-                            {/*</div>*/}
                             <div className="d-flex justify-content-end align-items-center m-4 mb-2">
                                 <div className="order-calculations">
                                     <div className="d-flex justify-content-start mb-2">
                                         <span className="w-px-100 text-heading">Subtotal:</span>
-                                        <h6 className="mb-0">$2093</h6>
+                                        <h6 className="mb-0">${subtotal}</h6>
                                     </div>
                                     <div className="d-flex justify-content-start mb-2">
                                         <span className="w-px-100 text-heading">Discount:</span>
-                                        <h6 className="mb-0">$2</h6>
+                                        <h6 className="mb-0">${bill.discount ? bill.discount.percentage_discount * subtotal / 100 : "Unknown"}</h6>
                                     </div>
-                                    <div className="d-flex justify-content-start mb-2">
-                                        <span className="w-px-100 text-heading">Tax:</span>
-                                        <h6 className="mb-0">$28</h6>
-                                    </div>
+                                    {/*<div className="d-flex justify-content-start mb-2">*/}
+                                    {/*    <span className="w-px-100 text-heading">Tax:</span>*/}
+                                    {/*    <h6 className="mb-0">$28</h6>*/}
+                                    {/*</div>*/}
                                     <div className="d-flex justify-content-start">
                                         <h6 className="w-px-100 mb-0">Total:</h6>
-                                        <h6 className="mb-0">$2113</h6>
+                                        <h6 className="mb-0">${bill.price}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -248,7 +231,7 @@ export const OrderDetails = () => {
                                     <span className="timeline-point timeline-point-primary"></span>
                                     <div className="timeline-event">
                                         <div className="timeline-header">
-                                            <h6 className="mb-0">Order was placed (Order ID: #32543)</h6>
+                                            <h6 className="mb-0">Order was placed (Order ID: #{bill.id})</h6>
                                             <small className="text-muted">Tuesday 11:29 AM</small>
                                         </div>
                                         <p className="mt-3">Your order has been placed successfully</p>
@@ -315,31 +298,31 @@ export const OrderDetails = () => {
                         <div className="card-body">
                             <div className="d-flex justify-content-start align-items-center mb-4">
                                 <div className="avatar me-3">
-                                    <img src="../../assets/img/avatars/1.png" alt="Avatar" className="rounded"/>
+                                    <img src={bill.account?.user.avatar} alt="Avatar" className="rounded"/>
                                 </div>
                                 <div className="d-flex flex-column">
                                     <a className="text-body text-nowrap">
-                                        <h6 className="mb-0">Shamus Tuttle</h6>
+                                        <h6 className="mb-0">{bill.account?.user ? `${bill.account.user.firstname} ${bill.account.user.lastname}` : 'Unknown'}</h6>
                                     </a>
-                                    <span>Customer ID: #58909</span></div>
+                                    <span>Customer ID: #{bill.account?.idaccount}</span></div>
                             </div>
                             <div className="d-flex justify-content-start align-items-center mb-4">
-                                <span
-                                    className="avatar rounded bg-label-success me-3 d-flex align-items-center justify-content-center"><i
-                                    className="bx bx-cart bx-sm"></i></span>
-                                <h6 className="text-nowrap mb-0">12 Orders</h6>
+                                <span className="avatar rounded bg-label-success me-3 d-flex align-items-center justify-content-center">
+                                    <i className="bx bx-cart bx-sm"></i>
+                                </span>
+                                <h6 className="text-nowrap mb-0">{bill.count > 1 ? `${bill.count} Orders` : `${bill.count} Order`}</h6>
                             </div>
                             <div className="d-flex justify-content-between">
-                                <h6 className="mb-1">Contact info</h6>
-                                {/*<h6 className="mb-1">*/}
-                                {/*    <a data-bs-toggle="modal" data-bs-target="#editUser">Edit</a>*/}
-                                {/*</h6>*/}
+                                <h6 className="mb-2">Contact info</h6>
+                                <h6 className="mb-2">
+                                    <Link to={"/user/profile"} className="p-0">Edit</Link>
+                                    {/*<a data-bs-toggle="modal" data-bs-target="#editUser">Edit</a>*/}
+                                </h6>
                             </div>
-                            <p className=" mb-1">Email: Shamus889@yahoo.com</p>
-                            <p className=" mb-0">Mobile: +84 (609) 972-22-22</p>
+                            <p className="mb-0">Email: {bill.account?.email}</p>
+                            <p className="mb-0">Mobile: {bill.account?.user ? formatPhoneNumber(bill.account.user.phone_number) : "Invalid phone number"}</p>
                         </div>
                     </div>
-
                     <div className="card mb-4">
                         <div className="card-header d-flex justify-content-between">
                             <h5 className="card-title m-0">Shipping address</h5>
@@ -349,16 +332,19 @@ export const OrderDetails = () => {
                         </div>
                         <div className="card-body">
                             <p className="mb-0">
-                                45 Roker Terrace
+                                {bill.address?.tower}
                                 <br/>
-                                Latheronwheel
+                                {bill.address?.street}
                                 <br/>
-                                KW5 8NW,London
+                                {bill.address?.district}
                                 <br/>
-                                UK
+                                {bill.address?.city}
+                                <br/>
+                                {bill.address?.state}
+                                <br/>
+                                {bill.address?.country}
                             </p>
                         </div>
-
                     </div>
                     <div className="card mb-4">
                         <div className="card-header d-flex justify-content-between pb-2">
@@ -368,13 +354,161 @@ export const OrderDetails = () => {
                             {/*</h6>*/}
                         </div>
                         <div className="card-body">
-                            <p className="mb-4">45 Roker Terrace <br/>Latheronwheel <br/>KW5 8NW,London <br/>UK</p>
-                            <h5 className="mb-1">Mastercard</h5>
+                            <p className="mb-4">
+                                {bill.address?.tower}
+                                <br/>
+                                {bill.address?.street}
+                                <br/>
+                                {bill.address?.district}
+                                <br/>
+                                {bill.address?.city}
+                                <br/>
+                                {bill.address?.state}
+                                <br/>
+                                {bill.address?.country}
+                            </p>
+                            <h6 className="mb-2">Mastercard</h6>
                             <p className="mb-0">Card Number: ******4291</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+const OrderDemo = () => {
+    return (
+        <>
+
+            {/*<div id="DataTables_Table_0_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer">*/}
+            {/*    <table*/}
+            {/*        className="datatables-order-details table border-top dataTable no-footer dtr-column"*/}
+            {/*        id="DataTables_Table_0" style="width: 918px;">*/}
+            {/*        <thead>*/}
+            {/*        <tr>*/}
+            {/*            <th className="control sorting_disabled dtr-hidden" rowSpan="1" colSpan="1"*/}
+            {/*                style="width: 0px; display: none;" aria-label=""></th>*/}
+            {/*            <th className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"*/}
+            {/*                rowSpan="1" colSpan="1" style="width: 18px;" data-col="1" aria-label="">*/}
+            {/*                <input type="checkbox" className="form-check-input"/></th>*/}
+            {/*            <th className="w-50 sorting_disabled" rowSpan="1" colSpan="1"*/}
+            {/*                style="width: 359px;" aria-label="products">products*/}
+            {/*            </th>*/}
+            {/*            <th className="w-25 sorting_disabled" rowSpan="1" colSpan="1"*/}
+            {/*                style="width: 156px;" aria-label="price">price*/}
+            {/*            </th>*/}
+            {/*            <th className="w-25 sorting_disabled" rowSpan="1" colSpan="1"*/}
+            {/*                style="width: 147px;" aria-label="qty">qty*/}
+            {/*            </th>*/}
+            {/*            <th className="sorting_disabled" rowSpan="1" colSpan="1" style="width: 42px;"*/}
+            {/*                aria-label="total">total*/}
+            {/*            </th>*/}
+            {/*        </tr>*/}
+            {/*        </thead>*/}
+            {/*        <tbody>*/}
+            {/*        <tr className="odd">*/}
+            {/*            <td className="control" tabIndex="0"></td>*/}
+            {/*            <td className="dt-checkboxes-cell">*/}
+            {/*                <input type="checkbox" className="dt-checkboxes form-check-input"/>*/}
+            {/*            </td>*/}
+            {/*            <td className="sorting_1">*/}
+            {/*                <div*/}
+            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
+            {/*                    <div className="avatar-wrapper">*/}
+            {/*                        <div className="avatar avatar-sm me-3">*/}
+            {/*                            <img*/}
+            {/*                                // src="../../assets/img/products/woodenchair.png"*/}
+            {/*                                alt="product-Wooden Chair" className="rounded-2"/>*/}
+            {/*                        </div>*/}
+            {/*                    </div>*/}
+            {/*                    <div className="d-flex flex-column">*/}
+            {/*                        <h6 className="text-heading mb-0">Wooden Chair</h6>*/}
+            {/*                        <small>Material: Wooden</small></div>*/}
+            {/*                </div>*/}
+            {/*            </td>*/}
+            {/*            <td><span>$841</span></td>*/}
+            {/*            <td><span className="text-body">2</span></td>*/}
+            {/*            <td><span className="text-body">1682</span></td>*/}
+            {/*        </tr>*/}
+            {/*        <tr className="even">*/}
+            {/*            <td className="control" tabIndex="0"></td>*/}
+            {/*            <td className="dt-checkboxes-cell">*/}
+            {/*                <input type="checkbox" className="dt-checkboxes form-check-input"/>*/}
+            {/*            </td>*/}
+            {/*            <td className="sorting_1">*/}
+            {/*                <div*/}
+            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
+            {/*                    <div className="avatar-wrapper">*/}
+            {/*                        <div className="avatar avatar-sm me-3">*/}
+            {/*                            <img*/}
+            {/*                                // src="../../assets/img/products/oneplus.png"*/}
+            {/*                                alt="product-Oneplus 10" className="rounded-2"/>*/}
+            {/*                        </div>*/}
+            {/*                    </div>*/}
+            {/*                    <div className="d-flex flex-column">*/}
+            {/*                        <h6 className="text-heading mb-0">Oneplus 10</h6>*/}
+            {/*                        <small>Storage:128gb</small>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </td>*/}
+            {/*            <td><span>$896</span></td>*/}
+            {/*            <td><span className="text-body">3</span></td>*/}
+            {/*            <td><span className="text-body">2688</span></td>*/}
+            {/*        </tr>*/}
+            {/*        <tr className="odd">*/}
+            {/*            <td className="control" tabIndex="0"></td>*/}
+            {/*            <td className="dt-checkboxes-cell">*/}
+            {/*                <input type="checkbox" className="dt-checkboxes form-check-input"/>*/}
+            {/*            </td>*/}
+            {/*            <td className="sorting_1">*/}
+            {/*                <div*/}
+            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
+            {/*                    <div className="avatar-wrapper">*/}
+            {/*                        <div className="avatar avatar-sm me-3">*/}
+            {/*                            <img*/}
+            {/*                                // src="../../assets/img/products/nikejordan.png"*/}
+            {/*                                alt="product-Nike Jordan" className="rounded-2"/>*/}
+            {/*                        </div>*/}
+            {/*                    </div>*/}
+            {/*                    <div className="d-flex flex-column">*/}
+            {/*                        <h6 className="text-heading mb-0">Nike Jordan</h6>*/}
+            {/*                        <small>Size:8UK</small>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </td>*/}
+            {/*            <td><span>$392</span></td>*/}
+            {/*            <td><span className="text-body">1</span></td>*/}
+            {/*            <td><span className="text-body">392</span></td>*/}
+            {/*        </tr>*/}
+            {/*        <tr className="even">*/}
+            {/*            <td className="control" tabIndex="0"></td>*/}
+            {/*            <td className="dt-checkboxes-cell">*/}
+            {/*                <input type="checkbox" className="dt-checkboxes form-check-input"/>*/}
+            {/*            </td>*/}
+            {/*            <td className="sorting_1">*/}
+            {/*                <div*/}
+            {/*                    className="d-flex justify-content-start align-items-center text-nowrap">*/}
+            {/*                    <div className="avatar-wrapper">*/}
+            {/*                        <div className="avatar avatar-sm me-3">*/}
+            {/*                            <img*/}
+            {/*                                // src="../../assets/img/products/facecream.png"*/}
+            {/*                                alt="product-Face cream" className="rounded-2"/>*/}
+            {/*                        </div>*/}
+            {/*                    </div>*/}
+            {/*                    <div className="d-flex flex-column">*/}
+            {/*                        <h6 className="text-heading mb-0">Face cream</h6>*/}
+            {/*                        <small>Gender:Women</small>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </td>*/}
+            {/*            <td><span>$813</span></td>*/}
+            {/*            <td><span className="text-body">2</span></td>*/}
+            {/*            <td><span className="text-body">1626</span></td>*/}
+            {/*        </tr>*/}
+            {/*        </tbody>*/}
+            {/*    </table>*/}
+            {/*</div>*/}
         </>
     )
 }

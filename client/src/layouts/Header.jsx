@@ -3,6 +3,7 @@ import React, { Component, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 import SaveChange from "../components/modal/notify/SaveChange.jsx";
 import Message from "../components/bar-elements/Message.jsx";
@@ -10,7 +11,6 @@ import Basket from "../components/bar-elements/Basket.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import Activitybar from "./Activitybar.jsx";
 import Outbar from "./Outbar.jsx";
-import {jwtDecode} from "jwt-decode";
 import Overside from "./Overside.jsx";
 
 const notifies = [
@@ -36,43 +36,6 @@ const baskets = [
     { id: 4, name: "DELL Precision 16' 5690", description: "Best Workstation", quantity: 1 },
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
-
-const Header0 = ({ role }) => {
-    const [loading, setLoading] = useState(true);
-    const setHeader = () => {
-        if (role === 1) {
-            return (
-                <>
-                    <Navbar/>
-                </>
-            )
-        } else if (role === 0) {
-            return (
-                <>
-                    <Activitybar/>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <Outbar/>
-                </>
-            )
-        }
-    }
-
-    useEffect(() => {
-        // setHeader()
-    }, [loading])
-
-    if (loading) return <div>Load</div>;
-
-    return (
-        <>
-            {setHeader()}
-        </>
-    )
-}
 
 const Header = () => {
     const [showModalHeader, setShowModalHeader] = useState(false);
@@ -145,9 +108,9 @@ const Header = () => {
             setTimeout(() => {
                 window.location.reload();
             }, 50);
-            console.log("tìm kiếm thành công");
+            // console.log("tìm kiếm thành công");
         } catch (error) {
-            console.log("tìm kiếm ko thành công", error);
+            // console.log("tìm kiếm ko thành công", error);
         }
     };
 
@@ -347,7 +310,7 @@ const Header = () => {
                                 <div className="dropdown-header d-flex align-items-center py-3">
                                     <h6 className="mb-0 me-auto">Notification</h6>
                                     <div className="d-flex align-items-center h6 mb-0">
-                                        <span className="badge bg-label-primary me-2">8 New</span>
+                                        <span className="badge bg-label-primary me-2">10 New</span>
                                         <a href="#" className="dropdown-notifications-all p-2" data-bs-toggle="tooltip"
                                            data-bs-placement="top" aria-label="Mark all as read"
                                            data-bs-original-title="Mark all as read">
@@ -432,7 +395,7 @@ const Header = () => {
                                 <img
                                     src="../assets/img/avatars/1.png"
                                     className="w-px-40 h-auto rounded-circle"
-                                    alt="avatar-image"
+                                    alt="avatar"
                                     aria-label="Avatar Image"
                                 />
                             </div>
@@ -450,7 +413,7 @@ const Header = () => {
                                                 <img
                                                     src="../assets/img/avatars/1.png"
                                                     className="w-px-40 h-auto rounded-circle"
-                                                    alt="avatar-image"
+                                                    alt="avatar"
                                                     aria-label="Avatar Image"
                                                 />
                                             </div>
@@ -539,110 +502,6 @@ const Header = () => {
                     <i className="bx bx-x bx-md search-toggler cursor-pointer"></i>
                 </div>
             </nav>
-
-            {/*<Navbar className="bg-dark bg-body-tertiary"*/}
-            {/*        fixed="top" expand="lg"*/}
-            {/*        style={{height: 56}}> /!** data-bs-theme="dark" *!/*/}
-            {/*    <Container>*/}
-            {/*        <Navbar.Brand className="app-brand-text demo menu-text fw-bold"*/}
-            {/*                      style={{textTransform: 'capitalize'}} href="/">Bill Cipher</Navbar.Brand>*/}
-            {/*        <Navbar.Toggle aria-controls="basic-navbar-nav"/>*/}
-            {/*        <Navbar.Collapse id="basic-navbar-nav">*/}
-            {/*            <Nav className="me-auto">*/}
-            {/*                <Nav.Link as={Link} to={'/search'}>Product</Nav.Link>*/}
-            {/*                <Nav.Link as={Link} to={'/contact'}>Contact</Nav.Link>*/}
-            {/*                <Nav.Link as={Link} to={'/about'}>About</Nav.Link>*/}
-            {/*            </Nav>*/}
-            {/*            <Nav className="ms-auto d-flex">*/}
-            {/*                <Form className="d-flex" onSubmit={handleSearch}>*/}
-            {/*                    <Form.Control*/}
-            {/*                        type="search"*/}
-            {/*                        placeholder="Search"*/}
-            {/*                        className="me-2"*/}
-            {/*                        aria-label="Search"*/}
-            {/*                        name="search"*/}
-            {/*                        value={submit.search}*/}
-            {/*                        onChange={handleChange}*/}
-            {/*                    />*/}
-            {/*                    <Button as={Link} to={'/search'} variant="outline-primary"><FontAwesomeIcon*/}
-            {/*                        icon={faSearch}/></Button>*/}
-            {/*                </Form>*/}
-            {/*                {token ? auth.role === 0 ?*/}
-            {/*                        <>*/}
-            {/*                            <DropdownButton*/}
-            {/*                                as={ButtonGroup}*/}
-            {/*                                align={{lg: 'end'}}*/}
-            {/*                                variant={'primary'}*/}
-            {/*                                title={<FontAwesomeIcon icon={faShoppingCart}/>}*/}
-            {/*                                className="ms-2 me-2">*/}
-            {/*                                <NavDropdown.Item as={Link} to={"/#"}>Schweitzenburg</NavDropdown.Item>*/}
-            {/*                                <NavDropdown.Item as={Link} to={"#"}>Braunschweig</NavDropdown.Item>*/}
-            {/*                                <NavDropdown.Divider/>*/}
-            {/*                                <NavDropdown.Item as={Link} to={"/user/cart"}>Full Cart</NavDropdown.Item>*/}
-            {/*                            </DropdownButton>*/}
-            {/*                        </> :*/}
-            {/*                        <>*/}
-            {/*                            <DropdownButton*/}
-            {/*                                as={ButtonGroup}*/}
-            {/*                                align={{lg: 'end'}}*/}
-            {/*                                variant={'primary'}*/}
-            {/*                                title={<FontAwesomeIcon icon={faBarsProgress}/>}*/}
-            {/*                                className="ms-2 me-2">*/}
-            {/*                                <NavDropdown.Item as={Link} to={"/admin"}>Dashborad</NavDropdown.Item>*/}
-            {/*                            </DropdownButton>*/}
-            {/*                        </> :*/}
-            {/*                    <>*/}
-            {/*                        <DropdownButton*/}
-            {/*                            as={ButtonGroup}*/}
-            {/*                            align={{ lg: 'end' }}*/}
-            {/*                            variant={'primary'}*/}
-            {/*                            title={<FontAwesomeIcon icon={faShoppingCart} />}*/}
-            {/*                            className="ms-2 me-2">*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/"}>Nothing in here now!</NavDropdown.Item>*/}
-            {/*                        </DropdownButton>*/}
-            {/*                    </>*/}
-            {/*                }*/}
-            {/*                {token ? auth.role === 0 ?*/}
-            {/*                    <>*/}
-            {/*                        <DropdownButton*/}
-            {/*                            as={ButtonGroup}*/}
-            {/*                            align={{ lg: "end" }}*/}
-            {/*                            variant={'primary'}*/}
-            {/*                            title={<i className='bx bx-user' ></i>}*/}
-            {/*                            className="">*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/user/profile"}>Profile</NavDropdown.Item>*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/user/address"}>Address</NavDropdown.Item>*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/user/bill"}>Bill</NavDropdown.Item>*/}
-            {/*                            <NavDropdown.Divider />*/}
-            {/*                            <NavDropdown.Item onClick={() => setShowModalHeader(true)}>Log out</NavDropdown.Item>*/}
-            {/*                        </DropdownButton>*/}
-            {/*                    </> : <>*/}
-            {/*                        <DropdownButton*/}
-            {/*                            as={ButtonGroup}*/}
-            {/*                            align={{ lg: "end" }}*/}
-            {/*                            variant={'primary'}*/}
-            {/*                            title={<i className='bx bx-user' ></i>}*/}
-            {/*                            className="">*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/admin/profile"}>Profile</NavDropdown.Item>*/}
-            {/*                            <NavDropdown.Divider />*/}
-            {/*                            <NavDropdown.Item onClick={() => setShowModalHeader(true)}>Log out</NavDropdown.Item>*/}
-            {/*                        </DropdownButton>*/}
-            {/*                    </> : <>*/}
-            {/*                        <DropdownButton*/}
-            {/*                            as={ButtonGroup}*/}
-            {/*                            align={{ lg: "end" }}*/}
-            {/*                            variant={'primary'}*/}
-            {/*                            title={<i className='bx bx-user' ></i>}*/}
-            {/*                            className="">*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/login"}>Log in</NavDropdown.Item>*/}
-            {/*                            <NavDropdown.Item as={Link} to={"/register"}>Sign up</NavDropdown.Item>*/}
-            {/*                        </DropdownButton>*/}
-            {/*                    </>*/}
-            {/*                }*/}
-            {/*            </Nav>*/}
-            {/*        </Navbar.Collapse>*/}
-            {/*    </Container>*/}
-            {/*</Navbar>*/}
             <SaveChange
                 show={showModalHeader}
                 onHide={() => setShowModalHeader(false)}

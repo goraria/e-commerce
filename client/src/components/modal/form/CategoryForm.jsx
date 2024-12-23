@@ -24,13 +24,13 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                 category_description: category.category_description || '',
                 category_image: category.category_image || ''
             });
-        // } else {
-        //     setFormData({
-        //         idcategory: '',
-        //         category_name: '',
-        //         category_description: '',
-        //         category_image: ''
-        //     });
+            // } else {
+            //     setFormData({
+            //         idcategory: '',
+            //         category_name: '',
+            //         category_description: '',
+            //         category_image: ''
+            //     });
         }
 
         if (!show) {
@@ -64,7 +64,7 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
         if (form.checkValidity() === false) {
             setValidated(true);
         } else {
-            const allFieldsFilled = Object.values(formData.category_name).every(value => value.trim() !== "");
+            const allFieldsFilled = Object.values(formData).every(value => value.trim() !== "");
 
             if (allFieldsFilled) {
                 setShowConfirmModal(true);
@@ -156,7 +156,7 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                                         />
                                     </label>
                                     <button aria-label='Click me' type="button"
-                                            className="btn btn-outline-secondary account-image-reset mb-4">
+                                        className="btn btn-outline-secondary account-image-reset mb-4">
                                         <i className="bx bx-reset d-block d-sm-none"></i>
                                         <span className="d-none d-sm-block">Reset</span>
                                     </button>
@@ -199,12 +199,12 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                                 </textarea>
                             </div>
                         </div>
-                        <hr/>
+                        <hr />
                         {/*{error && <p className="text-danger">{error}</p>}*/}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide} variant="secondary" style={{marginRight: "auto"}}>
+                    <Button onClick={onHide} variant="secondary" className="me-auto">
                         <i className='bx bx-x me-2' ></i>
                         <span>Close</span>
                     </Button>

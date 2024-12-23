@@ -354,6 +354,23 @@ class ProductController {
             res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
     }
+
+    async loadRatingMiddleware(req, res) {
+        // console.log(req.body, req.user);
+        try {
+            const rating = await Rating.findAll({
+                where: {
+                    idaccount: req.user.id,
+                    idproduct: req.body.idproduct
+                }
+            });
+
+            console.log(rating);
+            res.json(rating);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching ratings', error });
+        }
+    }
 }
 
 module.exports = new ProductController();

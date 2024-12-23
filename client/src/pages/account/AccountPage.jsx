@@ -115,6 +115,35 @@ export const AccountPage = ({ onReload }) => {
             }
         }
     };
+    const handleUploadAvatar = async () => {
+        const fileInput = document.getElementById('upload');
+        const file = fileInput.files[0]; // Lấy file từ input
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('avatar', file); // Gửi file dưới tên 'avatar'
+
+            try {
+                const token = localStorage.getItem('token'); // Token xác thực
+                const response = await axios.post('http://localhost:5172/account/upload-avatar', formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data' // Quan trọng khi gửi file
+                    }
+                });
+
+                if (response.status === 200) {
+                    // alert('Avatar uploaded successfully!');
+                    onReload(); // Gọi lại để cập nhật avatar trên giao diện
+                }
+            } catch (error) {
+                alert('Failed to upload avatar.');
+            }
+        } else {
+            alert('No file selected!');
+        }
+    };
+
 
     return (
         <>
@@ -287,73 +316,3 @@ export const AccountPage = ({ onReload }) => {
         </>
     )
 }
-
-
-
-
-<div className="card-body">
-    <div className="d-flex align-items-start align-items-sm-center gap-4">
-        <img
-            src="../assets/img/avatars/1.png"
-            alt="user-avatar"
-            className="d-block rounded"
-            height="100"
-            width="100"
-            aria-label="Account image"
-            id="uploadedAvatar"
-        />
-        <div className="button-wrapper">
-            <label htmlFor="upload" className="btn btn-primary me-3 mb-4" tabIndex="0">
-                <span className="d-none d-sm-block">Upload new photo</span>
-                <i className="bx bx-sm bx-upload d-block d-sm-none"></i>
-                <input
-                    type="file"
-                    name="avatar"
-                    id="upload"
-                    className="account-file-input"
-                    hidden
-                    accept="image/png, image/jpeg"
-                />
-            </label>
-            <button aria-label='Click me' type="button"
-                className="btn btn-outline-secondary account-image-reset mb-4">
-                <i className="bx bx-reset d-block d-sm-none"></i>
-                <span className="d-none d-sm-block">Reset</span>
-            </button>
-            <p className="text-muted mb-0">Allowed JPG or PNG.</p>
-        </div>
-    </div>
-</div>
-
-
-
-
-const [reloadAccountInfo, setReloadAccountInfo] = useState(0);
-
-const handleReloadAccountInfo = () => {
-    setReloadAccountInfo(reloadAccountInfo + 1);  // Tăng giá trị để force re-render
-};
-
-useEffect(() => {
-    const deactivateAcc = document.querySelector('#formAccountDeactivation');
-
-    // Update/reset user image of account page
-    let accountUserImage = document.getElementById('uploadedAvatar');
-    const fileInput = document.querySelector('.account-file-input');
-    const resetFileInput = document.querySelector('.account-image-reset');
-
-    if (accountUserImage) {
-        const resetImage = accountUserImage.src;
-
-        fileInput.onchange = () => {
-            if (fileInput.files[0]) {
-                accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-            }
-        };
-
-        resetFileInput.onclick = () => {
-            fileInput.value = '';
-            accountUserImage.src = resetImage;
-        };
-    }
-}, []);

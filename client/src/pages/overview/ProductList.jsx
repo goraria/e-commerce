@@ -39,9 +39,8 @@ const ProductList = () => {
            const response = await axios.get(`http://localhost:5172/products/load-productName/${searchQuery}`);
             setProductList(response.data);
         } catch (error) {
-            console.log('chưa nhập tên tìm kiếm')
+            // console.log('chưa nhập tên tìm kiếm')
         }
-        
     };
 
     useEffect(() => {
@@ -63,47 +62,13 @@ const ProductList = () => {
     return (
         <>
             <Transitionbar/>
-            {/*<Overview mt={168} me={56}>*/}
-            {/*    <h2>Laptop</h2>*/}
-            {/*    <h6 style={{padding: '0 16px'}}>*/}
-            {/*        Laptop là một thiết bị máy tính có kích thước nhỏ gọn và di động...*/}
-            {/*    </h6>*/}
-            {/*    <Row className="justify-content-center my-3">*/}
-            {/*        <Container style={{padding: '0 16px'}}>*/}
-            {/*            {['Lenovo', 'Dell', 'HP', 'Acer', 'Microsoft', 'Asus', 'LG', 'Apple', 'Razer', 'Samsung'].map((brand, index) => (*/}
-            {/*                <Button*/}
-            {/*                    variant="outline-primary"*/}
-            {/*                    key={index}*/}
-            {/*                    // style={{margin: '0px 16px 16px 0px'}}*/}
-            {/*                    className="me-3"*/}
-            {/*                    onClick={() => fetchProductByBrand(brand)} // Call function with brand name*/}
-            {/*                >*/}
-            {/*                    {brand}*/}
-            {/*                </Button>*/}
-            {/*            ))}*/}
-            {/*        </Container>*/}
-            {/*    </Row>*/}
-            {/*</Overview>*/}
-            {/*<Overview mt={56} me={56}>*/}
-            {/*    <h2>Chọn theo tiêu chí</h2>*/}
-            {/*    <h6 style={{padding: '0 16px'}}>*/}
-            {/*        Lọc theo các tiêu chí...*/}
-            {/*    </h6>*/}
-            {/*    <Row className="justify-content-center my-3">*/}
-            {/*        <Container style={{padding: '0 16px'}}>*/}
-            {/*            {categories.map((category, index) => (*/}
-            {/*                <CustomDropDown key={index} category={category} onSelect={filterProducts}/>*/}
-            {/*            ))}*/}
-            {/*        </Container>*/}
-            {/*    </Row>*/}
-            {/*</Overview>*/}
             <Overview>
                 <h5 className="card-title">Laptop</h5>
                 <h6 className="card-subtitle text-muted">
                     Laptop is best mobile device to work...
                 </h6>
                 <hr/>
-                <row className="justify-content-center my-3">
+                <Row className="justify-content-center">
                     <Stack direction="horizontal" gap={3}>
                         {brands.map((brand, index) => (
                             <button
@@ -115,7 +80,7 @@ const ProductList = () => {
                             </button>
                         ))}
                     </Stack>
-                </row>
+                </Row>
             </Overview>
             <Overview>
                 <h5 className="card-title">Sort by</h5>
@@ -123,13 +88,13 @@ const ProductList = () => {
                     Choose one of config to sort...
                 </h6>
                 <hr/>
-                <row className="justify-content-center my-3">
+                <Row className="justify-content-center">
                     <Stack direction="horizontal" gap={3}>
                         {categories.map((category, index) => (
                             <CustomDropDown key={index} category={category} onSelect={filterProducts}/>
                         ))}
                     </Stack>
-                </row>
+                </Row>
             </Overview>
             <Overview>
                 <h3 className="text-center m-0">Spotlight</h3>

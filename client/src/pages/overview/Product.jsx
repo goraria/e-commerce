@@ -12,6 +12,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
+import RatingStar from "../../components/product/RatingStar.jsx";
+import {RatingForm} from "../../components/modal/form/RatingForm.jsx";
 
 const Product = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -26,9 +28,11 @@ const Product = () => {
     const [carts, setCart] = useState();
     const [ChoosedColor, setChoosedColor] = useState(null);
 
+    const [showEvaluate, setShowEvaluate] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
     const token = localStorage.getItem('token');
+
     const fetchCart = async () => {
         try {
             const response = await fetch(`http://localhost:5172/cart/loadcart`, {
@@ -48,7 +52,7 @@ const Product = () => {
             const response = await fetch(`http://localhost:5172/products/load-productid/${id}`);
             const data = await response.json();
             setProduct(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            console.log(data[0])
+            // console.log(data[0])
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -66,12 +70,23 @@ const Product = () => {
         }
     };
 
+    const fetchProductRating = async () => {
+        try {
+            const response = await fetch(`http://localhost:5172/products/load-rating/${id}`);
+            const data = await response.json();
+            setRating(data); // Cập nhật thông tin sản phẩm từ backend
+            // console.log(data)
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+        }
+    };
+
     const fetchProductColor = async () => {
         try {
             const response = await fetch(`http://localhost:5172/products/load-color/${id}`);
             const data = await response.json();
             setcolor(data); // Cập nhật thông tin sản phẩm từ backend
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -83,7 +98,7 @@ const Product = () => {
             const data = await response.json();
             setconfig(data)
             setdefaultconfig(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -92,24 +107,12 @@ const Product = () => {
     const handleConfigurationChange = (config) => {
         setdefaultconfig(config);
     };
+
     // const [descriptions, setArray] = useState([]);
     // const currentUrl = window.location.href;
     // const url = new URL(currentUrl);
     // const params = new URLSearchParams(url.search);
     // const id = params.get('id');
-
-
-    // const fetchAPI = async () => {
-    //     const response = await axios.get(`http://localhost:5172/products/load-product/${id}`)
-    //     console.log(response.data)
-    //     setArray(response.data[0])
-    // };
-
-    // const fetchAPI1 = async () => {
-    //     const response = await axios.get(`http://localhost:5172/products/load-description/${id}`)
-    //     // console.log(response.data)
-    //     setArray(response.data[0])
-    // };
 
     const handleColorSelect = (idcolor) => {
         setChoosedColor(idcolor); // Cập nhật idcolor đã chọn
@@ -134,12 +137,14 @@ const Product = () => {
         }
     };
 
+    const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
+    const averageScore = totalScore / ratings.length;
+
     useEffect(() => {
-        // fetchAPI();
-        // fetchAPI1();
         fetchProductConfiguration();
         fetchProductDetails();
         fetchProductDecription();
+        fetchProductRating();
         fetchProductColor();
         fetchCart();
     }, [id]);
@@ -149,13 +154,12 @@ const Product = () => {
             <Transitionbar />
             <div className="container">
                 <div className="row">
-                    <Col sm={12} md={8} lg={8} style={{ alignItems: 'center' }}>
-                        <div className="mb-4" style={{ display: "flex", justifyContent: 'center' }}>
+                    <div className="col col-sm-12 col-md-8 col-lg-8 align-items-center">
+                        <div className="mb-4 d-flex justify-content-center">
                             <img
-                                className="d-block"
+                                className="d-block object-fit-cover w-100 h-100 rounded-4"
                                 src={products.product_image}
                                 alt="Second slide"
-                                style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '5px' }}
                             />
                         </div>
                         <div className="card p-3 mb-4">
@@ -195,7 +199,7 @@ const Product = () => {
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <Row>
-                                            <Col md={4}><strong>Revolution:</strong></Col>
+                                            <Col md={4}><strong>Resolution:</strong></Col>
                                             <Col md={8}>{default_config.resolution}</Col>
                                         </Row>
                                     </ListGroup.Item>
@@ -221,12 +225,11 @@ const Product = () => {
                             <Card.Body>
                                 {/* Section: Cấu hình đặc điểm */}
                                 <Card.Title> Mô tả sản phẩm</Card.Title>
-                                <div className="mb-4" style={{ display: "flex", justifyContent: 'center' }}>
+                                <div className="mb-4 d-flex justify-content-center">
                                     <img
-                                        className="d-block"
+                                        className="d-block object-fit-cover w-100 h-100 rounded-4"
                                         src={products.product_image}
                                         alt="Second slide"
-                                        style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '5px' }}
                                     />
                                 </div>
                                 <div>
@@ -234,14 +237,13 @@ const Product = () => {
                                     <h4>Thiết kế thời thượng, thuận tiện di chuyển</h4>
                                     <p>{descriptions.title_description}</p>
                                 </div>
-                                <div style={{ display: "flex", marginBottom: 24, justifyContent: 'center' }}>
+                                <div className="d-flex justify-content-center mb-4">
                                     {products.product_image ? (
-                                        <div style={{ display: "flex", marginBottom: 24, justifyContent: 'center' }}>
+                                        <div className="d-flex justify-content-center mb-4">
                                             <Image
-                                                className="d-block"
+                                                className="d-block object-fit-cover w-100 h-100 rounded-4"
                                                 src={products.product_image}
                                                 alt="Product image"
-                                                style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '5px' }}
                                             />
                                         </div>
                                     ) : (
@@ -254,18 +256,18 @@ const Product = () => {
                                 </div>
                             </Card.Body>
                         </div>
-                    </Col>
-                    <Col sm={12} md={4} lg={4}>
-                        <div className="card p-3" style={{ position: 'sticky', top: 136 }}>
+                    </div>
+                    <div className="col col-sm-12 col-md-4 col-lg-4">
+                        <div className="card p-3 position-sticky" style={{ top: 24 }}>
                             <div className="container">
                                 <div className="row mt-4">
-                                    <Col>
-                                        <h2>{products.product_name}</h2>
-                                        <p>Chưa có đánh giá</p>
-                                    </Col>
+                                    <div className="col">
+                                        <h3>{products.product_name}</h3>
+                                        <p className="text-warning">{averageScore ? <RatingStar rating={averageScore}/> : 'Chưa có đánh giá' }</p>
+                                    </div>
                                 </div>
                                 <div className="row mt-4">
-                                    <Col>
+                                    <div className="col">
                                         <h5>Configurations</h5>
                                         <Form>
                                             <div className="mb-3">
@@ -285,48 +287,73 @@ const Product = () => {
                                             <h5>Colors</h5>
                                             <div className="d-flex gap-3 mb-3">
                                                 {colors.map((colours, index) =>
-                                                    <Button key={index}
+                                                    <Button
+                                                        key={index}
                                                         variant={colours.color}
-                                                        style={{ boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}
+                                                        // style={{boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'}}
+                                                        className="shadow-sm"
                                                         onClick={() => handleColorSelect(colours.idcolor)}
-                                                    > {colours.color}</Button>)}
+                                                    >{colours.color}</Button>
+                                                )}
                                             </div>
                                         </Form>
-                                    </Col>
+                                    </div>
                                 </div>
                                 <div className="row mt-4">
-                                    <Col>
+                                    <div className="col">
                                         <h3 className="text-danger">${default_config.price}</h3>
                                         <h6 className="text-muted">
-                                            <del>{default_config.price}</del> <span className="text-danger">-47%</span>
+                                            <del>{default_config.price}</del>
+                                            <span className="text-danger">-47%</span>
                                         </h6>
-                                    </Col>
+                                    </div>
                                 </div>
                                 <div className="row mt-4">
-                                    <Col sm={12} md={6} lg={6} className="mb-3">
-                                        <Button variant="outline-danger" className="me-2" style={{ width: '100%' }} onClick={handleAddToCart}>Add to cart</Button>
-                                    </Col>
-                                    <Col sm={12} md={3} lg={6} className="mb-3">
-                                        <Button as={Link} to={"/pay/cart"} variant="danger" style={{ width: '100%' }}>Buy now</Button>
-                                    </Col>
+                                    <div className="col col-sm-12 col-md-6 col-lg-6 mb-3">
+                                        <Button
+                                            className="w-100 me-2"
+                                            variant="secondary"
+                                            onClick={handleAddToCart}
+                                        >Add to cart</Button>
+                                    </div>
+                                    <div className="col col-sm-12 col-md-6 col-lg-6 mb-3">
+                                        <Button
+                                            className="w-100"
+                                            as={Link}
+                                            to={"/pay/cart"}
+                                            variant="danger"
+                                        >Buy now</Button>
+                                    </div>
                                 </div>
-                                <h5>Đánh giá sản phẩm</h5>
-                                <Button variant="primary" className="mb-3" style={{ width: '100%' }}>Đánh giá</Button>
+                                <h5>Rating</h5>
+                                <Button
+                                    variant="primary"
+                                    className="mb-3 w-100"
+                                    onClick={() => setShowEvaluate(true)}
+                                >
+                                    Evaluate
+                                </Button>
                             </div>
                         </div>
-                    </Col>
+                    </div>
                 </div>
             </div>
             <Overview>
                 <h3 className="text-center m-0">Sản phẩm tương tự</h3>
-                {/* <Row>
-                        {products.map(product =>
-                            <Col key={product.id} sm={12} md={6} lg={3} className="mb-3">
-                                <ProductItem obj={product} />
-                            </Col>
-                        )}
-                    </Row> */}
+                {/*<Row>*/}
+                {/*    {products.map(product =>*/}
+                {/*        <Col key={product.id} sm={12} md={6} lg={3} className="mb-3">*/}
+                {/*            <ProductItem obj={product} />*/}
+                {/*        </Col>*/}
+                {/*    )}*/}
+                {/*</Row>*/}
             </Overview>
+            <RatingForm
+                prod={products}
+                show={showEvaluate}
+                onHide={() => setShowEvaluate(false)}
+                onReload={() => false}
+            />
             <NotifySuccess
                 title="Add to cart successfully"
                 message="Sản phẩm đã được thêm vào giỏ hàng!"

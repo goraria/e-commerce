@@ -104,6 +104,12 @@ const menu = [
                 ]
             },
             {
+                "text": "Voucher",
+                "icon": "bx bxs-discount",
+                "available": true,
+                "link": "/admin/voucher"
+            },
+            {
                 "text": "Tables",
                 "icon": "bx bx-table",
                 "available": true,
@@ -115,49 +121,194 @@ const menu = [
         "header": "AUTHORS",
         "items": [
             {
-                "text": "Japtor",
-                "icon": "bx bx-support",
+                "text": "Author",
+                "icon": "bx bxl-git",
                 "available": true,
-                "link": "https://github.com/goraria"
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "Japtor",
+                        "available": true,
+                        "link": "https://github.com/goraria"
+                    },
+                    {
+                        "text": "Payhd",
+                        "available": true,
+                        "link": "https://github.com/pa106"
+                    },
+                    {
+                        "text": "Locst",
+                        "available": true,
+                        "link": "https://github.com/LocPhamn"
+                    },
+                    {
+                        "text": "Zamcha",
+                        "available": true,
+                        "link": "https://github.com/zamchar"
+                    },
+                    {
+                        "text": "Ichibulup",
+                        "available": true,
+                        "link": "https://github.com/ichibulup"
+                    },
+                    {
+                        "text": "Goraria",
+                        "available": true,
+                        "link": "https://github.com/goraria"
+                    },
+                    {
+                        "text": "Schweitzenburg",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "Braunschweig",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
             },
             {
-                "text": "Payhd",
-                "icon": "bx bx-support",
+                "text": "Branches",
+                "icon": "bx bx-git-branch",
                 "available": true,
-                "link": "https://github.com/pa106"
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "master",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "main",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "japtor",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "payhd",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "locst",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "zamcha",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "ichibulup",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "goraria",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
             },
             {
-                "text": "Locst",
-                "icon": "bx bx-support",
+                "text": "Commit",
+                "icon": "bx bx-git-commit",
                 "available": true,
-                "link": "https://github.com/LocPhamn"
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "main",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "japtor",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "payhd",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "locst",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
             },
             {
-                "text": "Zamcha",
-                "icon": "bx bx-support",
+                "text": "Merge",
+                "icon": "bx bx-git-merge",
                 "available": true,
-                "link": "https://github.com/zamcha"
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "master",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
             },
             {
-                "text": "Ichibulup",
-                "icon": "bx bx-support",
+                "text": "Compare",
+                "icon": "bx bx-git-compare",
                 "available": true,
-                "link": "https://github.com/ichibulup"
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "master",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
             },
             {
-                "text": "Goraria",
-                "icon": "bx bx-file",
+                "text": "Pull Request",
+                "icon": "bx bx-git-pull-request",
+                "available": true,
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "master",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
+            },
+            {
+                "text": "Repo Forked",
+                "icon": "bx bx-git-repo-forked",
+                "available": true,
+                "link": "#",
+                "submenu": [
+                    {
+                        "text": "master",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "main",
+                        "available": true,
+                        "link": "#"
+                    }
+                ]
+            },
+            {
+                "text": "Support",
+                "icon": "bx bx-support",
                 "available": true,
                 "link": "#"
             },
             {
-                "text": "Schweitzenburg",
-                "icon": "bx bx-file",
-                "available": true,
-                "link": "#"
-            },
-            {
-                "text": "Braunschweig",
+                "text": "Document",
                 "icon": "bx bx-file",
                 "available": true,
                 "link": "#"
@@ -169,12 +320,12 @@ const menu = [
 const Layout = ({ children }) => {
     useEffect(() => {
         Main();
-    },[])
+    }, [])
 
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
-                <Sidebar menu={menu} source={"/admin"}/>
+                <Sidebar menu={menu} source={"/admin"} />
                 <div className="layout-page">
                     <Navbar>
                         {getGreetingMessage('from Bill')}

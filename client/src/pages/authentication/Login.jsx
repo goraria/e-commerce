@@ -193,12 +193,9 @@ const Login = ({ checker }) => {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">Log in
+                        <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">
+                            Log in
                         </button>
-                        {/*<Button variant="primary" type="submit" style={{width: '100%'}}*/}
-                        {/*        onClick={() => setCheck(true)}>*/}
-                        {/*    Log in*/}
-                        {/*</Button>*/}
                     </div>
                 </Form>
 
@@ -215,8 +212,8 @@ const Login = ({ checker }) => {
                 {/*<div className="text-center mb-3">or log in with</div>*/}
                 <div className="row d-flex justify-content-center flex-wrap">
                     <div className="col-lg-12">
-                        <div className="d-flex justify-content-center"
-                             style={{minWidth: '120px', width: '100%'}}>
+                        <div className="d-flex justify-content-center w-100"
+                             style={{minWidth: '120px'}}>
                             <GoogleLogin
                                 onSuccess={handleGoogleLogin}
                                 onError={() => setShowError(true)}
