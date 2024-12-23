@@ -271,7 +271,7 @@ const AddressForm = ({ address, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" className="me-auto">
-                        <i className='bx bx-x'></i>
+                        <i className='bx bx-x me-2'></i>
                         <span>Close</span>
                     </Button>
                     {address ?

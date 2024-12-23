@@ -47,7 +47,7 @@ const Cart = () => {
             const response = await axios.get(`http://localhost:5172/cart/load-cartItem/${Carts.idcart}`);
             setCartItem(response.data);
         } catch {
-            console.error('Error fetching CartItem details:');
+            // console.error('Error fetching CartItem details:');
         }
     };
 

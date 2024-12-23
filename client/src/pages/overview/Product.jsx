@@ -107,24 +107,12 @@ const Product = () => {
     const handleConfigurationChange = (config) => {
         setdefaultconfig(config);
     };
+
     // const [descriptions, setArray] = useState([]);
     // const currentUrl = window.location.href;
     // const url = new URL(currentUrl);
     // const params = new URLSearchParams(url.search);
     // const id = params.get('id');
-
-
-    // const fetchAPI = async () => {
-    //     const response = await axios.get(`http://localhost:5172/products/load-product/${id}`)
-    //     console.log(response.data)
-    //     setArray(response.data[0])
-    // };
-
-    // const fetchAPI1 = async () => {
-    //     const response = await axios.get(`http://localhost:5172/products/load-description/${id}`)
-    //     // console.log(response.data)
-    //     setArray(response.data[0])
-    // };
 
     const handleColorSelect = (idcolor) => {
         setChoosedColor(idcolor); // Cập nhật idcolor đã chọn
@@ -153,8 +141,6 @@ const Product = () => {
     const averageScore = totalScore / ratings.length;
 
     useEffect(() => {
-        // fetchAPI();
-        // fetchAPI1();
         fetchProductConfiguration();
         fetchProductDetails();
         fetchProductDecription();
@@ -363,8 +349,10 @@ const Product = () => {
                 {/*</Row>*/}
             </Overview>
             <RatingForm
+                prod={products}
                 show={showEvaluate}
                 onHide={() => setShowEvaluate(false)}
+                onReload={() => false}
             />
             <NotifySuccess
                 title="Add to cart successfully"

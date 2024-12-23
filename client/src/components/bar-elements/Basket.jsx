@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 const Basket = ({ bask }) => {
     return (
         <>
-            {/* <li> */}
-            <Link to={`/product?id=${bask.product.idproduct}`} className="list-group-item list-group-item-action dropdown-notifications-item">
+            {/* <li>  to={`/product?id=${bask.product.idproduct}`} */}
+            <li className="list-group-item list-group-item-action dropdown-notifications-item">
                 <div className="d-flex">
                     <div className="flex-shrink-0 me-3">
                         <div className="avatar">
@@ -30,7 +30,7 @@ const Basket = ({ bask }) => {
                         </a>
                     </div>
                 </div>
-            </Link>
+            </li>
         </>
     )
 }

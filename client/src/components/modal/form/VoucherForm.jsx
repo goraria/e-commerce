@@ -186,18 +186,18 @@ export const VoucherForm = ({ category, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" className="me-auto">
-                        <i className='bx bx-x me-2' ></i>
+                        <i className='bx bx-x me-2'></i>
                         <span>Close</span>
                     </Button>
                     {category ?
                         <>
                             <Button onClick={handleInvalid} variant="info">
-                                <i className='bx bx-check me-2' ></i>
+                                <i className='bx bx-check me-2'></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <i className='bx bx-plus me-2' ></i>
+                                <i className='bx bx-plus me-2'></i>
                                 <span>Create Category</span>
                             </Button>
                         </>

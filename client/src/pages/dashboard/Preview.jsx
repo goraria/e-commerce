@@ -575,9 +575,12 @@ export const Preview = () => {
                                                     <td>{item.price ? item.price : "$?"}</td>
                                                     <td>{renderStatusBadge(item.status)}</td>
                                                     <td>
-                                                        <Button variant="link" onClick={() => handleItemClick(item)}>
+                                                        <Link to={`/user/bill?id=${item.id}`}>
                                                             <i className='bx bx-bullseye'></i>
-                                                        </Button>
+                                                        </Link>
+                                                        {/*<Button variant="link" onClick={() => handleItemClick(item)}>*/}
+                                                        {/*    <i className='bx bx-bullseye'></i>*/}
+                                                        {/*</Button>*/}
                                                     </td>
                                                 </tr>
                                             ))}
