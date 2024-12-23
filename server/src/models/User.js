@@ -31,7 +31,8 @@ const User = sequelize.define('User', {
     },
     avatar: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: '../assets/img/avatars/0.png'
     },
     birthday: {
         type: DataTypes.DATE,
