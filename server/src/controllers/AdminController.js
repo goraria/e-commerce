@@ -9,7 +9,9 @@ const Product = require('../models/Product.js');
 const Configuration = require('../models/Configuration.js')
 const Color = require('../models/Color.js')
 const Description = require('../models/Description.js')
+const Discount = require('../models/Discount.js')
 class AdminController {
+
     async getAccount(req, res) {
         try {
 
@@ -531,6 +533,104 @@ class AdminController {
         } catch (error) {
             console.error('Error deleting description:', error);
             res.status(500).json({ success: false, message: 'Error deleting description', error });
+        }
+    }
+    async getVoucher(req, res) {
+        try {
+
+            const voucher = await Discount.findAll();
+            res.status(200).json(voucher);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching voucher', error });
+        }
+
+    }
+    async deleteVoucher(req, res) {
+        try {
+            const { idVoucher } = req.params
+
+            const voucher = await Discount.findOne({
+                where: {
+                    iddiscount: idVoucher
+                }
+            });
+            // Xóa người dùng
+            await voucher.destroy();
+            res.status(200).json({ success: true, message: 'Voucher deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting voucher:', error);
+            res.status(500).json({ success: false, message: 'Error deleting voucher', error });
+        }
+    }
+    async updateVoucher(req, res) {
+        const { idVoucher } = req.params;
+
+
+        if (!idVoucher) {
+            return res.status(400).json({ message: 'Voucher ID is required' });
+        }
+
+        const updatedData = req.body; // Dữ liệu cập nhật
+
+
+        if (!updatedData || Object.keys(updatedData).length === 0) {
+            return res.status(400).json({ message: 'No update data provided' });
+        }
+
+        try {
+            const voucher = await Discount.findOne({
+                where: { iddiscount: idVoucher },
+            });
+
+            if (!voucher) {
+                return res.status(404).json({ message: `No voucher found with id ${idVoucher}` });
+            }
+
+            await voucher.update(updatedData); // Cập nhật dữ liệu từ client
+
+            res.status(200).json({ success: true, message: 'Voucher updated successfully', data: voucher });
+
+        } catch (error) {
+            console.error('Error updating voucher:', error);
+            res.status(500).json({ success: false, message: 'Error updating voucher', error });
+        }
+    }
+    async createVoucher(req, res) {
+        const Data = req.body;
+
+        try {
+
+            const newVoucher = await Discount.create({
+                discount_name: Data.voucher_name,
+            });
+
+            console.log('Product created successfully:', newVoucher);
+            return res.status(201).json({
+                voucher: newVoucher,
+            });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error create voucher', error });
+        }
+    }
+    async updateStatus(req, res) {
+        const { idVoucher } = req.params;
+        const updatedData = req.body;
+        try {
+            const voucher = await Discount.findOne({
+                where: { iddiscount: idVoucher },
+            });
+            if (!voucher) {
+                return res.status(404).json({ message: `No account found with id ${idVoucher}` });
+            }
+            await voucher.update({
+                status: updatedData.status
+            });
+            console.log(updatedData.status);
+            res.status(200).json({ success: true, message: 'User updated successfully', data: updatedData });
+
+        } catch (error) {
+            // console.error('Error updating product name:', error);
+            res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
     }
 }

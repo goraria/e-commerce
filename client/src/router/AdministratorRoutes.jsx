@@ -61,7 +61,7 @@ import { ProductAccessory } from "../pages/management/ProductAccessory"
 import { ProductDescription } from "../pages/management/ProductDescription"
 import { ProductColor } from "../pages/management/ProductColor"
 import { ProfilePage } from "../pages/account/ProfilePage.jsx";
-
+import { Voucher } from '../pages/management/Voucher.jsx';
 ///////////////////////////////////////
 
 export const AdministratorRoutes = () => {
@@ -143,6 +143,7 @@ export const AdministratorRoutes = () => {
 
             <Route path="/users" element={<UserManagement />} />
             <Route path="/categories" element={<Category />} />
+            <Route path="/voucher" element={<Voucher />} />
             <Route path="/product/name" element={<ProductName />} />
             <Route path="/product/accessory" element={<ProductAccessory />} />
             <Route path="/product/configurarion" element={<ProductConfiguration />} />

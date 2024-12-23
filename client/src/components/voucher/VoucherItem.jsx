@@ -1,4 +1,4 @@
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import AddressForm from "../modal/form/AddressForm.jsx";
 import React from "react";
 
@@ -21,7 +21,7 @@ const VoucherItem = () => {
                             aria-label='card image'
                             className="card-img card-img-left"
                             src={jp} alt="Card image"
-                            style={{width: 144, height: 144, objectFit: "cover"}}/>
+                            style={{ width: 144, height: 144, objectFit: "cover" }} />
                     </div>
                     <div className="col-md-8">
                         <div className="card-body">
@@ -42,4 +42,4 @@ const VoucherItem = () => {
     )
 }
 
-export default VoucherItem
+export default VoucherItem;

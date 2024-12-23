@@ -115,6 +115,35 @@ export const AccountPage = ({ onReload }) => {
             }
         }
     };
+    const handleUploadAvatar = async () => {
+        const fileInput = document.getElementById('upload');
+        const file = fileInput.files[0]; // Lấy file từ input
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('avatar', file); // Gửi file dưới tên 'avatar'
+
+            try {
+                const token = localStorage.getItem('token'); // Token xác thực
+                const response = await axios.post('http://localhost:5172/account/upload-avatar', formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data' // Quan trọng khi gửi file
+                    }
+                });
+
+                if (response.status === 200) {
+                    // alert('Avatar uploaded successfully!');
+                    onReload(); // Gọi lại để cập nhật avatar trên giao diện
+                }
+            } catch (error) {
+                alert('Failed to upload avatar.');
+            }
+        } else {
+            alert('No file selected!');
+        }
+    };
+
 
     return (
         <>
@@ -328,32 +357,32 @@ export const AccountPage = ({ onReload }) => {
 
 
 
-const [reloadAccountInfo, setReloadAccountInfo] = useState(0);
+// const [reloadAccountInfo, setReloadAccountInfo] = useState(0);
 
-const handleReloadAccountInfo = () => {
-    setReloadAccountInfo(reloadAccountInfo + 1);  // Tăng giá trị để force re-render
-};
+// const handleReloadAccountInfo = () => {
+//     setReloadAccountInfo(reloadAccountInfo + 1);
+// };
 
-useEffect(() => {
-    const deactivateAcc = document.querySelector('#formAccountDeactivation');
+// useEffect(() => {
+//     const deactivateAcc = document.querySelector('#formAccountDeactivation');
 
-    // Update/reset user image of account page
-    let accountUserImage = document.getElementById('uploadedAvatar');
-    const fileInput = document.querySelector('.account-file-input');
-    const resetFileInput = document.querySelector('.account-image-reset');
+//     // Update/reset user image of account page
+//     let accountUserImage = document.getElementById('uploadedAvatar');
+//     const fileInput = document.querySelector('.account-file-input');
+//     const resetFileInput = document.querySelector('.account-image-reset');
 
-    if (accountUserImage) {
-        const resetImage = accountUserImage.src;
+//     if (accountUserImage) {
+//         const resetImage = accountUserImage.src;
 
-        fileInput.onchange = () => {
-            if (fileInput.files[0]) {
-                accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-            }
-        };
+//         fileInput.onchange = () => {
+//             if (fileInput.files[0]) {
+//                 accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+//             }
+//         };
 
-        resetFileInput.onclick = () => {
-            fileInput.value = '';
-            accountUserImage.src = resetImage;
-        };
-    }
-}, []);
+//         resetFileInput.onclick = () => {
+//             fileInput.value = '';
+//             accountUserImage.src = resetImage;
+//         };
+//     }
+// }, []);
