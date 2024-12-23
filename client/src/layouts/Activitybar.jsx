@@ -38,9 +38,11 @@ const Activitybar = ({ children }) => {
         Main();
 
         useLoad();
+        useCart();
     },[])
 
     const [account, setAccount] = useState({});
+    const [cart, setCart] = useState({});
 
     const [showModalHeader, setShowModalHeader] = useState(false);
     const [submit, setSubmit] = useState({ search: "" });
@@ -59,6 +61,23 @@ const Activitybar = ({ children }) => {
                 });
 
                 setAccount(response.data);
+                // console.log(response.data);
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        } else {
+            // navigate("/auth/login");
+        }
+    }
+
+    const useCart = async () => {
+        if (token) {
+            try {
+                const response = await axios.get('http://localhost:5172/cart/load-cart', {
+                    headers: {Authorization: `Bearer ${token}`}
+                });
+
+                setCart(response.data);
                 // console.log(response.data);
             } catch (error) {
                 console.error("Invalid token:", error);
@@ -265,7 +284,7 @@ const Activitybar = ({ children }) => {
                                     <div className="dropdown-header d-flex align-items-center py-3">
                                         <h6 className="mb-0 me-auto">Notification</h6>
                                         <div className="d-flex align-items-center h6 mb-0">
-                                            <span className="badge bg-label-primary me-2">8 New</span>
+                                            <span className="badge bg-label-primary me-2">10 New</span>
                                             <a href="#" className="dropdown-notifications-all p-2"
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top" aria-label="Mark all as read"
@@ -313,11 +332,15 @@ const Activitybar = ({ children }) => {
                                     <div className="dropdown-header d-flex align-items-center py-3">
                                         <h6 className="mb-0 me-auto">Cart</h6>
                                         <div className="d-flex align-items-center h6 mb-0">
-                                            <span className="badge bg-label-primary me-2">8 Items</span>
-                                            <a href="#" className="dropdown-notifications-all p-2"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top" aria-label="Find product"
-                                               data-bs-original-title="Find product">
+                                            <span className="badge bg-label-primary me-2">{cart.cart_items?.length} Items</span>
+                                            <a
+                                                // to="/search"
+                                                href="#"
+                                                className="dropdown-notifications-all p-2"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                aria-label="Find product"
+                                                data-bs-original-title="Find product">
                                                 <i className="bx bx-cart-download bx-sm text-heading"></i>
                                             </a>
                                         </div>
@@ -326,7 +349,7 @@ const Activitybar = ({ children }) => {
                                 <li className="dropdown-notifications-list scrollable-container ps">
                                     <ul className="list-group list-group-flush">
                                         {
-                                            baskets.map((bask, index) => (
+                                            cart.cart_items?.map((bask, index) => (
                                                 <Basket key={index} bask={bask}/>
                                             ))
                                         }
@@ -357,7 +380,7 @@ const Activitybar = ({ children }) => {
                                     <img
                                         src={account.avatar}
                                         className="w-px-40 h-auto rounded-circle"
-                                        alt="avatar-image"
+                                        alt="avatar"
                                         aria-label="Avatar Image"
                                     />
                                 </div>
@@ -375,13 +398,14 @@ const Activitybar = ({ children }) => {
                                                     <img
                                                         src={account.avatar}
                                                         className="w-px-40 h-auto rounded-circle"
-                                                        alt="avatar-image"
+                                                        alt="avatar"
                                                         aria-label="Avatar Image"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="flex-grow-1">
-                                                <span className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
+                                                <span
+                                                    className="fw-medium d-block">{`${account.lastname}`}</span>{/*${account.firstname}*/}
                                                 <small className="text-muted">User</small>
                                             </div>
                                         </div>
@@ -389,6 +413,16 @@ const Activitybar = ({ children }) => {
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <Link
+                                        to={"/user"}
+                                        aria-label="dashboard"
+                                        className="dropdown-item"
+                                    >
+                                        <span className="align-middle"><i
+                                            className="bx bxs-dashboard bx-sm me-2"></i>Dashboard</span>
+                                    </Link>
                                 </li>
                                 <li>
                                     <Link
@@ -400,16 +434,6 @@ const Activitybar = ({ children }) => {
                                             className="bx bx-user bx-sm me-2"></i>Profile</span>
                                     </Link>
                                 </li>
-                                {/*<li>*/}
-                                {/*    <Link*/}
-                                {/*        to={"/user/address"}*/}
-                                {/*        aria-label="address"*/}
-                                {/*        className="dropdown-item"*/}
-                                {/*    >*/}
-                                {/*        <span className="align-middle"><i*/}
-                                {/*            className="bx bx-location-plus bx-sm me-2"></i>Address</span>*/}
-                                {/*    </Link>*/}
-                                {/*</li>*/}
                                 {/*<li>*/}
                                 {/*    <Link*/}
                                 {/*        to={"/user/order"}*/}
@@ -454,8 +478,8 @@ const Activitybar = ({ children }) => {
                 <div className="navbar-search-wrapper search-input-wrapper container-xxl d-none">
                     <span className="twitter-typeahead container-xxl">
                         <input type="text" className="form-control search-input border-0 container-xxl tt-input"
-                            placeholder="Search..."
-                            aria-label="Search..." autoComplete="off" spellCheck="false" dir="auto" />
+                               placeholder="Search..."
+                               aria-label="Search..." autoComplete="off" spellCheck="false" dir="auto"/>
                         <div className="tt-menu navbar-search-suggestion ps">
                             <div className="tt-dataset tt-dataset-pages"></div>
                             <div className="tt-dataset tt-dataset-files"></div>

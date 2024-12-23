@@ -1,13 +1,13 @@
 import React from "react";
 
-const Notification = ({ notify }) => {
+const Notification = ({ notify, variant = "primary" }) => {
     return (
         <>
             <li className="list-group-item list-group-item-action dropdown-notifications-item">
                 <div className="d-flex">
                     <div className="flex-shrink-0 me-3">
                         <div className="avatar">
-                            <span className="avatar-initial rounded-circle bg-label-danger">
+                            <span className={`avatar-initial rounded-circle bg-label-${variant}`}>
                                 JG
                             </span>
                         </div>

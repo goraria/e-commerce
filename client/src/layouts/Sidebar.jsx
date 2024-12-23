@@ -11,7 +11,7 @@ const Sidebar = ({ menu, source }) => {
                         <img src="/assets/img/sneat.svg" alt="sneat-logo" aria-label='Sneat logo image' />
                     </span>
                     <span className="app-brand-text demo menu-text fw-bold ms-2">Bill Cipher</span> */}
-                    <span className="app-brand-text demo menu-text fw-bold ms-2" style={{textTransform: 'capitalize'}}>Cipher</span>
+                    <span className="app-brand-text demo menu-text fw-bold ms-2 text-capitalize">Cipher</span>
                 </Link>
 
                 <a href="#" className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">

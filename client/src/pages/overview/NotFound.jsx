@@ -1,26 +1,25 @@
-import React, {Component, useState, useEffect} from "react";
-import { Link, useNavigate } from 'react-router-dom';
-import {Container, Image, Row} from "react-bootstrap";
-
-import jp from '../../assets/images/jp.jpeg'
-import Overview from "../../layouts/Overview.jsx";
+import React from "react";
+import { Link } from 'react-router-dom';
 
 const NotFound = () => {
     return (
-        <Overview>
-            <div>
-                <h5>Cipher</h5>
-                <div style={{display: "flex", marginBottom: 16, justifyContent: 'center'}}>
+        <>
+            <div className="misc-wrapper">
+                <h2 className="mb-2 mx-2">Under Maintenance!</h2>
+                <p className="mb-4 mx-2">Sorry for the inconvenience but we're performing some maintenance at the moment</p>
+                <Link aria-label='Go to Home Page' to="/" className="btn btn-primary">Back to home</Link>
+                <div className="mt-4">
                     <img
-                        className="d-block"
-                        src={jp}
-                        alt="Second slide"
-                        style={{objectFit: 'cover', width: 224, height: 224, borderRadius: '5px'}}
-                    />
+                        src="../assets/img/illustrations/girl-doing-yoga-light.png"
+                        alt="girl-doing-yoga-light"
+                        aria-label="Girl doing yoga light"
+                        width="500"
+                        className="img-fluid"
+                        data-app-dark-img="illustrations/girl-doing-yoga-dark.png"
+                        data-app-light-img="illustrations/girl-doing-yoga-light.png" />
                 </div>
-                <h1 style={{textAlign: "center"}}>404 Page Not Found.</h1>
             </div>
-        </Overview>
+        </>
     )
 }
 

@@ -7,6 +7,8 @@ router.get('/list-all', BillController.getAllBill);
 
 router.get('/list-bill', AuthenticationMiddleware, BillController.getAllBillByAccount);
 
+router.get('/get-bill/:id', AuthenticationMiddleware, BillController.getBillById);
+
 router.put('/add-bill',AuthenticationMiddleware ,BillController.createBill);
 
 router.put('/add-billDetail', BillController.createBillDetail);

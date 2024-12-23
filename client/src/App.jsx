@@ -102,6 +102,15 @@ const App = () => {
             <Route path="/auth/*" element={<AuthenticationRoutes />} />
 
             <Route
+                path="/auth/login"
+                element={<Login checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+            />
+            <Route
+                path="/auth/register"
+                element={<Register checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+            />
+
+            <Route
                 path="/user/*"
                 element={
                     <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
@@ -132,15 +141,6 @@ const App = () => {
                         </Layout>
                     </Protected>
                 }
-            />
-
-            <Route
-                path="/auth/login"
-                element={<Login checker={authentication} />} // Truyền hàm authentication dưới dạng callback
-            />
-            <Route
-                path="/auth/register"
-                element={<Register checker={authentication} />} // Truyền hàm authentication dưới dạng callback
             />
 
             <Route path="*" element={<ErrorPage />} />

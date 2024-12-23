@@ -1,7 +1,6 @@
 import { Dropdown, DropdownButton, ButtonGroup } from "react-bootstrap";
 
 const CustomDropDown = ({ category, onSelect }) => {
-
     return (
         <DropdownButton
             as={ButtonGroup}
@@ -9,7 +8,6 @@ const CustomDropDown = ({ category, onSelect }) => {
             id={`dropdown-variants-${category.categorical}`}
             variant={category.varient}
             title={category.categorical}
-            // style={{ margin: '0px 16px 16px 0px' }}
         >
             {category.item.map((product, index) => (
                 <Dropdown.Item 

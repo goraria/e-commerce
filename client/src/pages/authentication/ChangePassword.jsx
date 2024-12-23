@@ -3,9 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
 import axios from "axios";
 
-import SocialFormButton from "../../components/button/SocialFormButton.jsx";
-
-import jp from '../../assets/images/jp.jpeg'
 import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import NotifyError from "../../components/modal/notify/NotifyError.jsx";
@@ -29,9 +26,11 @@ const ChangePassword = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [token, setToken] = useState('');
+
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
+
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -52,9 +51,11 @@ const ChangePassword = () => {
             setError('Error fetching user data');
         }
     };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
+
         if (formData.newPassword !== formData.retypePassword) {
             event.stopPropagation();
             setError("Password do not match.");
@@ -65,14 +66,12 @@ const ChangePassword = () => {
             setError("Make sure your password is more than 8 characters.");
             setShowError(true);
             return;
-        }
-        else if (!formData.oldPassword || !formData.newPassword || !formData.retypePassword) {
+        } else if (!formData.oldPassword || !formData.newPassword || !formData.retypePassword) {
             event.stopPropagation();
             setError("Please fill in all the fields.");
             setShowError(true);
             return;
-        }
-        else {
+        } else {
             setLoading(true);
             try {
                 const response = await axios.post('http://localhost:5172/authentication/change-password', {
@@ -172,10 +171,6 @@ const ChangePassword = () => {
                         >
                             Change Password
                         </button>
-                        {/* <Button variant="primary" type="submit" style={{ width: '100%' }}
-                            onClick={() => setCheck(true)}>
-                            Submit
-                        </Button> */}
                     </div>
                 </Form>
                 <div className="text-center">
@@ -192,7 +187,7 @@ const ChangePassword = () => {
                 show={showSuccess}  // truyền showSuccess vào NotifySuccess
                 onHide={() => {
                     setShowSuccess(false)
-                    console.log(1)
+                    // console.log(1)
                     setTimeout(() => {
                         navigate('/user'); // Điều hướng sau một khoảng thời gian
                     }, 500)

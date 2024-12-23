@@ -67,7 +67,7 @@ export const OrderHistory = () => {
                     </div>
                 ))
             }
-            <OrderDetails/>
+            {/*<OrderDetails/>*/}
         </>
     );
 }

@@ -109,9 +109,10 @@ const Order = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             const data = await response.json();
             setAdress(data)
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
@@ -144,7 +145,7 @@ const Order = () => {
                                     className="card px-3 py-3 light bg-body-tertiary align-items-center bg-navbar-theme">
                                     <div className="container d-flex ps-2 p-0 align-items-center">
                                         <h5 className="m-0">Order</h5>
-                                        <Button disabled to={'/search'} variant="light" style={{marginLeft: 'auto'}}>
+                                        <Button disabled to={'/search'} variant="light" className="ms-auto">
                                             <i className='bx bx-plus text-white me-2'></i>
                                             <span></span>
                                         </Button>

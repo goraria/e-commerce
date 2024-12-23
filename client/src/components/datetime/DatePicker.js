@@ -7,11 +7,11 @@ const DatePicker = () => {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        console.log("Ngày được chọn:", date);
+        // console.log("Ngày được chọn:", date);
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+        <div className="d-flex flex-column align-items-center mt-4">
             <h3>Chọn ngày:</h3>
             <Calendar
                 onChange={handleDateChange}

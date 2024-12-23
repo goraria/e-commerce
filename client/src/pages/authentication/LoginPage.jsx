@@ -24,6 +24,7 @@ export const LoginPage = () => {
         // Handle form submission logic here
         console.log('Form submitted:', formData);
     };
+
     return (
         <AuthWrapper>
             <h4 className="mb-2">Welcome to Sneat! 👋</h4>

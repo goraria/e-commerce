@@ -18,8 +18,7 @@ export const AuthWrapper = ({ children }) => {
                                              className="d-block rounded object-fit-cover" height="100" width="100"
                                              aria-label="Logo"/>
                                     </span>
-                                    <span className="app-brand-text demo text-body fw-bold ms-2"
-                                          style={{textTransform: 'capitalize'}}>Cipher</span>
+                                    <span className="app-brand-text demo text-body fw-bold ms-2 text-capitalize">Cipher</span>
                                 </Link>
                             </div>
                             {children}

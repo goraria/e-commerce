@@ -19,7 +19,7 @@ const menu = [
                 "text": "Layouts",
                 "icon": "bx bx-layout",
                 "available": true,
-                "link": "/admin/ui",
+                "link": "/user/ui",
                 "submenu": [
                     {
                         "text": "Without menu",
@@ -101,7 +101,7 @@ const Panel = ({ children }) => {
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
-                <Sidebar menu={menu} source={"/"}/>
+                <Sidebar menu={menu} source={"/user"}/>
                 <div className="layout-page">
                     <Activitybar>
                         {getGreetingMessage('from Bill')}

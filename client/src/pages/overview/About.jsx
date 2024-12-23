@@ -27,12 +27,12 @@ const imgItems = [
 
 const ImageAbout = ({ imageItems }) => {
     return (
-        <div style={{marginBottom: 16}}>
+        <div className="mb-3">
             <Image
-                className="d-block w-100"
+                className="d-block w-100 object-fit-cover rounded-4"
                 src={imageItems.src}
                 alt="Second slide"
-                style={{objectFit: 'cover', height: '500px', borderRadius: '5px'}}
+                style={{ height: '500px' }}
             />
         </div>
     )
@@ -82,7 +82,7 @@ export const About = () => {
                             ensuring timely delivery, making it a comprehensive solution for all laptop-related
                             needs.
                         </p>
-                        <ul style={{marginLeft: 20}}>
+                        <ul className="ms-4">
                             <li>Order</li>
                             <li>Responsive behavior when clicking nav links perfect for a one page website</li>
                             <li>Bootstrap&#39;s scrollspy feature which highlights which section of the page you're

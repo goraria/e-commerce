@@ -53,7 +53,7 @@ const AddressManagement = () => {
                         {/*<AddressList key={reloadTrigger} onReload={handleReload}/>*/}
                         <div className="container d-flex ps-2 p-0 align-items-center">
                             <h5 className="m-0">Address List</h5>
-                            <Button variant="primary" onClick={() => setModalShow(true)} style={{marginLeft: 'auto'}}>
+                            <Button className="ms-auto" variant="primary" onClick={() => setModalShow(true)}>
                                 <i className='bx bx-plus me-2'></i>
                                 <span>Add Address</span>
                             </Button>

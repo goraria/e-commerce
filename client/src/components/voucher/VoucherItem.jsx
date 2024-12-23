@@ -19,9 +19,9 @@ const VoucherItem = () => {
                     <div className="col-md-4">
                         <img
                             aria-label='card image'
-                            className="card-img card-img-left"
+                            className="card-img card-img-left object-fit-cover"
                             src={jp} alt="Card image"
-                            style={{ width: 144, height: 144, objectFit: "cover" }} />
+                            style={{width: 144, height: 144}}/>
                     </div>
                     <div className="col-md-8">
                         <div className="card-body">

@@ -56,7 +56,7 @@ export const Preview = () => {
             });
 
             setData(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu:', error);
             setError(`Lỗi khi lấy dữ liệu: ${error}`);
@@ -531,48 +531,6 @@ export const Preview = () => {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div className="dt-action-buttons text-end pt-6 pt-md-0">
-                                                    <div className="dt-buttons btn-group flex-wrap">
-                                                        <div style={{position: 'relative'}}
-                                                             ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
-                                                            <Button variant="outline-primary" className="me-3"
-                                                                    onClick={handleFromDateClick} style={{width: 200}}>
-                                                                From
-                                                                date: {fromDate ? fromDate.toLocaleDateString() : "Select date"}
-                                                            </Button>
-                                                            {showFromCalendar && (
-                                                                <div style={{
-                                                                    position: 'absolute',
-                                                                    zIndex: 1,
-                                                                    top: '100%',
-                                                                    left: 0
-                                                                }}>
-                                                                    <Calendar onChange={onFromDateChange}
-                                                                              value={fromDate}/>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div style={{position: 'relative'}}
-                                                             ref={toCalendarRef}> {/* Đặt vị trí tương đối */}
-                                                            <Button variant="outline-primary"
-                                                                    onClick={handleToDateClick}
-                                                                    style={{width: 200}}>
-                                                                To
-                                                                date: {toDate ? toDate.toLocaleDateString() : "Select date"}
-                                                            </Button>
-                                                            {showToCalendar && (
-                                                                <div style={{
-                                                                    position: 'absolute',
-                                                                    zIndex: 1,
-                                                                    top: '100%',
-                                                                    right: 0
-                                                                }}>
-                                                                    <Calendar onChange={onToDateChange} value={toDate}/>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <Table hover responsive
@@ -617,9 +575,12 @@ export const Preview = () => {
                                                     <td>{item.price ? item.price : "$?"}</td>
                                                     <td>{renderStatusBadge(item.status)}</td>
                                                     <td>
-                                                        <Button variant="link" onClick={() => handleItemClick(item)}>
+                                                        <Link to={`/user/bill?id=${item.id}`}>
                                                             <i className='bx bx-bullseye'></i>
-                                                        </Button>
+                                                        </Link>
+                                                        {/*<Button variant="link" onClick={() => handleItemClick(item)}>*/}
+                                                        {/*    <i className='bx bx-bullseye'></i>*/}
+                                                        {/*</Button>*/}
                                                     </td>
                                                 </tr>
                                             ))}
