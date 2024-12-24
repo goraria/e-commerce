@@ -25,7 +25,7 @@ export const DashboardPage = () => {
                             <div className="col-sm-7">
                                 <div className="card-body">
                                     <h5 className="card-title text-primary">
-                                        Congratulations John! 🎉
+                                        Congratulations Bill! 🎉
                                     </h5>
                                     <p className="mb-4">
                                         You have done <span className="fw-medium">72%</span> more

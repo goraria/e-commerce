@@ -1,8 +1,22 @@
 import React, { Component, version } from "react";
 import {
-    Container, Button, Form, ButtonGroup, DropdownButton, Dropdown, Row, Col, Card, Image, Stack, Carousel, ListGroup, Badge,
+    Container,
+    Button,
+    Form,
+    ButtonGroup,
+    DropdownButton,
+    Dropdown,
+    Row,
+    Col,
+    Card,
+    Image,
+    Stack,
+    Carousel,
+    ListGroup,
+    Badge,
     CardTitle,
-    CardText
+    CardText,
+    Table, Pagination
 } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -14,6 +28,7 @@ import Overview from "../../layouts/Overview.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import RatingStar from "../../components/product/RatingStar.jsx";
 import {RatingForm} from "../../components/modal/form/RatingForm.jsx";
+import Calendar from "react-calendar";
 
 const Product = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -25,13 +40,51 @@ const Product = () => {
     const [colors, setcolor] = useState([]);
     const [ratings, setRating] = useState([]);
     const [products, setProduct] = useState([]);
+    const [evaluate, setEvaluate] = useState([]);
     const [carts, setCart] = useState();
     const [ChoosedColor, setChoosedColor] = useState(null);
+
+    const [data, setData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedEntries, setSelectedEntries] = useState([]);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
+
+    const filteredData = data.filter(item =>
+        item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
 
     const [showEvaluate, setShowEvaluate] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
     const token = localStorage.getItem('token');
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleSelectItem = (id) => {
+        if (selectedEntries.includes(id)) {
+            setSelectedEntries(selectedEntries.filter(item => item !== id));
+        } else {
+            setSelectedEntries([...selectedEntries, id]);
+        }
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.id);
+            setSelectedEntries(allVisibleItems);
+        } else {
+            setSelectedEntries([]);
+        }
+    };
 
     const fetchCart = async () => {
         try {
@@ -43,7 +96,7 @@ const Product = () => {
             const data = await response.json();
             setCart(data)
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
 
@@ -54,7 +107,7 @@ const Product = () => {
             setProduct(data[0]); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data[0])
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
 
@@ -66,7 +119,7 @@ const Product = () => {
             // console.log(data[0])
 
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
 
@@ -77,7 +130,7 @@ const Product = () => {
             setRating(data); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data)
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
 
@@ -88,7 +141,7 @@ const Product = () => {
             setcolor(data); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data);
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
 
@@ -101,6 +154,27 @@ const Product = () => {
             // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+        }
+    };
+
+    const handleLoadRating = async () => {
+        if (!id || !token) return;
+
+        try {
+            const response = await axios.post(
+                'http://localhost:5172/products/load-rating',
+                { idproduct: id },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            if (response.status === 200) {
+                const data = response.data;
+                // console.log('Loaded rating:', data); // Debug dữ liệu tải về
+                setEvaluate(data);
+            }
+        } catch (err) {
+            // console.error('Failed to load rating:', err);
+            // setError(err.response ? err.response.data.message : 'Failed to load rating');
         }
     };
 
@@ -137,6 +211,127 @@ const Product = () => {
         }
     };
 
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    const renderPagination = () => {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
+        if (totalPages <= 1) return null;
+
+        const paginationItems = [];
+        const addPageButton = (pageNumber) => (
+            <Pagination.Item
+                key={pageNumber}
+                active={pageNumber === currentPage}
+                onClick={() => setCurrentPage(pageNumber)}
+            >
+                {pageNumber}
+            </Pagination.Item>
+        );
+
+        // Thêm nút 'First' và 'Previous'
+        paginationItems.push(
+            <Pagination.First
+                key="first"
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+            />,
+            <Pagination.Prev
+                key="prev"
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+            />
+        );
+
+        if (totalPages <= 7) {
+            // Hiển thị tất cả các trang nếu số trang <= 7
+            for (let i = 1; i <= totalPages; i++) {
+                paginationItems.push(addPageButton(i));
+            }
+        } else {
+            // Hiển thị phân trang với dấu `...`
+            if (currentPage <= 4) {
+                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
+                for (let i = 1; i <= 5; i++) {
+                    paginationItems.push(addPageButton(i));
+                }
+                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
+                paginationItems.push(addPageButton(totalPages));
+            } else if (currentPage >= totalPages - 3) {
+                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
+                paginationItems.push(addPageButton(1));
+                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
+                for (let i = totalPages - 4; i <= totalPages; i++) {
+                    paginationItems.push(addPageButton(i));
+                }
+            } else {
+                // Trường hợp trang hiện tại ở giữa
+                paginationItems.push(addPageButton(1));
+                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
+                paginationItems.push(addPageButton(currentPage - 1));
+                paginationItems.push(addPageButton(currentPage));
+                paginationItems.push(addPageButton(currentPage + 1));
+                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
+                paginationItems.push(addPageButton(totalPages));
+            }
+        }
+
+        // Thêm nút 'Next' và 'Last'
+        paginationItems.push(
+            <Pagination.Next
+                key="next"
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            />,
+            <Pagination.Last
+                key="last"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+            />
+        );
+
+        return <Pagination className="m-0">{paginationItems}</Pagination>;
+    };
+
+    const renderStatusBadge = (status) => {
+        switch (status) {
+            case 5: // "Delivered"
+                return <Badge bg="label-success">Delivered</Badge>;
+            case 0: // "Ordered"
+                return <Badge bg="label-warning">Ordered</Badge>;
+            case 3: // "Dispatched"
+                return <Badge bg="label-primary">Dispatched</Badge>;
+            case 1: // "Pickup"
+                return <Badge bg="label-info">Pickup</Badge>;
+            case 6: // "Rejected"
+                return <Badge bg="label-danger">Rejected</Badge>;
+            case 2: // "Arrival"
+                return <Badge bg="label-dark">Arrival</Badge>;
+            case 4: // "Arrival"
+                return <Badge bg="label-secondary">Arrival</Badge>;
+            default:
+                return <Badge bg="label-light">{status}</Badge>;
+        }
+    };
+
+    const formatDateTime = (inputDateTime) => {
+        const date = new Date(inputDateTime);
+
+        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        const hours = date.getUTCHours(); // Giờ theo UTC
+        const minutes = date.getUTCMinutes(); // Phút theo UTC
+
+        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+        return `${formattedDate}, ${formattedTime}`;
+    }
+
     const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
     const averageScore = totalScore / ratings.length;
 
@@ -147,6 +342,8 @@ const Product = () => {
         fetchProductRating();
         fetchProductColor();
         fetchCart();
+
+        handleLoadRating()
     }, [id]);
 
     return (
@@ -214,14 +411,15 @@ const Product = () => {
                                     <Col>
                                         <h5>Bảo hành & đổi trả</h5>
                                         <ListGroup variant="flush">
-                                            <ListGroup.Item>Bảo hành <strong>12 tháng tại chuỗi cửa hàng</strong></ListGroup.Item>
+                                            <ListGroup.Item>Bảo hành <strong>12 tháng tại chuỗi cửa
+                                                hàng</strong></ListGroup.Item>
                                             <ListGroup.Item>Đổi mới trong 15 ngày đầu tiên</ListGroup.Item>
                                         </ListGroup>
                                     </Col>
                                 </Row>
                             </Card.Body>
                         </div>
-                        <div className="card">
+                        <div className="card p-3 mb-4">
                             <Card.Body>
                                 {/* Section: Cấu hình đặc điểm */}
                                 <Card.Title> Mô tả sản phẩm</Card.Title>
@@ -256,14 +454,429 @@ const Product = () => {
                                 </div>
                             </Card.Body>
                         </div>
+                        <div className="card mb-4">
+                            <Card.Body>
+                                {/* Section: Cấu hình đặc điểm */}
+                                <Card.Title> Mô tả sản phẩm</Card.Title>
+                                <div className="mb-4 d-flex justify-content-center">
+                                    <img
+                                        className="d-block object-fit-cover w-100 h-100 rounded-4"
+                                        src={products.product_image}
+                                        alt="Second slide"
+                                    />
+                                </div>
+                                <div>
+                                    <p>{descriptions.img_description}</p>
+                                    <h4>Thiết kế thời thượng, thuận tiện di chuyển</h4>
+                                    <p>{descriptions.title_description}</p>
+                                </div>
+                                <div className="d-flex justify-content-center mb-4">
+                                    {products.product_image ? (
+                                        <div className="d-flex justify-content-center mb-4">
+                                            <Image
+                                                className="d-block object-fit-cover w-100 h-100 rounded-4"
+                                                src={products.product_image}
+                                                alt="Product image"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <p>Image not available</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <h4>Phù hợp với mọi tác vụ</h4>
+                                    <p>{descriptions.sub_description}</p>
+                                </div>
+                            </Card.Body>
+                        </div>
+                        <div className="row mb-4 g-4">
+                            <div className="col-md-6">
+                                <div className="card h-100">
+                                    <div className="card-body row widget-separator g-0">
+                                        <div className="col-sm-5 border-shift border-end pe-sm-4">
+                                            <h3 className="text-primary d-flex align-items-center gap-2 mb-2">
+                                                4.89
+                                                <i className="bx bxs-star bx-sm"></i>
+                                            </h3>
+                                            <p className="h6 mb-2">Total 187 reviews</p>
+                                            <p className="pe-2 mb-2">All reviews are from genuine customers</p>
+                                            <span className="badge bg-label-primary mb-4 mb-sm-0">+5 This week</span>
+                                            <hr className="d-sm-none"/>
+                                        </div>
+
+                                        <div
+                                            className="col-sm-7 gap-2 text-nowrap d-flex flex-column justify-content-between ps-sm-4 pt-2 py-sm-2">
+                                            <div className="d-flex align-items-center gap-2">
+                                                <small>5 Star</small>
+                                                <div className="progress w-100 bg-label-primary"
+                                                     style={{height: '8px'}}>
+                                                    <div className="progress-bar bg-primary" role="progressbar"
+                                                         style={{width: '85%'}} aria-valuenow="61.50" aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                                <small className="w-px-20 text-end">124</small>
+                                            </div>
+                                            <div className="d-flex align-items-center gap-2">
+                                                <small>4 Star</small>
+                                                <div className="progress w-100 bg-label-primary"
+                                                     style={{height: '8px'}}>
+                                                    <div className="progress-bar bg-primary" role="progressbar"
+                                                         style={{width: '50%'}} aria-valuenow="24" aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                                <small className="w-px-20 text-end">40</small>
+                                            </div>
+                                            <div className="d-flex align-items-center gap-2">
+                                                <small>3 Star</small>
+                                                <div className="progress w-100 bg-label-primary"
+                                                     style={{height: '8px'}}>
+                                                    <div className="progress-bar bg-primary" role="progressbar"
+                                                         style={{width: '35%'}} aria-valuenow="12" aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                                <small className="w-px-20 text-end">12</small>
+                                            </div>
+                                            <div className="d-flex align-items-center gap-2">
+                                                <small>2 Star</small>
+                                                <div className="progress w-100 bg-label-primary"
+                                                     style={{height: '8px'}}>
+                                                    <div className="progress-bar bg-primary" role="progressbar"
+                                                         style={{width: '18%'}} aria-valuenow="7" aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                                <small className="w-px-20 text-end">7</small>
+                                            </div>
+                                            <div className="d-flex align-items-center gap-2">
+                                                <small>1 Star</small>
+                                                <div className="progress w-100 bg-label-primary"
+                                                     style={{height: '8px'}}>
+                                                    <div className="progress-bar bg-primary" role="progressbar"
+                                                         style={{width: '10%'}} aria-valuenow="2" aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                                <small className="w-px-20 text-end">2</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="card h-100">
+                                    <div className="card-body row">
+                                        <div className="col-sm-5">
+                                            <div className="mb-12">
+                                                <h5 className="mb-2 text-nowrap">Reviews statistics</h5>
+                                                <p className="mb-0">
+                                                    <span className="me-2">12 New reviews</span>
+                                                    <span className="badge bg-label-success">+8.4%</span>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h6 className="mb-2 fw-normal">
+                                                    <span className="text-success me-1">87%</span>Positive reviews
+                                                </h6>
+                                                <small>Weekly Report</small>
+                                            </div>
+                                        </div>
+                                        <div
+                                            className="col-sm-7 d-flex justify-content-sm-end align-items-end position-relative">
+                                            <div id="reviewsChart" style={{minHeight: '175px'}}>
+                                                <div id="apexchartsmsgmet3n"
+                                                     className="apexcharts-canvas apexchartsmsgmet3n apexcharts-theme-light"
+                                                     style={{width: '190px', height: '160px'}}>
+                                                    <div className="apexcharts-legend"
+                                                         style={{maxHeight: '80px'}}></div>
+                                                    <div className="apexcharts-tooltip apexcharts-theme-light">
+                                                        <div className="apexcharts-tooltip-title"></div>
+                                                        <div className="apexcharts-tooltip-series-group order-1">
+                                                            <span className="apexcharts-tooltip-marker"></span>
+                                                            <div className="apexcharts-tooltip-text">
+                                                                <div className="apexcharts-tooltip-y-group">
+                                                                    <span
+                                                                        className="apexcharts-tooltip-text-y-label"></span>
+                                                                    <span
+                                                                        className="apexcharts-tooltip-text-y-value"></span>
+                                                                </div>
+                                                                <div className="apexcharts-tooltip-goals-group">
+                                                                    <span
+                                                                        className="apexcharts-tooltip-text-goals-label"></span>
+                                                                    <span
+                                                                        className="apexcharts-tooltip-text-goals-value"></span>
+                                                                </div>
+                                                                <div className="apexcharts-tooltip-z-group">
+                                                                    <span
+                                                                        className="apexcharts-tooltip-text-z-label"></span>
+                                                                    <span
+                                                                        className="apexcharts-tooltip-text-z-value"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        className="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light">
+                                                        <div className="apexcharts-yaxistooltip-text"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="resize-triggers">
+                                                <div className="expand-trigger">
+                                                    <div style={{width: '386px', height: '176px'}}></div>
+                                                </div>
+                                                <div className="contract-trigger"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-datatable table-responsive">
+                                <div className="dataTables_wrapper dt-bootstrap5 no-footer">
+                                    <div className="card-header flex-column flex-md-row pb-0">
+                                        <div className="d-flex justify-content-between align-items-center mb-4">
+                                            {/*<div className="head-label text-center">*/}
+                                            {/*    <h5 className="card-title mb-0">Statistics</h5>*/}
+                                            {/*</div>*/}
+                                            <div className="col-sm-12 col-md-6 d-flex">
+                                                <div
+                                                    className="dataTables_filter mb-0 mb-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0 me-3"> {/* col-sm-6 col-md-2 */}
+                                                    <Form.Control
+                                                        className="form-control"
+                                                        type="search"
+                                                        placeholder="Search..."
+                                                        value={searchTerm}
+                                                        onChange={handleSearch}
+                                                    />
+                                                </div>
+                                                <div className="dataTables_length">
+                                                    <label
+                                                        className="d-flex justify-content-left align-items-center">
+                                                        <select
+                                                            name="DataTables_Table_0_length"
+                                                            aria-controls="DataTables_Table_0"
+                                                            className="form-select" // ms-3 me-3
+                                                            style={{width: "80px"}}
+                                                            onChange={handleItemsPerPageChange}
+                                                            value={itemsPerPage}
+                                                        >
+                                                            <option value="10">7</option>
+                                                            <option value="10">10</option>
+                                                            <option value="25">20</option>
+                                                            <option value="50">50</option>
+                                                            <option value="50">70</option>
+                                                            <option value="50">100</option>
+                                                        </select>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Table hover responsive
+                                           className="table border-top dataTable no-footer dtr-column">
+                                        <thead style={{height: 64}}>
+                                        <tr>
+                                            <th
+                                                className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                                style={{verticalAlign: "middle", fontSize: 16, width: 18}}
+                                            >
+                                                <Form.Check
+                                                    type="checkbox"
+                                                    onChange={handleSelectAll}
+                                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
+                                                />
+                                            </th>
+                                            {
+                                                ["Reviewer", "Review"].map((item, index) => (
+                                                    <th className="sorting" key={index}
+                                                        style={{verticalAlign: "middle", fontSize: 13}}>
+                                                        {item}
+                                                    </th>
+                                                ))
+                                            }
+                                            <th className="sorting"
+                                                style={{verticalAlign: "middle", fontSize: 13, width: 180}}>Date
+                                            </th>
+                                            <th className="sorting"
+                                                style={{verticalAlign: "middle", fontSize: 13, width: 128}}>Status
+                                            </th>
+                                            {/*<th className="sorting_disabled"*/}
+                                            {/*    style={{verticalAlign: "middle", fontSize: 13, width: 128}}>Actions*/}
+                                            {/*</th>*/}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr style={{height: 64}}>
+                                            <td>
+                                                <Form.Check
+                                                    className="dt-checkboxes-cell"
+                                                    type="checkbox"
+                                                    checked={selectedEntries.includes()}
+                                                    onChange={() => handleSelectItem()}
+                                                />
+                                            </td>
+                                            <td>
+                                                <div
+                                                    className="d-flex justify-content-start align-items-center customer-name">
+                                                    <div className="avatar-wrapper">
+                                                        <div className="avatar me-4">{/* avatar-sm */}
+                                                            <img
+                                                                src="../../assets/img/avatars/5.png"
+                                                                alt="Avatar"
+                                                                className="rounded-circle"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="d-flex flex-column">
+                                                        <a>
+                                                            <span className="fw-medium text-primary">Braunschweig de Gorthenburg</span>
+                                                        </a>
+                                                        <small className="text-nowrap">username |
+                                                            gleppard8@yandex.ru</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className="read-only-ratings ps-0 mb-1 jq-ry-container"
+                                                     style={{width: '132px'}}>
+                                                    <div className="jq-ry-group-wrapper">
+                                                        {/*<div className="jq-ry-normal-group jq-ry-group">*/}
+                                                        {/*    <i className="bx bxs-star text-warning"></i>*/}
+                                                        {/*</div>*/}
+                                                        {/*<div className="jq-ry-rated-group jq-ry-group"*/}
+                                                        {/*     style={{width: '38.6364%'}}>*/}
+                                                        {/*    <i className="bx bxs-star"></i>*/}
+                                                        {/*</div>*/}
+
+                                                        <div className="jq-ry-normal-group jq-ry-group mb-2">
+                                                            <i className="bx bxs-star text-warning"></i>
+                                                            <i className="bx bxs-star text-warning"></i>
+                                                            <i className="bx bxs-star text-warning"></i>
+                                                            <i className="bx bxs-star text-warning"></i>
+                                                            <i className="bx bxs-star text-warning"></i>
+                                                        </div>
+                                                    </div>
+                                                    <p className="h6 mb-1 text-truncate">Good</p>
+                                                    <small className="text-break pe-3">
+                                                        Fusce consequat. Nulla nisl. Nunc nisl.
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            {/*<td className="sorting_1">*/}
+                                            {/*    <div*/}
+                                            {/*        className="d-flex justify-content-start align-items-center customer-name">*/}
+                                            {/*        <div className="avatar-wrapper">*/}
+                                            {/*            <div className="avatar me-4 rounded-2 bg-label-secondary">*/}
+                                            {/*                <img src="../assets/img/categories/product-9.png"*/}
+                                            {/*                     alt="Product-9" className="rounded"/>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className="d-flex flex-column">*/}
+                                            {/*            <span*/}
+                                            {/*                className="fw-medium text-nowrap text-heading">Air Jordan</span>*/}
+                                            {/*            <small>Air Jordan is a line of basketball shoes produced by*/}
+                                            {/*                Nike</small>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*</td>*/}
+                                            <td>{formatDateTime(new Date())}</td>
+                                            <td>{renderStatusBadge(3)}</td>
+                                        </tr>
+                                        {currentItems.map((item, index) => (
+                                            <tr key={index} style={{height: 64}}>
+                                                <td>
+                                                    <Form.Check
+                                                        className="dt-checkboxes-cell"
+                                                        type="checkbox"
+                                                        checked={selectedEntries.includes(item.id)}
+                                                        onChange={() => handleSelectItem(item.id)}
+                                                    />
+                                                </td>
+                                                <td className="sorting_1">
+                                                    <div
+                                                        className="d-flex justify-content-start align-items-center user-name">
+                                                        <div className="avatar-wrapper">
+                                                            <div className="avatar avatar-sm me-4">
+                                                <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
+                                                    {item.account.user.firstname[0]}{item.account.user.lastname[0]}
+                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex flex-column">
+                                                            <a className="text-heading text-truncate">
+                                                    <span
+                                                        className="fw-medium">{`${item.account.user.firstname} ${item.account.user.lastname}`}</span>
+                                                            </a>
+                                                            <small>
+                                                                {`${item.account.email}  |  ${item.account.username}`}
+                                                                {/*{item.account.email}*/}
+                                                                {/*<i className='bx bx-space-bar bx-sm px-2'></i>*/}
+                                                                {/*{item.account?.username}*/}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {/*<td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>*/}
+                                                <td>{formatDateTime(item.date)}</td>
+                                                <td>{item.price ? item.price : "$?"}</td>
+                                                <td>{renderStatusBadge(item.status)}</td>
+                                                <td>
+                                                    <Button
+                                                        variant="link"
+                                                        className="text-body p-2"
+                                                        // onClick={() => handleItemClick(item)}
+                                                    >
+                                                        <i className='bx bx-bullseye'></i>
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </Table>
+                                    <div className="card-footer flex-column flex-md-row pb-0 pb-4">
+                                        <div className="row">
+                                            <div className="d-flex col-sm-12 col-md-6">
+                                                <div
+                                                    className="dataTables_info d-flex justify-content-start align-items-center">
+                                                    <div className="text-center mt-2">
+                                                        {/*{`Showing from ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredData.length)} of ${filteredData.length} entries`}*/}
+                                                        <span>Showing from </span>
+                                                        <span className="text-primary">{indexOfFirstItem + 1}</span>
+                                                        <span> to </span>
+                                                        <span
+                                                            className="text-primary">{Math.min(indexOfLastItem, filteredData.length)}</span>
+                                                        <span> of </span>
+                                                        <span className="text-primary">{filteredData.length}</span>
+                                                        <span> entries</span>
+                                                    </div>
+                                                </div>
+                                                <div className="ms-2 me-2"></div>
+                                                <div
+                                                    className="dataTables_select d-flex justify-content-start align-items-center">
+                                                    <div className="text-center mt-2">
+                                                        Selected {selectedEntries.length} entries
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
+                                                {renderPagination()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="col col-sm-12 col-md-4 col-lg-4">
-                        <div className="card p-3 position-sticky" style={{ top: 24 }}>
-                            <div className="container">
+                        <div className="card p-3 position-sticky" style={{top: 24}}>
+                            <div className="container px-3">
                                 <div className="row mt-4">
                                     <div className="col">
-                                        <h3>{products.product_name}</h3>
-                                        <p className="text-warning">{averageScore ? <RatingStar rating={averageScore}/> : 'Chưa có đánh giá' }</p>
+                                        <h3>{`${products.brand} ${products.product_name}`}</h3>
+                                        <p className="text-warning">{averageScore ?
+                                            <RatingStar rating={averageScore}/> : 'Chưa có đánh giá'}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="row mt-4">
@@ -276,7 +889,6 @@ const Product = () => {
                                                         key={index}
                                                         type="radio"
                                                         label={config.cpu + " " + config.ram + "GB " + config.storage + "GB"}
-
                                                         name="version"
                                                         id="version1"
                                                         checked={config.idconfiguration === default_config.idconfiguration}
@@ -349,10 +961,11 @@ const Product = () => {
                 {/*</Row>*/}
             </Overview>
             <RatingForm
+                rate={evaluate}
                 prod={products}
                 show={showEvaluate}
                 onHide={() => setShowEvaluate(false)}
-                onReload={() => false}
+                // onReload={handleLoadRating()}
             />
             <NotifySuccess
                 title="Add to cart successfully"

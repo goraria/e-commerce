@@ -358,7 +358,7 @@ class ProductController {
     async loadRatingMiddleware(req, res) {
         // console.log(req.body, req.user);
         try {
-            const rating = await Rating.findAll({
+            const rating = await Rating.findOne({
                 where: {
                     idaccount: req.user.id,
                     idproduct: req.body.idproduct
@@ -369,6 +369,103 @@ class ProductController {
             res.json(rating);
         } catch (error) {
             res.status(500).json({ message: 'Error fetching ratings', error });
+        }
+    }
+
+    async createRatingMiddleware(req, res) {
+        try {
+            const { idproduct, score, comment } = req.body;
+
+            // Kiểm tra xem đã có đánh giá cho sản phẩm này chưa
+            const existingRating = await Rating.findOne({
+                where: {
+                    idaccount: req.user.id,
+                    idproduct: idproduct
+                }
+            });
+
+            if (existingRating) {
+                return res.status(400).json({ message: 'You have already rated this product' });
+            }
+
+            // Tạo mới đánh giá
+            const newRating = await Rating.create({
+                idaccount: req.user.id,
+                idproduct: idproduct,
+                score: score,
+                comment: comment,
+                rating_date: new Date()
+            });
+
+            res.status(201).json({
+                message: 'Rating created successfully',
+                data: newRating
+            });
+        } catch (error) {
+            // console.error(error);
+            res.status(500).json({ message: 'Error creating rating', error });
+        }
+    }
+
+    async changeRatingMiddleware(req, res) {
+        try {
+            const { score, comment } = req.body;
+            const ratingId = req.params.id;
+
+            // Tìm đánh giá hiện tại
+            // const rating = await Rating.findOne({
+            //     where: {
+            //         idaccount: req.user.id,
+            //         idrating: ratingId
+            //     }
+            // });
+
+            const rating = await Rating.findByPk(ratingId);
+
+            if (!rating) {
+                return res.status(404).json({ message: 'Rating not found' });
+            }
+
+            // Cập nhật đánh giá
+            rating.score = score || rating.score;
+            rating.comment = comment || rating.comment;
+
+            await rating.save();
+
+            res.status(200).json({
+                message: 'Rating updated successfully',
+                data: rating
+            });
+        } catch (error) {
+            // console.error(error);
+            res.status(500).json({ message: 'Error updating rating', error });
+        }
+    }
+
+    async removeRatingMiddleware(req, res) {
+        try {
+            const ratingId = req.params.id;
+
+            const rating = await Rating.findOne({
+                where: {
+                    idaccount: req.user.id,
+                    idrating: ratingId
+                }
+            });
+
+            if (!rating) {
+                return res.status(404).json({ message: 'Rating not found' });
+            }
+
+            // Xóa đánh giá
+            await rating.destroy();
+
+            res.status(200).json({
+                message: 'Rating removed successfully'
+            });
+        } catch (error) {
+            // console.error(error);
+            res.status(500).json({ message: 'Error removing rating', error });
         }
     }
 }

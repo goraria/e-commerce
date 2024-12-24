@@ -80,7 +80,7 @@ const Activitybar = ({ children }) => {
                 setCart(response.data);
                 // console.log(response.data);
             } catch (error) {
-                console.error("Invalid token:", error);
+                // console.error("Invalid token:", error);
             }
         } else {
             // navigate("/auth/login");

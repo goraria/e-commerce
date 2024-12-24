@@ -25,5 +25,8 @@ router.patch('/update-status/:idProduct', productController.updateStatus);
 ////////////////////////////
 
 router.post('/load-rating', AuthenticationMiddleware, productController.loadRatingMiddleware);
+router.post('/create-rating', AuthenticationMiddleware, productController.createRatingMiddleware);
+router.put('/change-rating/:id', AuthenticationMiddleware, productController.changeRatingMiddleware);
+router.delete('/remove-rating/:id', AuthenticationMiddleware, productController.removeRatingMiddleware);
 
 module.exports = router;
