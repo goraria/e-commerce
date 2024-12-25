@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './page-auth.css'
 import {Image} from "react-bootstrap";
-import jp from "../../assets/images/jp.jpeg";
+import jp from "../../../public/assets/img/overviews/jp.jpeg";
 export const AuthWrapper = ({ children }) => {
     return (
         <div className="container-xxl">

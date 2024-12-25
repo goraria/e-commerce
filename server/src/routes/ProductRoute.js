@@ -8,7 +8,9 @@ router.get('/load-product', productController.loadProduct);
 router.get('/load-productid/:idProduct', productController.loadProductWithID);
 router.get('/load-description/:idProduct', productController.loadDescription);
 router.get('/load-configuration/:idProduct', productController.loadConfiguration);
-router.get('/load-rating/:idProduct', productController.loadRating);
+
+router.get('/load-rating/:idproduct', productController.loadRating);
+
 router.get('/load-color/:idProduct', productController.loadColor);
 router.get('/load-idconfiguration/:idConfiguration', productController.loadConfigurationByID);
 router.get('/load-productCPU/:CPU', productController.loadProductWithCondition);
@@ -24,6 +26,9 @@ router.patch('/update-status/:idProduct', productController.updateStatus);
 
 ////////////////////////////
 
+router.get('/load-spotlight', productController.loadSpotlight);
+router.get('/load-top-spotlight', productController.loadTopSpotlight);
+router.get('/load-similarity/:idproduct', productController.loadSimilarity);
 router.post('/load-rating', AuthenticationMiddleware, productController.loadRatingMiddleware);
 router.post('/create-rating', AuthenticationMiddleware, productController.createRatingMiddleware);
 router.put('/change-rating/:id', AuthenticationMiddleware, productController.changeRatingMiddleware);

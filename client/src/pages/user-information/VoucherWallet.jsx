@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import VoucherItem from "../../components/voucher/VoucherItem.jsx";
 import {Button} from "react-bootstrap";
-import jp from "../../assets/images/jp.jpeg";
+import jp from "../../../public/assets/img/overviews/jp.jpeg";
 import axios from "axios";
 
 const VoucherWallet = () => {

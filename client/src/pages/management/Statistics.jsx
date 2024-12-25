@@ -253,7 +253,7 @@ export const Statistics = () => {
         setShowModal(true);  // Mở modal
     };
 
-    console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
+    // console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
     // setFromDate(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`);
 
     return (

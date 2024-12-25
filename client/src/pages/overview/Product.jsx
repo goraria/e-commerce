@@ -1,33 +1,26 @@
-import React, { Component, version } from "react";
+import React, { Component, useState, useEffect, version } from "react";
 import {
     Container,
     Button,
     Form,
-    ButtonGroup,
-    DropdownButton,
-    Dropdown,
     Row,
     Col,
     Card,
     Image,
-    Stack,
-    Carousel,
     ListGroup,
     Badge,
-    CardTitle,
-    CardText,
     Table, Pagination
 } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductItem from "../../components/product/ProductItem.jsx";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
+import ProductItem from "../../components/product/ProductItem.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import RatingStar from "../../components/product/RatingStar.jsx";
-import {RatingForm} from "../../components/modal/form/RatingForm.jsx";
+import { RatingForm } from "../../components/modal/form/RatingForm.jsx";
+import { MaintenancePage } from "../misc/MaintenancePage.jsx";
 import Calendar from "react-calendar";
 
 const Product = () => {
@@ -42,6 +35,7 @@ const Product = () => {
     const [products, setProduct] = useState([]);
     const [evaluate, setEvaluate] = useState([]);
     const [carts, setCart] = useState();
+    const [similars, setSimilars] = useState([]);
     const [ChoosedColor, setChoosedColor] = useState(null);
 
     const [data, setData] = useState([]);
@@ -49,41 +43,23 @@ const Product = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(7);
-
-    const filteredData = data.filter(item =>
-        item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
+    const [selectedItem, setSelectedItem] = useState(null);
 
     const [showEvaluate, setShowEvaluate] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
     const token = localStorage.getItem('token');
 
+    const navigate = useNavigate();
+
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);
     };
 
-    const handleSelectItem = (id) => {
-        if (selectedEntries.includes(id)) {
-            setSelectedEntries(selectedEntries.filter(item => item !== id));
-        } else {
-            setSelectedEntries([...selectedEntries, id]);
-        }
-    };
-
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.id);
-            setSelectedEntries(allVisibleItems);
-        } else {
-            setSelectedEntries([]);
-        }
+    const handleItemClick = (item) => {
+        setSelectedItem(item);
+        // setShowModal(true);
     };
 
     const fetchCart = async () => {
@@ -105,7 +81,7 @@ const Product = () => {
             const response = await fetch(`http://localhost:5172/products/load-productid/${id}`);
             const data = await response.json();
             setProduct(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            // console.log(data[0])
+            // console.log(data)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -128,6 +104,7 @@ const Product = () => {
             const response = await fetch(`http://localhost:5172/products/load-rating/${id}`);
             const data = await response.json();
             setRating(data); // Cập nhật thông tin sản phẩm từ backend
+            setData(data);
             // console.log(data)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
@@ -153,7 +130,22 @@ const Product = () => {
             setdefaultconfig(data[0]); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data)
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+        }
+    };
+
+    const fetchProductSimilars = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5172/products/load-similarity/${id}`);
+            // const response = await fetch(`http://localhost:5172/products/load-similarity/${id}`);
+            // const data = await response.json();
+
+            setSimilars(response.data)
+            // setSimilars(data)
+
+            // console.log(similars)
+        } catch (error) {
+            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     };
 
@@ -209,6 +201,38 @@ const Product = () => {
         } catch (error) {
             console.error('Lỗi khi thêm vào giỏ hàng:', error);
         }
+    };
+
+    const handleSelectItem = (id) => {
+        if (selectedEntries.includes(id)) {
+            setSelectedEntries(selectedEntries.filter(item => item !== id));
+        } else {
+            setSelectedEntries([...selectedEntries, id]);
+        }
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idrating);
+            setSelectedEntries(allVisibleItems);
+        } else {
+            setSelectedEntries([]);
+        }
+    };
+
+    const filteredData = data.filter(item =>
+        item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const getInitials = (name) => {
+        const initials = name.split(" ").map(n => n[0]).join("");
+        return initials;
     };
 
     const handleItemsPerPageChange = (e) => {
@@ -336,19 +360,23 @@ const Product = () => {
     const averageScore = totalScore / ratings.length;
 
     useEffect(() => {
+        if (!id) return <MaintenancePage/>;
+
         fetchProductConfiguration();
         fetchProductDetails();
         fetchProductDecription();
         fetchProductRating();
         fetchProductColor();
         fetchCart();
+        fetchProductSimilars();
 
+        // setData(ratings);
         handleLoadRating()
-    }, [id]);
+    }, [id, location.search]);
 
     return (
         <>
-            <Transitionbar />
+            <Transitionbar/>
             <div className="container">
                 <div className="row">
                     <div className="col col-sm-12 col-md-8 col-lg-8 align-items-center">
@@ -420,41 +448,6 @@ const Product = () => {
                             </Card.Body>
                         </div>
                         <div className="card p-3 mb-4">
-                            <Card.Body>
-                                {/* Section: Cấu hình đặc điểm */}
-                                <Card.Title> Mô tả sản phẩm</Card.Title>
-                                <div className="mb-4 d-flex justify-content-center">
-                                    <img
-                                        className="d-block object-fit-cover w-100 h-100 rounded-4"
-                                        src={products.product_image}
-                                        alt="Second slide"
-                                    />
-                                </div>
-                                <div>
-                                    <p>{descriptions.img_description}</p>
-                                    <h4>Thiết kế thời thượng, thuận tiện di chuyển</h4>
-                                    <p>{descriptions.title_description}</p>
-                                </div>
-                                <div className="d-flex justify-content-center mb-4">
-                                    {products.product_image ? (
-                                        <div className="d-flex justify-content-center mb-4">
-                                            <Image
-                                                className="d-block object-fit-cover w-100 h-100 rounded-4"
-                                                src={products.product_image}
-                                                alt="Product image"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <p>Image not available</p>
-                                    )}
-                                </div>
-                                <div>
-                                    <h4>Phù hợp với mọi tác vụ</h4>
-                                    <p>{descriptions.sub_description}</p>
-                                </div>
-                            </Card.Body>
-                        </div>
-                        <div className="card mb-4">
                             <Card.Body>
                                 {/* Section: Cấu hình đặc điểm */}
                                 <Card.Title> Mô tả sản phẩm</Card.Title>
@@ -731,8 +724,9 @@ const Product = () => {
                                                         <a>
                                                             <span className="fw-medium text-primary">Braunschweig de Gorthenburg</span>
                                                         </a>
-                                                        <small className="text-nowrap">username |
-                                                            gleppard8@yandex.ru</small>
+                                                        <small className="text-nowrap">
+                                                            username | braunschweig@gorth.org
+                                                        </small>
                                                     </div>
                                                 </div>
                                             </td>
@@ -748,18 +742,15 @@ const Product = () => {
                                                         {/*    <i className="bx bxs-star"></i>*/}
                                                         {/*</div>*/}
 
-                                                        <div className="jq-ry-normal-group jq-ry-group mb-2">
-                                                            <i className="bx bxs-star text-warning"></i>
-                                                            <i className="bx bxs-star text-warning"></i>
-                                                            <i className="bx bxs-star text-warning"></i>
-                                                            <i className="bx bxs-star text-warning"></i>
-                                                            <i className="bx bxs-star text-warning"></i>
+                                                        <div
+                                                            className="jq-ry-normal-group jq-ry-group text-warning mb-2">
+                                                            <RatingStar rating={1}/>
                                                         </div>
                                                     </div>
                                                     <p className="h6 mb-1 text-truncate">Good</p>
-                                                    <small className="text-break pe-3">
-                                                        Fusce consequat. Nulla nisl. Nunc nisl.
-                                                    </small>
+                                                    {/*<small className="text-break pe-3">*/}
+                                                    {/*    Fusce consequat. Nulla nisl. Nunc nisl.*/}
+                                                    {/*</small>*/}
                                                 </div>
                                             </td>
                                             {/*<td className="sorting_1">*/}
@@ -782,53 +773,54 @@ const Product = () => {
                                             <td>{formatDateTime(new Date())}</td>
                                             <td>{renderStatusBadge(3)}</td>
                                         </tr>
-                                        {currentItems.map((item, index) => (
+                                        {ratings.map((item, index) => (
                                             <tr key={index} style={{height: 64}}>
                                                 <td>
                                                     <Form.Check
                                                         className="dt-checkboxes-cell"
                                                         type="checkbox"
-                                                        checked={selectedEntries.includes(item.id)}
-                                                        onChange={() => handleSelectItem(item.id)}
+                                                        checked={selectedEntries.includes(item.idrating)}
+                                                        onChange={() => handleSelectItem(item.idrating)}
                                                     />
                                                 </td>
-                                                <td className="sorting_1">
+                                                <td>
                                                     <div
-                                                        className="d-flex justify-content-start align-items-center user-name">
+                                                        className="d-flex justify-content-start align-items-center customer-name">
                                                         <div className="avatar-wrapper">
-                                                            <div className="avatar avatar-sm me-4">
-                                                <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
-                                                    {item.account.user.firstname[0]}{item.account.user.lastname[0]}
-                                                </span>
+                                                            <div className="avatar me-4">{/* avatar-sm */}
+                                                                <img
+                                                                    src={item.reviewer?.avatar}
+                                                                    alt="Avatar"
+                                                                    className="rounded-circle"
+                                                                />
                                                             </div>
                                                         </div>
                                                         <div className="d-flex flex-column">
-                                                            <a className="text-heading text-truncate">
-                                                    <span
-                                                        className="fw-medium">{`${item.account.user.firstname} ${item.account.user.lastname}`}</span>
+                                                            <a>
+                                                                <span className="fw-medium text-primary">
+                                                                    {`${item.reviewer?.firstname} ${item.reviewer?.lastname}`}
+                                                                </span>
                                                             </a>
-                                                            <small>
-                                                                {`${item.account.email}  |  ${item.account.username}`}
-                                                                {/*{item.account.email}*/}
-                                                                {/*<i className='bx bx-space-bar bx-sm px-2'></i>*/}
-                                                                {/*{item.account?.username}*/}
+                                                            <small className="text-nowrap">
+                                                                {`${item.reviewer?.username} | ${item.reviewer?.email}`}
                                                             </small>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                {/*<td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>*/}
-                                                <td>{formatDateTime(item.date)}</td>
-                                                <td>{item.price ? item.price : "$?"}</td>
-                                                <td>{renderStatusBadge(item.status)}</td>
                                                 <td>
-                                                    <Button
-                                                        variant="link"
-                                                        className="text-body p-2"
-                                                        // onClick={() => handleItemClick(item)}
-                                                    >
-                                                        <i className='bx bx-bullseye'></i>
-                                                    </Button>
+                                                    <div className="read-only-ratings ps-0 mb-1 jq-ry-container"
+                                                         style={{width: '132px'}}>
+                                                        <div className="jq-ry-group-wrapper">
+                                                            <div
+                                                                className="jq-ry-normal-group jq-ry-group text-warning mb-2">
+                                                                <RatingStar rating={item.score}/>
+                                                            </div>
+                                                        </div>
+                                                        <p className="h6 mb-1 text-truncate">{item.comment}</p>
+                                                    </div>
                                                 </td>
+                                                <td>{formatDateTime(formatDateTime(item.rating_date))}</td>
+                                                <td>{renderStatusBadge(5)}</td>
                                             </tr>
                                         ))}
                                         </tbody>
@@ -874,8 +866,12 @@ const Product = () => {
                                 <div className="row mt-4">
                                     <div className="col">
                                         <h3>{`${products.brand} ${products.product_name}`}</h3>
-                                        <p className="text-warning">{averageScore ?
-                                            <RatingStar rating={averageScore}/> : 'Chưa có đánh giá'}
+                                        <p className="text-warning">
+                                            {
+                                                averageScore ?
+                                                    <RatingStar rating={averageScore}/>
+                                                    : 'Chưa có đánh giá'
+                                            }
                                         </p>
                                     </div>
                                 </div>
@@ -950,16 +946,18 @@ const Product = () => {
                     </div>
                 </div>
             </div>
-            <Overview>
-                <h3 className="text-center m-0">Sản phẩm tương tự</h3>
-                {/*<Row>*/}
-                {/*    {products.map(product =>*/}
-                {/*        <Col key={product.id} sm={12} md={6} lg={3} className="mb-3">*/}
-                {/*            <ProductItem obj={product} />*/}
-                {/*        </Col>*/}
-                {/*    )}*/}
-                {/*</Row>*/}
+            <Overview mt={4}>
+                <h3 className="text-center m-0">Similar products</h3>
             </Overview>
+            <div className="container">
+                <div className="row">
+                    {similars.map((product, index) =>
+                        <div key={index} className="col col-sm-12 col-md-6 col-lg-3 mb-4">
+                            <ProductItem obj={product}/>
+                        </div>
+                    )}
+                </div>
+            </div>
             <RatingForm
                 rate={evaluate}
                 prod={products}
