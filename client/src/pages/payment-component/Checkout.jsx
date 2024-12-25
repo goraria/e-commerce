@@ -158,140 +158,198 @@ const CheckOut = () => {
             <div className="container">
                 <div className="row">
                     {/* Left Section: Order Info and Payment Method */}
-                    <Col sm={12} md={6} lg={8}>
+                    <div className="col col-sm-12 col-md-6 col-lg-8">
                         {/* Order Information */}
                         <div className="card p-3 mb-4">
-                            <h5>Thông tin đơn hàng</h5>
-                            <div>Mã đặt hàng: <strong>DH2410160005</strong></div>
-                            <div>Người nhận: <strong>{userData.firstname} {userData.lastname}</strong></div>
-                            <div>{deliverymethod}:
-                                {deliverymethod === "Tại cửa hàng" && (
-                                    <strong>{selectedstoreaddress}</strong>
-                                )}
-                                {deliverymethod === "Giao tận nơi" && (
-                                    <strong>{address.street}, {address.city}, {address.district}</strong>
-                                )}
+                            <div className="p-3">
+                                <h5>Thông tin đơn hàng</h5>
+                                <div>Mã đặt hàng: <strong>DH2410160005</strong></div>
+                                <div>Người nhận: <strong>{userData.firstname} {userData.lastname}</strong></div>
+                                <div>{deliverymethod}:
+                                    {deliverymethod === "Tại cửa hàng" && (
+                                        <strong>{selectedstoreaddress}</strong>
+                                    )}
+                                    {deliverymethod === "Giao tận nơi" && (
+                                        <strong>{address.street}, {address.city}, {address.district}</strong>
+                                    )}
+                                </div>
                             </div>
                         </div>
                         {/* Payment Method */}
                         <div className="card p-3 mb-4">
-                            <h5>Phương thức thanh toán</h5>
-                            <Form.Check
-                                type="radio"
-                                label="Chuyển Khoản QR"
-                                name="paymentMethod"
-                                value="qr"
-                                checked={paymentMethod === "qr"}
-                                onChange={handlePaymentMethodChange}
-                            />
-                            {/* Other Payment Methods */}
-                            <Form.Check
-                                type="radio"
-                                label="Thanh toán khi nhận hàng"
-                                name="paymentMethod"
-                                value="cod"
-                                checked={paymentMethod === "cod"}
-                                onChange={handlePaymentMethodChange}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="Paypal"
-                                name="paymentMethod"
-                                value="paypal"
-                                checked={paymentMethod === "paypal"}
-                                onChange={handlePaymentMethodChange}
-                            />
+                            <div className="p-3"><h5>Phương thức thanh toán</h5>
+                                {/*<div className="form-check">*/}
+                                {/*    <input*/}
+                                {/*        name="default-radio-1"*/}
+                                {/*        className="form-check-input"*/}
+                                {/*        type="radio"*/}
+                                {/*        value=""*/}
+                                {/*        id="defaultRadio2"*/}
+                                {/*        checked/>*/}
+                                {/*    <label className="form-check-label" htmlFor="defaultRadio2"> Checked </label>*/}
+                                {/*</div>*/}
+                                <Form.Check
+                                    className="form-check"
+                                    type="radio"
+                                    label="Chuyển Khoản QR"
+                                    name="paymentMethod"
+                                    value="qr"
+                                    checked={paymentMethod === "qr"}
+                                    onChange={handlePaymentMethodChange}
+                                />
+                                {/* Other Payment Methods */}
+                                <Form.Check
+                                    type="radio"
+                                    label="Thanh toán khi nhận hàng"
+                                    name="paymentMethod"
+                                    value="cod"
+                                    checked={paymentMethod === "cod"}
+                                    onChange={handlePaymentMethodChange}
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    label="Paypal"
+                                    name="paymentMethod"
+                                    value="paypal"
+                                    checked={paymentMethod === "paypal"}
+                                    onChange={handlePaymentMethodChange}
+                                />
+                            </div>
                         </div>
                         {paymentMethod === "qr" && (
                             <>
                                 <div className="card p-3 mb-4">
-                                    <h6>Hướng dẫn chuyển khoản</h6>
-                                    <div><strong>Cách 1:</strong> Dùng ứng dụng ngân hàng để quét mã QR.</div>
-                                    <div><strong>Cách 2:</strong> Nhập thông tin chuyển khoản bên dưới. Lưu ý nhập chính
-                                        xác số tiền, nội dung chuyển khoản.
-                                    </div>
-                                    <div>Sau khi chuyển khoản thành công, bấm nút "Tôi đã chuyển khoản". Hệ thống sẽ mất
-                                        khoảng 30 giây để xác minh đã nhận được tiền.
+                                    <div className="p-3">
+                                        <h5>Hướng dẫn chuyển khoản</h5>
+                                        <div className="mb-1">
+                                            <strong>Cách 1: </strong>
+                                            Dùng ứng dụng ngân hàng để quét mã QR.
+                                        </div>
+                                        <div className="mb-1">
+                                            <strong>Cách 2: </strong>
+                                            Nhập thông tin chuyển khoản bên dưới.
+                                            Lưu ý nhập chính xác số tiền, nội dung chuyển khoản.
+                                        </div>
+                                        <div className="mb-1">
+                                            Sau khi chuyển khoản thành công, bấm nút
+                                            <strong> Tôi đã chuyển khoản</strong>. Hệ thống sẽ mất
+                                            khoảng 30 giây để xác minh đã nhận được tiền.
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* Bank Info */}
                                 <div className="card p-3 mb-4">
-                                    <Row>
-                                        <Col>
-                                            <p>Ngân hàng: <strong>Ngân hàng TMCP Ngoại thương Việt Nam
-                                                (Vietcombank)</strong></p>
-                                            <p>Tên tài khoản: <strong>Lê Tuấn Linh</strong></p>
-                                            <p>Số tài khoản: <strong>9968727279</strong></p>
-                                            <p>Nội dung CK: <strong>212410160005 RYPRGG</strong></p>
-                                            <p>Số tiền: <strong>${totalPrice}</strong></p>
-                                        </Col>
-                                        <Col>
-                                            <img src="https://via.placeholder.com/150" alt="QR Code" />
-                                            <p className="text-center">Quét mã QR bằng ứng dụng ngân hàng</p>
-                                        </Col>
-                                    </Row>
-                                    <Button className="w-100 mt-2" variant="primary" onClick={() => {
-                                        handleStatusChange(1);
-                                        handleAddBill()
-                                        // NotifySuccess()
-                                    }}>Tôi đã chuyển khoản</Button>
+                                    <div className="p-3">
+                                        <div className="row mb-3">
+                                            <div className="col col-lg-9">
+                                                <p>Ngân hàng: <strong>Ngân hàng TMCP Ngoại thương Việt Nam
+                                                    (Vietcombank)</strong></p>
+                                                <p>Tên tài khoản: <strong>Lê Tuấn Linh</strong></p>
+                                                <p>Số tài khoản: <strong>9968727279</strong></p>
+                                                <p>Nội dung CK: <strong>212410160005 RYPRGG</strong></p>
+                                                <p>Số tiền: <strong>${totalPrice}</strong></p>
+                                            </div>
+                                            <div className="col col-3 justify-content-center">
+                                                <div className="d-flex align-items-center flex-column">
+                                                    <img className="img-fluid rounded mb-4"
+                                                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                                         height="120" width="120" alt="QR Code"/>
+                                                    <div className="customer-info text-center mb-4">
+                                                        <h5 className="mb-0">Scan QR code</h5>
+                                                        <span>Customer ID #30</span>
+                                                    </div>
+                                                </div>
+                                                {/*<img src="https://via.placeholder.com/150" alt="QR Code"/>*/}
+                                                {/*<p className="text-center">Scan QR code</p>*/}
+                                            </div>
+                                        </div>
+                                        <Button className="w-100 mt-2" variant="primary" onClick={() => {
+                                            handleStatusChange(1);
+                                            handleAddBill()
+                                            // NotifySuccess()
+                                        }}>Tôi đã chuyển khoản</Button>
+                                    </div>
                                 </div>
                             </>
                         )}
                         {paymentMethod === "cod" && (
                             <div className="card p-3 mb-3">
+                                <div className="p-3">
                                 <Button className="w-100" variant="primary" onClick={() => {
-                                    handleStatusChange(0)
-                                    handleAddBill()
-                                }}>
-                                    Xác nhận thanh toán
-                                </Button>
+                                        handleStatusChange(0)
+                                        handleAddBill()
+                                    }}>
+                                        Xác nhận thanh toán
+                                    </Button>
+                                </div>
                             </div>
                         )}
                         {paymentMethod === "paypal" && (
-                            <div className="card p-3 mb-3 d-flex justify-content-center">
-                                <div className="d-flex" id="paypal-button-container"></div>
-                            </div>
+                            <>
+                                <div className="card p-3 mb-4 d-flex justify-content-center">
+                                    <div className="d-flex justify-content-center w-100">
+                                        <div className="d-flex" id="paypal-button-container"></div>
+                                    </div>
+                                </div>
+                                {/*<div className="card p-3 mb-3 d-flex justify-content-center">*/}
+                                {/*    <div className="row d-flex justify-content-center flex-wrap">*/}
+                                {/*        <div className="col-12">*/}
+                                {/*            <div className="d-flex justify-content-center w-100"*/}
+                                {/*                 style={{minWidth: '120px'}}>*/}
+                                {/*                <div className="d-flex" id="paypal-button-container"></div>*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                            </>
                         )}
-                    </Col>
+                    </div>
 
-                    {/* Right Section: Order Summary & Product List */}
-                    <Col sm={12} md={6} lg={4} className="mb-4">
-                        {/* First Card: Order Summary */}
-                        <div className="card sticky-summary mb-4 shadow-none position-sticky bg-transparent"
-                            style={{ top: 120 }}>
-                            <div className="card p-3 sticky-summary mb-4">
-                                <h5>Tóm tắt đơn hàng</h5>
-                                <div className="d-flex justify-content-between">
-                                    <span>Tạm tính</span>
-                                    <span>${prePrice} </span>
+                    <div className="col col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
+                            <div className="card p-3 mb-4">
+                                <div className="rounded p-3">
+                                    <h5>Price Details</h5>
+                                    <dl className="row mb-0 text-heading">
+                                        <dt className="col-6 fw-normal">Bag Total</dt>
+                                        <dd className="col-6 text-end">${prePrice}</dd>
+
+                                        <dt className="col-6 fw-normal">Coupon Discount</dt>
+                                        <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+
+                                        <dt className="col-6 fw-normal">Order Total</dt>
+                                        <dd className="col-6 text-end">- ${prePrice * discount}</dd>
+
+                                        <dt className="col-6 fw-normal">Delivery Charges</dt>
+                                        <dd className="col-6 text-end">
+                                            <s className="text-muted">$5.00</s>
+                                            <span className="badge bg-label-success ms-1">Free</span>
+                                        </dd>
+                                    </dl>
+                                    <hr className="my-4"/>
+                                    <dl className="row mb-0">
+                                        <dt className="col-6 text-heading">Total</dt>
+                                        <dd className="col-6 fw-medium text-end text-heading mb-0">${totalPrice}</dd>
+                                    </dl>
                                 </div>
-                                <div className="d-flex justify-content-between">
-                                    <span>Được giảm</span>
-                                    <span>${prePrice * discount} </span>
-                                </div>
-                                <div className="d-flex justify-content-between mt-2">
-                                    <span>Tổng cộng</span>
-                                    <span style={{ fontWeight: 'bold', fontSize: '1.5em' }}>${totalPrice} </span>
-                                </div>
-                                {/* <div className="d-flex justify-content-between mt-2">
-                                    <span>Đã thanh toán</span>
-                                    <span>{paid.toLocaleString('vi-VN')} đ</span>
-                                </div>
-                                <div className="d-flex justify-content-between mt-2">
-                                    <span>Còn lại</span>
-                                    <span>${totalPrice}</span>
-                                </div> */}
+                                {/*<div className="p-3">*/}
+                                {/*    <Button className="w-100" variant="danger">*/}
+                                {/*        Order*/}
+                                {/*    </Button>*/}
+                                {/*</div>*/}
                             </div>
-                            <div className="card p-3 sticky-summary mb-4">
-                                <h4>Sản phẩm trong đơn</h4>
-                                {cartData.map((item, index) => (
-                                    <OrderItem key={index} Item={item} />
-                                ))}
+                            <div className="card p-3">
+                                <div className="rounded p-3">
+                                    <h5>Sản phẩm trong đơn</h5>
+                                    <hr className="my-4"/>
+                                    {cartData.map((item, index) => (
+                                        <OrderItem key={index} Item={item}/>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </Col>
+                    </div>
                 </div>
             </div>
             <NotifySuccess

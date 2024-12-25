@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import AddressForm from "../modal/form/AddressForm.jsx";
 import React from "react";
 
-import jp from '../../assets/images/jp.jpeg'
+import jp from '../../../public/assets/img/overviews/jp.jpeg'
 
 const VoucherItem = () => {
     let item = {

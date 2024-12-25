@@ -1,49 +1,59 @@
-import {Button, Card, Carousel, Col, Container, Row, Image} from "react-bootstrap";
-import React, {Component, useEffect, useState} from "react";
-
-import ProductItem from "../../components/product/ProductItem.jsx";
-
-import mbp from "../../assets/images/mbp.jpeg"
-import mba from "../../assets/images/mba.jpeg"
-import sfc from "../../assets/images/sfc.jpeg"
-import xps from "../../assets/images/xps.jpeg"
-import pri from "../../assets/images/pri.jpeg"
-import uls from "../../assets/images/uls.jpeg"
-import axios from "axios";
+import React, { Component, useEffect, useState } from "react";
+import { Carousel, Image } from "react-bootstrap";
 import Overview from "../../layouts/Overview.jsx";
-
-const products = [
-    { id: 1, name: 'Product 1', price: '5', image: 'https://via.placeholder.com/300x200', description: 'Mô tả ngắn về Product 1' },
-    { id: 2, name: 'Product 2', price: '6', image: 'https://via.placeholder.com/300x200', description: 'Mô tả ngắn về Product 2' },
-    { id: 3, name: 'Product 3', price: '7', image: 'https://via.placeholder.com/300x200', description: 'Mô tả ngắn về Product 3' },
-    { id: 4, name: 'Product 4', price: '8', image: 'https://via.placeholder.com/300x200', description: 'Mô tả ngắn về Product 4' },
-    { id: 5, name: 'Product 5', price: '9', image: 'https://via.placeholder.com/300x200', description: 'Mô tả ngắn về Product 5' },
-    { id: 6, name: 'Product 6', price: '10', image: 'https://via.placeholder.com/300x200', description: 'Mô tả ngắn về Product 6' },
-];
+import ProductItem from "../../components/product/ProductItem.jsx";
+import axios from "axios";
 
 const banners = [
-    { id: 1, name: mbp, alt: "First slide", title: "Sale Off 5%", description: "Developer love Mac" },
-    { id: 2, name: mba, alt: "Second slide", title: "Sale Off 10%", description: "The best display ever in a laptop." },
-    { id: 3, name: xps, alt: "Third slide", title: "Sale Off 12%", description: "Most beautiful Ultrabook" },
-    { id: 4, name: pri, alt: "Fourth slide", title: "Sale Off 8%", description: "The best Workstation" },
-    { id: 5, name: sfc, alt: "Fifth slide", title: "Sale Off 15%", description: "Surface x Copilot" },
-    { id: 6, name: uls, alt: "Sixth slide", title: "Sale Off 20%", description: "XDR Display" },
+    { id: 0, name: "../assets/img/overviews/macbook.png", alt: "Out slide", title: "Sale Off 5-10%", description: "Developer love Mac" },
+    { id: 1, name: "..//assets/img/overviews/mbp.jpeg", alt: "First slide", title: "Sale Off 5%", description: "Developer love Mac" },
+    // { id: 2, name: "../assets/img/overviews/mba.jpeg", alt: "Second slide", title: "Sale Off 10%", description: "The best display ever in a laptop." },
+    { id: 3, name: "../assets/img/overviews/xps.jpeg", alt: "Third slide", title: "Sale Off 12%", description: "Most beautiful Ultrabook" },
+    // { id: 4, name: "../assets/img/overviews/pri.jpeg", alt: "Fourth slide", title: "Sale Off 8%", description: "The best Workstation" },
+    { id: 5, name: "../assets/img/overviews/sfc.jpeg", alt: "Fifth slide", title: "Sale Off 15%", description: "Surface x Copilot" },
+    // { id: 6, name: "../assets/img/overviews/yogabook.jpeg", alt: "Sixth slide", title: "Sale Off 20%", description: "Double Display" },
 ]
 
 const Home = () => {
     // const [users, setUsers] = useState([]);
     // const [count, setCount] = useState(0);
-    // const [array, setArray] = useState([]);
-    //
-    // const fetchAPI = async () => {
-    //     const response = await axios.get("http://localhost:5172/api")
-    //     // console.log(response.data.name)
-    //     setArray(response.data.name)
-    // }
-    //
-    // useEffect(() => {
-    //     fetchAPI()
-    // }, []);
+    const [array, setArray] = useState([]);
+    const [spotlights, setProductSpotlights] = useState([]);
+    const [randoms, setProductRandoms] = useState([]);
+
+    const fetchAPI = async () => {
+        const response = await axios.get("http://localhost:5172/api")
+        // console.log(response.data.name)
+        setArray(response.data.name)
+    }
+
+    const fetchProductSpotlight = async () => {
+        try {
+            const response = await axios.get("http://localhost:5172/products/load-spotlight");
+
+            setProductRandoms(response.data);
+            // console.log(response.data);
+        } catch (error) {
+
+        }
+    }
+
+    const fetchProductTopSpotlight = async () => {
+        try {
+            const response = await axios.get("http://localhost:5172/products/load-top-spotlight");
+
+            setProductSpotlights(response.data);
+            // console.log(response.data);
+        } catch (error) {
+
+        }
+    }
+
+    useEffect(() => {
+        // fetchAPI()
+        fetchProductSpotlight();
+        fetchProductTopSpotlight();
+    }, []);
 
     return (
         <div>
@@ -65,18 +75,30 @@ const Home = () => {
                     )
                 )}
             </Carousel>
-            <Overview mt={24}>
+            <Overview mt={4}>
                 <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
-            <Container className="my-4">
+            <div className="container">
                 <div className="row">
-                    {products.map(product => (
-                        <div key={product.id} className="col col-sm-12 col-md-6 col-lg-4 mb-4">
-                            {/* <ProductItem obj={product} /> */}
+                    {spotlights.map((product, index) => (
+                        <div key={index} className="col col-sm-12 col-md-6 col-lg-4 mb-4">
+                             <ProductItem obj={product} />
                         </div>
                     ))}
                 </div>
-            </Container>
+            </div>
+            <Overview>
+                <h3 className="text-center m-0">Random</h3>
+            </Overview>
+            <div className="container">
+                <div className="row">
+                    {randoms.map((product, index) => (
+                        <div key={index} className="col col-sm-12 col-md-6 col-lg-4 mb-4">
+                             <ProductItem obj={product} />
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     )
 }

@@ -86,7 +86,7 @@ const ForgotPassword = () => {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
-                            autoFocus />
+                            autoFocus/>
                     </div>
                     <div className="mb-3">
                         <button
@@ -98,16 +98,23 @@ const ForgotPassword = () => {
                             Send Reset Link
                         </button>
                     </div>
-                    <ReCaptchaComponent
-                        siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
-                        verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
-                        onSuccess={handleSuccess}
-                        onError={handleError}
-                    />
+                    <div className="row d-flex justify-content-center flex-wrap">
+                        <div className="col-lg-12">
+                            <div className="d-flex justify-content-center w-100"
+                                 style={{minWidth: '120px'}}>
+                                <ReCaptchaComponent
+                                    siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
+                                    verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
+                                    onSuccess={handleSuccess}
+                                    onError={handleError}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </Form>
                 <div className="text-center">
                     <Link aria-label="Go to Login Page" to="/auth/login"
-                        className="d-flex align-items-center justify-content-center">
+                          className="d-flex align-items-center justify-content-center">
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>

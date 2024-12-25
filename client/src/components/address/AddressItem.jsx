@@ -1,6 +1,6 @@
 import React, {Component, useState} from "react";
 import {Container, Button, Form, Row, Col, Image, Card, InputGroup} from "react-bootstrap";
-import jp from "../../assets/images/jp.jpeg";
+import jp from "../../../public/assets/img/overviews/jp.jpeg";
 import AddressForm from "../modal/form/AddressForm.jsx";
 
 const AddressItem = ({ item, onReload }) => {

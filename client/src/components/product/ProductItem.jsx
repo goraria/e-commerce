@@ -127,7 +127,10 @@ const ProductItem = (product, state) => {
 
     return (
         <>
-            <div className="card border-0 bg-light rounded-3" style={{height: cardWidth * 6 / 5, width: cardWidth}}>
+            <div
+                className="card border-0 bg-light rounded-3"
+                // style={{height: cardWidth * 6 / 5, width: cardWidth}}
+            >
                 <Link to={`/product?id=${obj.idproduct}`} style={{textDecoration: 'none'}}>
                     <img
                         src={products.product_image}
@@ -138,7 +141,7 @@ const ProductItem = (product, state) => {
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
                         <h5 className="card-title m-0 text-truncate" style={{maxWidth: '70%'}}>
-                            {products.product_name}
+                            {`${products.brand} ${products.product_name}`}
                         </h5>
                         <span className="fw-bold fs-5">${configurations.price}</span>
                     </div>
