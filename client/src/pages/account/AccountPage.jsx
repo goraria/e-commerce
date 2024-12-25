@@ -33,13 +33,18 @@ export const AccountPage = ({ onReload }) => {
             });
 
             const data = response.data;
+            function removeLocalhostPrefix(url) {
+                const prefix = 'http://localhost:5172/';
+                return url.startsWith(prefix) ? url.slice(prefix.length) : url;
+            }
+            const avatarUrl = removeLocalhostPrefix(data.avatar);
             setFormData({
                 username: data.username,
                 email: data.email,
                 firstname: data.firstname,
                 lastname: data.lastname,
                 phone: data.phone,
-                avatar: data.avatar
+                avatar: avatarUrl
             });
         } catch (error) {
             setError('Error fetching user data');
@@ -70,10 +75,6 @@ export const AccountPage = ({ onReload }) => {
         }
     }
 
-    useEffect(() => {
-        getInformation();
-        getAvatar();
-    }, []);
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -82,21 +83,54 @@ export const AccountPage = ({ onReload }) => {
     const handleSaveChanges = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put(`http://localhost:5172/account/set-info`, formData, {
+            const fileInput = document.getElementById('upload');
+            const file = fileInput.files[0]; // Lấy file từ input
+
+            const formDataToSend = new FormData();
+
+            // Nếu có avatar mới, thêm vào FormData
+            if (file) {
+                formDataToSend.append('avatar', file); // Đảm bảo file được thêm vào FormData
+            }
+
+            // Thêm các trường dữ liệu khác vào FormData, bao gồm cả thông tin người dùng
+            formDataToSend.append('username', formData.username);
+            formDataToSend.append('email', formData.email);
+            formDataToSend.append('firstname', formData.firstname);
+            formDataToSend.append('lastname', formData.lastname);
+            formDataToSend.append('phone', formData.phone);
+
+            // Gửi yêu cầu POST để upload avatar (nếu có thay đổi avatar)
+            const avatarResponse = file ? await axios.post(`http://localhost:5172/account/upload-avatar`, formDataToSend, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            }) : null;
+
+            // Gửi yêu cầu PUT để cập nhật thông tin người dùng (bao gồm cả trường hợp không thay đổi avatar)
+            const userInfoResponse = await axios.put(`http://localhost:5172/account/set-info`, formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            if (response.status === 200) {
-                // alert('User information updated successfully');
-                setShowModal(false); // Đóng modal sau khi lưu thành công
-                onReload(); // Gọi hàm reload từ component cha
+            if ((avatarResponse && avatarResponse.status === 200) || (userInfoResponse.status === 200)) {
+                // Nếu có thay đổi avatar, cập nhật avatar hiển thị sau khi lưu thành công
+                if (avatarResponse) {
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        avatar: avatarResponse.data.avatarPath,
+                    }));
+                    // console.log(avatarResponse.data.avatarPath);
+                }
+                console.log(formData.avatar);
+                setShowModal(false); // Đóng modal
+                onReload(); // Reload dữ liệu từ component cha
+                // getInformation();
             }
         } catch (error) {
-            // alert('Failed to update user information');
             setError(error.response ? error.response.data.message : 'Update failed');
         }
     };
-
     const handleInvalid = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -115,35 +149,12 @@ export const AccountPage = ({ onReload }) => {
             }
         }
     };
-    const handleUploadAvatar = async () => {
-        const fileInput = document.getElementById('upload');
-        const file = fileInput.files[0]; // Lấy file từ input
 
-        if (file) {
-            const formData = new FormData();
-            formData.append('avatar', file); // Gửi file dưới tên 'avatar'
 
-            try {
-                const token = localStorage.getItem('token'); // Token xác thực
-                const response = await axios.post('http://localhost:5172/account/upload-avatar', formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data' // Quan trọng khi gửi file
-                    }
-                });
-
-                if (response.status === 200) {
-                    // alert('Avatar uploaded successfully!');
-                    onReload(); // Gọi lại để cập nhật avatar trên giao diện
-                }
-            } catch (error) {
-                alert('Failed to upload avatar.');
-            }
-        } else {
-            alert('No file selected!');
-        }
-    };
-
+    useEffect(() => {
+        getInformation();
+        getAvatar();
+    }, []);
 
     return (
         <>

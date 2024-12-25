@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 class AccountController {
@@ -62,23 +63,38 @@ class AccountController {
             });
         } catch (error) {
             // console.error('Lỗi khi cập nhật thông tin tài khoản và người dùng:', error);
+            console.log(error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật thông tin' });
         }
     }
     async UploadAvatar(req, res) {
         try {
-            const avatarPath = path.join(__dirname, 'avatar');
+            function convertBackslashesToSlashes(path) {
+                return path.replace(/\\/g, '/');
+            }
+            // console.log(req.file);
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+            console.log(req.file);
+            const avatarPath = path.join(__dirname, '../../../client/public/assets/img/avatars');
             if (!fs.existsSync(avatarPath)) {
                 fs.mkdirSync(avatarPath, { recursive: true });
             }
-            const filePath = path.join('avatar', req.file.filename);
-            // Bạn có thể lưu `filePath` vào database, ví dụ:
+            const filePath = path.join("../assets/img/avatars/", req.file.filename);
             const user = await User.findOne({ where: { idaccount: req.user.id } });
-            // await User.update({ avatar: filePath }, { where: { id: req.user.id } });
-            await user.update({ avatar: filePath })
+            // console.log(avatarPath)
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            // console.log(filePath);
+            // Cập nhật đường dẫn ảnh vào cơ sở dữ liệu
+            const filepath = convertBackslashesToSlashes(filePath);
+            await user.update({ avatar: filepath });
 
             res.status(200).json({ message: 'Avatar uploaded successfully', avatarPath: filePath });
         } catch (error) {
+            // console.log(error);
             res.status(500).json({ message: 'Failed to upload avatar', error: error.message });
         }
     }

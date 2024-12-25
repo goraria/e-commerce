@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Badge, Button, Dropdown, Form, Pagination, Table} from "react-bootstrap";
+import React, { useEffect, useRef, useState } from "react";
+import { Badge, Button, Dropdown, Form, Pagination, Table } from "react-bootstrap";
 import Calendar from "react-calendar";
 import axios from "axios";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Statistics = () => {
     const [data, setData] = useState([]);
@@ -253,7 +253,7 @@ export const Statistics = () => {
         setShowModal(true);  // Mở modal
     };
 
-    console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
+    // console.log(new Date(fromDate).toLocaleString(), new Date(toDate).toLocaleString())
     // setFromDate(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`);
 
     return (
@@ -284,7 +284,7 @@ export const Statistics = () => {
                                                 name="DataTables_Table_0_length"
                                                 aria-controls="DataTables_Table_0"
                                                 className="form-select" // ms-3 me-3
-                                                style={{width: "80px"}}
+                                                style={{ width: "80px" }}
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
@@ -347,7 +347,7 @@ export const Statistics = () => {
                                             </a>
                                             <ul className="dropdown-menu dropdown-menu-end p-0">
                                                 <li>
-                                                    <Calendar onChange={onFromDateChange} value={fromDate}/>
+                                                    <Calendar onChange={onFromDateChange} value={fromDate} />
                                                 </li>
                                             </ul>
                                         </li>
@@ -367,7 +367,7 @@ export const Statistics = () => {
                                             </a>
                                             <ul className="dropdown-menu dropdown-menu-end p-0">
                                                 <li>
-                                                    <Calendar onChange={onToDateChange} value={toDate}/>
+                                                    <Calendar onChange={onToDateChange} value={toDate} />
                                                 </li>
                                             </ul>
                                         </li>
@@ -409,11 +409,11 @@ export const Statistics = () => {
                             {/*</div>*/}
                         </div>
                         <Table hover responsive className="table border-top dataTable no-footer dtr-column">
-                            <thead style={{height: 64}}>
+                            <thead style={{ height: 64 }}>
                                 <tr>
                                     <th
                                         className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                        style={{verticalAlign: "middle", fontSize: 16, width: 18}}
+                                        style={{ verticalAlign: "middle", fontSize: 16, width: 18 }}
                                     >
                                         <Form.Check
                                             type="checkbox"
@@ -423,62 +423,62 @@ export const Statistics = () => {
                                     </th>
                                     {
                                         ["Fullname", "Order Date", "Spent", "Status"].map((item, index) => (
-                                            <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
+                                            <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13 }}>
                                                 {item}
                                             </th>
                                         ))
                                     }
-                                    <th className="sorting_disabled" style={{verticalAlign: "middle", fontSize: 13, width: 128}}>Actions</th>
+                                    <th className="sorting_disabled" style={{ verticalAlign: "middle", fontSize: 13, width: 128 }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {currentItems.map((item, index) => (
-                                <tr key={index} style={{height: 64}}>
-                                    <td>
-                                        <Form.Check
-                                            className="dt-checkboxes-cell"
-                                            type="checkbox"
-                                            checked={selectedEntries.includes(item.id)}
-                                            onChange={() => handleSelectItem(item.id)}
-                                        />
-                                    </td>
-                                    <td className="sorting_1">
-                                        <div className="d-flex justify-content-start align-items-center user-name">
-                                            <div className="avatar-wrapper">
-                                                <div className="avatar avatar-sm me-4">
-                                                <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
-                                                    {item.account.user.firstname[0]}{item.account.user.lastname[0]}
-                                                </span>
+                                {currentItems.map((item, index) => (
+                                    <tr key={index} style={{ height: 64 }}>
+                                        <td>
+                                            <Form.Check
+                                                className="dt-checkboxes-cell"
+                                                type="checkbox"
+                                                checked={selectedEntries.includes(item.id)}
+                                                onChange={() => handleSelectItem(item.id)}
+                                            />
+                                        </td>
+                                        <td className="sorting_1">
+                                            <div className="d-flex justify-content-start align-items-center user-name">
+                                                <div className="avatar-wrapper">
+                                                    <div className="avatar avatar-sm me-4">
+                                                        <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
+                                                            {item.account.user.firstname[0]}{item.account.user.lastname[0]}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="d-flex flex-column">
+                                                    <a className="text-heading text-truncate">
+                                                        <span
+                                                            className="fw-medium">{`${item.account.user.firstname} ${item.account.user.lastname}`}</span>
+                                                    </a>
+                                                    <small>
+                                                        {`${item.account.email}  |  ${item.account.username}`}
+                                                        {/*{item.account.email}*/}
+                                                        {/*<i className='bx bx-space-bar bx-sm px-2'></i>*/}
+                                                        {/*{item.account?.username}*/}
+                                                    </small>
                                                 </div>
                                             </div>
-                                            <div className="d-flex flex-column">
-                                                <a className="text-heading text-truncate">
-                                                    <span
-                                                        className="fw-medium">{`${item.account.user.firstname} ${item.account.user.lastname}`}</span>
-                                                </a>
-                                                <small>
-                                                    {`${item.account.email}  |  ${item.account.username}`}
-                                                    {/*{item.account.email}*/}
-                                                    {/*<i className='bx bx-space-bar bx-sm px-2'></i>*/}
-                                                    {/*{item.account?.username}*/}
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    {/*<td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>*/}
-                                    <td>{formatDateTime(item.date)}</td>
-                                    <td>{item.price ? item.price : "$?"}</td>
-                                    <td>{renderStatusBadge(item.status)}</td>
-                                    <td>
-                                        <Button
-                                            variant="link"
-                                            className="text-body p-2"
-                                            onClick={() => handleItemClick(item)}>
-                                            <i className='bx bx-bullseye'></i>
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
+                                        </td>
+                                        {/*<td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>*/}
+                                        <td>{formatDateTime(item.date)}</td>
+                                        <td>{item.price ? item.price : "$?"}</td>
+                                        <td>{renderStatusBadge(item.status)}</td>
+                                        <td>
+                                            <Button
+                                                variant="link"
+                                                className="text-body p-2"
+                                                onClick={() => handleItemClick(item)}>
+                                                <i className='bx bx-bullseye'></i>
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
                         <div className="card-footer flex-column flex-md-row pb-0 pb-4">
