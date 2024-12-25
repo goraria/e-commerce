@@ -35,8 +35,9 @@ router.put('/create-description', AdminController.createDescription);
 router.get('/payhd', AdminController.payhd);
 
 router.get('/get-voucher', AdminController.getVoucher);
+router.get('/get-voucherid', AdminController.getVoucherName);
 router.delete('/delete-voucher/:idVoucher', AdminController.deleteVoucher);
-router.post('/update-voucher/:idVoucher', AdminController.updateVoucher);
-router.put('/create-voucher', AdminController.createVoucher);
+router.put('/update-voucher/:idVoucher', AdminController.updateVoucher);
+router.post('/create-voucher', AdminController.createVoucher);
 router.patch('/update-voucher-status/:idVoucher', AdminController.updateStatus);
 module.exports = router;

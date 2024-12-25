@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, {useEffect, useRef, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import {Badge, Button, Form, Pagination, Table} from "react-bootstrap";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Badge, Button, Form, Pagination, Table } from "react-bootstrap";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
 
@@ -52,7 +52,7 @@ export const Preview = () => {
 
         try {
             const response = await axios.get('http://localhost:5172/bill/list-bill', {
-                headers: {Authorization: `Bearer ${token}`}
+                headers: { Authorization: `Bearer ${token}` }
             });
 
             setData(response.data);
@@ -297,7 +297,6 @@ export const Preview = () => {
     useEffect(() => {
         getInformation()
         fetchPreviews()
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
@@ -311,7 +310,7 @@ export const Preview = () => {
                             <div className="customer-avatar-section">
                                 <div className="d-flex align-items-center flex-column">
                                     <img className="img-fluid rounded mb-4" src={formData.avatar}
-                                         height="120" width="120" alt="User avatar"/>
+                                        height="120" width="120" alt="User avatar" />
                                     <div className="customer-info text-center mb-4">
                                         <h5 className="mb-0">{`${formData.firstname} ${formData.lastname}`}</h5>
                                         <span>Customer ID #{formData.iduser}</span>
@@ -379,8 +378,8 @@ export const Preview = () => {
                                     <Link
                                         to="/user/profile"
                                         className="btn btn-primary w-100"
-                                        // data-bs-target="#editUser"
-                                        // data-bs-toggle="modal"
+                                    // data-bs-target="#editUser"
+                                    // data-bs-toggle="modal"
                                     >
                                         Edit Details
                                     </Link>
@@ -519,7 +518,7 @@ export const Preview = () => {
                                                                 name="DataTables_Table_0_length"
                                                                 aria-controls="DataTables_Table_0"
                                                                 className="form-select" // ms-3 me-3
-                                                                style={{width: "80px"}}
+                                                                style={{ width: "80px" }}
                                                                 onChange={handleItemsPerPageChange}
                                                                 value={itemsPerPage}
                                                             >
@@ -534,56 +533,56 @@ export const Preview = () => {
                                             </div>
                                         </div>
                                         <Table hover responsive
-                                               className="table border-top dataTable no-footer dtr-column">
-                                            <thead style={{height: 64}}>
-                                            <tr>
-                                                <th
-                                                    className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                                    style={{verticalAlign: "middle", fontSize: 16, width: 18}}
-                                                >
-                                                    <Form.Check
-                                                        type="checkbox"
-                                                        onChange={handleSelectAll}
-                                                        checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                                    />
-                                                </th>
-                                                {
-                                                    ["Order Date", "Spent", "Status"].map((item, index) => (
-                                                        <th className="sorting" key={index}
-                                                            style={{verticalAlign: "middle", fontSize: 13}}>
-                                                            {item}
-                                                        </th>
-                                                    ))
-                                                }
-                                                <th className="sorting_disabled"
-                                                    style={{verticalAlign: "middle", fontSize: 13, width: 128}}>Actions
-                                                </th>
-                                            </tr>
+                                            className="table border-top dataTable no-footer dtr-column">
+                                            <thead style={{ height: 64 }}>
+                                                <tr>
+                                                    <th
+                                                        className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                                        style={{ verticalAlign: "middle", fontSize: 16, width: 18 }}
+                                                    >
+                                                        <Form.Check
+                                                            type="checkbox"
+                                                            onChange={handleSelectAll}
+                                                            checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
+                                                        />
+                                                    </th>
+                                                    {
+                                                        ["Order Date", "Spent", "Status"].map((item, index) => (
+                                                            <th className="sorting" key={index}
+                                                                style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                                                {item}
+                                                            </th>
+                                                        ))
+                                                    }
+                                                    <th className="sorting_disabled"
+                                                        style={{ verticalAlign: "middle", fontSize: 13, width: 128 }}>Actions
+                                                    </th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            {currentItems.map((item, index) => (
-                                                <tr key={index} style={{height: 64}}>
-                                                    <td>
-                                                        <Form.Check
-                                                            className="dt-checkboxes-cell"
-                                                            type="checkbox"
-                                                            checked={selectedEntries.includes(item.id)}
-                                                            onChange={() => handleSelectItem(item.id)}
-                                                        />
-                                                    </td>
-                                                    <td>{formatDateTime(item.date)}</td>
-                                                    <td>{item.price ? item.price : "$?"}</td>
-                                                    <td>{renderStatusBadge(item.status)}</td>
-                                                    <td>
-                                                        <Link to={`/user/bill?id=${item.id}`}>
-                                                            <i className='bx bx-bullseye'></i>
-                                                        </Link>
-                                                        {/*<Button variant="link" onClick={() => handleItemClick(item)}>*/}
-                                                        {/*    <i className='bx bx-bullseye'></i>*/}
-                                                        {/*</Button>*/}
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                                {currentItems.map((item, index) => (
+                                                    <tr key={index} style={{ height: 64 }}>
+                                                        <td>
+                                                            <Form.Check
+                                                                className="dt-checkboxes-cell"
+                                                                type="checkbox"
+                                                                checked={selectedEntries.includes(item.id)}
+                                                                onChange={() => handleSelectItem(item.id)}
+                                                            />
+                                                        </td>
+                                                        <td>{formatDateTime(item.date)}</td>
+                                                        <td>{item.price ? item.price : "$?"}</td>
+                                                        <td>{renderStatusBadge(item.status)}</td>
+                                                        <td>
+                                                            <Link to={`/user/bill?id=${item.id}`}>
+                                                                <i className='bx bx-bullseye'></i>
+                                                            </Link>
+                                                            {/*<Button variant="link" onClick={() => handleItemClick(item)}>*/}
+                                                            {/*    <i className='bx bx-bullseye'></i>*/}
+                                                            {/*</Button>*/}
+                                                        </td>
+                                                    </tr>
+                                                ))}
                                             </tbody>
                                         </Table>
                                         <div className="card-footer flex-column flex-md-row pb-0 pb-4">

@@ -26,7 +26,8 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use("avatars", express.static(path.join(__dirname, '../client/public/assets/img/avatars')));
+console.log(__dirname)
 
 routes(app)
 

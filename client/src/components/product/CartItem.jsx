@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Image, Form, Button } from "react-bootstrap";
 import axios from 'axios';
 
-const CardItem = ({ element, onCheckboxChange, onRemoveItem }) => {
+const CardItem = ({ element, onCheckboxChange, onQuantityChange, onRemoveItem }) => {
     const item = element;
     const [product, setProduct] = useState([]);
     const [default_config, setdefaultconfig] = useState([]);
@@ -78,15 +78,18 @@ const CardItem = ({ element, onCheckboxChange, onRemoveItem }) => {
             console.error('Lỗi khi cập nhật vào giỏ hàng:', error);
         }
     };
-
+    // const handleQuantityUpdate = (event) => {
+    //     const newQuantity = parseInt(event.target.value);
+    //     setQuantity(newQuantity);
+    //     onQuantityChange(element, newQuantity);  // Gọi hàm handleQuantityChange từ Cart
+    // };
     const handleQuantityChange = (newQuantity) => {
         if (newQuantity < 1) return;
 
         setQuantity(newQuantity);
         handleUpdateQuantityItem(newQuantity);  // Update quantity in the backend
-        // console.log(newQuantity) // Update local quantity state
     };
-    
+
     useEffect(() => {
         // fetchUser();
         // fetchAddress();
