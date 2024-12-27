@@ -1,8 +1,4 @@
-import { Button } from "react-bootstrap";
-import AddressForm from "../modal/form/AddressForm.jsx";
 import React from "react";
-
-import jp from '../../../public/assets/img/overviews/jp.jpeg'
 
 const VoucherItem = () => {
     let item = {
@@ -12,6 +8,7 @@ const VoucherItem = () => {
         startdate: new Date().toLocaleDateString(),
         outdate: new Date().toLocaleDateString()
     }
+
     return (
         <>
             <div className="card mb-3">
@@ -20,7 +17,7 @@ const VoucherItem = () => {
                         <img
                             aria-label='card image'
                             className="card-img card-img-left object-fit-cover"
-                            src={jp} alt="Card image"
+                            src={"../assets/img/overviews/jp.jpeg"} alt="Card image"
                             style={{width: 144, height: 144}}/>
                     </div>
                     <div className="col-md-8">

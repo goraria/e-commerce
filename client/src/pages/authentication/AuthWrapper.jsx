@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './page-auth.css'
-import {Image} from "react-bootstrap";
-import jp from "../../../public/assets/img/overviews/jp.jpeg";
+
 export const AuthWrapper = ({ children }) => {
     return (
         <div className="container-xxl">
@@ -14,7 +13,7 @@ export const AuthWrapper = ({ children }) => {
                                 <Link aria-label='Go to Home Page' to="/" className="app-brand-link gap-2">
                                     <span className="app-brand-logo demo">
                                         {/*<img src="/assets/img/sneat.svg" alt="sneat-logo" />*/}
-                                        <img src={jp} alt="user-avatar"
+                                        <img src={"../assets/img/overviews/jp.jpeg"} alt="user-avatar"
                                              className="d-block rounded object-fit-cover" height="100" width="100"
                                              aria-label="Logo"/>
                                     </span>
