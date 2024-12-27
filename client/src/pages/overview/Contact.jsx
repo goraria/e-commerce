@@ -1,28 +1,19 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import {
-    Carousel, Container, Dropdown, Image, Row, Card
-} from "react-bootstrap";
-
-import jp from '../../assets/images/jp.jpeg'
-import xps from '../../assets/images/xps.jpeg'
-import asusStore from '../../assets/images/asus-store.jpg'
-import dellStore from '../../assets/images/dell-store.jpg'
-import rogStore from '../../assets/images/rog-store.jpeg'
-import lenovoStore from '../../assets/images/lenovo-store.jpg'
+import { Carousel, Dropdown, Image } from "react-bootstrap";
 import Overview from "../../layouts/Overview.jsx";
 
 const carouselItems = [
-    { id: 0, name: "jg", src: jp, caption: "Bill", description: "Famous Brand in our website" },
-    { id: 1, name: "bill", src: xps, caption: "Cipher", description: "Famous Brand in our website" },
+    { id: 0, name: "jg", src: "../assets/img/overviews/jp.jpeg", caption: "Bill", description: "Famous Brand in our website" },
+    { id: 1, name: "bill", src: "../assets/img/overviews/xps.jpeg", caption: "Cipher", description: "Famous Brand in our website" },
 ]
 
 const imgItems = [
-    { id: 0, name: "jg", src: jp, },
-    { id: 1, name: "asus", src: asusStore, },
-    { id: 2, name: "asus", src: dellStore, },
-    { id: 3, name: "asus", src: rogStore, },
-    { id: 4, name: "asus", src: lenovoStore, },
+    { id: 0, name: "jg", src: "../assets/img/overviews/jp.jpeg", },
+    { id: 1, name: "asus", src: "../assets/img/overviews/asus-store.jpg", },
+    { id: 2, name: "asus", src: "../assets/img/overviews/dell-store.jpg", },
+    { id: 3, name: "asus", src: "../assets/img/overviews/rog-store.jpeg", },
+    { id: 4, name: "asus", src: "../assets/img/overviews/lenovo-store.jpg", },
 ]
 
 const ImageAbout = ({ imageItems }) => {
@@ -59,7 +50,7 @@ const Contact = () => {
                     ))
                 }
             </Carousel>
-            <Overview mt={56} me={56}>
+            <Overview mt={4}>
                 <div>
                     <h5>Contact</h5>
                     <p className="lead">

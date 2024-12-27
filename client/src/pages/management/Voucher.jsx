@@ -287,8 +287,15 @@ export const Voucher = () => {
                                     Voucher Name
                                 </th>
                                 {
-                                    ["Percentage", "Value", "Start Date", "End Date"].map((item, index) => (
-                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                    ["Percentage", "Value"].map((item, index) => (
+                                        <th className="sorting" key={index} style={{ textAlign: "center", verticalAlign: "middle", fontSize: 13, width: 120 }}>
+                                            {item}
+                                        </th>
+                                    ))
+                                }
+                                {
+                                    ["Start Date", "End Date"].map((item, index) => (
+                                        <th className="sorting" key={index} style={{ textAlign: "center", verticalAlign: "middle", fontSize: 13, width: 200 }}>
                                             {item}
                                         </th>
                                     ))
@@ -337,10 +344,14 @@ export const Voucher = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td className="sorting" style={{ textAlign: "center", verticalAlign: "middle", fontSize: 13 }}>
+                                        {` ${item.percentage_discount}`}</td>
+                                    <td className="sorting" style={{ textAlign: "center", verticalAlign: "middle", fontSize: 13 }}>
+                                        {` ${item.value_discount}`}</td>
+                                    <td className="sorting" style={{ textAlign: "center", verticalAlign: "middle", fontSize: 13 }}>
+                                        {formatDateTime(item.start_date)}</td>
+                                    <td className="sorting" style={{ textAlign: "center", verticalAlign: "middle", fontSize: 13 }}>
+                                        {formatDateTime(item.end_date)}</td>
                                     <td>
                                         {/*<span className="text-truncate">*/}
                                         {/*    <label className="switch switch-primary switch-sm">*/}

@@ -537,8 +537,22 @@ class AdminController {
     }
     async getVoucher(req, res) {
         try {
-
             const voucher = await Discount.findAll();
+            // console.log(voucher)
+            res.status(200).json(voucher);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching voucher', error });
+        }
+
+    }
+    async getVoucherName(req, res) {
+        try {
+            const { VoucherName } = req.body
+            const voucher = await Discount.findAll({
+                where: {
+                    discount_name: VoucherName
+                }
+            });
             res.status(200).json(voucher);
         } catch (error) {
             res.status(500).json({ message: 'Error fetching voucher', error });
@@ -571,7 +585,7 @@ class AdminController {
         }
 
         const updatedData = req.body; // Dữ liệu cập nhật
-
+        // console.log(updatedData);
 
         if (!updatedData || Object.keys(updatedData).length === 0) {
             return res.status(400).json({ message: 'No update data provided' });
@@ -597,11 +611,14 @@ class AdminController {
     }
     async createVoucher(req, res) {
         const Data = req.body;
-
         try {
-
             const newVoucher = await Discount.create({
-                discount_name: Data.voucher_name,
+                discount_name: Data.discount_name,
+                percentage_discount: Data.percentage_discount,
+                value_discount: Data.value_discount,
+                start_date: Data.start_date,
+                end_date: Data.end_date,
+                status: 1,
             });
 
             console.log('Product created successfully:', newVoucher);
@@ -609,6 +626,7 @@ class AdminController {
                 voucher: newVoucher,
             });
         } catch (error) {
+            // console.log(error)
             res.status(500).json({ success: false, message: 'Error create voucher', error });
         }
     }

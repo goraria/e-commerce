@@ -298,7 +298,7 @@ const Order = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="d-none col col-sm-12 col-md-6 col-lg-4 mb-2">
+                    <div className="col col-sm-12 col-md-6 col-lg-4 mb-2 d-none">
                         <div className="card sticky-summary mb-3 shadow-none"
                              style={{position: 'sticky', top: 100, backgroundColor: 'transparent', boxShadow: 'none'}}>
                             <div className="card p-3 sticky-summary">
