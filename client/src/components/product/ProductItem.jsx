@@ -13,10 +13,24 @@ const ProductItem = (product, state) => {
     const [carts, setCart] = useState();
     const [colors, setColor] = useState();
 
+    const [properties, setProperties] = useState([]);
+
     const [showSuccess, setShowSuccess] = useState(false);
 
     var obj = product.obj;
+    // console.log(obj)
     const token = localStorage.getItem('token');
+
+    const getProperties = () => {
+        try {
+            const response = axios.get(`http://localhost:5172/products/load-properties/${obj.idproduct}`);
+
+            setProperties(response.data);
+            console.log(response.data)
+        } catch (error) {
+
+        }
+    }
 
     const fetchCart = async () => {
         try {
@@ -94,6 +108,7 @@ const ProductItem = (product, state) => {
         fetchProductRating();
         fetchProductColor();
         fetchCart();
+        // getProperties()
         // fetchAPI();
         // fetchAPI1();
         // fetchAPI2();
@@ -122,8 +137,8 @@ const ProductItem = (product, state) => {
 
     const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
     const averageScore = totalScore / ratings.length;
-    const cardWidth = state;
-    const imageHeight = (1 / 8) * cardWidth;
+    // const cardWidth = state;
+    // const imageHeight = (1 / 8) * cardWidth;
 
     return (
         <>

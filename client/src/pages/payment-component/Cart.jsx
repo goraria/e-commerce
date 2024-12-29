@@ -7,6 +7,147 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'
 
+const Cart0 = () => {
+    const [carts, setCart] = useState(null); // Dữ liệu giỏ hàng
+    const [selectedCartItems, setSelectedCartItems] = useState([]); // Các sản phẩm được chọn
+    const [vouchers, setVouchers] = useState([]); // Danh sách voucher
+    const [selectedVoucher, setSelectedVoucher] = useState(null); // Voucher được chọn
+
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
+
+    const handleCheckboxChange = (item, isSelected) => {
+        setSelectedCartItems((prev) => {
+            if (isSelected) {
+                // Thêm sản phẩm vào danh sách được chọn
+                return [...prev, { ...item, quantity: item.quantity }];
+            } else {
+                // Xóa sản phẩm khỏi danh sách khi bỏ tick
+                return prev.filter((cartItem) => cartItem.idcart_item !== item.idcart_item);
+            }
+        });
+    };
+
+    const handleQuantityChange = (item, newQuantity) => {
+        setSelectedCartItems((prev) =>
+            prev.map((cartItem) =>
+                cartItem.idcart_item === item.idcart_item
+                    ? { ...cartItem, quantity: newQuantity }
+                    : cartItem
+            )
+        );
+    };
+
+// Tính tổng giá trị giỏ hàng
+    const calculateTotal = () => {
+        const preTotal = selectedCartItems.reduce(
+            (sum, item) => sum + item.configuration.price * item.quantity,
+            0
+        );
+        const discount = selectedVoucher ? selectedVoucher.percentage_discount : 0;
+        return {
+            preTotal,
+            discountAmount: preTotal * discount,
+            total: preTotal - preTotal * discount,
+        };
+    };
+
+    const { preTotal, discountAmount, total } = calculateTotal();
+
+    useEffect(() => {
+        // Tải giỏ hàng và danh sách voucher khi component mount
+        loadFullCart();
+        getVoucher();
+    }, []);
+
+    useEffect(() => {
+        // Load dữ liệu giỏ hàng và voucher khi mount
+        const fetchCart = async () => {
+            try {
+                const response = await axios.get('http://localhost:5172/cart/load-cart', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setCart(response.data);
+            } catch (error) {
+                console.error('Error fetching cart:', error);
+            }
+        };
+
+        const fetchVouchers = async () => {
+            try {
+                const response = await axios.get('http://localhost:5172/cart/get-voucher');
+                setVouchers(response.data);
+            } catch (error) {
+                console.error('Error fetching vouchers:', error);
+            }
+        };
+
+        fetchCart();
+        fetchVouchers();
+    }, []);
+
+    // const { preTotal, discountAmount, total } = calculateTotal();
+
+    return (
+        <>
+            <Transitionbar />
+            <Container>
+                <Row>
+                    {/* Left Section: Product List */}
+                    <Col lg={8}>
+                        {carts?.cart_items.map((item) => (
+                            <Card key={item.idcart_item} className="mb-4">
+                                <Card.Body>
+                                    <CardItem
+                                        element={item}
+                                        onCheckboxChange={(isSelected) =>
+                                            handleCheckboxChange(item, isSelected)
+                                        }
+                                        onQuantityChange={(newQuantity) =>
+                                            handleQuantityChange(item, newQuantity)
+                                        }
+                                    />
+                                </Card.Body>
+                            </Card>
+                        ))}
+                    </Col>
+
+                    {/* Right Section: Order Summary */}
+                    <Col lg={4}>
+                        <Card>
+                            <Card.Body>
+                                <h5>Offer</h5>
+                                <Form.Group>
+                                    <Form.Select onChange={(e) => setSelectedVoucher(e.target.value)}>
+                                        <option value="">Choose voucher</option>
+                                        {vouchers.map((voucher) => (
+                                            <option key={voucher.id} value={voucher.id}>
+                                                {voucher.discount_name} - {voucher.percentage_discount * 100}% off
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                                <h5>Price Details</h5>
+                                <dl>
+                                    <dt>Bag Total</dt>
+                                    <dd>${preTotal.toFixed(2)}</dd>
+                                    <dt>Coupon Discount</dt>
+                                    <dd>-${discountAmount.toFixed(2)}</dd>
+                                    <dt>Total</dt>
+                                    <dd>${total.toFixed(2)}</dd>
+                                </dl>
+                                <Button onClick={handleOrderClick} className="w-100 mt-3" variant="danger">
+                                    Order
+                                </Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        </>
+    );
+};
+
 const Cart = () => {
     const [carts, setCart] = useState();
     const [cartItems, setCartItem] = useState([]);
@@ -17,38 +158,141 @@ const Cart = () => {
     const [selectedCartItems, setSelectedCartItems] = useState([]);
     const [voucher, setVoucher] = useState([]);
     const [vouchername, setVoucherName] = useState([]);
-    const navigate = useNavigate();
+    const [vouchers, setVouchers] = useState([]); // Danh sách voucher
+    const [selectedVoucher, setSelectedVoucher] = useState(null); // Voucher được chọn
 
     const token = localStorage.getItem('token');
-    const response = async () => {
-        await axios.get('http://localhost:5172/cart/load', {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+    const navigate = useNavigate();
+
+    const loadFullCart = async () => {
+        try {
+            const response = await axios.get('http://localhost:5172/cart/load-cart', {
+                headers: {Authorization: `Bearer ${token}`}
+            });
+
+            setCart(response.data);
+            // console.log(response.data);
+        } catch (error) {
+            // console.error("Invalid token:", error);
+        }
     };
 
-    const handleOrderClick = (event) => {
-        event.preventDefault();
-        navigate('/pay/order', {
-            state: {
-                cartData: selectedCartItems, // Dữ liệu giỏ hàng
-                prePrice: pre_total,
-                discount: discount,
-                totalPrice: total     // Tổng giá trị đơn hàng
+    const getVoucher = async () => {
+        try {
+            const response = await axios.get('http://localhost:5172/cart/get-voucher');
+            setVoucher(response.data);
+
+            // console.log(response.data)
+        } catch (error) {
+            // console.error('Error fetching product details:', error);
+        }
+    };
+
+    // const handleOrderClick = (event) => {
+    //     event.preventDefault();
+    //     navigate('/pay/order', {
+    //         state: {
+    //             cartData: selectedCartItems, // Dữ liệu giỏ hàng
+    //             prePrice: pre_total,
+    //             discount: discount,
+    //             totalPrice: total // Tổng giá trị đơn hàng
+    //         }
+    //     });
+    // };
+
+    const handleChange = (item, isSelected) => {
+        loadFullCart();
+
+        const itemPrice = item.configuration.price * item.quantity;
+
+        // Cập nhật selectedPrices
+        setSelectedPrices((prevSelectedPrices) => {
+            if (isSelected) {
+                // Nếu sản phẩm được chọn, thêm giá trị mới vào selectedPrices
+                return prevSelectedPrices.filter(price => price !== (item.configuration.price * item.prevQuantity)) // Loại bỏ giá trị cũ (nếu có)
+                    .concat(itemPrice); // Thêm giá trị mới
+            } else {
+                // Nếu sản phẩm bị bỏ chọn, loại bỏ giá trị của sản phẩm khỏi selectedPrices
+                return prevSelectedPrices.filter((price) => price !== item.configuration.price * item.quantity);
+            }
+        });
+
+        // Cập nhật selectedCartItems
+        setSelectedCartItems((prevSelectedCartItems) => {
+            if (isSelected) {
+                // Nếu sản phẩm được chọn, thêm item vào selectedCartItemsọn, thêm item vào selectedCartItems
+                return [...prevSelectedCartItems, item];
+            } else {
+                // Nếu sản phẩm bị bỏ chọn, loại bỏ item khỏi selectedCartItems
+                return prevSelectedCartItems.filter((cartItem) => cartItem.idcart_item !== item.idcart_item);
             }
         });
     };
 
+    // let pre_total = selectedPrices.reduce((acc, price) => acc + price, 0);
+    // let discount = 0;
+    // let total = pre_total - pre_total * discount;
+
+    const calculateTotal = () => {
+        const preTotal = selectedCartItems.reduce(
+            (sum, item) => sum + item.configuration.price * item.quantity,
+            0
+        );
+        const discount = selectedVoucher ? selectedVoucher.percentage_discount : 0;
+        return {
+            preTotal,
+            discountAmount: preTotal * discount,
+            total: preTotal - preTotal * discount,
+        };
+    };
+
+    const handleCheckboxChange = (item, isSelected) => {
+        setSelectedCartItems((prev) => {
+            if (isSelected) {
+                return [...prev, { ...item, quantity: item.quantity }];
+            } else {
+                return prev.filter((cartItem) => cartItem.idcart_item !== item.idcart_item);
+            }
+        });
+    };
+
+    const handleQuantityChange = (item, newQuantity) => {
+        // if (newQuantity < 1 || newQuantity > item.configuration.quantity) return;
+
+        setSelectedCartItems((prev) =>
+            prev.map((cartItem) =>
+                cartItem.idcart_item === item.idcart_item
+                    ? { ...cartItem, quantity: newQuantity }
+                    : cartItem
+            )
+        );
+    };
+
+    const handleOrderClick = (event) => {
+        event.preventDefault();
+        const { preTotal, discountAmount, total } = calculateTotal();
+        navigate('/pay/order', {
+            state: {
+                cartData: selectedCartItems,
+                prePrice: preTotal,
+                discount: discountAmount,
+                totalPrice: total,
+            },
+        });
+    };
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const fetchCartItem = async (Carts) => {
         try {
-            const response = await axios.get(`http://localhost:5172/cart/load-cartItem/${Carts.idcart}`);
+            const response = await axios.get(`http://localhost:5172/cart/load-cartItem/${Carts.id}`);
             setCartItem(response.data);
         } catch {
             // console.error('Error fetching CartItem details:');
         }
     };
 
-    const fetchCartItem1 = async (idcart) => {
+    const fetchCartItemLoad = async (idcart) => {
         try {
             const response = await axios.get(`http://localhost:5172/cart/load-cartItem/${idcart}`);
             setCartItem(response.data);
@@ -56,6 +300,7 @@ const Cart = () => {
             // console.error('Error fetching CartItem details:');
         }
     };
+
     const fetchVoucherName = async (voucher) => {
         try {
             const response = await fetch('http://localhost:5172/admin/get-voucherid', {
@@ -68,17 +313,19 @@ const Cart = () => {
             // console.error('Error fetching product details:', error);
         }
     };
+
     const fetchVoucher = async (voucher) => {
         try {
             const response = await fetch('http://localhost:5172/admin/get-voucher');
             const data = await response.json();
             setVoucher(data);
+
             console.log(data)
-            // console.log(data)
         } catch (error) {
             // console.error('Error fetching product details:', error);
         }
     };
+
     const fetchProductDetails = async (CartItems) => {
         if (cartItems && cartItems.idproduct) {  // Check if idproduct is available
             try {
@@ -92,56 +339,28 @@ const Cart = () => {
         }
     };
 
-    const fetchCart = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/cart/loadcart`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            setCart(data)
-        } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
-        }
-    };
-
-
-    const handleCheckboxChange = (price, isSelected, item) => {
-        fetchCartItem1(item.idcart);
-        setSelectedPrices((prevSelectedPrices) =>
-            isSelected
-                ? [...prevSelectedPrices, price * item.quantity] // Add price if checked
-                : prevSelectedPrices.filter((itemPrice) => itemPrice !== price * item.quantity) // Remove if unchecked
-        );
-
-        setSelectedCartItems((prevSelectedCartItems) =>
-            isSelected
-                ? [...prevSelectedCartItems, item]
-                : prevSelectedCartItems.filter((cartItem) => cartItem.idcart_item !== item.idcart_item)
-        );
-    };
-    const removeCartItem = () => {
-        fetchCartItem(carts);
-    };
-
-    // Calculate total based on selected prices
-    var pre_total = selectedPrices.reduce((acc, price) => acc + price, 0);
-    var discount = 0; // Modify as needed
-    var total = pre_total - pre_total * discount;
+    // const handleCheckboxChange = (price, isSelected, item) => {
+    //     fetchCartItemLoad(item.id);
+    //     setSelectedPrices((prevSelectedPrices) =>
+    //         isSelected
+    //             ? [...prevSelectedPrices, price * item.quantity] // Add price if checked
+    //             : prevSelectedPrices.filter((itemPrice) => itemPrice !== price * item.quantity) // Remove if unchecked
+    //     );
+    //
+    //     setSelectedCartItems((prevSelectedCartItems) =>
+    //         isSelected
+    //             ? [...prevSelectedCartItems, item]
+    //             : prevSelectedCartItems.filter((cartItem) => cartItem.idcart_item !== item.idcart_item)
+    //     );
+    // };
 
     useEffect(() => {
-        fetchCart();
-        fetchVoucher();
+        loadFullCart();
+        getVoucher();
         // response();
     }, []);
 
-    useEffect(() => {
-        fetchCartItem(carts);
-        // fetchProductDetails();
-        // fetchProductConfiguration();
-        // fetchProductDecription();
-    }, [carts]); // Run fetchProductDetails when cartItems is updated
+    const { preTotal, discountAmount, total } = calculateTotal();
 
     return (
         <>
@@ -157,20 +376,25 @@ const Cart = () => {
                                     <div className="container d-flex ps-2 p-0 align-items-center">
                                         <h5 className="m-0">Cart</h5>
                                         <Button as={Link} to={'/search'} variant="primary" className="ms-auto">
-                                            <i className='bx bx-plus me-2'></i>
+                                            <i className='bx bx-cart-add me-2'></i>
                                             <span>Add Product</span>
                                         </Button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {cartItems.map((item) => (
-                            <div className="card p-3 mb-4" key={item.idcart_item}>
+                        {carts?.cart_items.map((item, index) => (
+                            <div className="card p-3 mb-4" key={index}>
                                 <CardItem
                                     element={item}
-                                    onCheckboxChange={handleCheckboxChange}
-                                    // onQuantitychange={handleQuantityChange}
-                                    onRemoveItem={removeCartItem} />
+                                    onChange={handleChange}
+                                    onCheckboxChange={(isSelected) =>
+                                        handleCheckboxChange(item, isSelected)
+                                    }
+                                    onQuantityChange={(newQuantity) =>
+                                        handleQuantityChange(item, newQuantity)
+                                    }
+                                    onReload={() => loadFullCart()}/>
                             </div>
                         ))}
                     </div>
@@ -185,14 +409,16 @@ const Cart = () => {
                                         <div className="col-8 col-xxl-8 col-xl-12">
                                             <Form.Select
                                                 className="mb-4"
-                                                aria-label="Default select example">
+                                                aria-label="Default select example"
+                                                onChange={(e) => setSelectedVoucher(e.target.value)}
+                                            >
                                                 <option>Choose voucher</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                {voucher.map((item, index) => (
+                                                    <option key={index} value={item.percentage_discount}>{item.discount_name}</option>
+                                                ))}
                                             </Form.Select>
-                                            <input type="text" className="form-control" placeholder="Enter Promo Code"
-                                                aria-label="Enter Promo Code" />
+                                            {/*<input type="text" className="form-control" placeholder="Enter Promo Code"*/}
+                                            {/*    aria-label="Enter Promo Code" />*/}
                                         </div>
                                         <div className="col-4 col-xxl-4 col-xl-12">
                                             <div className="d-grid">
@@ -204,13 +430,17 @@ const Cart = () => {
                                     <h5>Price Details</h5>
                                     <dl className="row mb-0 text-heading">
                                         <dt className="col-6 fw-normal">Bag Total</dt>
-                                        <dd className="col-6 text-end">${pre_total}</dd>
+                                        <dd className="col-6 text-end">${preTotal}</dd>
 
                                         <dt className="col-6 fw-normal">Coupon Discount</dt>
-                                        <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+                                        {
+                                            discountAmount
+                                                ? <dd className="col-6 text-end">{discountAmount}%</dd>
+                                                : <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+                                        }
 
                                         <dt className="col-6 fw-normal">Order Total</dt>
-                                        <dd className="col-6 text-end">- ${pre_total * discount}</dd>
+                                        <dd className="col-6 text-end">- ${preTotal * discountAmount / 100}</dd>
 
                                         <dt className="col-6 fw-normal">Delivery Charges</dt>
                                         <dd className="col-6 text-end">
