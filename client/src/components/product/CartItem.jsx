@@ -3,55 +3,6 @@ import { Row, Col, Image, Form, Button } from "react-bootstrap";
 import axios from 'axios';
 import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
 
-const CardItem0 = ({ element, onCheckboxChange, onQuantityChange }) => {
-    const [isChecked, setIsChecked] = useState(false);
-    const [quantity, setQuantity] = useState(element.quantity);
-
-    const handleCheckboxToggle = () => {
-        const newChecked = !isChecked;
-        setIsChecked(newChecked);
-        onCheckboxChange(newChecked); // Gửi trạng thái checkbox lên `Cart`
-    };
-
-    const handleQuantityChange = (newQuantity) => {
-        setQuantity(newQuantity);
-        onQuantityChange(newQuantity); // Gửi số lượng mới lên `Cart`
-    };
-
-    return (
-        <Row className="align-items-center">
-            <Col lg={1}>
-                <Form.Check checked={isChecked} onChange={handleCheckboxToggle} />
-            </Col>
-            <Col lg={8}>
-                <h6>{element.product.name}</h6>
-                <p>${element.configuration.price}</p>
-            </Col>
-            <Col lg={3} className="text-end">
-                <Button
-                    onClick={() => handleQuantityChange(quantity - 1)}
-                    disabled={quantity <= 1}
-                    variant="outline-primary"
-                >
-                    -
-                </Button>
-                <Form.Control
-                    value={quantity}
-                    onChange={(e) => handleQuantityChange(Number(e.target.value))}
-                    style={{ width: 50, textAlign: 'center', display: 'inline-block' }}
-                />
-                <Button
-                    onClick={() => handleQuantityChange(quantity + 1)}
-                    disabled={quantity >= element.configuration.quantity}
-                    variant="outline-primary"
-                >
-                    +
-                </Button>
-            </Col>
-        </Row>
-    );
-};
-
 const CardItem = ({ element, onChange, onReload, onCheckboxChange, onQuantityChange }) => {
     const [product, setProduct] = useState([]);
     const [default_config, setdefaultconfig] = useState([]);
@@ -110,11 +61,12 @@ const CardItem = ({ element, onChange, onReload, onCheckboxChange, onQuantityCha
     };
 
     const handleQuantityChange = (newQuantity) => {
-        if (isChecked) { // Chỉ cho phép thay đổi nếu sản phẩm được tick chọn
-            setQuantity(newQuantity);
-            handleUpdateQuantity(newQuantity);
-            onQuantityChange(newQuantity); // Gửi số lượng mới lên `Cart`
-        }
+        // if (isChecked) { // Chỉ cho phép thay đổi nếu sản phẩm được tick chọn
+        //     // Gửi số lượng mới lên `Cart`
+        // }
+        setQuantity(newQuantity);
+        handleUpdateQuantity(newQuantity);
+        onQuantityChange(newQuantity);
     };
 
     // const handleCheckboxChange = () => {
@@ -138,9 +90,9 @@ const CardItem = ({ element, onChange, onReload, onCheckboxChange, onQuantityCha
                 quantity: quantity
             });
 
-            setQuantity(quantity);
+            // setQuantity(quantity);
             onReload()
-            onChange(element, true)
+            // onChange(element, true)
         } catch (error) {
             // console.error('Lỗi khi cập nhật vào giỏ hàng:', error);
         }
@@ -262,6 +214,55 @@ const CardItem = ({ element, onChange, onReload, onCheckboxChange, onQuantityCha
                 onHide={() => setShowSuccess(false)}
             />
         </>
+    );
+};
+
+const CardItem0 = ({ element, onCheckboxChange, onQuantityChange }) => {
+    const [isChecked, setIsChecked] = useState(false);
+    const [quantity, setQuantity] = useState(element.quantity);
+
+    const handleCheckboxToggle = () => {
+        const newChecked = !isChecked;
+        setIsChecked(newChecked);
+        onCheckboxChange(newChecked); // Gửi trạng thái checkbox lên `Cart`
+    };
+
+    const handleQuantityChange = (newQuantity) => {
+        setQuantity(newQuantity);
+        onQuantityChange(newQuantity); // Gửi số lượng mới lên `Cart`
+    };
+
+    return (
+        <Row className="align-items-center">
+            <Col lg={1}>
+                <Form.Check checked={isChecked} onChange={handleCheckboxToggle} />
+            </Col>
+            <Col lg={8}>
+                <h6>{element.product.name}</h6>
+                <p>${element.configuration.price}</p>
+            </Col>
+            <Col lg={3} className="text-end">
+                <Button
+                    onClick={() => handleQuantityChange(quantity - 1)}
+                    disabled={quantity <= 1}
+                    variant="outline-primary"
+                >
+                    -
+                </Button>
+                <Form.Control
+                    value={quantity}
+                    onChange={(e) => handleQuantityChange(Number(e.target.value))}
+                    style={{ width: 50, textAlign: 'center', display: 'inline-block' }}
+                />
+                <Button
+                    onClick={() => handleQuantityChange(quantity + 1)}
+                    disabled={quantity >= element.configuration.quantity}
+                    variant="outline-primary"
+                >
+                    +
+                </Button>
+            </Col>
+        </Row>
     );
 };
 

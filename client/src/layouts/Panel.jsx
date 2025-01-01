@@ -13,7 +13,7 @@ const menu = [
                 "text": "Dashboard",
                 "icon": "bx bx-home",
                 "available": true,
-                "link": "/user"
+                "link": "/"
             },
             {
                 "text": "Layouts",

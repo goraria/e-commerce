@@ -39,7 +39,6 @@ const Order = () => {
                 deliverymethod: deliveryMethod
             }
         });
-
     };
 
     const formatDateToMySQL = (date) => {
@@ -52,6 +51,7 @@ const Order = () => {
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
+
     const handleAddBill = async () => {
         try {
             const response = await axios.put(`http://localhost:5172/bill/add-bill`, {
@@ -91,14 +91,12 @@ const Order = () => {
     const fetchUser = async () => {
         try {
             const response = await fetch(`http://localhost:5172/account/get-info`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const data = await response.json();
             setUser(data)
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
     };
 
@@ -129,7 +127,6 @@ const Order = () => {
     useEffect(() => {
         fetchUser();
         fetchAddress();
-
     }, []);
 
     return (
@@ -281,7 +278,7 @@ const Order = () => {
                                     </dl>
                                 </div>
                                 <div className="p-3">
-                                <Button className="w-100" variant="danger" onClick={handleOrderClick}>
+                                    <Button className="w-100" variant="danger" onClick={handleOrderClick}>
                                         Order
                                     </Button>
                                 </div>
@@ -292,7 +289,7 @@ const Order = () => {
 
                                     <hr className="my-4"/>
                                     {cartData.map((item, index) => (
-                                        <OrderItem key={index} Item={item}/>
+                                        <OrderItem key={index} item={item}/>
                                     ))}
                                 </div>
                             </div>
@@ -331,9 +328,9 @@ const Order = () => {
                             </div>
                             <div className="card p-3 sticky-summary mb-4 mt-4">
                                 <h4>Sản phẩm trong đơn</h4>
-                                {cartData.map((item, index) => (
-                                    <OrderItem key={index} Item={item}/>
-                                ))}
+                                {/*{cartData.map((item, index) => (*/}
+                                {/*    // <OrderItem key={index} Item={item}/>*/}
+                                {/*))}*/}
                             </div>
                         </div>
                     </div>
