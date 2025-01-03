@@ -309,24 +309,24 @@ class BillController {
     async createBill(req, res) {
         const idaccount = req.user.id;
         const { date, iddiscount, idaddress, price, status, items } = req.body;
-        console.log(req.body );
+        // console.log(req.body);
         try {
             const newBill = await Bill.create({
                 idaccount: req.user.id,
                 date: date,
-                iddiscount:iddiscount,
-                idaddress:idaddress,
-                price:price,
-                status:status
+                iddiscount: iddiscount,
+                idaddress: idaddress,
+                price: price,
+                status: status
             });
             for (const e of items) {
-                await  BillDetail.create({
+                await BillDetail.create({
                     idbill: newBill.idbill,
                     idproduct: e.idproduct,
-                    idcolor:e.idcolor,
-                    idconfiguration:e.idconfiguration,
-                    quantity:e.quantity,
-                    price:1000
+                    idcolor: e.idcolor,
+                    idconfiguration: e.idconfiguration,
+                    quantity: e.quantity,
+                    price: 1000
                 });
             }
             res.status(201).json(newBill);
@@ -337,7 +337,7 @@ class BillController {
 
     async createBillDetail(req, res) {
         const { idbill, idproduct, idcolor, idconfiguration, quantity, price } = req.body;
-        console.log( req.body);
+        // console.log( req.body);
         try {
             const newBillDetail = await BillDetail.create({
                 idbill: idbill,
@@ -352,7 +352,6 @@ class BillController {
             res.status(500).json({ error: 'Có lỗi xảy ra khi thêm billDetail' });
         }
     };
-
 
     async updateBill(req, res) {
         try {

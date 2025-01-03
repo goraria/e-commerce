@@ -100,7 +100,6 @@ const CheckOut = () => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-
             });
 
             setShowSuccess(true)
@@ -119,20 +118,6 @@ const CheckOut = () => {
     const handleStatusChange = (status) => {
         setStatus(status);
         // console.log(status)
-    };
-
-    const handleRemoveItem = async () => {
-        try {
-            const response = await axios.put(`http://localhost:5172/cart/remove-cartitem`, {
-                idcartItem: item.idcart_item,
-            });
-            if (response.status === 201) {
-                // alert("Sản phẩm đã được xóa vào giỏ hàng!");
-                onRemoveItem();
-            }
-        } catch (error) {
-            console.error('Lỗi khi xóa vào giỏ hàng:', error);
-        }
     };
 
     useEffect(() => {

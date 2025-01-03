@@ -19,4 +19,6 @@ router.put('/remove-cartitem', cartController.removeCartItem);
 
 router.put('/update-cartitem', cartController.updateCartItemQuantity);
 
+router.get('/get-voucher', cartController.loadVoucher);
+
 module.exports = router;

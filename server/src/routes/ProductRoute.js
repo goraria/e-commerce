@@ -26,6 +26,7 @@ router.patch('/update-status/:idProduct', productController.updateStatus);
 
 ////////////////////////////
 
+router.get('/load-properties/:idproduct', productController.loadProperties);
 router.get('/load-spotlight', productController.loadSpotlight);
 router.get('/load-top-spotlight', productController.loadTopSpotlight);
 router.get('/load-similarity/:idproduct', productController.loadSimilarity);

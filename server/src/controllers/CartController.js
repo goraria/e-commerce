@@ -3,7 +3,8 @@ const Product = require('../models/Product');
 const Configuration = require('../models/Configuration');
 const Cart = require('../models/Cart')
 const CartItem = require('../models/CartItem');
-const { where } = require('sequelize');
+const { where, Op} = require('sequelize');
+const Discount = require("../models/Discount");
 
 class CartController {
     async loadCartPro(req, res) {
@@ -154,7 +155,7 @@ class CartController {
 
     async removeCartItem(req, res) {
         const { idcartItem } = req.body;  // Nhận thông tin từ yêu cầu
-            console.log(req.body)
+        // console.log(req.body)
         try {
             // Tạo một mục mới trong bảng CartItem
             const cartItem = await CartItem.findOne(
@@ -176,23 +177,16 @@ class CartController {
     }
 
     async updateCartItemQuantity(req, res) {
-        const { idcartItem, quantity } = req.body;  // Receive item ID and new quantity from the request
-        console.log(req.body);
+        const { idcart_item, quantity } = req.body;  // Receive item ID and new quantity from the request
+        // console.log(req.body);
     
         try {
-            // Find the cart item by its ID
-            const cartItem = await CartItem.findOne({
-                where: {
-                    idcart_item: idcartItem
-                }
-            });
+            const cartItem = await CartItem.findByPk(idcart_item);
     
-            // Check if the cart item exists
             if (!cartItem) {
                 return res.status(404).json({ message: 'Cart item not found' });
             }
     
-            // Update the quantity of the cart item
             cartItem.quantity = quantity;
             await cartItem.save();  // Save the updated item to the database
     
@@ -202,6 +196,29 @@ class CartController {
             });
         } catch (error) {
             res.status(500).json({ message: 'Error updating cart item quantity', error });
+        }
+    }
+
+    async loadVoucher(req, res) {
+        try {
+            const today = new Date().toISOString().split('T')[0];  // Get today's date in YYYY-MM-DD format
+
+            const vouchers = await Discount.findAll({
+                where: {
+                    status: 1,  // Assuming 1 means "active" vouchers. Adjust if needed.
+                    start_date: {
+                        [Op.lte]: today,  // Start date should be less than or equal to today
+                    },
+                    end_date: {
+                        [Op.gte]: today,  // End date should be greater than or equal to today
+                    }
+                }
+            });
+
+            // console.log(vouchers);
+            res.status(200).json(vouchers);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching vouchers', error });
         }
     }
 }

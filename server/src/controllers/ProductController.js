@@ -1,6 +1,7 @@
 const Product = require('../models/Product');
 const Description = require('../models/Description');
 const Configuration = require('../models/Configuration')
+const Accessory = require("../models/Accessory")
 const Rating = require("../models/Rating")
 const Color = require("../models/Color")
 const Category = require("../models/Category")
@@ -8,6 +9,7 @@ const Account = require("../models/Account")
 const User = require("../models/User")
 const BillDetail = require("../models/BillDetail")
 const CartItem = require("../models/CartItem")
+const Cart = require("../models/Cart");
 const { Op, where, Sequelize } = require("sequelize");
 const jwt = require('jsonwebtoken');
 
@@ -18,6 +20,75 @@ class ProductController {
             res.status(200).json(products);
         } catch (error) {
             res.status(500).json({ message: 'Error fetching products', error });
+        }
+    }
+
+    async loadProperties(req, res) {
+        try {
+            // Fetch product by its primary key (using req.params.productId) and include related models
+            const product = await Product.findByPk(req.params.idproduct, {
+                attributes: ['idproduct', 'product_name', 'brand', 'product_image', 'status'],
+                include: [
+                    {
+                        model: Configuration, // Including the Configuration model
+                        attributes: ['idconfiguration', 'cpu', 'ram', 'gpu', 'storage', 'screen', 'resolution', 'price', 'quantity'],
+                    },
+                    {
+                        model: Color, // Including the Color model (if applicable)
+                        attributes: ['idcolor', 'color_name'],
+                    },
+                    {
+                        model: Description, // Including the Description model (assuming you have one)
+                        attributes: ['iddescription', 'description_text'],
+                    },
+                    {
+                        model: Accessory, // Including Accessory model (if applicable)
+                        attributes: ['idaccessory', 'accessory_name'],
+                    }
+                ],
+            });
+
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            // Format the result as required
+            const result = {
+                idproduct: product.idproduct,
+                name: product.product_name,
+                brand: product.brand,
+                image: product.product_image,
+                status: product.status,
+                configurations: product.Configurations.map(config => ({
+                    idconfiguration: config.idconfiguration,
+                    cpu: config.cpu,
+                    ram: config.ram,
+                    gpu: config.gpu,
+                    storage: config.storage,
+                    screen: config.screen,
+                    resolution: config.resolution,
+                    price: config.price,
+                    quantity: config.quantity,
+                })),
+                colors: product.Colors.map(color => ({
+                    idcolor: color.idcolor,
+                    color_name: color.color_name,
+                })),
+                descriptions: product.Descriptions.map(desc => ({
+                    iddescription: desc.iddescription,
+                    description_text: desc.description_text,
+                })),
+                accessories: product.Accessories.map(accessory => ({
+                    idaccessory: accessory.idaccessory,
+                    accessory_name: accessory.accessory_name,
+                }))
+            };
+
+            console.log(result);
+            return res.json(result);
+        } catch (error) {
+            console.error('Error fetching product properties:', error);
+            return res.status(500).json({ error: 'Failed to load product properties' });
         }
     }
 
