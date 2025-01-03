@@ -1,12 +1,9 @@
-import React, { Component } from "react";
-import { Container, Button, Row, Col, Card, Form } from 'react-bootstrap';
+import React, { Component, useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from 'react-router-dom'
+import {Button, Form, FormText} from 'react-bootstrap';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
 import CardItem from '../../components/product/CartItem.jsx';
-import { Link } from 'react-router-dom'
-import { useLocation } from 'react-router-dom';
 import OrderItem from "../../components/product/OrderItem.jsx";
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 const Order = () => {
@@ -19,7 +16,7 @@ const Order = () => {
     const [date, setDate] = useState(new Date()); // State for delivery method
 
     const location = useLocation();
-    const { cartData, prePrice, discount, totalPrice } = location.state || {};
+    const { cartData, prePrice, discount, voucher, totalPrice } = location.state || {};
 
     const token = localStorage.getItem('token');
 
@@ -32,6 +29,7 @@ const Order = () => {
                 cartData: cartData, // Dữ liệu giỏ hàng
                 prePrice: prePrice,
                 discount: discount,
+                voucher: voucher,
                 totalPrice: totalPrice,
                 userData: user,
                 selectedaddress: selectedAddress,
@@ -125,6 +123,10 @@ const Order = () => {
     };
 
     useEffect(() => {
+        if (!location.state) {
+            navigate('/pay/cart');
+        }
+
         fetchUser();
         fetchAddress();
     }, []);
@@ -182,6 +184,7 @@ const Order = () => {
                                     <Form.Label>Fullname</Form.Label>
                                     <Form.Control
                                         type="text"
+                                        readOnly
                                         placeholder="Enter your fullname"
                                         name="recipientName"
                                         defaultValue={user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : ""}
@@ -190,10 +193,11 @@ const Order = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPhoneNumber" className="mt-3">
-                                    <Form.Label>Số điện thoại</Form.Label>
+                                    <Form.Label>Phone number</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        placeholder="Nhập số điện thoại"
+                                        readOnly
+                                        placeholder="Phone number"
                                         name="phoneNumber"
                                         defaultValue={user.phone}
                                         // value={phoneNumber}
@@ -204,14 +208,13 @@ const Order = () => {
                                     <Form.Group controlId="formAddress" className="mt-3">
                                         <Form.Label>Địa chỉ giao hàng</Form.Label>
                                         <Form.Select
-                                            aria-label="Chọn địa chỉ giao hàng"
+                                            aria-label="Choose address to deliver"
                                             value={selectedAddress}
                                             onChange={(e) => {
                                                 setSelectedAddress(e.target.value);
-
                                             }}
                                         >
-                                            <option value="">Chọn địa chỉ</option>
+                                            <option value="">Choose address</option>
                                             {address.map((addr, index) => (
                                                 <option key={index} value={addr.idaddress}>
                                                     {addr.street}, {addr.city}, {addr.district}
@@ -227,32 +230,38 @@ const Order = () => {
                             {products.map((item) => <CardItem key={item.id} item={item} />)}
                         </Card> */}
                     </div>
-                    {/* Right Section: Order Summary */}
 
-                    <div className="col col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div className="col col-lg-4 col-md-12 col-sm-12 mb-4">
                         <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
-                            <div className="card p-3 mb-4">
+                            <div className="card p-3">
                                 <div className="rounded p-3">
                                     <h5>Offer</h5>
                                     <div className="row g-4 mb-4">
-                                        <div className="col-8 col-xxl-8 col-xl-12">
+                                        <div className="col-12">
                                             <Form.Select
                                                 className="mb-4"
-                                                aria-label="Default select example">
-                                                <option>Choose voucher</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                aria-label="Default select example"
+                                                disabled
+                                                // onChange={(e) => setSelectedVoucher(e.target.value)}
+                                            >
+                                                {/*<option>Choose voucher</option>*/}
+                                                {/*{voucher.map((item, index) => (*/}
+                                                {/*    <option key={index}*/}
+                                                {/*            value={item.percentage_discount}>{item.discount_name}</option>*/}
+                                                {/*))}*/}
+                                                <option value="">{voucher ? voucher.discount_name : "Not Selected"}</option>
                                             </Form.Select>
-                                            <input type="text" className="form-control" placeholder="Enter Promo Code"
-                                                   aria-label="Enter Promo Code"/>
+                                            {/*<input type="text" className="form-control" placeholder="Enter Promo Code"*/}
+                                            {/*    aria-label="Enter Promo Code" />*/}
                                         </div>
-                                        <div className="col-4 col-xxl-4 col-xl-12">
-                                            <div className="d-grid">
-                                                <Button variant="outline-primary" type="button"
-                                                        className="btn btn-label-primary">Apply</Button>
-                                            </div>
-                                        </div>
+                                        {/*<div className="col-4 col-xxl-4 col-xl-12">*/}
+                                        {/*    <Form.Control*/}
+                                        {/*        className="text-end"*/}
+                                        {/*        value={voucher ? `${voucher.percentage_discount}%` : "0%"}*/}
+                                        {/*        readOnly*/}
+                                        {/*    >*/}
+                                        {/*    </Form.Control>*/}
+                                        {/*</div>*/}
                                     </div>
                                     <h5>Price Details</h5>
                                     <dl className="row mb-0 text-heading">
@@ -260,10 +269,14 @@ const Order = () => {
                                         <dd className="col-6 text-end">${prePrice}</dd>
 
                                         <dt className="col-6 fw-normal">Coupon Discount</dt>
-                                        <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+                                        {
+                                            voucher
+                                                ? <dd className="col-6 text-end">-{voucher.percentage_discount}%</dd>
+                                                : <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+                                        }
 
                                         <dt className="col-6 fw-normal">Order Total</dt>
-                                        <dd className="col-6 text-end">- ${prePrice * discount}</dd>
+                                        <dd className="col-6 text-end">-${discount}</dd>
 
                                         <dt className="col-6 fw-normal">Delivery Charges</dt>
                                         <dd className="col-6 text-end">
@@ -277,60 +290,11 @@ const Order = () => {
                                         <dd className="col-6 fw-medium text-end text-heading mb-0">${totalPrice}</dd>
                                     </dl>
                                 </div>
-                                <div className="p-3">
+                                <div className="rounded p-3">
                                     <Button className="w-100" variant="danger" onClick={handleOrderClick}>
                                         Order
                                     </Button>
                                 </div>
-                            </div>
-                            <div className="card p-3">
-                                <div className="rounded p-3">
-                                    <h5>Sản phẩm trong đơn</h5>
-
-                                    <hr className="my-4"/>
-                                    {cartData.map((item, index) => (
-                                        <OrderItem key={index} item={item}/>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col col-sm-12 col-md-6 col-lg-4 mb-2 d-none">
-                        <div className="card sticky-summary mb-3 shadow-none"
-                             style={{position: 'sticky', top: 100, backgroundColor: 'transparent', boxShadow: 'none'}}>
-                            <div className="card p-3 sticky-summary">
-                                <h4>Khuyến mãi</h4>
-                                <Form.Select aria-label="Default select example"
-                                             style={{padding: 10, margin: '1px 0 10px 0'}}>
-                                    <option> Chọn hoặc nhập khuyến mãi</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </Form.Select>
-
-                                <h4>Tóm tắt đơn hàng</h4>
-                                <div className="d-flex justify-content-between">
-                                    <span>Tạm tính</span>
-                                    <span>${prePrice}</span>
-                                </div>
-                                <div className="d-flex justify-content-between">
-                                    <span>Được giảm</span>
-                                    <span>{prePrice * discount}$</span>
-                                </div>
-
-                                <div className="d-flex justify-content-between mt-2">
-                                    <span>Tổng cộng</span>
-                                    <span style={{fontWeight: 'bold', fontSize: '1.5em'}}>${totalPrice}</span>
-                                </div>
-                                <Button className="w-100 mt-3" variant="danger" size="lg" onClick={handleOrderClick}>
-                                    Đặt hàng
-                                </Button>
-                            </div>
-                            <div className="card p-3 sticky-summary mb-4 mt-4">
-                                <h4>Sản phẩm trong đơn</h4>
-                                {/*{cartData.map((item, index) => (*/}
-                                {/*    // <OrderItem key={index} Item={item}/>*/}
-                                {/*))}*/}
                             </div>
                         </div>
                     </div>

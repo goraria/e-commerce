@@ -81,11 +81,11 @@ const menu = [
                         "available": true,
                         "link": "/admin/product/name"
                     },
-                    {
-                        "text": "Accessory",
-                        "available": true,
-                        "link": "/admin/product/accessory"
-                    },
+                    // {
+                    //     "text": "Accessory",
+                    //     "available": true,
+                    //     "link": "/admin/product/accessory"
+                    // },
                     {
                         "text": "Configuration",
                         "available": true,
@@ -109,12 +109,12 @@ const menu = [
                 "available": true,
                 "link": "/admin/voucher"
             },
-            {
-                "text": "Tables",
-                "icon": "bx bx-table",
-                "available": true,
-                "link": "/admin/tables"
-            }
+            // {
+            //     "text": "Tables",
+            //     "icon": "bx bx-table",
+            //     "available": true,
+            //     "link": "/admin/tables"
+            // }
         ]
     },
     {

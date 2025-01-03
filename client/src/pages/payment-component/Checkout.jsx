@@ -1,24 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
+import { redirect, useLocation, useNavigate } from 'react-router-dom';
 import { Container, Button, Row, Col, Card, Form } from 'react-bootstrap';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
-import { redirect, useLocation } from 'react-router-dom';
 import OrderItem from "../../components/product/OrderItem.jsx";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
-import { useNavigate } from 'react-router-dom'
-
-// var pre_total = 0;
-// // products.map((item) => pre_total += item['price']);
-
-var discount = 0; // Assuming no discount applied.
-// var total = pre_total - (discount * pre_total);
-// var paid = 0;
-// var remaining = total - paid;
+import axios from 'axios';
 
 const CheckOut = () => {
     const location = useLocation();
-    const { cartData, prePrice, discounts, totalPrice, userData, selectedaddress, selectedstoreaddress, deliverymethod } = location.state || {};
+    const { cartData, prePrice, discount, voucher, totalPrice, userData, selectedaddress, selectedstoreaddress, deliverymethod } = location.state || {};
     const [paymentMethod, setPaymentMethod] = useState("qr"); // State for delivery method
     const [status, setStatus] = useState(1); // State for delivery method
     const [date, setDate] = useState(new Date()); // State for delivery method
@@ -87,9 +77,10 @@ const CheckOut = () => {
             }).render('#paypal-button-container');
         }
     };
+
     const handleAddBill = async () => {
         try {
-            const response = await axios.put(`http://localhost:5172/bill/add-bill`, {
+            const response = await axios.post(`http://localhost:5172/bill/add-bill`, {
                 date: formatDateToMySQL(date),
                 iddiscount: null,
                 idaddress: selectedaddress,
@@ -121,7 +112,7 @@ const CheckOut = () => {
     };
 
     useEffect(() => {
-        fetchAddress();
+        // fetchAddress();
 
         if (isPaypalSelected) {
             const script = document.createElement('script');
@@ -136,6 +127,12 @@ const CheckOut = () => {
             };
         }
     }, [isPaypalSelected]); // Only run when PayPal is selected
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/pay/cart');
+        }
+    }, []);
 
     return (
         <>
@@ -176,7 +173,7 @@ const CheckOut = () => {
                                 <Form.Check
                                     className="form-check"
                                     type="radio"
-                                    label="Chuyển Khoản QR"
+                                    label="Bank transfer by QR"
                                     name="paymentMethod"
                                     value="qr"
                                     checked={paymentMethod === "qr"}
@@ -185,7 +182,7 @@ const CheckOut = () => {
                                 {/* Other Payment Methods */}
                                 <Form.Check
                                     type="radio"
-                                    label="Thanh toán khi nhận hàng"
+                                    label="Cash on Delivery"
                                     name="paymentMethod"
                                     value="cod"
                                     checked={paymentMethod === "cod"}
@@ -193,7 +190,7 @@ const CheckOut = () => {
                                 />
                                 <Form.Check
                                     type="radio"
-                                    label="Paypal"
+                                    label="Pay with Paypal"
                                     name="paymentMethod"
                                     value="paypal"
                                     checked={paymentMethod === "paypal"}
@@ -205,35 +202,36 @@ const CheckOut = () => {
                             <>
                                 <div className="card p-3 mb-4">
                                     <div className="p-3">
-                                        <h5>Hướng dẫn chuyển khoản</h5>
+                                        <h5>Transfer Instructions</h5>
                                         <div className="mb-1">
-                                            <strong>Cách 1: </strong>
-                                            Dùng ứng dụng ngân hàng để quét mã QR.
+                                            <strong>Method 1: </strong>
+                                            Use your banking app to scan the QR code.
                                         </div>
                                         <div className="mb-1">
-                                            <strong>Cách 2: </strong>
-                                            Nhập thông tin chuyển khoản bên dưới.
-                                            Lưu ý nhập chính xác số tiền, nội dung chuyển khoản.
+                                            <strong>Method 2: </strong>
+                                            Enter the transfer information below.
+                                            Please ensure the amount and transfer content are entered correctly.
                                         </div>
                                         <div className="mb-1">
-                                            Sau khi chuyển khoản thành công, bấm nút
-                                            <strong> Tôi đã chuyển khoản</strong>. Hệ thống sẽ mất
-                                            khoảng 30 giây để xác minh đã nhận được tiền.
+                                            After a successful transfer, click the <strong>I have transferred</strong> button.
+                                            The system will take about 30 seconds to verify that the payment has been
+                                            received.
                                         </div>
                                     </div>
                                 </div>
-
                                 {/* Bank Info */}
                                 <div className="card p-3 mb-4">
                                     <div className="p-3">
-                                        <div className="row mb-3">
+                                        <div className="row">
                                             <div className="col col-lg-9">
-                                                <p>Ngân hàng: <strong>Ngân hàng TMCP Ngoại thương Việt Nam
-                                                    (Vietcombank)</strong></p>
-                                                <p>Tên tài khoản: <strong>Lê Tuấn Linh</strong></p>
-                                                <p>Số tài khoản: <strong>9968727279</strong></p>
-                                                <p>Nội dung CK: <strong>212410160005 RYPRGG</strong></p>
-                                                <p>Số tiền: <strong>${totalPrice}</strong></p>
+                                                <p>
+                                                    <strong>Bank:</strong> BIDV (Bank for Investment and Development of
+                                                    Vietnam)
+                                                </p>
+                                                <p><strong>Account Name:</strong> Japtor Gortheia</p>
+                                                <p><strong>Account Number:</strong> 1234567890</p>
+                                                <p><strong>Payment Reference:</strong> 212410160005 RYPRGG</p>
+                                                <p><strong>Amount:</strong> ${totalPrice}</p>
                                             </div>
                                             <div className="col col-3 justify-content-center">
                                                 <div className="d-flex align-items-center flex-column">
@@ -249,11 +247,11 @@ const CheckOut = () => {
                                                 {/*<p className="text-center">Scan QR code</p>*/}
                                             </div>
                                         </div>
-                                        <Button className="w-100 mt-2" variant="primary" onClick={() => {
+                                        <Button className="w-100" variant="primary" onClick={() => {
                                             handleStatusChange(1);
                                             handleAddBill()
                                             // NotifySuccess()
-                                        }}>Tôi đã chuyển khoản</Button>
+                                        }}>Order</Button>
                                     </div>
                                 </div>
                             </>
@@ -265,7 +263,7 @@ const CheckOut = () => {
                                         handleStatusChange(0)
                                         handleAddBill()
                                     }}>
-                                        Xác nhận thanh toán
+                                        Accept Payment
                                     </Button>
                                 </div>
                             </div>
@@ -301,10 +299,14 @@ const CheckOut = () => {
                                         <dd className="col-6 text-end">${prePrice}</dd>
 
                                         <dt className="col-6 fw-normal">Coupon Discount</dt>
-                                        <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+                                        {
+                                            voucher
+                                                ? <dd className="col-6 text-end">-{voucher.percentage_discount}%</dd>
+                                                : <dd className="col-6 text-primary text-end">Apply Coupon</dd>
+                                        }
 
                                         <dt className="col-6 fw-normal">Order Total</dt>
-                                        <dd className="col-6 text-end">- ${prePrice * discount}</dd>
+                                        <dd className="col-6 text-end">-${discount}</dd>
 
                                         <dt className="col-6 fw-normal">Delivery Charges</dt>
                                         <dd className="col-6 text-end">
@@ -329,7 +331,7 @@ const CheckOut = () => {
                                     <h5>Sản phẩm trong đơn</h5>
                                     <hr className="my-4"/>
                                     {cartData.map((item, index) => (
-                                        <OrderItem key={index} Item={item}/>
+                                        <OrderItem key={index} item={item}/>
                                     ))}
                                 </div>
                             </div>
