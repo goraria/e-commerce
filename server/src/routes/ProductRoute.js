@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware');
 const productController = require('../controllers/ProductController');
-
+const path = require('path');
+const getMulterMiddleware = require('../middleware/multer.js');
+const ImageUpload = getMulterMiddleware(path.join(__dirname, '../../../client/public/assets/img/product'));
 // Route để lấy tất cả người dùng
 router.get('/load-product', productController.loadProduct);
 router.get('/load-productid/:idProduct', productController.loadProductWithID);
@@ -17,9 +19,9 @@ router.get('/load-productCPU/:CPU', productController.loadProductWithCondition);
 router.get('/load-productBrand/:Brand', productController.loadProductWithBrand);
 router.get('/load-productName/:Name', productController.loadProductWithName);
 
-router.post('/update-productname/:idProduct', productController.updateProductName);
+router.post('/update-productname/:idProduct', ImageUpload.single('product_image'), productController.updateProductName);
 router.delete('/delete-productname/:idProduct', productController.deleteProductName);
-router.put('/create-productname', productController.createProductName);
+router.put('/create-productname', ImageUpload.single('product_image'), productController.createProductName);
 
 router.get('/get-product', productController.loadAllProduct);
 router.patch('/update-status/:idProduct', productController.updateStatus);
@@ -34,4 +36,5 @@ router.post('/create-rating', AuthenticationMiddleware, productController.create
 router.put('/change-rating/:id', AuthenticationMiddleware, productController.changeRatingMiddleware);
 router.delete('/remove-rating/:id', AuthenticationMiddleware, productController.removeRatingMiddleware);
 
+router.post('/upload-image', ImageUpload.single('product_image'), productController.UploadProductImage);
 module.exports = router;

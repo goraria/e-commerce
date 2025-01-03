@@ -26,10 +26,9 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("avatars", express.static(path.join(__dirname, '../client/public/assets/img/avatars')));
-console.log(__dirname)
-
+app.use("/assets", express.static(path.join(__dirname, '../client/public/assets/')));
 routes(app)
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

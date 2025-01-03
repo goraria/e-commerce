@@ -260,9 +260,10 @@ class AdminController {
             const product = await Product.create({
                 product_name: a.product_name,
                 brand: a.brand,
-                product_image: "1",
+                product_image: a.product_image,
                 idcategory: category.dataValues.idcategory
             })
+            // console.log(a)
         } catch (error) {
             console.log(error)
         }
@@ -279,10 +280,14 @@ class AdminController {
     }
     async updateConfiguration(req, res) {
         const { idConfiguration } = req.params;
-        console.log(idConfiguration);
+        // console.log(idConfiguration);
         const updatedData = req.body;
-
+        // console.log(updatedData)
         try {
+            const product = await Product.findOne({
+                where: { product_name: updatedData.product_name }
+            })
+            console.log(product)
             const configuration = await Configuration.findOne({
                 where: { idconfiguration: idConfiguration },
             });
@@ -290,8 +295,17 @@ class AdminController {
             if (!configuration) {
                 return res.status(404).json({ message: `No configuration found with id ${idConfiguration}` });
             }
-
-            await configuration.update(updatedData); // Cập nhật dữ liệu từ client
+            const data = {
+                cpu: updatedData.cpu,
+                ram: updatedData.ram,
+                gpu: updatedData.gpu,
+                storage: updatedData.storage,
+                screen: updatedData.screen,
+                resolution: updatedData.resolution,
+                price: updatedData.price,
+                idproduct: product.idproduct
+            }
+            await configuration.update(data); // Cập nhật dữ liệu từ client
 
             res.status(200).json({ success: true, message: 'Configuration updated successfully', data: configuration });
 
@@ -382,17 +396,23 @@ class AdminController {
     async updateColor(req, res) {
         const { idColor } = req.params;
         const updatedData = req.body;
-
         try {
+            const product = await Product.findOne({
+                where: { product_name: updatedData.product_name }
+            })
             const color = await Color.findOne({
                 where: { idcolor: idColor },
             });
-
+            // console.log(color)
+            console.log(updatedData)
             if (!color) {
                 return res.status(404).json({ message: `No color found with id ${idColor}` });
             }
-
-            await color.update(updatedData); // Cập nhật dữ liệu từ client
+            const data = {
+                color: updatedData.color,
+                idproduct: product.idproduct
+            }
+            await color.update(data); // Cập nhật dữ liệu từ client
 
             res.status(200).json({ success: true, message: 'Color updated successfully', data: color });
 
@@ -403,7 +423,7 @@ class AdminController {
     }
     async createColor(req, res) {
         const Data = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
-        console.log(Data)
+        // console.log(Data)
         try {
             const product = await Product.findOne({
                 where: {

@@ -88,12 +88,24 @@ class CategoryController {
 
     async updateCategory(req, res) {
         try {
+            function convertBackslashesToSlashes(path) {
+                return path.replace(/\\/g, '/');
+            }
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+            const ImagePath = path.join(__dirname, '../../../client/public/assets/img/product');
+            if (!fs.existsSync(ImagePath)) {
+                fs.mkdirSync(ImagePath, { recursive: true });
+            }
+            const filePath = `/assets/img/categories/${req.file.filename}`;
+            const filepath = convertBackslashesToSlashes(filePath);
             const { id } = req.params;
             if (!id) {
                 return res.status(400).json({ message: 'Category ID is required' });
             }
 
-            const datas = req.body; // Dữ liệu cập nhật
+            const datas = req.body;
             if (!datas || Object.keys(datas).length === 0) {
                 return res.status(400).json({ message: 'No update data provided' });
             }
@@ -106,7 +118,11 @@ class CategoryController {
                 return res.status(404).json({ message: `No category found with id ${id}` });
             }
 
-            await category.update(datas);
+            await category.update({
+                category_name: datas.category_name,
+                category_description: datas.category_description,
+                category_image: filepath,
+            });
 
             res.status(200).json({ success: true, message: 'Category updated successfully', data: category });
         } catch (error) {
@@ -132,6 +148,7 @@ class CategoryController {
             res.status(500).json({ success: false, message: 'Error create user', error });
         }
     }
+
 }
 
 module.exports = new CategoryController();

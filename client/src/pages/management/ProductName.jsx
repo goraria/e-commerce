@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Pagination } from "react-bootstrap";
+import { Table, Button, Form, Pagination, Modal } from "react-bootstrap";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 // import "./DataTables.css"; // Add custom styling here
 import { ProductForm } from "../../components/modal/form/ProductForm.jsx";
 import { CategoryBadge } from "../../components/badge/CategoryBadge.jsx";
-
+// import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 export const ProductName = () => {
     const navigate = useNavigate();
 
@@ -13,9 +13,26 @@ export const ProductName = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(7);
-
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [data, setData] = useState([])
     const [data1, setData1] = useState([])
+
+    const handleShow = (id) => {
+        setSelectedProductId(id);
+        setShow(true);
+    };
+    const [show, setShow] = useState(false); // Quản lý trạng thái modal
+    const [selectedProductId, setSelectedProductId] = useState(null); // ID sản phẩm được chọn để xóa
+
+    // Hàm đóng modal
+    const handleClose = () => {
+        setShow(false);
+        setSelectedProductId(null);
+    };
+    const confirmDelete = () => {
+        handleDelete(selectedProductId); // Gọi hàm xóa từ props với ID đã chọn
+        handleClose(); // Đóng modal
+    };
 
     const fetchAPI = async () => {
         const response = await axios.get("http://localhost:5172/products/get-product")
@@ -60,6 +77,7 @@ export const ProductName = () => {
         if (e.target.checked) {
             const allVisibleItems = filteredData.slice(indexOfFirstItem, indexOfLastItem).map(item => item.idproduct);
             setSelectedEntries(allVisibleItems);
+
         } else {
             setSelectedEntries([]);
         }
@@ -80,6 +98,7 @@ export const ProductName = () => {
             await axios.delete(`http://localhost:5172/products/delete-productname/${id}`);
 
             // Optionally, fetch the updated data again
+            setShowConfirmDelete(false);
             fetchAPI();
         } catch (error) {
             console.error("Error deleting product:", error);
@@ -215,41 +234,41 @@ export const ProductName = () => {
     const renderCategory = (category) => {
         switch (category) {
             case "Laptop":
-                return <CategoryBadge cate="Laptop" icon="bx-laptop" color="primary"/>
+                return <CategoryBadge cate="Laptop" icon="bx-laptop" color="primary" />
             case "Keyboard":
-                return <CategoryBadge cate="Keyboard" icon="bxs-keyboard" color="warning"/>
+                return <CategoryBadge cate="Keyboard" icon="bxs-keyboard" color="warning" />
             case "Mouse":
-                return <CategoryBadge cate="Mouse" icon="bx-mouse-alt" color="success"/>
+                return <CategoryBadge cate="Mouse" icon="bx-mouse-alt" color="success" />
             case "Tablet":
-                return <CategoryBadge cate="Tablet" icon="bx-devices" color="danger"/>
+                return <CategoryBadge cate="Tablet" icon="bx-devices" color="danger" />
             case "Smartphone":
-                return <CategoryBadge cate="Smartphone" icon="bx-mobile-alt" color="info"/>
+                return <CategoryBadge cate="Smartphone" icon="bx-mobile-alt" color="info" />
             case "Smartwatch":
-                return <CategoryBadge cate="Smartwatch" icon="bxs-watch-alt" color="secondary"/>
+                return <CategoryBadge cate="Smartwatch" icon="bxs-watch-alt" color="secondary" />
             case "Screen":
-                return <CategoryBadge cate="Screen" icon="bx-desktop" color="primary"/>
+                return <CategoryBadge cate="Screen" icon="bx-desktop" color="primary" />
             case "Monitor":
-                return <CategoryBadge cate="Monitor" icon="bx-desktop" color="danger"/>
+                return <CategoryBadge cate="Monitor" icon="bx-desktop" color="danger" />
             case "Play Station":
-                return <CategoryBadge cate="Play Station" icon="bx-coin-stack" color="secondary"/>
+                return <CategoryBadge cate="Play Station" icon="bx-coin-stack" color="secondary" />
             case "Camera":
-                return <CategoryBadge cate="Camera" icon="bx-camera" color="secondary"/>
+                return <CategoryBadge cate="Camera" icon="bx-camera" color="secondary" />
             case "Sound":
-                return <CategoryBadge cate="Sound" icon="bx-headphone" color="secondary"/>
+                return <CategoryBadge cate="Sound" icon="bx-headphone" color="secondary" />
             case "Household":
-                return <CategoryBadge cate="Household" icon="bx-briefcase" color="warning"/>
+                return <CategoryBadge cate="Household" icon="bx-briefcase" color="warning" />
             case "Office":
-                return <CategoryBadge cate="Office" icon="bx-home-smile" color="info"/>
+                return <CategoryBadge cate="Office" icon="bx-home-smile" color="info" />
             case "Game":
-                return <CategoryBadge cate="Game" icon="bx-laptop" color="primary"/>
+                return <CategoryBadge cate="Game" icon="bx-laptop" color="primary" />
             case "Electronics":
-                return <CategoryBadge cate="Electronics" icon="bx-headphone" color="danger"/>
+                return <CategoryBadge cate="Electronics" icon="bx-headphone" color="danger" />
             case "Accessories":
-                return <CategoryBadge cate="Accessories" icon="bxs-watch" color="secondary"/>
+                return <CategoryBadge cate="Accessories" icon="bxs-watch" color="secondary" />
             case "Shoes":
-                return <CategoryBadge cate="Shoes" icon="bx-walk" color="success"/>
+                return <CategoryBadge cate="Shoes" icon="bx-walk" color="success" />
             default:
-                return <CategoryBadge cate="Unknown" icon="bx-question-mark" color="dark"/>
+                return <CategoryBadge cate="Unknown" icon="bx-question-mark" color="dark" />
         }
     }
 
@@ -262,7 +281,7 @@ export const ProductName = () => {
         <>
             <div className="card">
                 <div className="card-datatable table-responsive">
-                <div className="dataTables_wrapper dt-bootstrap5 no-footer">
+                    <div className="dataTables_wrapper dt-bootstrap5 no-footer">
                         <div className="card-header flex-column flex-md-row pb-0">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div className="col-sm-12 col-md-6 d-flex">
@@ -283,7 +302,7 @@ export const ProductName = () => {
                                                 name="DataTables_Table_0_length"
                                                 aria-controls="DataTables_Table_0"
                                                 className="form-select" // ms-3 me-3
-                                                style={{width: "80px"}}
+                                                style={{ width: "80px" }}
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
@@ -302,8 +321,8 @@ export const ProductName = () => {
                                     <div className="dt-buttons btn-group flex-wrap">
                                         <div>
                                             <Button variant="primary" type="button"
-                                                    className="btn btn-secondary create-new btn-primary d-flex text-center"
-                                                    onClick={() => setModalShow(true)}>
+                                                className="btn btn-secondary create-new btn-primary d-flex text-center"
+                                                onClick={() => setModalShow(true)}>
                                                 <i className='bx bx-plus me-2'></i>
                                                 Add New Product
                                             </Button>
@@ -314,104 +333,104 @@ export const ProductName = () => {
                         </div>
                     </div>
                     <Table hover responsive className="table border-top dataTable datatable no-footer dtr-column">
-                        <thead style={{height: 64}}>
-                        <tr>
-                            <th
-                                className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                style={{verticalAlign: "middle", fontSize: 16, width: 18}}
-                            >
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            <th className="sorting" style={{verticalAlign: "middle", fontSize: 13}}>
-                                Product Name
-                            </th>
-                            {
-                                ["Stock", "Category", "Actions"].map((item, index) => (
-                                    <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13, width: 120}}>
-                                        {item}
-                                    </th>
-                                ))
-                            }
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
+                        <thead style={{ height: 64 }}>
+                            <tr>
+                                <th
+                                    className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                    style={{ verticalAlign: "middle", fontSize: 16, width: 18 }}
+                                >
                                     <Form.Check
                                         type="checkbox"
-                                        checked={selectedEntries.includes(item.idproduct)}
-                                        onChange={() => handleSelectItem(item.idproduct)}
+                                        onChange={handleSelectAll}
+                                        checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
                                     />
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div
-                                            className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
-                                            <div className="avatar">
-                                                <img
-                                                    // src={`../assets/img/categories/product-7.png`}
-                                                    src={item.product_image}
-                                                    alt="Product-8"
-                                                    className="rounded"
-                                                />
+                                </th>
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                    Product Name
+                                </th>
+                                {
+                                    ["Stock", "Category", "Actions"].map((item, index) => (
+                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>
+                                            {item}
+                                        </th>
+                                    ))
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentItems.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <Form.Check
+                                            type="checkbox"
+                                            checked={selectedEntries.includes(item.idproduct)}
+                                            onChange={() => handleSelectItem(item.idproduct)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <div className="d-flex align-items-center">
+                                            <div
+                                                className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                                <div className="avatar">
+                                                    <img
+                                                        // src={`../assets/img/categories/product-7.png`}
+                                                        src={item.product_image}
+                                                        alt="Product-8"
+                                                        className="rounded"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column justify-content-center">
+                                                <span className="text-heading text-wrap fw-medium">
+                                                    {`${item.brand} ${item.product_name}`}
+                                                </span>
+                                                <span className="text-truncate mb-0 d-none d-sm-block">
+                                                    <small>
+                                                        Professional
+                                                    </small>
+                                                </span>
                                             </div>
                                         </div>
-                                        <div className="d-flex flex-column justify-content-center">
-                                            <span className="text-heading text-wrap fw-medium">
-                                                {`${item.brand} ${item.product_name}`}
-                                            </span>
-                                            <span className="text-truncate mb-0 d-none d-sm-block">
-                                                <small>
-                                                    Professional
-                                                </small>
-                                            </span>
+                                    </td>
+                                    <td>
+                                        {/*<span className="text-truncate">*/}
+                                        {/*    <label className="switch switch-primary switch-sm">*/}
+                                        {/*        <input type="checkbox" className="switch-input" id="switch"/>*/}
+                                        {/*        <span className="switch-toggle-slider">*/}
+                                        {/*            <span className="switch-off"></span>*/}
+                                        {/*        </span>*/}
+                                        {/*    </label>*/}
+                                        {/*    <span className="d-none">Out_of_Stock</span>*/}
+                                        {/*</span>*/}
+                                        <div className="form-check form-switch mb-2">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                id={`flexSwitchCheck${item.idproduct}`}
+                                                checked={item.status}
+                                                onChange={(e) => handleChange(e, item.idproduct)}
+                                            />
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    {/*<span className="text-truncate">*/}
-                                    {/*    <label className="switch switch-primary switch-sm">*/}
-                                    {/*        <input type="checkbox" className="switch-input" id="switch"/>*/}
-                                    {/*        <span className="switch-toggle-slider">*/}
-                                    {/*            <span className="switch-off"></span>*/}
-                                    {/*        </span>*/}
-                                    {/*    </label>*/}
-                                    {/*    <span className="d-none">Out_of_Stock</span>*/}
-                                    {/*</span>*/}
-                                    <div className="form-check form-switch mb-2">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id={`flexSwitchCheck${item.idproduct}`}
-                                            checked={item.status}
-                                            onChange={(e) => handleChange(e, item.idproduct)}
-                                        />
-                                    </div>
-                                </td>
-                                <td>{renderCategory(item.category_name)}</td>
-                                {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
+                                    </td>
+                                    <td>{renderCategory(item.category_name)}</td>
+                                    {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
                                 <td>{item.phone_number}</td> */}
-                                <td>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleEdit(item.idproduct)}
-                                        className="text-body p-2">
-                                        <i className='bx bx-edit'></i>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleDelete(item.idproduct)}
-                                        className="text-body p-2">
-                                        <i className='bx bx-trash'></i>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                                    <td>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleEdit(item.idproduct)}
+                                            className="text-body p-2">
+                                            <i className='bx bx-edit'></i>
+                                        </Button>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleShow(item.idproduct)}
+                                            className="text-body p-2">
+                                            <i className='bx bx-trash'></i>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
@@ -442,7 +461,21 @@ export const ProductName = () => {
                         </div>
                     </div>
                 </div>
+                <Modal show={show} onHide={handleClose} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Xác nhận xóa</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có chắc chắn muốn xóa không?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Hủy
+                        </Button>
+                        <Button variant="danger" onClick={confirmDelete}>
+                            Xác nhận xóa
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );
-}
+} 

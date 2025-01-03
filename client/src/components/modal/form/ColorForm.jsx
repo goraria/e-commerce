@@ -10,22 +10,13 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
         product_name: '',
     });
     const [error, setError] = useState(null);
+    const [product, setData] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-
-    useEffect(() => {
-        if (color) {
-            setFormData({
-                color: color.color || '',
-                product_name: color.product_name || '',
-            });
-        } else {
-            setFormData({
-                color: '',
-                product_name: '',
-            });
-        }
-    }, [color]);
+    const fetchAPI = async () => {
+        const response = await axios.get("http://localhost:5172/products/get-product")
+        setData(response.data)
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -85,7 +76,23 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
-
+    useEffect(() => {
+        fetchAPI()
+        if (color) {
+            setFormData({
+                color: color.color || '',
+                product_name: color.product_name || '',
+            });
+        }
+        if (!show) {
+            setFormData({
+                color: '',
+                product_name: '',
+            });
+        }
+        setValidated(false);
+        setError(null);
+    }, [show]);
     return (
         <>
             <Modal
@@ -108,24 +115,22 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
                     </p> */}
                     <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={7} controlId="product_name">
-                                <Form.Label>Product Name</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="product_name">
-                                        <i className='bx bx-user' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        name="product_name"
-                                        value={formData.product_name}
-                                        onChange={handleChange}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your Product Name.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
+                            <select
+                                className="form-select"
+                                id="product_name"
+                                name="product_name"
+                                defaultValue=""
+                                value={formData.product_name}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Choose Product</option>
+                                {
+                                    product.map((cat, index) => (
+                                        <option key={index} value={cat.product_name}>{cat.product_name}</option>
+                                    ))
+                                }
+                            </select>
                             <Form.Group as={Col} md={5} controlId="color">
                                 <Form.Label>Color</Form.Label>
                                 <InputGroup hasValidation>
@@ -144,100 +149,9 @@ export const ColorForm = ({ color, show, onHide, onReload }) => {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            {/* <Form.Group as={Col} md={4} controlId="email">
-                                <Form.Label>Email</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="email">
-                                        <i className='bx bx-user' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="email"
-                                        name="email"
-                                        value={formData.district}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your email.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group> */}
-                        </Row>
-                        {/* <Row className="mb-3">
-                            <Form.Group as={Col} md={5} controlId="phonenumber">
-                                <Form.Label>Phone Number</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="phonenumber">
-                                        <i className='bx bxs-phone' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="tel"
-                                        name="phonenumber"
-                                        value={formData.phone_number}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your phone number.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="email">
-                                <Form.Label>Email</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="email">
-                                        <i className='bx bx-envelope' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your email.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group> */}
-                        {/* <Form.Group as={Col} md={4} controlId="state">
-                                <Form.Label>State</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="state">
-                                        <i className='bx bxs-flag-alt' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        name="state"
-                                        value={formData.state}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your state.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
 
-                            <Form.Group as={Col} md={4} controlId="country">
-                                <Form.Label>Country</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="country">
-                                        <i className='bx bx-globe' ></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        name="country"
-                                        value={formData.country}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter your country.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group> */}
-                        {/* </Row> */}
+                        </Row>
+
                         <hr />
                         {error && <p className="text-danger">{error}</p>}
                     </Form>

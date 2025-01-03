@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
+import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-bootstrap";
 import axios from 'axios';
-import {ColorForm} from "../../components/modal/form/ColorForm.jsx";
+import { ColorForm } from "../../components/modal/form/ColorForm.jsx";
 
 export const ProductColor = () => {
     const [data, setData] = useState([])
-    // const fetchAPI = async () => {
-    //     const response = await axios.get("http://localhost:5172/admin/get-color")
-    //     setData(response.data)
-    // };
     const [data1, setData1] = useState([])
-    // const fetchAPI1 = async () => {
-    //     try {
-    //         const response = await axios.get("http://localhost:5172/products/load-product")
-    //         setData1(response.data)
-    //         console.log(response.data)
-    //         console.log(data1)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
+    const handleShow = (id) => {
+        setSelectedProductId(id);
+        setShow(true);
+    };
+    const [show, setShow] = useState(false); // Quản lý trạng thái modal
+    const [selectedProductId, setSelectedProductId] = useState(null); // ID sản phẩm được chọn để xóa
 
-    // };
-    // const [data2, setData2] = useState([false])
-    // const fetchAPI2 = async () => {
-    //     try {
-    //         const response = await axios.get("http://localhost:5172/admin/payhd")
-    //         setData2(response.data)
-    //         console.log(response.data)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
+    // Hàm đóng modal
+    const handleClose = () => {
+        setShow(false);
+        setSelectedProductId(null);
+    };
+    const confirmDelete = () => {
+        handleDelete(selectedProductId); // Gọi hàm xóa từ props với ID đã chọn
+        handleClose(); // Đóng modal
+    };
 
-    // };
     const fetchData = async () => {
         try {
             const [colorsResponse, productsResponse] = await Promise.all([
@@ -263,7 +254,7 @@ export const ProductColor = () => {
                                                 name="DataTables_Table_0_length"
                                                 aria-controls="DataTables_Table_0"
                                                 className="form-select" // ms-3 me-3
-                                                style={{width: "80px"}}
+                                                style={{ width: "80px" }}
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
@@ -282,8 +273,8 @@ export const ProductColor = () => {
                                     <div className="dt-buttons btn-group flex-wrap">
                                         <div>
                                             <Button variant="primary" type="button"
-                                                    className="btn btn-secondary create-new btn-primary d-flex text-center"
-                                                    onClick={() => setModalShow(true)}>
+                                                className="btn btn-secondary create-new btn-primary d-flex text-center"
+                                                onClick={() => setModalShow(true)}>
                                                 <i className='bx bx-plus me-2'></i>
                                                 Add New Product
                                             </Button>
@@ -294,80 +285,80 @@ export const ProductColor = () => {
                         </div>
                     </div>
                     <Table hover responsive className="table border-top dataTable datatable no-footer dtr-column">
-                        <thead style={{height: 64}}>
-                        <tr>
-                            <th
-                                className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                style={{verticalAlign: "middle", fontSize: 16, width: 18}}
-                            >
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            {
-                                ["Product Name", "Color"].map((item, index) => (
-                                    <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
-                                        {item}
-                                    </th>
-                                ))
-                            }
-                            <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
+                        <thead style={{ height: 64 }}>
+                            <tr>
+                                <th
+                                    className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                    style={{ verticalAlign: "middle", fontSize: 16, width: 18 }}
+                                >
                                     <Form.Check
                                         type="checkbox"
-                                        checked={selectedEntries.includes(item.idcolor)}
-                                        onChange={() => handleSelectItem(item.idcolor)}
+                                        onChange={handleSelectAll}
+                                        checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
                                     />
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div
-                                            className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
-                                            <div className="avatar">
-                                                <img
-                                                    // src={`../assets/img/categories/product-7.png`}
-                                                    src={item.product_image}
-                                                    alt="Product-8"
-                                                    className="rounded"
-                                                />
+                                </th>
+                                {
+                                    ["Product Name", "Color"].map((item, index) => (
+                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                            {item}
+                                        </th>
+                                    ))
+                                }
+                                <th className="sorting_disabled text-center"
+                                    style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentItems.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <Form.Check
+                                            type="checkbox"
+                                            checked={selectedEntries.includes(item.idcolor)}
+                                            onChange={() => handleSelectItem(item.idcolor)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <div className="d-flex align-items-center">
+                                            <div
+                                                className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                                <div className="avatar">
+                                                    <img
+                                                        // src={`../assets/img/categories/product-7.png`}
+                                                        src={item.product_image}
+                                                        alt="Product-8"
+                                                        className="rounded"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column justify-content-center">
+                                                <span className="text-heading text-wrap fw-medium">
+                                                    {`${item.brand} ${item.product_name}`}
+                                                </span>
+                                                {/*<span className="text-truncate mb-0 d-none d-sm-block">*/}
+                                                {/*    <small>Pro</small>*/}
+                                                {/*</span>*/}
                                             </div>
                                         </div>
-                                        <div className="d-flex flex-column justify-content-center">
-                                            <span className="text-heading text-wrap fw-medium">
-                                                {`${item.brand} ${item.product_name}`}
-                                            </span>
-                                            {/*<span className="text-truncate mb-0 d-none d-sm-block">*/}
-                                            {/*    <small>Pro</small>*/}
-                                            {/*</span>*/}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{renderStatusBadge(item.color)}</td>
-                                <td>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleEdit(item.idcolor)}
-                                        className="text-body p-2">
-                                        <i className='bx bx-edit'></i>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleDelete(item.idcolor)}
-                                        className="text-body p-2">
-                                        <i className='bx bx-trash'></i>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                                    </td>
+                                    <td>{renderStatusBadge(item.color)}</td>
+                                    <td>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleEdit(item.idcolor)}
+                                            className="text-body p-2">
+                                            <i className='bx bx-edit'></i>
+                                        </Button>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleShow(item.idcolor)}
+                                            className="text-body p-2">
+                                            <i className='bx bx-trash'></i>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
@@ -398,6 +389,20 @@ export const ProductColor = () => {
                         </div>
                     </div>
                 </div>
+                <Modal show={show} onHide={handleClose} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Xác nhận xóa</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có chắc chắn muốn xóa không?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Hủy
+                        </Button>
+                        <Button variant="danger" onClick={confirmDelete}>
+                            Xác nhận xóa
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );

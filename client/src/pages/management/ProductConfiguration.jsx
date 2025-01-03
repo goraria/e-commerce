@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
+import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-bootstrap";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import {ConfigurationForm} from "../../components/modal/form/ConfigurationForm.jsx";
+import { ConfigurationForm } from "../../components/modal/form/ConfigurationForm.jsx";
 
 export const ProductConfiguration = () => {
     const navigate = useNavigate();
@@ -203,7 +203,22 @@ export const ProductConfiguration = () => {
 
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
+    const handleShow = (id) => {
+        setSelectedProductId(id);
+        setShow(true);
+    };
+    const [show, setShow] = useState(false); // Quản lý trạng thái modal
+    const [selectedProductId, setSelectedProductId] = useState(null); // ID sản phẩm được chọn để xóa
 
+    // Hàm đóng modal
+    const handleClose = () => {
+        setShow(false);
+        setSelectedProductId(null);
+    };
+    const confirmDelete = () => {
+        handleDelete(selectedProductId); // Gọi hàm xóa từ props với ID đã chọn
+        handleClose(); // Đóng modal
+    };
     useEffect(() => {
         fetchAPI();
         productList();
@@ -237,7 +252,7 @@ export const ProductConfiguration = () => {
                                                 name="DataTables_Table_0_length"
                                                 aria-controls="DataTables_Table_0"
                                                 className="form-select" // ms-3 me-3
-                                                style={{width: "80px"}}
+                                                style={{ width: "80px" }}
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
@@ -256,8 +271,8 @@ export const ProductConfiguration = () => {
                                     <div className="dt-buttons btn-group flex-wrap">
                                         <div>
                                             <Button variant="primary" type="button"
-                                                    className="btn btn-secondary create-new btn-primary d-flex text-center"
-                                                    onClick={() => setModalShow(true)}>
+                                                className="btn btn-secondary create-new btn-primary d-flex text-center"
+                                                onClick={() => setModalShow(true)}>
                                                 <i className='bx bx-plus me-2'></i>
                                                 Add New Category
                                             </Button>
@@ -268,94 +283,94 @@ export const ProductConfiguration = () => {
                         </div>
                     </div>
                     <Table hover responsive className="table border-top dataTable datatable no-footer dtr-column">
-                        <thead style={{height: 64}}>
-                        <tr>
-                            <th
-                                className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                style={{verticalAlign: "middle", fontSize: 16, width: 18}}
-                            >
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            {
-                                ["Product Name", "Screen"].map((item, index) => (
-                                    <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
-                                        {item}
-                                    </th>
-                                ))
-                            }
-                            <th className="sorting text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Price
-                            </th>
-                            <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
+                        <thead style={{ height: 64 }}>
+                            <tr>
+                                <th
+                                    className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                    style={{ verticalAlign: "middle", fontSize: 16, width: 18 }}
+                                >
                                     <Form.Check
                                         type="checkbox"
-                                        checked={selectedEntries.includes(item.id)}
-                                        onChange={() => handleSelectItem(item.id)}
+                                        onChange={handleSelectAll}
+                                        checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
                                     />
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div
-                                            className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
-                                            <div className="avatar">
-                                                <img
-                                                    // src={`../assets/img/categories/product-7.png`}
-                                                    src={item.product_image}
-                                                    alt="Product-8"
-                                                    className="rounded"
-                                                />
+                                </th>
+                                {
+                                    ["Product Name", "Screen"].map((item, index) => (
+                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                            {item}
+                                        </th>
+                                    ))
+                                }
+                                <th className="sorting text-center"
+                                    style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>Price
+                                </th>
+                                <th className="sorting_disabled text-center"
+                                    style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentItems.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <Form.Check
+                                            type="checkbox"
+                                            checked={selectedEntries.includes(item.id)}
+                                            onChange={() => handleSelectItem(item.id)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <div className="d-flex align-items-center">
+                                            <div
+                                                className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                                <div className="avatar">
+                                                    <img
+                                                        // src={`../assets/img/categories/product-7.png`}
+                                                        src={item.product_image}
+                                                        alt="Product-8"
+                                                        className="rounded"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column justify-content-center">
+                                                <span className="text-heading text-wrap fw-medium">
+                                                    {`${item.brand} ${item.product_name}`}
+                                                </span>
+                                                <span className="text-truncate mb-0 d-none d-sm-block">
+                                                    <small>{item.cpu}</small>
+                                                    <small> | </small>
+                                                    <small>{item.gpu}</small>
+                                                    <small> | </small>
+                                                    <small>{item.ram} GB</small>
+                                                    <small> | </small>
+                                                    <small>{item.storage} GB</small>
+                                                </span>
                                             </div>
                                         </div>
-                                        <div className="d-flex flex-column justify-content-center">
-                                            <span className="text-heading text-wrap fw-medium">
-                                                {`${item.brand} ${item.product_name}`}
-                                            </span>
-                                            <span className="text-truncate mb-0 d-none d-sm-block">
-                                                <small>{item.cpu}</small>
-                                                <small> | </small>
-                                                <small>{item.gpu}</small>
-                                                <small> | </small>
-                                                <small>{item.ram} GB</small>
-                                                <small> | </small>
-                                                <small>{item.storage} GB</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span>
-                                        {item.screen} &#39; | {item.resolution}
-                                    </span>
-                                </td>
-                                <td><span>${item.price}</span></td>
-                                <td>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleEdit(item.idconfiguration)}
-                                        className="text-body p-2">
-                                        <i className='bx bx-edit'></i>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleDelete(item.idconfiguration)}
-                                        className="text-body p-2">
-                                        <i className='bx bx-trash'></i>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {item.screen} &#39; | {item.resolution}
+                                        </span>
+                                    </td>
+                                    <td><span>${item.price}</span></td>
+                                    <td>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleEdit(item.idconfiguration)}
+                                            className="text-body p-2">
+                                            <i className='bx bx-edit'></i>
+                                        </Button>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleShow(item.idconfiguration)}
+                                            className="text-body p-2">
+                                            <i className='bx bx-trash'></i>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">
@@ -387,6 +402,20 @@ export const ProductConfiguration = () => {
                     </div>
                 </div>
             </div>
+            <Modal show={show} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận xóa</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Bạn có chắc chắn muốn xóa không?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Hủy
+                    </Button>
+                    <Button variant="danger" onClick={confirmDelete}>
+                        Xác nhận xóa
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };
