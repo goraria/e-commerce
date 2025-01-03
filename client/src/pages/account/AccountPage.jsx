@@ -67,7 +67,6 @@ export const AccountPage = ({ onReload }) => {
                     accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
                 }
             };
-
             resetFileInput.onclick = () => {
                 fileInput.value = '';
                 accountUserImage.src = resetImage;
@@ -84,11 +83,10 @@ export const AccountPage = ({ onReload }) => {
         try {
             const token = localStorage.getItem('token');
             const fileInput = document.getElementById('upload');
-            const file = fileInput.files[0]; // Lấy file từ input
+            const file = fileInput.files[0];
 
             const formDataToSend = new FormData();
 
-            // Nếu có avatar mới, thêm vào FormData
             if (file) {
                 formDataToSend.append('avatar', file); // Đảm bảo file được thêm vào FormData
             }
@@ -114,18 +112,16 @@ export const AccountPage = ({ onReload }) => {
             });
 
             if ((avatarResponse && avatarResponse.status === 200) || (userInfoResponse.status === 200)) {
-                // Nếu có thay đổi avatar, cập nhật avatar hiển thị sau khi lưu thành công
                 if (avatarResponse) {
                     setFormData((prevData) => ({
                         ...prevData,
                         avatar: avatarResponse.data.avatarPath,
                     }));
-                    // console.log(avatarResponse.data.avatarPath);
                 }
                 console.log(formData.avatar);
-                setShowModal(false); // Đóng modal
-                onReload(); // Reload dữ liệu từ component cha
-                // getInformation();
+                setShowModal(false);
+                onReload();
+
             }
         } catch (error) {
             setError(error.response ? error.response.data.message : 'Update failed');

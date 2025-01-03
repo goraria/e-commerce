@@ -76,7 +76,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
             setValidated(true);
         } else {
             const allFieldsFilled = Object.values(datastring).every(value => value.trim() !== "");
-
+            console.log(allFieldsFilled)
             if (allFieldsFilled) {
                 // console.log("1")
                 setShowConfirmModal(true);
@@ -152,7 +152,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
                     </p> */}
                     <Form noValidate validated={validated}
-                          onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
+                        onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <div className="mb-3">
                             <label htmlFor="product_name" className="form-label">Product</label>
                             <select
@@ -305,7 +305,7 @@ export const ConfigurationForm = ({ configuration, show, onHide, onReload }) => 
                                 </InputGroup>
                             </Form.Group>
                         </Row>
-                        <hr/>
+                        <hr />
                         {error && <p className="text-danger">{error}</p>}
                     </Form>
                 </Modal.Body>

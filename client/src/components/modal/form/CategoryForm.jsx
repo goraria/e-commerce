@@ -15,35 +15,7 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
-    useEffect(() => {
-        setError(null);
-        if (category) {
-            setFormData({
-                idcategory: category.idcategory || '',
-                category_name: category.category_name || '',
-                category_description: category.category_description || '',
-                category_image: category.category_image || ''
-            });
-            // } else {
-            //     setFormData({
-            //         idcategory: '',
-            //         category_name: '',
-            //         category_description: '',
-            //         category_image: ''
-            //     });
-        }
 
-        if (!show) {
-            setFormData({
-                idcategory: '',
-                category_name: '',
-                category_description: '',
-                category_image: ''
-            });
-            setValidated(false);
-            setError(null);
-        }
-    }, [show]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -76,6 +48,19 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
 
     const handleConfirmSave = async () => {
         try {
+            const fileInput = document.getElementById('upload');
+            const file = fileInput.files[0];
+            const formDataToSend = new FormData();
+
+            if (file) {
+                formDataToSend.append('product_image', file); // Đảm bảo file được thêm vào FormData
+            }
+            // Thêm các trường dữ liệu khác vào FormData, bao gồm cả thông tin người dùng
+            formDataToSend.append('brand', formData.category_name);
+            formDataToSend.append('category_name', formData.cate);
+            formDataToSend.append('product_name', formData.product_name);
+            formDataToSend.append('idcategory', formData.idcategory);
+
             const response = category
                 ? await axios.put(`http://localhost:5172/category/update-category/${category.idcategory}`, formData)
                 : await axios.post('http://localhost:5172/category/create-category', formData);
@@ -104,7 +89,6 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
         try {
             await axios.delete(`http://localhost:5172/category/delete-category/${category.idcategory}`);
             setShowConfirmDelete(false);
-
             onHide();
             onReload()
         } catch (error) {
@@ -112,7 +96,49 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+    const getImage = () => {
+        let categoryImage = document.getElementById('uploadedImage');
+        const fileInput = document.querySelector('.category-file-input');
+        const resetFileInput = document.querySelector('.category-image-reset');
 
+        if (categoryImage && fileInput && resetFileInput) {
+            const resetImage = categoryImage.src;
+
+            fileInput.onchange = () => {
+                if (fileInput.files[0]) {
+                    categoryImage.src = window.URL.createObjectURL(fileInput.files[0]);
+                }
+            };
+
+
+            resetFileInput.onclick = () => {
+                fileInput.value = '';
+                categoryImage.src = resetImage;
+            };
+        }
+    };
+    useEffect(() => {
+        getImage();
+        setError(null);
+        if (category) {
+            setFormData({
+                idcategory: category.idcategory || '',
+                category_name: category.category_name || '',
+                category_description: category.category_description || '',
+                category_image: category.category_image || ''
+            });
+        }
+        if (!show) {
+            setFormData({
+                idcategory: '',
+                category_name: '',
+                category_description: '',
+                category_image: ''
+            });
+            setValidated(false);
+            setError(null);
+        }
+    }, [show]);
     return (
         <>
             <Modal
@@ -134,12 +160,13 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                             <div className="d-flex align-items-start align-items-sm-center gap-4 rounded-2 col-7 mb-3">
                                 <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                     <img
-                                        src={`../assets/img/categories/${formData.category_image}`}
+                                        src={`${formData.category_image}` || "/assets/img/product/default.png"}
                                         alt="category"
                                         className="d-block rounded"
                                         height="100"
                                         width="100"
                                         aria-label="Category image"
+                                        id="uploadedImage"
                                     />
                                 </div>
                                 <div className="button-wrapper">
@@ -148,15 +175,15 @@ export const CategoryForm = ({ category, show, onHide, onReload }) => {
                                         <i className="bx bx-sm bx-upload d-block d-sm-none"></i>
                                         <input
                                             type="file"
-                                            name="avatar"
+                                            name="category"
                                             id="upload"
-                                            className="account-file-input"
+                                            className="category-file-input"
                                             hidden
                                             accept="image/png, image/jpeg"
                                         />
                                     </label>
                                     <button aria-label='Click me' type="button"
-                                        className="btn btn-outline-secondary account-image-reset mb-4">
+                                        className="btn btn-outline-secondary category-image-reset mb-4">
                                         <i className="bx bx-reset d-block d-sm-none"></i>
                                         <span className="d-none d-sm-block">Reset</span>
                                     </button>

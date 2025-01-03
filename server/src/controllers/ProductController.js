@@ -12,7 +12,8 @@ const CartItem = require("../models/CartItem")
 const Cart = require("../models/Cart");
 const { Op, where, Sequelize } = require("sequelize");
 const jwt = require('jsonwebtoken');
-
+const path = require('path');
+const fs = require('fs');
 class ProductController {
     async loadProduct(req, res) {
         try {
@@ -340,10 +341,24 @@ class ProductController {
 
     async updateProductName(req, res) {
         const { idProduct } = req.params;
-        const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
+        const updatedData = req.body;
+        console.log(req.body);
         const idcategory = parseInt(updatedData.idcategory, 10);
         try {
-
+            function convertBackslashesToSlashes(path) {
+                return path.replace(/\\/g, '/');
+            }
+            // console.log(req.file);
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+            // console.log(req.file);
+            const avatarPath = path.join(__dirname, '../../../client/public/assets/img/product');
+            if (!fs.existsSync(avatarPath)) {
+                fs.mkdirSync(avatarPath, { recursive: true });
+            }
+            const filePath = `/assets/img/product/${req.file.filename}`;
+            const filepath = convertBackslashesToSlashes(filePath);
             const product = await Product.findOne({
                 where: { idProduct: idProduct },
             });
@@ -358,18 +373,20 @@ class ProductController {
                 where: {
                     idcategory: idcategory
                 },
-                category_name: updatedData.category_name
             });
 
             await product.update({
+                idcategory: updatedData.idcategory,
                 product_name: updatedData.product_name,
                 brand: updatedData.brand,
+                product_image: filepath
             });
 
             // await t.commit(); // Cam kết transaction
             res.status(200).json({ success: true, message: 'User updated successfully', data: updatedData });
 
         } catch (error) {
+            console.log(error);
             // console.error('Error updating product name:', error);
             res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
@@ -396,19 +413,33 @@ class ProductController {
     async createProductName(req, res) {
         const Data = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
         try {
-
+            function convertBackslashesToSlashes(path) {
+                return path.replace(/\\/g, '/');
+            }
+            // console.log(req.file);
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+            // console.log(req.file);
+            const avatarPath = path.join(__dirname, '../../../client/public/assets/img/product');
+            if (!fs.existsSync(avatarPath)) {
+                fs.mkdirSync(avatarPath, { recursive: true });
+            }
+            const filePath = `/assets/img/product/${req.file.filename}`
+            const filepath = convertBackslashesToSlashes(filePath);
             const newProduct = await Product.create({
                 product_name: Data.product_name,
                 brand: Data.brand,
                 idcategory: Data.idcategory,
-                product_image: Data.product_image
+                product_image: filepath
             });
-
+            // console.log(filePath)
             // console.log('Product created successfully:', newProduct);
             return res.status(201).json({
                 product: newProduct,
             });
         } catch (error) {
+            console.log(error)
             res.status(500).json({ success: false, message: 'Error create user', error });
         }
     }
@@ -700,6 +731,37 @@ class ProductController {
             res.status(200).json(productsByBrand);
         } catch (error) {
             res.status(500).json({ message: 'Error fetching similar products', error });
+        }
+    }
+    async UploadProductImage(req, res) {
+        try {
+            function convertBackslashesToSlashes(path) {
+                return path.replace(/\\/g, '/');
+            }
+            // console.log(req.file);
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+            // console.log(req.file);
+            const avatarPath = path.join(__dirname, '../../../client/public/assets/img/product');
+            if (!fs.existsSync(avatarPath)) {
+                fs.mkdirSync(avatarPath, { recursive: true });
+            }
+            const filePath = `/assets/img/product/${req.file.filename}`;
+            const product = await Product.findOne({ where: { product_name: req.body.product_name } });
+            // console.log(req.body)
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            const filepath = convertBackslashesToSlashes(filePath);
+            console.log(filepath)
+            await product.update({ product_image: filepath });
+
+            res.status(200).json({ message: 'Image uploaded successfully', avatarPath: filePath });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Failed to upload Image', error: error.message });
         }
     }
 }

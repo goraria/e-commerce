@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import {CategoryForm} from "../../components/modal/form/CategoryForm.jsx";
+import { CategoryForm } from "../../components/modal/form/CategoryForm.jsx";
 
 export const Category = () => {
     const navigate = useNavigate();
@@ -204,7 +204,7 @@ export const Category = () => {
                                         </span>
                                     </span>
                                 </div>
-                                <hr className="d-none d-sm-block d-lg-none me-6"/>
+                                <hr className="d-none d-sm-block d-lg-none me-6" />
                             </div>
                             <div className="col-sm-6 col-lg-3">
                                 <div
@@ -223,7 +223,7 @@ export const Category = () => {
                                         </span>
                                     </span>
                                 </div>
-                                <hr className="d-none d-sm-block d-lg-none"/>
+                                <hr className="d-none d-sm-block d-lg-none" />
                             </div>
                             <div className="col-sm-6 col-lg-3">
                                 <div
@@ -287,7 +287,7 @@ export const Category = () => {
                                                 name="DataTables_Table_0_length"
                                                 aria-controls="DataTables_Table_0"
                                                 className="form-select" // ms-3 me-3
-                                                style={{width: "80px"}}
+                                                style={{ width: "80px" }}
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
@@ -306,8 +306,8 @@ export const Category = () => {
                                     <div className="dt-buttons btn-group flex-wrap">
                                         <div>
                                             <Button variant="primary" type="button"
-                                                    className="btn btn-secondary create-new btn-primary d-flex text-center"
-                                                    onClick={() => setModalShow(true)}>
+                                                className="btn btn-secondary create-new btn-primary d-flex text-center"
+                                                onClick={() => setModalShow(true)}>
                                                 <i className='bx bx-plus me-2'></i>
                                                 Add New Category
                                             </Button>
@@ -318,71 +318,71 @@ export const Category = () => {
                         </div>
                     </div>
                     <Table hover responsive className="table border-top dataTable datatable no-footer dtr-column">
-                        <thead style={{height: 64}}>
-                        <tr>
-                            <th
-                                className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
-                                style={{verticalAlign: "middle", fontSize: 16, width: 18}}
-                            >
-                                <Form.Check
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
-                                />
-                            </th>
-                            <th className="sorting" style={{verticalAlign: "middle", fontSize: 13}}>
-                                Category Name
-                            </th>
-                            <th className="sorting_disabled text-center"
-                                style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
-                            </th>
-                        </tr>
+                        <thead style={{ height: 64 }}>
+                            <tr>
+                                <th
+                                    className="sorting_disabled dt-checkboxes-cell dt-checkboxes-select-all"
+                                    style={{ verticalAlign: "middle", fontSize: 16, width: 18 }}
+                                >
+                                    <Form.Check
+                                        type="checkbox"
+                                        onChange={handleSelectAll}
+                                        checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
+                                    />
+                                </th>
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                    Category Name
+                                </th>
+                                <th className="sorting_disabled text-center"
+                                    style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>Actions
+                                </th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {currentItems.map((item, index) => (
-                            <tr key={index} style={{height: 64}}>
-                                <td>
-                                    <Form.Check
-                                        className="dt-checkboxes-cell"
-                                        type="checkbox"
-                                        checked={selectedEntries.includes(item.idcategory)}
-                                        onChange={() => handleSelectItem(item.idcategory)}
-                                    />
-                                </td>
-                                <td className="sorting_1">
-                                    <div className="d-flex align-items-center">
-                                        <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
-                                            <div className="avatar"><img
-                                                src={`../assets/img/categories/${item.category_image}`}
-                                                alt="Product-8"
-                                                className="rounded"/></div>
+                            {currentItems.map((item, index) => (
+                                <tr key={index} style={{ height: 64 }}>
+                                    <td>
+                                        <Form.Check
+                                            className="dt-checkboxes-cell"
+                                            type="checkbox"
+                                            checked={selectedEntries.includes(item.idcategory)}
+                                            onChange={() => handleSelectItem(item.idcategory)}
+                                        />
+                                    </td>
+                                    <td className="sorting_1">
+                                        <div className="d-flex align-items-center">
+                                            <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                                <div className="avatar"><img
+                                                    src={`../assets/img/categories/${item.category_image}`}
+                                                    alt="Product-8"
+                                                    className="rounded" /></div>
+                                            </div>
+                                            <div className="d-flex flex-column justify-content-center"><span
+                                                className="text-heading text-wrap fw-medium">{item.category_name}</span><span
+                                                    className="text-truncate mb-0 d-none d-sm-block"><small>{item.category_description}</small></span>
+                                            </div>
                                         </div>
-                                        <div className="d-flex flex-column justify-content-center"><span
-                                            className="text-heading text-wrap fw-medium">{item.category_name}</span><span
-                                            className="text-truncate mb-0 d-none d-sm-block"><small>{item.category_description}</small></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                {/* <td>{item.brand}</td> */}
-                                {/* <td>{item.product_name}</td> */}
-                                {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
+                                    </td>
+                                    {/* <td>{item.brand}</td> */}
+                                    {/* <td>{item.product_name}</td> */}
+                                    {/* <td> {item.role === 1 ? "Admin" : item.role === 0 ? "User" : "Unknown Role"}</td>
                                 <td>{item.phone_number}</td> */}
-                                <td>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleEdit(item.idcategory)}
-                                        className="p-2">
-                                        <i className='bx bx-edit'></i>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => handleDelete(item.idcategory)}
-                                        className="p-2">
-                                        <i className='bx bx-trash'></i>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                                    <td>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleEdit(item.idcategory)}
+                                            className="p-2">
+                                            <i className='bx bx-edit'></i>
+                                        </Button>
+                                        <Button
+                                            variant="link"
+                                            onClick={() => handleDelete(item.idcategory)}
+                                            className="p-2">
+                                            <i className='bx bx-trash'></i>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                     <div className="card-footer flex-column flex-md-row pb-0 pb-4">

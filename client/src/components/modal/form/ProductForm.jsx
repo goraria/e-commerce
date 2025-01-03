@@ -18,12 +18,9 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
     const fetchCategory = async () => {
         const response = await axios.get("http://localhost:5172/category/get-category")
         setCategory(response.data)
+        // console.log(response.data)
     }
 
-    const fetchAPI1 = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-category")
-        setData1(response.data)
-    };
 
     const findIdCategoryByName = (name) => {
         const category = data1.find(cat => cat.category_name.toLowerCase() === name.toLowerCase());
@@ -34,28 +31,6 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
-    useEffect(() => {
-        if (product) {
-            setFormData({
-                brand: product.brand || '',
-                category_name: product.category_name || '',
-                product_image: product.product_image || '',
-                product_name: product.product_name || '',
-                idcategory: product.idcategory || ''
-            });
-        } else {
-            setFormData({
-                brand: '',
-                category_name: '',
-                product_image: '',
-                product_name: '',
-                idcategory: ''
-            });
-        }
-
-        fetchAPI1();
-        fetchCategory()
-    }, [product]);
 
     const convertFormDataToString = (data) => {
         return Object.fromEntries(
@@ -65,23 +40,36 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData(prevData => ({ ...prevData, [name]: String(value) }));
+
+        // Nếu thay đổi là từ category
+        if (name === 'category_name') {
+            const selectedCategory = category.find(cat => cat.category_name === value); // Tìm category từ danh sách
+            setFormData(prevData => ({
+                ...prevData,
+                category_name: value, // Cập nhật tên category
+                idcategory: selectedCategory ? String(selectedCategory.idcategory) : ''
+            }));
+        } else {
+            // Cập nhật các trường khác bình thường
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: value
+            }));
+        }
     };
 
     const handleInvalid = async (event) => {
-        // console.log(formData)
         event.preventDefault();
         event.stopPropagation();
-
+        setFormData(prevData => ({
+            ...prevData,
+            product_image: "fileInput(0)"
+        }))
         const form = event.currentTarget;
         const dataAsString = convertFormDataToString(formData);
         const idCategory = findIdCategoryByName(dataAsString.category_name)
-        const stringid = String(idCategory)
-        dataAsString.idcategory = stringid;
-        // console.log(formData)
 
         if (form.checkValidity() === false) {
-            // console.log("0")
             setValidated(true);
         } else {
             const allFieldsFilled = Object.values(dataAsString).every(value => value.trim() !== "");
@@ -89,6 +77,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
             if (allFieldsFilled) {
                 setShowConfirmModal(true);
             } else {
+
                 setValidated(true);
             }
         }
@@ -98,11 +87,39 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
         try {
             const dataAsString = convertFormDataToString(formData);
             // const token = localStorage.getItem('token');
-            // console.log(formData)
-            const response = product
-                ? await axios.post(`http://localhost:5172/products/update-productname/${product.idproduct}`, dataAsString)
-                : await axios.put('http://localhost:5172/admin/abc', formData)
+            const fileInput = document.getElementById('upload');
+            const file = fileInput.files[0];
+            const formDataToSend = new FormData();
 
+            if (file) {
+                formDataToSend.append('product_image', file); // Đảm bảo file được thêm vào FormData
+            }
+            // Thêm các trường dữ liệu khác vào FormData, bao gồm cả thông tin người dùng
+            formDataToSend.append('brand', formData.brand);
+            formDataToSend.append('category_name', formData.category_name);
+            formDataToSend.append('product_name', formData.product_name);
+            formDataToSend.append('idcategory', formData.idcategory);
+
+
+            const response = product
+                ? await axios.post(`http://localhost:5172/products/update-productname/${product.idproduct}`, formDataToSend, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    product_name: formDataToSend.product_name,
+                })
+                : await axios.put('http://localhost:5172/products/create-productname', formDataToSend, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                })
+
+            // if ((ImageResponse && ImageResponse.status === 200) || (response.status === 200)) {
+            //     onHide();
+            //     setShowModal(false);
+            //     onReload();
+
+            // }
             if (response.status === 200 || response.status === 201) {
                 // alert(address ? 'Address updated successfully' : 'Address added successfully');
                 setShowConfirmModal(false)
@@ -126,11 +143,58 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save product name');
         }
     };
+    const getImage = () => {
+        // Update/reset user image of account page
+        let productImage = document.getElementById('uploadedImage');
+        const fileInput = document.querySelector('.product-file-input');
+        const resetFileInput = document.querySelector('.product-image-reset');
 
+        if (productImage && fileInput && resetFileInput) {
+            const resetImage = productImage.src; // Lưu URL gốc của ảnh
+
+            // Khi người dùng chọn ảnh mới
+            fileInput.onchange = () => {
+                if (fileInput.files[0]) {
+                    productImage.src = window.URL.createObjectURL(fileInput.files[0]); // Thay đổi ảnh
+                }
+            };
+
+            // Khi người dùng muốn reset ảnh
+            resetFileInput.onclick = () => {
+                fileInput.value = ''; // Reset input file
+                productImage.src = resetImage; // Đặt lại ảnh về giá trị ban đầu
+            };
+        }
+    };
+    useEffect(() => {
+        getImage();
+        // fetchAPI1();
+        fetchCategory();
+        if (product) {
+            setFormData({
+                brand: product.brand || '',
+                category_name: product.category_name || '',
+                product_image: product.product_image || '',
+                product_name: product.product_name || '',
+                idcategory: product.idcategory || ''
+            });
+        }
+
+        if (!show) {
+            setFormData({
+                brand: '',
+                category_name: '',
+                product_image: '',
+                product_name: '',
+                idcategory: ''
+            });
+        }
+        setValidated(false);
+        setError(null);
+    }, [show]);
     return (
         <>
             <Modal
-                // {...address}
                 show={show}
                 onHide={onHide} //
                 size="lg"
@@ -143,21 +207,18 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* <h4>Note</h4> */}
-                    {/* <p>
-                        Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
-                    </p> */}
                     <Form noValidate validated={validated} onSubmit={handleInvalid}>
                         <div className="row mb-3">
                             <div className="d-flex align-items-start align-items-sm-center gap-4 rounded-2 col-7 mb-3">
                                 <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                     <img
-                                        src={`${formData.product_image}`}
-                                        alt="product"
+                                        src={`${formData.product_image}` || "/assets/img/product/default.png"}
+                                        alt="product-image"
                                         className="d-block rounded"
                                         height="100"
                                         width="100"
                                         aria-label="Product image"
+                                        id="uploadedImage"
                                     />
                                 </div>
                                 <div className="button-wrapper">
@@ -168,38 +229,19 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                                             type="file"
                                             name="product"
                                             id="upload"
-                                            className="account-file-input"
+                                            className="product-file-input"
                                             hidden
                                             accept="image/png, image/jpeg"
                                         />
                                     </label>
                                     <button aria-label='Click me' type="button"
-                                            className="btn btn-outline-secondary account-image-reset mb-4">
+                                        className="btn btn-outline-secondary product-image-reset mb-4">
                                         <i className="bx bx-reset d-block d-sm-none"></i>
                                         <span className="d-none d-sm-block">Reset</span>
                                     </button>
                                     <p className="text-muted mb-2">Allowed JPG or PNG.</p>
                                 </div>
                             </div>
-                            {/*<Form.Group as={Col} className="col-5 mb-3" controlId="category_name">*/}
-                            {/*    <Form.Label>Category</Form.Label>*/}
-                            {/*    <InputGroup hasValidation>*/}
-                            {/*        <InputGroup.Text id="category_name">*/}
-                            {/*            <i className='bx bx-layer'></i>*/}
-                            {/*        </InputGroup.Text>*/}
-                            {/*        <Form.Control*/}
-                            {/*            required*/}
-                            {/*            type="text"*/}
-                            {/*            name="category_name"*/}
-                            {/*            placeholder="Category Name"*/}
-                            {/*            value={formData.category_name}*/}
-                            {/*            onChange={handleChange}*/}
-                            {/*        />*/}
-                            {/*        <Form.Control.Feedback type="invalid">*/}
-                            {/*            Please enter Category Name.*/}
-                            {/*        </Form.Control.Feedback>*/}
-                            {/*    </InputGroup>*/}
-                            {/*</Form.Group>*/}
                             <div className="col-5 mb-3">
                                 <label htmlFor="category" className="form-label">Category</label>
                                 <select
@@ -260,7 +302,7 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
                                 </InputGroup>
                             </Form.Group>
                         </div>
-                        <hr/>
+                        <hr />
                         {/*{error && <p className="text-danger">{error}</p>}*/}
                     </Form>
                 </Modal.Body>
