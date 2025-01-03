@@ -8,28 +8,17 @@ import axios from 'axios';
 
 const CheckOut = () => {
     const location = useLocation();
-    const { cartData, prePrice, discount, voucher, totalPrice, userData, selectedaddress, selectedstoreaddress, deliverymethod } = location.state || {};
     const [paymentMethod, setPaymentMethod] = useState("qr"); // State for delivery method
     const [status, setStatus] = useState(1); // State for delivery method
-    const [date, setDate] = useState(new Date()); // State for delivery method
-    const [address, setAdress] = useState([]); // State for delivery method
     const [isPaypalSelected, setIsPaypalSelected] = useState(false);
 
     const [showSuccess, setShowSuccess] = useState(false);
 
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    const { cartData, prePrice, discount, voucher, totalPrice, userData, address, deliverymethod } = location.state || {};
 
-    const fetchAddress = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/address/addresses/${selectedaddress}`);
-            const data = await response.json();
-            setAdress(data[0])
-        } catch (error) {
-            // console.log(error);
-            console.error('Lỗi khi lấy địa chỉ:', error);
-        }
-    };
+    // console.log(location.state);
 
     const formatDateToMySQL = (date) => {
         const year = date.getFullYear();
@@ -67,7 +56,7 @@ const CheckOut = () => {
                         .then(details => {
                             alert('Thanh toán thành công');
                             handleStatusChange(1);
-                            handleAddBill()
+                            handleOrder()
                         });
                 },
                 onError: function (err) {
@@ -78,28 +67,42 @@ const CheckOut = () => {
         }
     };
 
-    const handleAddBill = async () => {
+    const handleOrder = async () => {
         try {
-            const response = await axios.post(`http://localhost:5172/bill/add-bill`, {
-                date: formatDateToMySQL(date),
-                iddiscount: null,
-                idaddress: selectedaddress,
+            const requestData = {
+                date: formatDateToMySQL(new Date()),
+                voucher: voucher ? voucher : null,
+                address: address,
                 price: totalPrice,
                 status: status,
                 items: cartData
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
+            };
+
+            // console.log('Dữ liệu gửi lên:', requestData);
+
+            await axios.post(`http://localhost:5172/bill/add-bill`, requestData, {
+                headers: { Authorization: `Bearer ${token}` },
             });
 
-            setShowSuccess(true)
-            // alert("Hóa đơn đã được tạo vào thành công");
-            // navigate('/')
+            setShowSuccess(true);
         } catch (error) {
-            console.error('Lỗi khi tạo hóa đơn:', error);
+            console.error('Lỗi khi tạo hóa đơn:', error.response ? error.response.data : error.message);
         }
     };
+
+    const handleNavigate = () => {
+        navigate('/pay/success', {
+            state: {
+                cartData, // Dữ liệu giỏ hàng
+                prePrice,
+                discount,
+                voucher,
+                totalPrice,
+                userData,
+                address,
+            }
+        });
+    }
 
     const handlePaymentMethodChange = (event) => {
         setPaymentMethod(event.target.value);
@@ -112,8 +115,6 @@ const CheckOut = () => {
     };
 
     useEffect(() => {
-        // fetchAddress();
-
         if (isPaypalSelected) {
             const script = document.createElement('script');
             script.src = "https://www.paypal.com/sdk/js?client-id=AdhVzROq2s2WBCyzBViwG2txjK55M54O6K_swNa_do0hEpOGo5PQf49TYCoz3evn0s3PF_jdXovGzKb3&currency=USD";
@@ -144,12 +145,12 @@ const CheckOut = () => {
                         {/* Order Information */}
                         <div className="card p-3 mb-4">
                             <div className="p-3">
-                                <h5>Thông tin đơn hàng</h5>
-                                <div>Mã đặt hàng: <strong>DH2410160005</strong></div>
-                                <div>Người nhận: <strong>{userData.firstname} {userData.lastname}</strong></div>
+                                <h5>Order Information</h5>
+                                <div>Order ID: <strong>#</strong></div>
+                                <div>Customer: <strong>{userData?.firstname} {userData?.lastname}</strong></div>
                                 <div>{deliverymethod}:
                                     {deliverymethod === "Tại cửa hàng" && (
-                                        <strong>{selectedstoreaddress}</strong>
+                                        <strong>{address}</strong>
                                     )}
                                     {deliverymethod === "Giao tận nơi" && (
                                         <strong>{address.street}, {address.city}, {address.district}</strong>
@@ -249,7 +250,7 @@ const CheckOut = () => {
                                         </div>
                                         <Button className="w-100" variant="primary" onClick={() => {
                                             handleStatusChange(1);
-                                            handleAddBill()
+                                            handleOrder()
                                             // NotifySuccess()
                                         }}>Order</Button>
                                     </div>
@@ -261,7 +262,7 @@ const CheckOut = () => {
                                 <div className="p-3">
                                 <Button className="w-100" variant="primary" onClick={() => {
                                         handleStatusChange(0)
-                                        handleAddBill()
+                                        handleOrder()
                                     }}>
                                         Accept Payment
                                     </Button>
@@ -328,9 +329,9 @@ const CheckOut = () => {
                             </div>
                             <div className="card p-3">
                                 <div className="rounded p-3">
-                                    <h5>Sản phẩm trong đơn</h5>
+                                    <h5>Order List</h5>
                                     <hr className="my-4"/>
-                                    {cartData.map((item, index) => (
+                                    {cartData?.map((item, index) => (
                                         <OrderItem key={index} item={item}/>
                                     ))}
                                 </div>
@@ -343,7 +344,10 @@ const CheckOut = () => {
                 title="Order successfully"
                 message="Follow your order in Order History!"
                 show={showSuccess}
-                onHide={() => setShowSuccess(false)}
+                onHide={() => {
+                    setShowSuccess(false)
+                    handleNavigate()
+                }}
             />
         </>
     );

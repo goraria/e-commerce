@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import {Button, Form, FormText} from 'react-bootstrap';
+import { Button, Form, FormText } from 'react-bootstrap';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
 import CardItem from '../../components/product/CartItem.jsx';
 import OrderItem from "../../components/product/OrderItem.jsx";
@@ -10,10 +10,7 @@ const Order = () => {
     const [user, setUser] = useState([]);
     const [address, setAdress] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(""); // State to track selected address
-    const [selectedStoreAddress, setSelectedStoreAddress] = useState("");
     const [deliveryMethod, setDeliveryMethod] = useState("Delivery"); // State for delivery method
-    const [status, setStatus] = useState(1); // State for delivery method
-    const [date, setDate] = useState(new Date()); // State for delivery method
 
     const location = useLocation();
     const { cartData, prePrice, discount, voucher, totalPrice } = location.state || {};
@@ -26,64 +23,16 @@ const Order = () => {
         event.preventDefault();
         navigate('/pay/checkout', {
             state: {
-                cartData: cartData, // Dữ liệu giỏ hàng
-                prePrice: prePrice,
-                discount: discount,
-                voucher: voucher,
-                totalPrice: totalPrice,
+                cartData, // Dữ liệu giỏ hàng
+                prePrice,
+                discount,
+                voucher,
+                totalPrice,
                 userData: user,
-                selectedaddress: selectedAddress,
-                selectedstoreaddress: selectedStoreAddress,
-                deliverymethod: deliveryMethod
+                address: selectedAddress,
+                deliveryMethod
             }
         });
-    };
-
-    const formatDateToMySQL = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are zero-indexed
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    };
-
-    const handleAddBill = async () => {
-        try {
-            const response = await axios.put(`http://localhost:5172/bill/add-bill`, {
-                date: formatDateToMySQL(date),
-                iddiscount: null,
-                idaddress: selectedAddress,
-                price: totalPrice,
-                status: status,
-                items: cartData
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-
-            });
-            alert("Bill đã được tạo vào thành công");
-
-        } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
-        }
-    };
-
-    const fetchBill = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/account/get-info`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            setUser(data)
-        } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
-        }
     };
 
     const fetchUser = async () => {
@@ -100,15 +49,12 @@ const Order = () => {
 
     const fetchAddress = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/address/list`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+            const response = await axios.get(`http://localhost:5172/address/list`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
 
-            const data = await response.json();
-            setAdress(data)
-            // console.log(data)
+            setAdress(response.data)
+            // console.log(response.data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
@@ -116,10 +62,6 @@ const Order = () => {
 
     const handleDeliveryMethodChange = (event) => {
         setDeliveryMethod(event.target.value);
-    };
-
-    const handleStoreAddressChange = (event) => {
-        setSelectedStoreAddress(event.target.value);
     };
 
     useEffect(() => {
@@ -144,7 +86,7 @@ const Order = () => {
                                     className="card px-3 py-3 light bg-body-tertiary align-items-center bg-navbar-theme">
                                     <div className="container d-flex ps-2 p-0 align-items-center">
                                         <h5 className="m-0">Order</h5>
-                                        <Button disabled to={'/search'} variant="light" className="ms-auto">
+                                        <Button disabled variant="light" className="ms-auto">
                                             <i className='bx bx-plus text-white me-2'></i>
                                             <span></span>
                                         </Button>
@@ -206,18 +148,22 @@ const Order = () => {
                                 </Form.Group>
                                 {deliveryMethod === 'Delivery' && (
                                     <Form.Group controlId="formAddress" className="mt-3">
-                                        <Form.Label>Địa chỉ giao hàng</Form.Label>
+                                        <Form.Label>Address to delivery</Form.Label>
                                         <Form.Select
                                             aria-label="Choose address to deliver"
-                                            value={selectedAddress}
+                                            // value={selectedAddress}
                                             onChange={(e) => {
-                                                setSelectedAddress(e.target.value);
+                                                const selectedValue = parseInt(e.target.value);
+                                                const selectedItem = address.find(item => item.idaddress === selectedValue);
+
+                                                setSelectedAddress(selectedItem);
+                                                // console.log(selectedAddress)
                                             }}
                                         >
-                                            <option value="">Choose address</option>
+                                            <option>Choose address</option>
                                             {address.map((addr, index) => (
                                                 <option key={index} value={addr.idaddress}>
-                                                    {addr.street}, {addr.city}, {addr.district}
+                                                    {addr.street}, {addr.city}, {addr.district}, {addr.city}, {addr.state}, {addr.country},
                                                 </option>
                                             ))}
                                         </Form.Select>
@@ -233,7 +179,7 @@ const Order = () => {
 
                     <div className="col col-lg-4 col-md-12 col-sm-12 mb-4">
                         <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
-                            <div className="card p-3">
+                            <div className="card p-3 mb-4">
                                 <div className="rounded p-3">
                                     <h5>Offer</h5>
                                     <div className="row g-4 mb-4">
@@ -249,7 +195,8 @@ const Order = () => {
                                                 {/*    <option key={index}*/}
                                                 {/*            value={item.percentage_discount}>{item.discount_name}</option>*/}
                                                 {/*))}*/}
-                                                <option value="">{voucher ? voucher.discount_name : "Not Selected"}</option>
+                                                <option
+                                                    value="">{voucher ? voucher.discount_name : "Not Selected"}</option>
                                             </Form.Select>
                                             {/*<input type="text" className="form-control" placeholder="Enter Promo Code"*/}
                                             {/*    aria-label="Enter Promo Code" />*/}
@@ -291,9 +238,23 @@ const Order = () => {
                                     </dl>
                                 </div>
                                 <div className="rounded p-3">
-                                    <Button className="w-100" variant="danger" onClick={handleOrderClick}>
+                                    <Button
+                                        className="w-100"
+                                        variant="danger"
+                                        onClick={handleOrderClick}
+                                        disabled={selectedAddress === ""}
+                                    >
                                         Order
                                     </Button>
+                                </div>
+                            </div>
+                            <div className="card p-3">
+                                <div className="rounded p-3">
+                                    <h5>Order List</h5>
+                                    <hr className="my-4"/>
+                                    {cartData?.map((item, index) => (
+                                        <OrderItem key={index} item={item}/>
+                                    ))}
                                 </div>
                             </div>
                         </div>
