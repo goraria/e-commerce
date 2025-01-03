@@ -37,8 +37,8 @@ const Bill = sequelize.define('Bill', {
         },
     },
     price: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.FLOAT,
+        allowNull: false,
     },
     status: {
         type: DataTypes.TINYINT,
