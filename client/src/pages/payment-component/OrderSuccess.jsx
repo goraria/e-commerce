@@ -1,6 +1,21 @@
+import React, { Component, useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
 
 export const OrderSuccess = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const { cartData, prePrice, discount, voucher, totalPrice, userData, address } = location.state || {};
+
+    // console.log(location.state)
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/pay/cart');
+        }
+    }, []);
+
     return (
         <Overview>
             <div
@@ -19,17 +34,17 @@ export const OrderSuccess = () => {
                                 <p>
                                     Your order{" "}
                                     <a href="#" className="text-heading fw-medium">
-                                        #1536548131
+                                        #
                                     </a>{" "}
                                     has been placed!
                                 </p>
                                 <p>
                                     We sent an email to{" "}
                                     <a
-                                        // href="mailto:john.doe@example.com"
+                                        // href="mailto:contact@gorth.org"
                                         className="text-heading fw-medium"
                                     >
-                                        john.doe@example.com
+                                        contact@gorth.org
                                     </a>{" "}
                                     with your order confirmation and receipt. If the email
                                     hasn't arrived within two minutes, please check your spam
@@ -50,28 +65,38 @@ export const OrderSuccess = () => {
                                             <i className="bx bx-map"></i> Shipping
                                         </h6>
                                         <address className="mb-0">
-                                            John Doe <br/>
-                                            4135 Parkway Street,
+                                            {`${userData?.firstname} ${userData?.lastname}`}
                                             <br/>
-                                            Los Angeles, CA 90017,
+                                            {address?.type},
                                             <br/>
-                                            USA
+                                            {`${address?.tower}, ${address?.street}`},
+                                            <br/>
+                                            {`${address?.district}`},
+                                            <br/>
+                                            {`${address?.city}, ${address?.state}`},
+                                            <br/>
+                                            {address?.country}
                                         </address>
-                                        <p className="mb-0 mt-4">+123456789</p>
+                                        <p className="mb-0 mt-4">{userData?.phone}</p>
                                     </li>
                                     <li className="list-group-item flex-fill p-4 text-body">
                                         <h6 className="d-flex align-items-center gap-2">
                                             <i className="bx bx-credit-card"></i> Billing Address
                                         </h6>
                                         <address className="mb-0">
-                                            John Doe <br/>
-                                            4135 Parkway Street,
+                                            {`${userData?.firstname} ${userData?.lastname}`}
                                             <br/>
-                                            Los Angeles, CA 90017,
+                                            {address?.type},
                                             <br/>
-                                            USA
+                                            {`${address?.tower}, ${address?.street}`},
+                                            <br/>
+                                            {`${address?.district}`},
+                                            <br/>
+                                            {`${address?.city}, ${address?.state}`},
+                                            <br/>
+                                            {address?.country}
                                         </address>
-                                        <p className="mb-0 mt-4">+123456789</p>
+                                        <p className="mb-0 mt-4">{userData?.phone}</p>
                                     </li>
                                     <li className="list-group-item flex-fill p-4 text-body">
                                         <h6 className="d-flex align-items-center gap-2">
@@ -89,79 +114,123 @@ export const OrderSuccess = () => {
                         <div className="row">
                             <div className="col-xl-9 mb-4 mb-xl-0">
                                 <ul className="list-group">
-                                    <li className="list-group-item p-4">
-                                        <div className="d-flex gap-4 flex-sm-row flex-column">
-                                            <div className="flex-shrink-0">
-                                                <img
-                                                    src="../assets/img/categories/product-1.png"
-                                                    alt="google home"
-                                                    className="w-px-75"
-                                                />
-                                            </div>
-                                            <div className="flex-grow-1">
-                                                <div className="row">
-                                                    <div className="col-md-8">
-                                                        <a href="#">
-                                                            <h6 className="mb-2">
-                                                                Google - Google Home - White
-                                                            </h6>
-                                                        </a>
-                                                        <div className="text-body mb-2 d-flex flex-wrap">
-                                                            <span className="me-1">Sold by:</span>{" "}
-                                                            <a href="#" className="me-3">
-                                                                Google
+                                    {cartData?.map((item, index) => (
+                                        <li key={index} className="list-group-item p-4">
+                                            <div className="d-flex gap-4 flex-sm-row flex-column">
+                                                <div className="flex-shrink-0">
+                                                    <img
+                                                        src={item?.product?.image}
+                                                        alt="google home"
+                                                        className="w-px-75"
+                                                    />
+                                                </div>
+                                                <div className="flex-grow-1">
+                                                    <div className="row">
+                                                        <div className="col-md-8">
+                                                            <a href="#">
+                                                                <h6 className="mb-2">
+                                                                    {`${item?.product?.brand} ${item?.product?.name}`}
+                                                                </h6>
                                                             </a>
+                                                            <div className="text-body mb-2 d-flex flex-wrap">
+                                                                <span className="me-1">
+                                                                    {`${item?.configuration?.cpu} |
+                                                                    ${item?.configuration?.gpu} | 
+                                                                    ${item?.configuration?.ram} GB |
+                                                                    ${item?.configuration?.storage} GB |
+                                                                    ${item?.configuration?.screen}' |
+                                                                    ${item?.configuration?.resolution}`}
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                        <span className="badge bg-label-success">
-                                                                In Stock
-                                                            </span>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <div className="text-md-end">
-                                                            <div className="my-2 my-lg-4">
-                                                                <span className="text-primary">$299/</span>
-                                                                <s className="text-muted">$359</s>
+                                                        <div className="col-md-4">
+                                                            <div className="text-md-end">
+                                                                <div className="my-2 my-lg-4">
+                                                                    <span
+                                                                        className="text-primary">${item?.configuration.price}</span>
+                                                                    <span
+                                                                        className="text-body ms-2">x{item?.quantity}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item p-4">
-                                        <div className="d-flex gap-4 flex-sm-row flex-column">
-                                            <div className="flex-shrink-0">
-                                                <img
-                                                    src="../assets/img/categories/product-5.png"
-                                                    alt="google home"
-                                                    className="w-px-75"
-                                                />
-                                            </div>
-                                            <div className="flex-grow-1">
-                                                <div className="row">
-                                                    <div className="col-md-8">
-                                                        <a href="#">
-                                                            <h6 className="mb-2">
-                                                                Apple iPhone 11 (64GB, Black)
-                                                            </h6>
-                                                        </a>
-                                                        <div className="text-body mb-2 d-flex flex-wrap">
-                                                            <span className="me-1">Sold by:</span>{" "}
-                                                            <a href="#">Apple</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <div className="text-md-end">
-                                                            <div className="my-2 my-lg-4">
-                                                                <span className="text-primary">$299/</span>
-                                                                <s className="text-muted">$359</s>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    ))}
+                                    {/*<li className="list-group-item p-4">*/}
+                                    {/*    <div className="d-flex gap-4 flex-sm-row flex-column">*/}
+                                    {/*        <div className="flex-shrink-0">*/}
+                                    {/*            <img*/}
+                                    {/*                src="../assets/img/categories/product-1.png"*/}
+                                    {/*                alt="google home"*/}
+                                    {/*                className="w-px-75"*/}
+                                    {/*            />*/}
+                                    {/*        </div>*/}
+                                    {/*        <div className="flex-grow-1">*/}
+                                    {/*            <div className="row">*/}
+                                    {/*                <div className="col-md-8">*/}
+                                    {/*                    <a href="#">*/}
+                                    {/*                        <h6 className="mb-2">*/}
+                                    {/*                            Google - Google Home - White*/}
+                                    {/*                        </h6>*/}
+                                    {/*                    </a>*/}
+                                    {/*                    <div className="text-body mb-2 d-flex flex-wrap">*/}
+                                    {/*                        <span className="me-1">Sold by:</span>{" "}*/}
+                                    {/*                        <a href="#" className="me-3">*/}
+                                    {/*                            Google*/}
+                                    {/*                        </a>*/}
+                                    {/*                    </div>*/}
+                                    {/*                    <span className="badge bg-label-success">*/}
+                                    {/*                            In Stock*/}
+                                    {/*                        </span>*/}
+                                    {/*                </div>*/}
+                                    {/*                <div className="col-md-4">*/}
+                                    {/*                    <div className="text-md-end">*/}
+                                    {/*                        <div className="my-2 my-lg-4">*/}
+                                    {/*                            <span className="text-primary">$299/</span>*/}
+                                    {/*                            <s className="text-muted">$359</s>*/}
+                                    {/*                        </div>*/}
+                                    {/*                    </div>*/}
+                                    {/*                </div>*/}
+                                    {/*            </div>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
+                                    {/*<li className="list-group-item p-4">*/}
+                                    {/*    <div className="d-flex gap-4 flex-sm-row flex-column">*/}
+                                    {/*        <div className="flex-shrink-0">*/}
+                                    {/*            <img*/}
+                                    {/*                src="../assets/img/categories/product-5.png"*/}
+                                    {/*                alt="google home"*/}
+                                    {/*                className="w-px-75"*/}
+                                    {/*            />*/}
+                                    {/*        </div>*/}
+                                    {/*        <div className="flex-grow-1">*/}
+                                    {/*            <div className="row">*/}
+                                    {/*                <div className="col-md-8">*/}
+                                    {/*                    <a href="#">*/}
+                                    {/*                        <h6 className="mb-2">*/}
+                                    {/*                            Apple iPhone 11 (64GB, Black)*/}
+                                    {/*                        </h6>*/}
+                                    {/*                    </a>*/}
+                                    {/*                    <div className="text-body mb-2 d-flex flex-wrap">*/}
+                                    {/*                        <span className="me-1">Sold by:</span>{" "}*/}
+                                    {/*                        <a href="#">Apple</a>*/}
+                                    {/*                    </div>*/}
+                                    {/*                </div>*/}
+                                    {/*                <div className="col-md-4">*/}
+                                    {/*                    <div className="text-md-end">*/}
+                                    {/*                        <div className="my-2 my-lg-4">*/}
+                                    {/*                            <span className="text-primary">$299/</span>*/}
+                                    {/*                            <s className="text-muted">$359</s>*/}
+                                    {/*                        </div>*/}
+                                    {/*                    </div>*/}
+                                    {/*                </div>*/}
+                                    {/*            </div>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
                                 </ul>
                             </div>
                             <div className="col-xl-3">
@@ -169,7 +238,7 @@ export const OrderSuccess = () => {
                                     <h6>Price Details</h6>
                                     <dl className="row mb-0 text-heading">
                                         <dt className="col-6 fw-normal">Order Total</dt>
-                                        <dd className="col-6 text-end">$1198.00</dd>
+                                        <dd className="col-6 text-end">${totalPrice}</dd>
 
                                         <dt className="col-sm-6 text-heading fw-normal">
                                             Charges
@@ -177,15 +246,15 @@ export const OrderSuccess = () => {
                                         <dd className="col-sm-6 text-end">
                                             <s className="text-muted">$5.00</s>{" "}
                                             <span className="badge bg-label-success ms-1">
-                                                    Free
-                                                </span>
+                                                Free
+                                            </span>
                                         </dd>
                                     </dl>
                                     <hr className="mx-n6 mb-4"/>
                                     <dl className="row mb-0">
                                         <dt className="col-6 text-heading">Total</dt>
                                         <dd className="col-6 fw-medium text-end text-heading mb-0">
-                                            $1198.00
+                                            ${totalPrice}
                                         </dd>
                                     </dl>
                                 </div>

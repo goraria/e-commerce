@@ -307,33 +307,41 @@ class BillController {
     }
 
     async createBill(req, res) {
-        const idaccount = req.user.id;
-        const { date, iddiscount, idaddress, price, status, items } = req.body;
-        // console.log(req.body);
+        const { date, voucher, address, price, status, items } = req.body;
+
         try {
+            if (!address || !price || !status || !items || items.length === 0) {
+                return res.status(400).json({ error: 'Dữ liệu không hợp lệ' });
+            }
+
             const newBill = await Bill.create({
                 idaccount: req.user.id,
+                iddiscount: voucher ? voucher.iddiscount : null,
+                idaddress: address.idaddress,
                 date: date,
-                iddiscount: iddiscount,
-                idaddress: idaddress,
                 price: price,
                 status: status
             });
+
             for (const e of items) {
                 await BillDetail.create({
                     idbill: newBill.idbill,
-                    idproduct: e.idproduct,
-                    idcolor: e.idcolor,
-                    idconfiguration: e.idconfiguration,
+                    idproduct: e.product.idproduct,
+                    idaccessory: e.accessory ? e.accessory.idaccessory : null,
+                    idcolor: e.color ? e.color.idcolor : null,
+                    idconfiguration: e.configuration.idconfiguration,
+                    product_name: e.product.name,
                     quantity: e.quantity,
-                    price: 1000
+                    price: e.configuration.price
                 });
             }
+
             res.status(201).json(newBill);
         } catch (error) {
+            console.error('Lỗi server khi tạo hóa đơn:', error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi thêm bill' });
         }
-    };
+    }
 
     async createBillDetail(req, res) {
         const { idbill, idproduct, idcolor, idconfiguration, quantity, price } = req.body;
