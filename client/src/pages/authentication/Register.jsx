@@ -8,6 +8,7 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import {AuthWrapper} from "./AuthWrapper.jsx";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
+import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
@@ -28,6 +29,19 @@ const Register = ({ checker }) => {
         lastname: '',
         phone: ''
     });
+
+    const [captchaVerified, setCaptchaVerified] = useState(false); // New state
+    const handleSuccess = (data) => {
+        // console.log('Captcha verification success:', data);
+        // alert('Verification successful, proceed with form submission!');
+        setCaptchaVerified(true);
+    };
+
+    const handleError = (error) => {
+        // console.log('Captcha verification failed:', error);
+        // alert('Verification failed, please try again!');
+        setCaptchaVerified(false);
+    };
 
     const [error, setError] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);  // trạng thái cho NotifySuccess
@@ -53,6 +67,11 @@ const Register = ({ checker }) => {
 
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
+
+        if (!captchaVerified) {
+            alert('Please verify the captcha before submitting.');
+            return;
+        }
 
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -431,6 +450,19 @@ const Register = ({ checker }) => {
                                 I agree to
                                 <a aria-label="pricacy policy and terms" href="#"> privacy policy & terms</a>
                             </label>
+                        </div>
+                    </div>
+                    <div className="row d-flex justify-content-center flex-wrap mb-3">
+                        <div className="col-lg-12">
+                            <div className="d-flex justify-content-center w-100"
+                                 style={{minWidth: '120px'}}>
+                                <ReCaptchaComponent
+                                    siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
+                                    verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
+                                    onSuccess={handleSuccess}
+                                    onError={handleError}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="mb-3">

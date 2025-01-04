@@ -13,18 +13,20 @@ router.post('/verify-captcha', async (req, res) => {
     }
 
     try {
+        console.log(1)
         const googleResponse = await axios.post(
             `https://www.google.com/recaptcha/api/siteverify`,
             null,
             { params: { secret: RECAPTCHA_SECRET_KEY, response: captcha } }
         );
-
+        console.log(googleResponse)
         if (googleResponse.data.success) {
             return res.json({ success: true });
         } else {
             return res.status(400).json({ success: false, message: 'Invalid captcha' });
         }
     } catch (error) {
+
         return res.status(500).json({ success: false, message: 'Server error' });
     }
 });
