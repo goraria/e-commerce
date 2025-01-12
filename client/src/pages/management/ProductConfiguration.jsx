@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-bootstrap";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { ConfigurationForm } from "../../components/modal/form/ConfigurationForm.jsx";
+import ConfigurationForm from "../../components/modal/form/ConfigurationForm.jsx";
 
 export const ProductConfiguration = () => {
     const navigate = useNavigate();

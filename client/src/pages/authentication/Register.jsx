@@ -18,7 +18,7 @@ const sclItems = [
     // { id: 4, name: "Twitter", icon: faTwitter },
 ]
 
-const Register = ({ checker }) => {
+export const Register = ({ checker }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
@@ -525,5 +525,3 @@ const Register = ({ checker }) => {
         </>
     )
 }
-
-export default Register

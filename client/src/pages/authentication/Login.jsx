@@ -11,7 +11,7 @@ import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-const Login = ({ checker }) => {
+export const Login = ({ checker }) => {
     // const [modalShow, setModalShow] = useState(false);
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -274,7 +274,4 @@ const Login = ({ checker }) => {
             />
         </>
     )
-
 }
-
-export default Login

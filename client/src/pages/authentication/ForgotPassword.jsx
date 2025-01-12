@@ -7,7 +7,7 @@ import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
 
-const ForgotPassword = () => {
+export const ForgotPassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -123,6 +123,3 @@ const ForgotPassword = () => {
         </>
     )
 }
-
-
-export default ForgotPassword

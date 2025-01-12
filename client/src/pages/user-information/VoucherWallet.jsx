@@ -3,7 +3,7 @@ import VoucherItem from "../../components/voucher/VoucherItem.jsx";
 import {Button} from "react-bootstrap";
 import axios from "axios";
 
-const VoucherWallet = () => {
+export const VoucherWallet = () => {
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     // const [reloadAddressManagement, setReloadAddressManagement] = useState(0);
@@ -59,5 +59,3 @@ const VoucherWallet = () => {
         </>
     )
 }
-
-export default VoucherWallet

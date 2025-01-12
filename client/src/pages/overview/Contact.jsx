@@ -29,7 +29,7 @@ const ImageAbout = ({ imageItems }) => {
     )
 }
 
-const Contact = () => {
+export const Contact = () => {
     return (
         <div className="mt-4">
             <Carousel fade>
@@ -136,7 +136,5 @@ const Contact = () => {
         </div>
     )
 }
-
-export default Contact
 
 

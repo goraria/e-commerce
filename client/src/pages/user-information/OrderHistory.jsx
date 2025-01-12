@@ -1,11 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
-import axios from "axios";
-import {Badge, Button, Form, Pagination, Table} from "react-bootstrap";
-import Calendar from "react-calendar";
-import StatisticView from "../../components/modal/form/StatisticView.jsx";
-import {Statistics} from "../management/Statistics.jsx";
-import {OrderDetails} from "./OrderDetails.jsx";
+import { Badge, Button, Form, Pagination, Table } from "react-bootstrap";
 import OrderExpand from "../../components/order-elements/OrderExpand.jsx";
+import axios from "axios";
 
 export const OrderHistory = () => {
     const [orders, setOrders] = useState([]);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { CategoryForm } from "../../components/modal/form/CategoryForm.jsx";
+import CategoryForm from "../../components/modal/form/CategoryForm.jsx";
 
 export const Category = () => {
     const navigate = useNavigate();

@@ -6,7 +6,7 @@ import OrderItem from "../../components/product/OrderItem.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import axios from 'axios';
 
-const CheckOut = () => {
+export const CheckOut = () => {
     const location = useLocation();
     const [paymentMethod, setPaymentMethod] = useState("qr"); // State for delivery method
     const [status, setStatus] = useState(1); // State for delivery method
@@ -352,5 +352,3 @@ const CheckOut = () => {
         </>
     );
 }
-
-export default CheckOut;

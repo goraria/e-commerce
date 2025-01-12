@@ -3,7 +3,7 @@ import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
-export const NameForm = ({ name, show, onHide, onReload }) => {
+const NameForm = ({ name, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         firstname: '',
@@ -328,3 +328,5 @@ export const NameForm = ({ name, show, onHide, onReload }) => {
         </>
     )
 }
+
+export default NameForm;

@@ -6,7 +6,7 @@ import CardItem from '../../components/product/CartItem.jsx';
 import OrderItem from "../../components/product/OrderItem.jsx";
 import axios from 'axios';
 
-const Order = () => {
+export const Order = () => {
     const [user, setUser] = useState([]);
     const [address, setAdress] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(""); // State to track selected address
@@ -264,5 +264,3 @@ const Order = () => {
         </>
     )
 }
-
-export default Order

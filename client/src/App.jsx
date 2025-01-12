@@ -6,16 +6,18 @@ import { jwtDecode } from 'jwt-decode';
 import Layout from "./layouts/Layout";
 import Frame from "./layouts/Frame";
 import Panel from "./layouts/Panel.jsx";
+
 import { AdministratorRoutes } from "./router/AdministratorRoutes.jsx";
 import { UserRoutes } from "./router/UserRoutes.jsx";
 import { CustomerRoutes } from "./router/CustomerRoutes.jsx";
 import { ShareRoutes } from "./router/ShareRoutes.jsx";
 import { Loading } from "./pages/overview/Loading.jsx";
-import Protected from "./utils/Protected.jsx";
-import Login from "./pages/authentication/Login.jsx";
-import Register from "./pages/authentication/Register.jsx";
+import { Login } from "./pages/authentication/Login.jsx";
+import { Register } from "./pages/authentication/Register.jsx";
 import { AuthenticationRoutes } from "./router/AuthenticationRoutes.jsx";
 import { ErrorPage } from "./pages/misc/ErrorPage.jsx";
+
+import Protected from "./utils/Protected.jsx";
 
 const App = () => {
     const [auth, setAuth] = useState({

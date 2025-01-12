@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Form, Pagination, Modal } from "react-bootstrap";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 // import "./DataTables.css"; // Add custom styling here
-import { ProductForm } from "../../components/modal/form/ProductForm.jsx";
-import { CategoryBadge } from "../../components/badge/CategoryBadge.jsx";
+import ProductForm from "../../components/modal/form/ProductForm.jsx";
+import CategoryBadge from "../../components/badge/CategoryBadge.jsx";
 // import SaveChange from "../../components/modal/notify/SaveChange.jsx";
 export const ProductName = () => {
     const navigate = useNavigate();

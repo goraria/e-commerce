@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
-const NotFound = () => {
+export const NotFound = () => {
     return (
         <>
             <div className="misc-wrapper">
@@ -22,5 +22,3 @@ const NotFound = () => {
         </>
     )
 }
-
-export default NotFound

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 export const ToastPage = () => {
     useEffect(() => {
         Toast();
-      },[])
+    },[])
     return (
         <>
             <h4 className="py-3 mb-4"><span className="text-muted fw-light">UI elements /</span> Toasts</h4>

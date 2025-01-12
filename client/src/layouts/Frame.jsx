@@ -7,7 +7,7 @@ import Outbar from "./Outbar.jsx";
 import Overside from "./Overside.jsx";
 import Navbar from "./Navbar.jsx";
 import Activitybar from "./Activitybar.jsx";
-import getGreetingMessage from "../utils/greetingHandler.js";
+import getGreetingMessage from "../hooks/greetingHandler.jsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {Container, Button, Row, Col, Stack} from 'react-bootstrap';
 import CustomDropDown from "../../components/button/CustomDropDown";
 import ProductItem from "../../components/product/ProductItem";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
-import { useLocation } from 'react-router-dom';
 import Overview from "../../layouts/Overview.jsx";
 
 const categories = [
@@ -15,7 +15,7 @@ const categories = [
     { categorical: 'Screen', varient: 'danger', item: ['15', '14', '12','16'] },
 ];
 
-const ProductList = () => {
+export const ProductList = () => {
     const brands = ['Lenovo', 'Dell', 'HP', 'Acer', 'Microsoft', 'Asus', 'LG', 'Apple', 'Razer', 'Samsung']
     const [count, setCount] = useState(0);
     const [productList, setProductList] = useState([]);
@@ -113,5 +113,3 @@ const ProductList = () => {
         </>
     );
 }
-
-export default ProductList;

@@ -1,7 +1,7 @@
 import React from "react";
 // import {Badge} from "react-bootstrap";
 
-export const CategoryBadge = ({ cate, icon, color }) => {
+const CategoryBadge = ({ cate, icon, color }) => {
     return (
         <>
             {/*<Badge className="me-2" pill bg="primary" text="dark">Primary</Badge>*/}
@@ -15,3 +15,5 @@ export const CategoryBadge = ({ cate, icon, color }) => {
         </>
     )
 }
+
+export default CategoryBadge;

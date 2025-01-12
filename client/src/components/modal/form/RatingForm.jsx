@@ -3,7 +3,7 @@ import axios from "axios";
 import {Button, Col, Form, InputGroup, Modal, Row} from "react-bootstrap";
 import SaveChange from "../notify/SaveChange.jsx";
 
-export const RatingForm = ({ rate, prod, show, onHide, onReload }) => {
+const RatingForm = ({ rate, prod, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         score: 0,
@@ -211,3 +211,5 @@ export const RatingForm = ({ rate, prod, show, onHide, onReload }) => {
         </>
     );
 };
+
+export default RatingForm;
