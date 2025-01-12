@@ -3,7 +3,6 @@ import React from 'react';
 const Carousel = ({ id, items, dark }) => {
     return (
         <>
-
             <div
                 id={id}
                 className={`carousel ${dark ? 'carousel-dark slide carousel-fade' : 'carousel slide'}`}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import axios from 'axios';
-import {DescriptionForm} from "../../components/modal/form/DescriptionForm.jsx";
+import DescriptionForm from "../../components/modal/form/DescriptionForm.jsx";
 
 export const ProductDescription = () => {
     const [data, setData] = useState([])

@@ -13,17 +13,16 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import Transitionbar from "../../layouts/Transitionbar.jsx";
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Overview from "../../layouts/Overview.jsx";
 import ProductItem from "../../components/product/ProductItem.jsx";
 import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
 import RatingStar from "../../components/product/RatingStar.jsx";
-import { RatingForm } from "../../components/modal/form/RatingForm.jsx";
+import RatingForm from "../../components/modal/form/RatingForm.jsx";
 import { MaintenancePage } from "../misc/MaintenancePage.jsx";
 import Calendar from "react-calendar";
 
-const Product = () => {
+export const Product = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -974,5 +973,3 @@ const Product = () => {
         </>
     )
 }
-
-export default Product

@@ -1,6 +1,6 @@
-import {useLocation} from "react-router-dom";
-import React, {useState} from "react";
-import {Form, Table} from "react-bootstrap";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Form, Table } from "react-bootstrap";
 
 export const Bill = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại

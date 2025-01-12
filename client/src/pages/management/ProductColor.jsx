@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-bootstrap";
 import axios from 'axios';
-import { ColorForm } from "../../components/modal/form/ColorForm.jsx";
+import ColorForm from "../../components/modal/form/ColorForm.jsx";
 
 export const ProductColor = () => {
     const [data, setData] = useState([])

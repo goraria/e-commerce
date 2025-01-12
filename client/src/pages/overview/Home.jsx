@@ -14,7 +14,7 @@ const banners = [
     // { id: 6, name: "../assets/img/overviews/yogabook.jpeg", alt: "Sixth slide", title: "Sale Off 20%", description: "Double Display" },
 ]
 
-const Home = () => {
+export const Home = () => {
     // const [users, setUsers] = useState([]);
     // const [count, setCount] = useState(0);
     const [array, setArray] = useState([]);
@@ -102,5 +102,3 @@ const Home = () => {
         </div>
     )
 }
-
-export default Home

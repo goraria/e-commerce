@@ -3,7 +3,7 @@ import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
-export const ProductForm = ({ product, show, onHide, onReload }) => {
+const ProductForm = ({ product, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         brand: '',
@@ -351,3 +351,5 @@ export const ProductForm = ({ product, show, onHide, onReload }) => {
         </>
     )
 }
+
+export default ProductForm;

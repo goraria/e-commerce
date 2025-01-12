@@ -1,4 +1,4 @@
-import { React, useState, useEffect, Component } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { } from 'react-bootstrap';
 import axios from "axios";

@@ -9,7 +9,7 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 
-const ChangePassword = () => {
+export const ChangePassword = () => {
     const [check, setCheck] = useState(false);
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -203,5 +203,3 @@ const ChangePassword = () => {
         </>
     )
 }
-
-export default ChangePassword

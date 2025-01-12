@@ -1,9 +1,7 @@
 import React from 'react'
 
-
 export const CollapsePage = () => {
     return (
-
         <>
             <h4 className="py-3 mb-4"><span className="text-muted fw-light">UI elements /</span> Collapse</h4>
 

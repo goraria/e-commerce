@@ -3,7 +3,8 @@ import { Table, Button, Form, Pagination } from "react-bootstrap";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 // import "./DataTables.css"; // Add custom styling here
-import { VoucherForm } from "../../components/modal/form/VoucherForm.jsx";
+import VoucherForm from "../../components/modal/form/VoucherForm.jsx";
+
 export const Voucher = () => {
     const navigate = useNavigate();
 

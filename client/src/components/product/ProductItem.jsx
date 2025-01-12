@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import React, { Component } from "react";
-import { useState, useEffect } from 'react';
+import React, { Component, useState, useEffect } from "react";
 import axios from 'axios';
 import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
 import RatingStar from "./RatingStar.jsx";

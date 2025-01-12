@@ -4,7 +4,7 @@ import AddressItem from "../../components/address/AddressItem.jsx";
 import AddressForm from "../../components/modal/form/AddressForm.jsx";
 import axios from "axios";
 
-const AddressManagement = () => {
+export const AddressManagement = () => {
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     // const [reloadAddressManagement, setReloadAddressManagement] = useState(0);
@@ -80,5 +80,3 @@ const AddressManagement = () => {
         </>
     )
 }
-
-export default AddressManagement

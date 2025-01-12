@@ -1,5 +1,5 @@
 import React from 'react'
-import Carousel from '../../components/molecul/carousel';
+import Carousel from '../../components/molecul/Carousel.jsx';
 
 export const CarouselPage = () => {
     const carouselItems = [

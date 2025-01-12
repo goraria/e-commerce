@@ -1,4 +1,4 @@
-// greetingHandler.js
+// greetingHandler.jsx
 
 const getGreetingMessage = (name) => {
     const currentTime = new Date();
