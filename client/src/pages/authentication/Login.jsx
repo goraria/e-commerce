@@ -7,7 +7,7 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import { Loading } from "../overview/Loading.jsx";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { AuthWrapper } from "./AuthWrapper.jsx";
-import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
+import ReCaptchaComponent from "../../components/recapcha/Recapcha.jsx";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 

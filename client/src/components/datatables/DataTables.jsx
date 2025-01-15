@@ -264,11 +264,12 @@ export const DataTables = () => {
                                 <div className="dt-buttons btn-group flex-wrap">
                                     <div className="btn-group">
                                         <Dropdown className="me-3">
-                                            <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                                 Export
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#">Export as CSV</Dropdown.Item>
+                                                <Dropdown.Item href="#">Export as XLS</Dropdown.Item>
                                                 <Dropdown.Item href="#">Export as PDF</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>

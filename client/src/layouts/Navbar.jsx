@@ -1,4 +1,4 @@
-import getGreetingMessage from '../hooks/greetingHandler.jsx';
+import getGreetingMessage from '../utils/greetingHandler.jsx';
 import {Button, ButtonToolbar, Form, Nav} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";

@@ -8,7 +8,7 @@ import NotifyError from "../../components/modal/notify/NotifyError.jsx";
 import {AuthWrapper} from "./AuthWrapper.jsx";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
-import ReCaptchaComponent from "../../components/Recapcha/Recapcha.jsx";
+import ReCaptchaComponent from "../../components/recapcha/Recapcha.jsx";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },

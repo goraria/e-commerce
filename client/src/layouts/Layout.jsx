@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import Copyright from './Copyright.jsx';
-import getGreetingMessage from "../hooks/greetingHandler.jsx";
+import getGreetingMessage from "../utils/greetingHandler.jsx";
 
 const menu = [
     {
@@ -12,7 +12,7 @@ const menu = [
                 "text": "Dashboard",
                 "icon": "bx bx-home",
                 "available": true,
-                "link": "/"
+                "link": "/admin"
             },
             {
                 "text": "Layouts",
@@ -325,7 +325,7 @@ const Layout = ({ children }) => {
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
-                <Sidebar menu={menu} source={"/admin"} />
+                <Sidebar menu={menu} source={"/"} />
                 <div className="layout-page">
                     <Navbar>
                         {getGreetingMessage('from Bill')}

@@ -17,7 +17,7 @@ import { Register } from "./pages/authentication/Register.jsx";
 import { AuthenticationRoutes } from "./router/AuthenticationRoutes.jsx";
 import { ErrorPage } from "./pages/misc/ErrorPage.jsx";
 
-import Protected from "./utils/Protected.jsx";
+import Protected from "./router/Protected.jsx";
 
 const App = () => {
     const [auth, setAuth] = useState({
