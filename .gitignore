@@ -33,6 +33,7 @@ logs/
 # Folders for each part of the project
 /client/node_modules/
 /server/node_modules/
+/customer/node_modules/
 /mobile/node_modules/
 
 # OS-specific files
