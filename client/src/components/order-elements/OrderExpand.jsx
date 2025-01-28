@@ -1,7 +1,6 @@
-import {Badge, Button, Form, Table} from "react-bootstrap";
 import React from "react";
-import order from "../../pages/payment-component/Order.jsx";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Badge, Button, Form, Table } from "react-bootstrap";
 
 const OrderExpand = ({ order }) => {
     // console.log(order)

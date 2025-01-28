@@ -264,11 +264,12 @@ export const DataTables = () => {
                                 <div className="dt-buttons btn-group flex-wrap">
                                     <div className="btn-group">
                                         <Dropdown className="me-3">
-                                            <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                                 Export
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item href="#">Export as CSV</Dropdown.Item>
+                                                <Dropdown.Item href="#">Export as XLS</Dropdown.Item>
                                                 <Dropdown.Item href="#">Export as PDF</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
@@ -333,15 +334,18 @@ export const DataTables = () => {
                                 checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
                             />
                         </th>
+                        <th className="sorting" style={{verticalAlign: "middle", fontSize: 13}}>
+                            Name
+                        </th>
                         {
-                            ["Name", "Email", "Date", "Salary", "Status"].map((item, index) => (
-                                <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
+                            ["Date", "Salary", "Status"].map((item, index) => (
+                                <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13, width: 120}}>
                                     {item}
                                 </th>
                             ))
                         }
                         <th className="sorting_disabled"
-                            style={{verticalAlign: "middle", fontSize: 13, width: 164}}>Actions
+                            style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                         </th>
                     </tr>
                     </thead>
@@ -355,23 +359,48 @@ export const DataTables = () => {
                                     onChange={() => handleSelectItem(item.id)}
                                 />
                             </td>
-                            <td>
-                                <div className="d-flex align-items-center">
-                                    <div className="avatar-circle me-2">
-                                        {getInitials(item.name)}
+                            {/*<td>*/}
+                            {/*    <div className="d-flex align-items-center">*/}
+                            {/*        <div className="avatar-circle me-2">*/}
+                            {/*            {getInitials(item.name)}*/}
+                            {/*        </div>*/}
+                            {/*        <div>*/}
+                            {/*            {item.name}*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</td>*/}
+                            <td className="sorting_1">
+                                <div className="d-flex justify-content-start align-items-center user-name">
+                                    <div className="avatar-wrapper">
+                                        <div className="avatar avatar-sm me-4">
+                                                <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
+                                                    {item.name[0]}
+                                                </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        {item.name}
+                                    <div className="d-flex flex-column">
+                                        <a className="text-heading text-truncate">
+                                            <span className="fw-medium">{item.name}</span>
+                                        </a>
+                                        <small>{item.email}</small>
                                     </div>
                                 </div>
                             </td>
-                            <td>{item.email}</td>
+                            {/*<td>{item.email}</td>*/}
                             <td>{item.date}</td>
                             <td>{item.salary}</td>
                             <td>{renderStatusBadge(item.status)}</td>
                             <td>
-                                <Button variant="link"><i className='bx bx-edit'></i></Button>
-                                <Button variant="link"><i className='bx bx-trash'></i></Button>
+                                <Button
+                                    variant="link"
+                                    className="p-2">
+                                    <i className='bx bx-edit'></i>
+                                </Button>
+                                <Button
+                                    variant="link"
+                                    className="p-2">
+                                    <i className='bx bx-trash'></i>
+                                </Button>
                             </td>
                         </tr>
                     ))}
