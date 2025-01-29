@@ -9,7 +9,7 @@
 
 <h1 align="center">
    <a href="#" target="_blank" align="center">
-        Laptop E-Commerce Website
+        E-Commerce
    </a>
 </h1>
 
