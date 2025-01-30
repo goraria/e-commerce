@@ -8,7 +8,7 @@ const avatarUpload = getMulterMiddleware(path.join(__dirname, '../../../client/p
 const AccountController = require('../controllers/AccountController');
 const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware');
 
-// router.use(express.static(path.join(__dirname, 'client/public')));
+// routes.use(express.static(path.join(__dirname, 'client/public')));
 
 router.get('/get-info', AuthenticationMiddleware, AccountController.getAccountInfo);
 router.put('/set-info', AuthenticationMiddleware, AccountController.setAccountInfo);

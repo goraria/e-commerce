@@ -118,7 +118,7 @@ export const AccountPage = ({ onReload }) => {
                         avatar: avatarResponse.data.avatarPath,
                     }));
                 }
-                console.log(formData.avatar);
+                // console.log(formData.avatar);
                 setShowModal(false);
                 onReload();
 

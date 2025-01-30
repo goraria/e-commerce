@@ -4,8 +4,8 @@ const cartController = require('../controllers/CartController');
 const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware');
 
 // Route để lấy tất cả người dùng
-// router.get('/load-cart', cartController.loadCart);
-// router.get('/load-cart/:idCart', cartController.loadCartById);
+// routes.get('/load-cart', cartController.loadCart);
+// routes.get('/load-cart/:idCart', cartController.loadCartById);
 
 router.get('/load-cart', AuthenticationMiddleware , cartController.loadCartPro);
 

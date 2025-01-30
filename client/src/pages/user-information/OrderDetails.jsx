@@ -19,7 +19,7 @@ export const OrderDetails = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             setBill(response.data);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu:', error);

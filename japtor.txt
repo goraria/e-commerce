@@ -40,6 +40,10 @@ Verify {
     "cross-spawn": "7.0.5"
 },
 
+"dependencies": {
+    "react-scripts": ""
+},
+
 To Do {
     Fix đăng nhập
     Thêm login register với google

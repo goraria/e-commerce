@@ -177,7 +177,7 @@ export const Cart = () => {
             const data = await response.json();
             setVouchers(data);
 
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             // console.error('Error fetching product details:', error);
         }

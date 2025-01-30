@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 import Layout from "./layouts/Layout";
 import Frame from "./layouts/Frame";
 import Panel from "./layouts/Panel.jsx";
 
-import { AdministratorRoutes } from "./router/AdministratorRoutes.jsx";
-import { UserRoutes } from "./router/UserRoutes.jsx";
-import { CustomerRoutes } from "./router/CustomerRoutes.jsx";
-import { ShareRoutes } from "./router/ShareRoutes.jsx";
+import { AdministratorRoutes } from "./routes/AdministratorRoutes.jsx";
+import { UserRoutes } from "./routes/UserRoutes.jsx";
+import { CustomerRoutes } from "./routes/CustomerRoutes.jsx";
+import { ShareRoutes } from "./routes/ShareRoutes.jsx";
 import { Loading } from "./pages/overview/Loading.jsx";
 import { Login } from "./pages/authentication/Login.jsx";
 import { Register } from "./pages/authentication/Register.jsx";
-import { AuthenticationRoutes } from "./router/AuthenticationRoutes.jsx";
+import { AuthenticationRoutes } from "./routes/AuthenticationRoutes.jsx";
 import { ErrorPage } from "./pages/misc/ErrorPage.jsx";
 
-import Protected from "./router/Protected.jsx";
+import Protected from "./routes/Protected.jsx";
+import viteLogo from "./assets/vite.svg";
+import reactLogo from "./assets/react.svg";
 
-const App = () => {
+export default function App() {
     const [auth, setAuth] = useState({
         isAuthenticated: false,
         role: null,
@@ -57,35 +59,8 @@ const App = () => {
         }
     };
 
-    const authentication0 = async () => {
-        const token = localStorage.getItem('token');
-        setLoading(true);
-
-        if (!token) {
-            setAuth({ isAuthenticated: false, role: null });
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const response = await axios.get('http://localhost:5172/authentication/check', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            setAuth({
-                isAuthenticated: true,
-                role: response.data.role,
-            });
-        } catch (error) {
-            setAuth({ isAuthenticated: false, role: null });
-            localStorage.removeItem('token');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
-        authentication(); // Gọi hàm authentication một lần khi App mount
+        authentication();
     }, []);
 
     if (loading) return <Loading />; // Hiển thị loading nếu đang tải
@@ -150,4 +125,31 @@ const App = () => {
     );
 };
 
-export default App;
+function Web() {
+    const [count, setCount] = useState(0)
+
+    return (
+        <>
+            <div>
+                <a href="https://vite.dev" target="_blank">
+                    <img src={viteLogo} className="logo" alt="Vite logo" />
+                </a>
+                <a href="https://react.dev" target="_blank">
+                    <img src={reactLogo} className="logo react" alt="React logo" />
+                </a>
+            </div>
+            <h1>Vite + React</h1>
+            <div className="card">
+                <button onClick={() => setCount((count) => count + 1)}>
+                    count is {count}
+                </button>
+                <p>
+                    Edit <code>src/App.tsx</code> and save to test HMR
+                </p>
+            </div>
+            <p className="read-the-docs">
+                Click on the Vite and React logos to learn more
+            </p>
+        </>
+    );
+}

@@ -76,7 +76,7 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
             setValidated(true);
         } else {
             const allFieldsFilled = Object.values(datastring).every(value => value.trim() !== "");
-            console.log(allFieldsFilled)
+            // console.log(allFieldsFilled)
             if (allFieldsFilled) {
                 // console.log("1")
                 setShowConfirmModal(true);

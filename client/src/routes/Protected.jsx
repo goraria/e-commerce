@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
 import { useAuthentication } from '../hooks/useAuthentication.jsx';
 
-const Protected = ({ children, isAllowed, redirectTo }) => {
+export default function Protected({ children, isAllowed, redirectTo }) {
     if (!isAllowed) {
         return <Navigate to={redirectTo} />;
     }
@@ -26,5 +26,3 @@ const Protected0 = ({ component: Component, roles, ...rest }) => {
         }} />
     );
 };
-
-export default Protected;
