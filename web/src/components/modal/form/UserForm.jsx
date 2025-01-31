@@ -1,38 +1,40 @@
 import axios from "axios";
-import SaveChange from "../notify/SaveChange.jsx";
+import SaveChange from "../notice/SaveChange.tsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
-const DescriptionForm = ({ description, show, onHide, onReload }) => {
+const UserForm = ({ user, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
-        title_description: '',
-        product_name: '',
-        sub_description: ' ',
-        img_description: ' ',
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone_number: '',
+        username: '',
     });
-
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
     useEffect(() => {
-        if (description) {
+        if (user) {
             setFormData({
-                title_description: description.title_description || '',
-                product_name: description.product_name || '',
-                sub_description: description.sub_description || '',
-                img_description: description.img_description || '',
+                firstname: user.firstname || '',
+                lastname: user.lastname || '',
+                email: user.email || '',
+                phone_number: user.phone_number || '',
+                username: user.username || '',
             });
         } else {
             setFormData({
-                title_description: '',
-                product_name: '',
-                sub_description: ' ',
-                img_description: ' ',
+                firstname: '',
+                lastname: '',
+                email: '',
+                phone_number: '',
+                username: '',
             });
         }
-    }, [description]);
+    }, [user]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -58,29 +60,69 @@ const DescriptionForm = ({ description, show, onHide, onReload }) => {
         }
     };
 
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+
+    //     const form = event.currentTarget;
+    //     if (form.checkValidity() === false) {
+    //         setValidated(true);
+    //         return;
+    //     }
+
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = address ?
+    //             await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
+    //             await axios.post('http://localhost:5172/address/addition', formData, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             });
+
+    //         if (response.status === 200 || response.status === 201) {
+    //             // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+    //             onHide();
+    //         }
+    //         onReload()
+    //     } catch (error) {
+    //         setError(error.response ? error.response.data.message : 'Failed to save address');
+    //     }
+    //     // setValidated(true);
+    // };
+
     const handleConfirmSave = async () => {
         try {
-            // const token = localStorage.getItem('token');
-            // console.log(formData);
-            const response = description
-                ? await axios.post(`http://localhost:5172/admin/update-description/${description.iddescription}`, formData)
-                : await axios.put('http://localhost:5172/admin/create-description', formData);
+            if (user) {
+                // Chỉ thực hiện cập nhật nếu có đối tượng `user`
+                // console.log('formData:', formData);
+                const response = await axios.post(`http://localhost:5172/admin/update-user/${user.idaccount}`, formData);
 
-            if (response.status === 200 || response.status === 201) {
-                // alert(address ? 'Address updated successfully' : 'Address added successfully');
-                setShowConfirmModal(false)
-                onHide();
-                onReload()
+                if (response.status === 200 || response.status === 201) {
+                    setShowConfirmModal(false);
+                    onHide();
+                    onReload();
+                }
+            } else {
+                // Có thể hiển thị thông báo nếu `user` không tồn tại
+                setError('User not found for update');
             }
+
+            // if (response.status === 200 || response.status === 201) {
+            //     // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+            //     setShowConfirmModal(false)
+            //     onHide();
+            //     onReload()
+            // }
         } catch (error) {
-            setError(error.response ? error.response.data.message : 'Failed to save address');
+            setError(error.response ? error.response.data.message : 'Failed to save user');
         }
     };
 
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${color.idaddress}`, {
+            await axios.delete(`http://localhost:5172/admin/delete/${address.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -102,9 +144,9 @@ const DescriptionForm = ({ description, show, onHide, onReload }) => {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
-                <Modal.Header >
+                <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h5>Edit Color</h5>
+                        <h5>Edit User</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -114,39 +156,39 @@ const DescriptionForm = ({ description, show, onHide, onReload }) => {
                     </p> */}
                     <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={7} controlId="product_name">
-                                <Form.Label>Product Name</Form.Label>
+                            <Form.Group as={Col} md={6} controlId="firstname">
+                                <Form.Label>First Name</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="product_name">
-                                        <i className='bx bx-layout'></i>
+                                    <InputGroup.Text id="firstname">
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
                                         type="text"
-                                        name="product_name"
-                                        value={formData.product_name}
+                                        name="firstname"
+                                        value={formData.firstname}
                                         onChange={handleChange}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter your Product Name.
+                                        Please enter your First Name.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="title_description">
-                                <Form.Label>Title Description</Form.Label>
+                            <Form.Group as={Col} md={6} controlId="lastname">
+                                <Form.Label>Last Name</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="title_description">
-                                        <i className='bx bx-file-blank'></i>
+                                    <InputGroup.Text id="lastname">
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
                                         type="text"
-                                        name="title_description"
-                                        value={formData.title_description}
+                                        name="lastname"
+                                        value={formData.lastname}
                                         onChange={handleChange}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter Title Description.
+                                        Please enter your last name.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
@@ -170,41 +212,39 @@ const DescriptionForm = ({ description, show, onHide, onReload }) => {
                             </Form.Group> */}
                         </Row>
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={12} controlId="sub_description">
-                                <Form.Label>Sub Description</Form.Label>
+                            <Form.Group as={Col} md={6} controlId="phone_number">
+                                <Form.Label>Phone Number</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="sub_description">
-                                        <i className='bx bx-file-find'></i>
+                                    <InputGroup.Text id="phone_number">
+                                        <i className='bx bxs-phone' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
-                                        type="text"
-                                        name="sub_description"
-                                        value={formData.sub_description}
+                                        type="tel"
+                                        name="phone_number"
+                                        value={formData.phone_number}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter Sub Description.
+                                        Please enter your phone number.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} md={12} controlId="img_description">
-                                <Form.Label>Img Description</Form.Label>
+                            <Form.Group as={Col} md={6} controlId="email">
+                                <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="img_description">
-                                        <i className='bx bxs-file-image'></i>
+                                    <InputGroup.Text id="email">
+                                        <i className='bx bx-envelope' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
-                                        type="text"
-                                        name="img_description"
-                                        value={formData.img_description}
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter Img Description.
+                                        Please enter your email.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
@@ -260,11 +300,11 @@ const DescriptionForm = ({ description, show, onHide, onReload }) => {
                     {/*    <i className='bx bx-check me-2' ></i>*/}
                     {/*    <span>Save changes</span>*/}
                     {/*</Button>*/}
-                    {description ?
+                    {user ?
                         <>
                             {/* <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
                                 <i className='bx bx-trash' ></i>
-                                <span>Delete Address</span>
+                                <span>Delete AddressDefaultType</span>
                             </Button> */}
                             <Button onClick={handleInvalid} variant="info">
                                 <i className='bx bx-check me-2'></i>
@@ -293,4 +333,4 @@ const DescriptionForm = ({ description, show, onHide, onReload }) => {
     )
 }
 
-export default DescriptionForm;
+export default UserForm;

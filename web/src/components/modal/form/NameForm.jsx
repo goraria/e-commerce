@@ -1,68 +1,43 @@
 import axios from "axios";
-import SaveChange from "../notify/SaveChange.jsx";
+import SaveChange from "../notice/SaveChange.tsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
-const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
+const NameForm = ({ name, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
-        cpu: '',
-        gpu: '',
-        price: '',
-        ram: '',
-        screen: '',
-        storage: '',
-        resolution: '',
-        product_name: ''
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone_number: '',
+        username: '',
     });
-    const [products, setProductList] = useState([]);
-
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-
     useEffect(() => {
-        if (configuration) {
+        if (name) {
             setFormData({
-                cpu: configuration.cpu || '',
-                gpu: configuration.gpu || '',
-                price: configuration.price || '',
-                ram: configuration.ram || '',
-                screen: configuration.screen || '',
-                storage: configuration.storage || '',
-                resolution: configuration.resolution || '',
-                product_name: configuration.product_name || '',
+                firstname: name.firstname || '',
+                lastname: name.lastname || '',
+                email: name.email || '',
+                phone_number: name.phone_number || '',
+                username: name.username || '',
+            });
+        } else {
+            setFormData({
+                firstname: '',
+                lastname: '',
+                email: '',
+                phone_number: '',
+                username: '',
             });
         }
-
-        if (!show) {
-            setFormData({
-                cpu: '',
-                gpu: '',
-                price: '',
-                ram: '',
-                screen: '',
-                storage: '',
-                resolution: '',
-                product_name: ''
-            });
-        }
-
-        setValidated(false);
-        setError(null);
-
-        getProducts()
-    }, [show]);
+    }, [name]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
-    };
-
-    const convertFormDataToString = (data) => {
-        return Object.fromEntries(
-            Object.entries(data).map(([key, value]) => [key, String(value || "")])
-        );
     };
 
     const handleInvalid = (event) => {
@@ -70,47 +45,81 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
         event.stopPropagation();
 
         const form = event.currentTarget;
-        const datastring = convertFormDataToString(formData)
-        // console.log(datastring)
+
         if (form.checkValidity() === false) {
             setValidated(true);
         } else {
-            const allFieldsFilled = Object.values(datastring).every(value => value.trim() !== "");
-            // console.log(allFieldsFilled)
+            const allFieldsFilled = Object.values(formData).every(value => value.trim() !== "");
+
             if (allFieldsFilled) {
-                // console.log("1")
                 setShowConfirmModal(true);
             } else {
-                // console.log("2")
                 setValidated(true);
             }
         }
     };
 
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+
+    //     const form = event.currentTarget;
+    //     if (form.checkValidity() === false) {
+    //         setValidated(true);
+    //         return;
+    //     }
+
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = address ?
+    //             await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
+    //             await axios.post('http://localhost:5172/address/addition', formData, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             });
+
+    //         if (response.status === 200 || response.status === 201) {
+    //             // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+    //             onHide();
+    //         }
+    //         onReload()
+    //     } catch (error) {
+    //         setError(error.response ? error.response.data.message : 'Failed to save address');
+    //     }
+    //     // setValidated(true);
+    // };
+
     const handleConfirmSave = async () => {
         try {
             // const token = localStorage.getItem('token');
-            // console.log(formData)
-            const response = configuration
-                ? await axios.post(`http://localhost:5172/admin/update-configuration/${configuration.idconfiguration}`, formData)
-                : await axios.put('http://localhost:5172/admin/create-configuration', formData);
+            const response = name
+                ? await axios.post(`http://localhost:5172/admin//update-user/${name.idaccount}`, formData)
+                : await axios.put('http://localhost:5172/address/addition', formData);
 
+            // const response = address ?
+            //     await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
+            //     await axios.post('http://localhost:5172/address/addition', formData, {
+            //         headers: {
+            //             Authorization: `Bearer ${token}`
+            //         }
+            //     });
 
             if (response.status === 200 || response.status === 201) {
-                // alert(address ? 'Address updated successfully' : 'Address added successfully');
+                // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
                 setShowConfirmModal(false)
                 onHide();
                 onReload()
             }
         } catch (error) {
-            setError(error.response ? error.response.data.message : 'Failed to save configuration');
+            setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
 
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${configuration.idaddress}`, {
+            await axios.delete(`http://localhost:5172/admin/delete/${address.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -121,16 +130,6 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
-
-    const getProducts = async () => {
-        try {
-            const response = await axios.get('http://localhost:5172/products/get-product');
-            setProductList(response.data);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-        }
-    }
-
     return (
         <>
             <Modal
@@ -141,9 +140,9 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
-                <Modal.Header >
+                <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h5>Edit Configuration</h5>
+                        <h3>Edit Name</h3>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -151,159 +150,137 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
                     {/* <p>
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
                     </p> */}
-                    <Form noValidate validated={validated}
-                        onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
-                        <div className="mb-3">
-                            <label htmlFor="product_name" className="form-label">Product</label>
-                            <select
-                                className="form-select"
-                                id="product_name"
-                                name="product_name"
-                                defaultValue=""
-                                value={formData.product_name}
-                                onChange={handleChange}
-                                required
-                            >
-                                <option value="">Choose product</option>
-                                {
-                                    products.map((item, index) => (
-                                        <option key={index} value={item.product_name}>{`${item.brand} ${item.product_name}`}</option>
-                                    ))
-                                }
-                            </select>
-                            <Form.Control.Feedback type="invalid">
-                                Please select a type of address.
-                            </Form.Control.Feedback>
-                        </div>
+                    <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={8} controlId="cpu">
-                                <Form.Label>CPU</Form.Label>
+                            <Form.Group as={Col} md={5} controlId="firstname">
+                                <Form.Label>First Name</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="cpu">
-                                        <i className='bx bx-pie-chart-alt'></i>
+                                    <InputGroup.Text id="firstname">
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
                                         type="text"
-                                        name="cpu"
-                                        value={formData.cpu}
+                                        name="firstname"
+                                        value={formData.firstname}
                                         onChange={handleChange}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter CPU.
+                                        Please enter your First Name.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={4} controlId="ram">
-                                <Form.Label>RAM</Form.Label>
+                            <Form.Group as={Col} md={5} controlId="lastname">
+                                <Form.Label>Last Name</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="ram">
-                                        <i className='bx bx-bar-chart-square'></i>
+                                    <InputGroup.Text id="lastname">
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
                                         type="text"
-                                        name="ram"
-                                        value={formData.ram}
+                                        name="lastname"
+                                        value={formData.lastname}
                                         onChange={handleChange}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter Ram.
+                                        Please enter your last name.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={8} controlId="gpu">
-                                <i className='bx bx-pie-chart-alt-2'></i>
+                            {/* <Form.Group as={Col} md={4} controlId="email">
+                                <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="gpu">
-                                        <i className='bx bx-user'></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        name="gpu"
-                                        value={formData.gpu}
-                                        onChange={handleChange}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter GPU.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
-                            <Form.Group as={Col} md={4} controlId="storage">
-                                <Form.Label>Storage</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="storage">
-                                        <i className='bx bx-hdd'></i>
+                                    <InputGroup.Text id="email">
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="email"
-                                        name="storage"
-                                        value={formData.storage}
+                                        name="email"
+                                        value={formData.district}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter storage.
+                                        Please enter your email.
                                     </Form.Control.Feedback>
                                 </InputGroup>
-                            </Form.Group>
+                            </Form.Group> */}
                         </Row>
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={4} controlId="screen">
-                                <Form.Label>Screen</Form.Label>
+                            <Form.Group as={Col} md={5} controlId="phonenumber">
+                                <Form.Label>Phone Number</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="screen">
-                                        <i className='bx bx-desktop'></i>
+                                    <InputGroup.Text id="phonenumber">
+                                        <i className='bx bxs-phone' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
-                                        type="text"
-                                        name="screen"
-                                        value={formData.screen}
+                                        type="tel"
+                                        name="phonenumber"
+                                        value={formData.phone_number}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter screen.
+                                        Please enter your phone number.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={8} controlId="resolution">
-                                <Form.Label>Resolution</Form.Label>
+                            <Form.Group as={Col} md={5} controlId="email">
+                                <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="resolution">
-                                        <i className='bx bx-fullscreen'></i>
+                                    <InputGroup.Text id="email">
+                                        <i className='bx bx-envelope' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
-                                        type="text"
-                                        name="resolution"
-                                        value={formData.resolution}
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter resolution.
+                                        Please enter your email.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="price">
-                                <Form.Label>Price</Form.Label>
+                            {/* <Form.Group as={Col} md={4} controlId="state">
+                                <Form.Label>State</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="price">
-                                        <i className='bx bxs-flag-alt'></i>
+                                    <InputGroup.Text id="state">
+                                        <i className='bx bxs-flag-alt' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
-                                        name="price"
-                                        value={formData.price}
+                                        name="state"
+                                        value={formData.state}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter price.
+                                        Please enter your state.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
+
+                            <Form.Group as={Col} md={4} controlId="country">
+                                <Form.Label>Country</Form.Label>
+                                <InputGroup hasValidation>
+                                    <InputGroup.Text id="country">
+                                        <i className='bx bx-globe' ></i>
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="text"
+                                        name="country"
+                                        value={formData.country}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter your country.
+                                    </Form.Control.Feedback>
+                                </InputGroup>
+                            </Form.Group> */}
                         </Row>
                         <hr />
                         {error && <p className="text-danger">{error}</p>}
@@ -319,11 +296,11 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
                     {/*    <i className='bx bx-check me-2' ></i>*/}
                     {/*    <span>Save changes</span>*/}
                     {/*</Button>*/}
-                    {configuration ?
+                    {name ?
                         <>
                             <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
                                 <i className='bx bx-trash me-2'></i>
-                                <span>Delete Address</span>
+                                <span>Delete Product Name</span>
                             </Button>
                             <Button onClick={handleInvalid} variant="info">
                                 <i className='bx bx-check me-2'></i>
@@ -332,7 +309,7 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
                                 <i className='bx bx-plus me-2'></i>
-                                <span>Create Configuration</span>
+                                <span>Create Product Name</span>
                             </Button>
                         </>
                     }
@@ -352,4 +329,4 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
     )
 }
 
-export default ConfigurationForm;
+export default NameForm;

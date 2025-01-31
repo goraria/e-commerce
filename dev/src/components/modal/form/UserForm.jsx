@@ -1,5 +1,5 @@
 import axios from "axios";
-import SaveChange from "../notice/SaveChange.tsx";
+import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
@@ -81,7 +81,7 @@ const UserForm = ({ user, show, onHide, onReload }) => {
     //             });
 
     //         if (response.status === 200 || response.status === 201) {
-    //             // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+    //             // alert(address ? 'Address updated successfully' : 'Address added successfully');
     //             onHide();
     //         }
     //         onReload()
@@ -109,7 +109,7 @@ const UserForm = ({ user, show, onHide, onReload }) => {
             }
 
             // if (response.status === 200 || response.status === 201) {
-            //     // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+            //     // alert(address ? 'Address updated successfully' : 'Address added successfully');
             //     setShowConfirmModal(false)
             //     onHide();
             //     onReload()
@@ -304,7 +304,7 @@ const UserForm = ({ user, show, onHide, onReload }) => {
                         <>
                             {/* <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
                                 <i className='bx bx-trash' ></i>
-                                <span>Delete AddressDefaultType</span>
+                                <span>Delete Address</span>
                             </Button> */}
                             <Button onClick={handleInvalid} variant="info">
                                 <i className='bx bx-check me-2'></i>

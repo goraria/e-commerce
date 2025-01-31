@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Col, Form, InputGroup, Modal, Row} from "react-bootstrap";
-import SaveChange from "../notice/SaveChange.tsx";
+import SaveChange from "../notify/SaveChange.jsx";
 
 const RatingForm = ({ rate, prod, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import SaveChange from "../notice/SaveChange.tsx";
+import SaveChange from "../notify/SaveChange.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
@@ -80,7 +80,7 @@ const NameForm = ({ name, show, onHide, onReload }) => {
     //             });
 
     //         if (response.status === 200 || response.status === 201) {
-    //             // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+    //             // alert(address ? 'Address updated successfully' : 'Address added successfully');
     //             onHide();
     //         }
     //         onReload()
@@ -106,7 +106,7 @@ const NameForm = ({ name, show, onHide, onReload }) => {
             //     });
 
             if (response.status === 200 || response.status === 201) {
-                // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
+                // alert(address ? 'Address updated successfully' : 'Address added successfully');
                 setShowConfirmModal(false)
                 onHide();
                 onReload()

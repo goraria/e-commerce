@@ -1,43 +1,38 @@
 import axios from "axios";
-import SaveChange from "../notify/SaveChange.jsx";
+import SaveChange from "../notice/SaveChange.tsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
-const AccessoryForm = ({ address, show, onHide, onReload }) => {
+const DescriptionForm = ({ description, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
-        tower: '',
-        street: '',
-        district: '',
-        city: '',
-        state: '',
-        country: ''
+        title_description: '',
+        product_name: '',
+        sub_description: ' ',
+        img_description: ' ',
     });
+
     const [error, setError] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
     useEffect(() => {
-        if (address) {
+        if (description) {
             setFormData({
-                tower: address.tower || '',
-                street: address.street || '',
-                district: address.district || '',
-                city: address.city || '',
-                state: address.state || '',
-                country: address.country || ''
+                title_description: description.title_description || '',
+                product_name: description.product_name || '',
+                sub_description: description.sub_description || '',
+                img_description: description.img_description || '',
             });
         } else {
             setFormData({
-                tower: '',
-                street: '',
-                district: '',
-                city: '',
-                state: '',
-                country: ''
+                title_description: '',
+                product_name: '',
+                sub_description: ' ',
+                img_description: ' ',
             });
         }
-    }, [address]);
+    }, [description]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -63,58 +58,16 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
         }
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            setValidated(true);
-            return;
-        }
-
-        try {
-            const token = localStorage.getItem('token');
-            const response = address ?
-                await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
-                await axios.post('http://localhost:5172/address/addition', formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-            if (response.status === 200 || response.status === 201) {
-                // alert(address ? 'Address updated successfully' : 'Address added successfully');
-                onHide();
-            }
-            onReload()
-        } catch (error) {
-            setError(error.response ? error.response.data.message : 'Failed to save address');
-        }
-        // setValidated(true);
-    };
-
     const handleConfirmSave = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = address
-                ? await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData, {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                : await axios.post('http://localhost:5172/address/addition', formData, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-            // const response = address ?
-            //     await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
-            //     await axios.post('http://localhost:5172/address/addition', formData, {
-            //         headers: {
-            //             Authorization: `Bearer ${token}`
-            //         }
-            //     });
+            // const token = localStorage.getItem('token');
+            // console.log(formData);
+            const response = description
+                ? await axios.post(`http://localhost:5172/admin/update-description/${description.iddescription}`, formData)
+                : await axios.put('http://localhost:5172/admin/create-description', formData);
 
             if (response.status === 200 || response.status === 201) {
-                // alert(address ? 'Address updated successfully' : 'Address added successfully');
+                // alert(address ? 'AddressDefaultType updated successfully' : 'AddressDefaultType added successfully');
                 setShowConfirmModal(false)
                 onHide();
                 onReload()
@@ -127,7 +80,7 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/address/delete/${address.idaddress}`, {
+            await axios.delete(`http://localhost:5172/admin/delete/${color.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -138,6 +91,7 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal
@@ -148,94 +102,113 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h5>Address Details</h5>
+                        <h5>Edit Color</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h6>Note</h6>
-                    <p>
+                    {/* <h4>Note</h4> */}
+                    {/* <p>
                         Enter invalid values of all input groups to help us know your location. Then we can deliver your package.
-                    </p>
+                    </p> */}
                     <Form noValidate validated={validated} onSubmit={handleInvalid}> {/*onSubmit={handleSubmit, openConfirmModal}*/}
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={4} controlId="tower">
-                                <Form.Label>Tower</Form.Label>
+                            <Form.Group as={Col} md={7} controlId="product_name">
+                                <Form.Label>Product Name</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="tower">
-                                        <i className='bx bx-buildings'></i>
+                                    <InputGroup.Text id="product_name">
+                                        <i className='bx bx-layout'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
                                         type="text"
-                                        name="tower"
-                                        value={formData.tower}
+                                        name="product_name"
+                                        value={formData.product_name}
                                         onChange={handleChange}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter your building.
+                                        Please enter your Product Name.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={4} controlId="street">
-                                <Form.Label>Street</Form.Label>
+                            <Form.Group as={Col} md={5} controlId="title_description">
+                                <Form.Label>Title Description</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="street">
-                                        <i className='bx bx-directions'></i>
+                                    <InputGroup.Text id="title_description">
+                                        <i className='bx bx-file-blank'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         required
                                         type="text"
-                                        name="street"
-                                        value={formData.street}
+                                        name="title_description"
+                                        value={formData.title_description}
                                         onChange={handleChange}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter your road.
+                                        Please enter Title Description.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={4} controlId="district">
-                                <Form.Label>District</Form.Label>
+                            {/* <Form.Group as={Col} md={4} controlId="email">
+                                <Form.Label>Email</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="district">
-                                        <i className='bx bx-user'></i>
+                                    <InputGroup.Text id="email">
+                                        <i className='bx bx-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
-                                        type="text"
-                                        name="district"
+                                        type="email"
+                                        name="email"
                                         value={formData.district}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter your district.
+                                        Please enter your email.
+                                    </Form.Control.Feedback>
+                                </InputGroup>
+                            </Form.Group> */}
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md={12} controlId="sub_description">
+                                <Form.Label>Sub Description</Form.Label>
+                                <InputGroup hasValidation>
+                                    <InputGroup.Text id="sub_description">
+                                        <i className='bx bx-file-find'></i>
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="text"
+                                        name="sub_description"
+                                        value={formData.sub_description}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter Sub Description.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
                         </Row>
                         <Row className="mb-3">
-                            <Form.Group as={Col} md={4} controlId="city">
-                                <Form.Label>City</Form.Label>
+                            <Form.Group as={Col} md={12} controlId="img_description">
+                                <Form.Label>Img Description</Form.Label>
                                 <InputGroup hasValidation>
-                                    <InputGroup.Text id="city">
-                                        <i className='bx bxs-city'></i>
+                                    <InputGroup.Text id="img_description">
+                                        <i className='bx bxs-file-image'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
-                                        name="city"
-                                        value={formData.city}
+                                        name="img_description"
+                                        value={formData.img_description}
                                         onChange={handleChange}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter your city.
+                                        Please enter Img Description.
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-
-                            <Form.Group as={Col} md={4} controlId="state">
+                            {/* <Form.Group as={Col} md={4} controlId="state">
                                 <Form.Label>State</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="state">
@@ -271,7 +244,7 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
                                         Please enter your country.
                                     </Form.Control.Feedback>
                                 </InputGroup>
-                            </Form.Group>
+                            </Form.Group> */}
                         </Row>
                         <hr />
                         {error && <p className="text-danger">{error}</p>}
@@ -279,22 +252,27 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="secondary" className="me-auto">
-                        <i className='bx bx-x' ></i>
+                        <i className='bx bx-x me-2'></i>
                         <span>Close</span>
                     </Button>
-                    {address ?
+                    {/*<Button type="submit" variant="info"*/}
+                    {/*        onClick={handleSubmit}> /!*onClick={handleSubmit, openConfirmModal}*!/*/}
+                    {/*    <i className='bx bx-check me-2' ></i>*/}
+                    {/*    <span>Save changes</span>*/}
+                    {/*</Button>*/}
+                    {description ?
                         <>
-                            <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
+                            {/* <Button onClick={() => setShowConfirmDelete(true)} variant="danger" className="me-3">
                                 <i className='bx bx-trash' ></i>
-                                <span>Delete Address</span>
-                            </Button>
+                                <span>Delete AddressDefaultType</span>
+                            </Button> */}
                             <Button onClick={handleInvalid} variant="info">
-                                <i className='bx bx-check' ></i>
+                                <i className='bx bx-check me-2'></i>
                                 <span>Save changes</span>
                             </Button>
                         </> : <>
                             <Button type="submit" variant="success" onClick={handleInvalid}>
-                                <i className='bx bx-plus' ></i>
+                                <i className='bx bx-plus me-2'></i>
                                 <span>Create Address</span>
                             </Button>
                         </>
@@ -315,4 +293,4 @@ const AccessoryForm = ({ address, show, onHide, onReload }) => {
     )
 }
 
-export default AccessoryForm;
+export default DescriptionForm;

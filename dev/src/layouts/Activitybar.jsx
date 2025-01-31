@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import SaveChange from "../components/modal/notice/SaveChange.tsx";
+import SaveChange from "../components/modal/notify/SaveChange.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import {Button, Form} from "react-bootstrap";
-import { getGreetingMessage } from "../utils/greetingHandler.tsx";
+import getGreetingMessage from "../utils/greetingHandler.jsx";
 import Overside from "./Overside.jsx";
 
 const notifies = [
@@ -33,7 +33,7 @@ const baskets = [
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
 
-export default function Activitybar({ children }) {
+const Activitybar = ({ children }) => {
     useEffect(() => {
         Main();
 
@@ -494,9 +494,11 @@ export default function Activitybar({ children }) {
                 onHide={() => setShowModalHeader(false)}
                 onSave={handleLogout}
                 title="Log out"
-                message="Do you want to log out?"
+                text="Do you want to log out?"
                 button="Log out"
             />
         </>
     );
 }
+
+export default Activitybar;
