@@ -44,6 +44,11 @@ Verify {
     "react-scripts": ""
 },
 
+"devDependencies": {
+    "eslint-plugin-react": "",
+    "@vitejs/plugin-react-swc": ""
+},
+
 To Do {
     Fix đăng nhập
     Thêm login register với google
