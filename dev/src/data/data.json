@@ -1,0 +1,60 @@
+{
+    "Account": {
+        "username": "admin",
+        "password": "admin"
+    },
+    "User": {
+        "name": "Japtor",
+        "email": "",
+        "phone": "1234567890",
+        "address": "1234 Elm St.",
+        "city": "Springfield",
+        "state": "IL",
+        "zip": "62701",
+        "country": "USA",
+        "avatar": "avatar.jpg",
+        "status": "active",
+        "role": "admin",
+        "created": "01/01/2021",
+        "updated": "01/01/2021",
+        "last_login": "01/01/2021",
+        "notes": "This is an example user.",
+        "settings": {
+            "theme": "light",
+            "layout": "fullwidth",
+            "boxed": false,
+            "rtl": false,
+            "menu": {
+                "hidden": false,
+                "collapsed": false
+            },
+            "topbar": {
+                "fixed": true
+            },
+            "footer": {
+                "hidden": false,
+                "fixed": false
+            }
+        },
+        "permissions": {
+            "users": {
+                "view": true,
+                "edit": true,
+                "create": true,
+                "delete": true
+            },
+            "roles": {
+                "view": true,
+                "edit": true,
+                "create": true,
+                "delete": true
+            },
+            "settings": {
+                "view": true,
+                "edit": true
+            }
+        },
+        "activity": [],
+        "notifications": []
+    }
+}

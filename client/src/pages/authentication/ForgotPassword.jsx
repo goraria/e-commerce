@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
-import ReCaptchaComponent from "../../components/recapcha/Recapcha.jsx";
+import ReCaptchaComponent from "../../components/recaptcha/Recaptcha.jsx";
 
 export const ForgotPassword = () => {
     const [check, setCheck] = useState(false);

@@ -3,7 +3,7 @@ import { AccountWrapper } from "../../components/wrapper/AccountWrapper";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
-import SaveChange from "../../components/modal/notify/SaveChange.jsx";
+import SaveChangeOld from "../../components/modal/notice/SaveChangeOld.jsx";
 
 export const AccountPage = ({ onReload }) => {
     const [validated, setValidated] = useState(false);
@@ -118,7 +118,7 @@ export const AccountPage = ({ onReload }) => {
                         avatar: avatarResponse.data.avatarPath,
                     }));
                 }
-                console.log(formData.avatar);
+                // console.log(formData.avatar);
                 setShowModal(false);
                 onReload();
 
@@ -319,7 +319,7 @@ export const AccountPage = ({ onReload }) => {
                     </form>
                 </div>
             </div>
-            <SaveChange show={showModal} onHide={() => setShowModal(false)} onSave={handleSaveChanges} />
+            <SaveChangeOld show={showModal} onHide={() => setShowModal(false)} onSave={handleSaveChanges} />
         </>
     )
 }

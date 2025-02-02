@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Image, Form, Button } from "react-bootstrap";
 
-const OrderItem = ({ item }) => {
+export default function OrderItem({ item }) {
     const [product, setProduct] = useState([]);
     const [default_config, setdefaultconfig] = useState([]);
     const [descriptions, setArray] = useState([]);
@@ -77,5 +76,3 @@ const OrderItem = ({ item }) => {
         </>
     );
 };
-
-export default OrderItem;

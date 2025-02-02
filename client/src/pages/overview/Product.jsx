@@ -16,7 +16,7 @@ import Transitionbar from "../../layouts/Transitionbar.jsx";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Overview from "../../layouts/Overview.jsx";
 import ProductItem from "../../components/product/ProductItem.jsx";
-import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
+import NotifySuccess from "../../components/modal/notice/NotifySuccess.jsx";
 import RatingStar from "../../components/product/RatingStar.jsx";
 import RatingForm from "../../components/modal/form/RatingForm.jsx";
 import { MaintenancePage } from "../misc/MaintenancePage.jsx";

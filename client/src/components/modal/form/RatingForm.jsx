@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Col, Form, InputGroup, Modal, Row} from "react-bootstrap";
-import SaveChange from "../notify/SaveChange.jsx";
+import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 
 const RatingForm = ({ rate, prod, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);
@@ -198,12 +198,12 @@ const RatingForm = ({ rate, prod, show, onHide, onReload }) => {
                     }
                 </Modal.Footer>
             </Modal>
-            <SaveChange
+            <SaveChangeOld
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
                 onSave={() => { handleConfirmSave(); setShowConfirmModal(false) }}
             />
-            <SaveChange
+            <SaveChangeOld
                 show={showConfirmDelete}
                 onHide={() => setShowConfirmDelete(false)}
                 onSave={handleDelete}

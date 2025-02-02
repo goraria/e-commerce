@@ -63,7 +63,7 @@ class AccountController {
             });
         } catch (error) {
             // console.error('Lỗi khi cập nhật thông tin tài khoản và người dùng:', error);
-            console.log(error);
+            // console.log(error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật thông tin' });
         }
     }
@@ -76,7 +76,7 @@ class AccountController {
             if (!req.file) {
                 return res.status(400).json({ message: 'No file uploaded' });
             }
-            console.log(req.file);
+            // console.log(req.file);
             const avatarPath = path.join(__dirname, '../../../client/public/assets/img/avatars');
             if (!fs.existsSync(avatarPath)) {
                 fs.mkdirSync(avatarPath, { recursive: true });

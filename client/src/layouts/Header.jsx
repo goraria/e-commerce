@@ -5,7 +5,7 @@ import { Navbar } from "react-bootstrap";
 import axios from "axios";
 import {jwtDecode} from "jwt-decode";
 
-import SaveChange from "../components/modal/notify/SaveChange.jsx";
+import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
@@ -502,7 +502,7 @@ const Header = () => {
                     <i className="bx bx-x bx-md search-toggler cursor-pointer"></i>
                 </div>
             </nav>
-            <SaveChange
+            <SaveChangeOld
                 show={showModalHeader}
                 onHide={() => setShowModalHeader(false)}
                 onSave={handleLogout}

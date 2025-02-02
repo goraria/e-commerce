@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-const ToastBox = ({ title, type, position, message }) => {
+export default function ToastBox({ title, type, position, message }) {
     useEffect(() => {
         Toast();
     },[])
@@ -381,6 +381,4 @@ const ToastBox = ({ title, type, position, message }) => {
             {/* <!--/ Bootstrap Toasts Styles --> */}
         </>
     )
-}
-
-export default ToastBox;
+};

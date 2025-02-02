@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RatingStar = ({ rating }) => {
+export default function RatingStar({ rating }) {
     // Sanitize rating to be between 0 and 5
     const sanitizedRating = Math.max(0, Math.min(rating, 5));
     const fullStars = Math.floor(sanitizedRating); // Full stars count
@@ -22,6 +22,4 @@ const RatingStar = ({ rating }) => {
             ))}
         </>
     );
-}
-
-export default RatingStar;
+};

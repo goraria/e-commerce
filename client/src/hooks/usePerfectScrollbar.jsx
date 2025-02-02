@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 
-const usePerfectScrollbar = (elementId) => {
+export default function usePerfectScrollbar(elementId) {
     useEffect(() => {
         const element = document.getElementById(elementId);
         if (element) {
@@ -12,5 +12,3 @@ const usePerfectScrollbar = (elementId) => {
         }
     }, [elementId]);
 };
-
-export default usePerfectScrollbar;

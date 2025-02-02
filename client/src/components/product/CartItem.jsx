@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Image, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import axios from 'axios';
-import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
+import NotifySuccess from "../modal/notice/NotifySuccess.jsx";
 
-const CardItem = ({ element, onChange, onReload, onCheckboxChange, onQuantityChange }) => {
+export default function CardItem({ element, onChange, onReload, onCheckboxChange, onQuantityChange }) {
     const [product, setProduct] = useState([]);
     const [default_config, setdefaultconfig] = useState([]);
     const [descriptions, setArray] = useState([]);
@@ -265,5 +265,3 @@ const CardItem0 = ({ element, onCheckboxChange, onQuantityChange }) => {
         </Row>
     );
 };
-
-export default CardItem;

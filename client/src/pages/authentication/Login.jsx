@@ -1,13 +1,13 @@
 import React, { Component, useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Form } from "react-bootstrap";
-import SaveChange from "../../components/modal/notify/SaveChange.jsx";
-import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
-import NotifyError from "../../components/modal/notify/NotifyError.jsx";
+import SaveChangeOld from "../../components/modal/notice/SaveChangeOld.jsx";
+import NotifySuccess from "../../components/modal/notice/NotifySuccess.jsx";
+import NotifyError from "../../components/modal/notice/NotifyError.jsx";
 import { Loading } from "../overview/Loading.jsx";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { AuthWrapper } from "./AuthWrapper.jsx";
-import ReCaptchaComponent from "../../components/recapcha/Recapcha.jsx";
+import ReCaptchaComponent from "../../components/recaptcha/Recaptcha.jsx";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 

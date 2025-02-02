@@ -3,12 +3,12 @@ import {Link, useNavigate} from "react-router-dom";
 import { Form } from "react-bootstrap";
 
 import axios from "axios";
-import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
-import NotifyError from "../../components/modal/notify/NotifyError.jsx";
+import NotifySuccess from "../../components/modal/notice/NotifySuccess.jsx";
+import NotifyError from "../../components/modal/notice/NotifyError.jsx";
 import {AuthWrapper} from "./AuthWrapper.jsx";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
-import ReCaptchaComponent from "../../components/recapcha/Recapcha.jsx";
+import ReCaptchaComponent from "../../components/recaptcha/Recaptcha.jsx";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },

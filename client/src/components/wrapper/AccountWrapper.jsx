@@ -6,6 +6,7 @@ const navData = [
     { link: '/account/notifications', name: 'Notifications' },
     { link: '/account/connections', name: 'Connections' }
 ];
+
 const MenuItem = (item, index) => {
     const location = useLocation();
     const isActive = location.pathname === item.link;
@@ -15,6 +16,7 @@ const MenuItem = (item, index) => {
         </li>
     )
 };
+
 export const AccountWrapper = ({ title, children }) => {
     return (
         <>

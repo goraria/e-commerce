@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { DataTables } from "../../components/datatables/DataTables.jsx";
+import DataTables from "../../components/datatables/DataTables.jsx";
 import { Statistics } from "../management/Statistics.jsx";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'

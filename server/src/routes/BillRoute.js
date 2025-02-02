@@ -13,8 +13,8 @@ router.post('/add-bill', AuthenticationMiddleware, BillController.createBill);
 
 router.put('/add-billDetail', BillController.createBillDetail);
 
-// router.get('/list', AuthenticationMiddleware, BillController.getAllBillByAccount);
+// routes.get('/list', AuthenticationMiddleware, BillController.getAllBillByAccount);
 
-// router.get('/read:id', BillController.getBillById);
+// routes.get('/read:id', BillController.getBillById);
 
 module.exports = router;

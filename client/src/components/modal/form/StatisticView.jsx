@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
 import axios from "axios";
-import SaveChange from "../notify/SaveChange.jsx";
+import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 
 const StatisticView = ({ item, show, onHide, onReload }) => {
     const [validated, setValidated] = useState(false);

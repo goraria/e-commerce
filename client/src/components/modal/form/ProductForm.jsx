@@ -1,5 +1,5 @@
 import axios from "axios";
-import SaveChange from "../notify/SaveChange.jsx";
+import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
@@ -335,7 +335,7 @@ const ProductForm = ({ product, show, onHide, onReload }) => {
                     }
                 </Modal.Footer>
             </Modal>
-            <SaveChange
+            <SaveChangeOld
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
                 onSave={() => {
@@ -343,7 +343,7 @@ const ProductForm = ({ product, show, onHide, onReload }) => {
                     setShowConfirmModal(false)
                 }}
             />
-            <SaveChange
+            <SaveChangeOld
                 show={showConfirmDelete}
                 onHide={() => setShowConfirmDelete(false)}
                 onSave={handleDelete}

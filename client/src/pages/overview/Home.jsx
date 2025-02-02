@@ -1,8 +1,8 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel, Image } from "react-bootstrap";
+import axios from "axios";
 import Overview from "../../layouts/Overview.jsx";
 import ProductItem from "../../components/product/ProductItem.jsx";
-import axios from "axios";
 
 const banners = [
     { id: 0, name: "../assets/img/overviews/macbook.png", alt: "Out slide", title: "Sale Off 5-10%", description: "Developer love Mac" },
@@ -56,7 +56,7 @@ export const Home = () => {
     }, []);
 
     return (
-        <div>
+        <>
             <Carousel>
                 {
                     banners.map((banner, index) => (
@@ -99,6 +99,6 @@ export const Home = () => {
                     ))}
                 </div>
             </div>
-        </div>
+        </>
     )
 }

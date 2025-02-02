@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 
-export const DataTables = () => {
+export default function DataTables() {
     const [data, setData] = useState([
         { "id": 1, "name": "Alice Johnson", "email": "alice.johnson@example.com", "date": "01/01/2020", "salary": "$50000", "status": "Professional" },
         { "id": 2, "name": "Bob Smith", "email": "bob.smith@example.com", "date": "02/02/2020", "salary": "$60000", "status": "Applied" },

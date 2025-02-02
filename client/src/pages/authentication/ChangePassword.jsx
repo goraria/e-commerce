@@ -3,9 +3,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, FloatingLabel, Form, Image, Col, Row, Card } from "react-bootstrap";
 import axios from "axios";
 
-import SaveChange from "../../components/modal/notify/SaveChange.jsx";
-import NotifySuccess from "../../components/modal/notify/NotifySuccess.jsx";
-import NotifyError from "../../components/modal/notify/NotifyError.jsx";
+import SaveChangeOld from "../../components/modal/notice/SaveChangeOld.jsx";
+import NotifySuccess from "../../components/modal/notice/NotifySuccess.jsx";
+import NotifyError from "../../components/modal/notice/NotifyError.jsx";
 import { Loading } from "../overview/Loading.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 

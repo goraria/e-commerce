@@ -6,7 +6,7 @@ import Basket from "../components/bar-elements/Basket.jsx";
 import Overside from "./Overside.jsx";
 import axios from "axios";
 import {Button, Form, Nav, Navbar} from "react-bootstrap";
-import SaveChange from "../components/modal/notify/SaveChange.jsx";
+import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
 import getGreetingMessage from "../utils/greetingHandler.jsx";
 
 const Outbar = ({ children }) => {

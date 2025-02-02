@@ -1,10 +1,11 @@
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom'
-import React, { Component, useState, useEffect } from "react";
 import axios from 'axios';
-import NotifySuccess from "../modal/notify/NotifySuccess.jsx";
+
+import NotifySuccess from "../modal/notice/NotifySuccess.jsx";
 import RatingStar from "./RatingStar.jsx";
 
-const ProductItem = (product, state) => {
+export default function ProductItem(product, state) {
     const [descriptions, setArray] = useState([]);
     const [configurations, setconfig] = useState([]);
     const [ratings, setRating] = useState([]);
@@ -183,5 +184,3 @@ const ProductItem = (product, state) => {
         </>
     );
 }
-
-export default ProductItem;

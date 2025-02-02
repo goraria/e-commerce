@@ -1,6 +1,6 @@
 import React from "react";
 
-const VoucherItem = () => {
+export default function VoucherItem() {
     let item = {
         percentage: 10,
         max: 10,
@@ -37,6 +37,4 @@ const VoucherItem = () => {
             </div>
         </>
     )
-}
-
-export default VoucherItem;
+};

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import SaveChange from "../components/modal/notify/SaveChange.jsx";
+import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
@@ -489,7 +489,7 @@ const Activitybar = ({ children }) => {
                     <i className="bx bx-x bx-md search-toggler cursor-pointer"></i>
                 </div>
             </nav>
-            <SaveChange
+            <SaveChangeOld
                 show={showModalHeader}
                 onHide={() => setShowModalHeader(false)}
                 onSave={handleLogout}

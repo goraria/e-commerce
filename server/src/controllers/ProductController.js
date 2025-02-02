@@ -85,7 +85,7 @@ class ProductController {
                 }))
             };
 
-            console.log(result);
+            // console.log(result);
             return res.json(result);
         } catch (error) {
             console.error('Error fetching product properties:', error);

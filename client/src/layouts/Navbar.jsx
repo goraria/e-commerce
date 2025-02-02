@@ -3,7 +3,7 @@ import {Button, ButtonToolbar, Form, Nav} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import SaveChange from "../components/modal/notify/SaveChange.jsx";
+import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
@@ -522,7 +522,7 @@ const Navbar = ({ children }) => {
                 </div>
             </nav>
 
-            <SaveChange
+            <SaveChangeOld
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 onSave={handleLogout}

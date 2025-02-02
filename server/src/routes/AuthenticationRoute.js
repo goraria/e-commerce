@@ -4,7 +4,7 @@ const AuthenticationController = require('../controllers/AuthenticationControlle
 const AuthenticationMiddleware = require('../middleware/AuthenticationMiddleware');
 const AdministratorMiddleware = require('../middleware/AdministratorMiddleware');
 
-// router.post('/login/authen', AuthenticationController.login.bind(AuthenticationController))
+// routes.post('/login/authen', AuthenticationController.login.bind(AuthenticationController))
 router.post('/login-google', AuthenticationController.google)
 
 router.post('/login', AuthenticationController.login)

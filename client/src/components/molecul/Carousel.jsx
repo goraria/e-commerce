@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Carousel = ({ id, items, dark }) => {
+export default function Carousel({ id, items, dark }) {
     return (
         <>
             <div
@@ -42,5 +42,3 @@ const Carousel = ({ id, items, dark }) => {
         </>
     );
 };
-
-export default Carousel;
