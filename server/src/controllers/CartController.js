@@ -133,7 +133,7 @@ class CartController {
 
     async addCartItem(req, res) {
         const { idcart, idproduct, quantity,idcolor, idconfiguration } = req.body;  // Nhận thông tin từ yêu cầu
-            console.log(req.body)
+            // console.log(req.body)
         try {
             // Tạo một mục mới trong bảng CartItem
             const newCartItem = await CartItem.create({
