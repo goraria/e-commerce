@@ -3,8 +3,16 @@ import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
 import axios from "axios";
 import SaveChange from "../notice/SaveChange.tsx";
+import { AddressDefaultType } from "../../../types/AddressDefaultType.ts";
 
-const StatisticView = ({ item, show, onHide, onReload }) => {
+type StatisticType = {
+    item: AddressDefaultType,
+    show: boolean,
+    onHide: void,
+    onReload: void
+}
+
+export default function StatisticView({ item, show, onHide, onReload }: StatisticType) {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         tower: '',
@@ -62,7 +70,7 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
                 setValidated(true);
             }
         }
-    };
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -305,5 +313,3 @@ const StatisticView = ({ item, show, onHide, onReload }) => {
         </>
     );
 }
-
-export default StatisticView
