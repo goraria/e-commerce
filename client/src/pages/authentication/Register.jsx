@@ -125,8 +125,8 @@ export const Register = ({ checker }) => {
                 setError("Google Login failed.");
             }
         } catch (err) {
-            setError("An error occurred during Google Login.");
-            console.error(err);
+            setError(response.data.error);
+            // console.error(err);
         } finally {
             setLoading(false);
         }
