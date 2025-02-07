@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function UserForm({ user, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -96,7 +97,7 @@ export default function UserForm({ user, show, onHide, onReload }) {
             if (user) {
                 // Chỉ thực hiện cập nhật nếu có đối tượng `user`
                 // console.log('formData:', formData);
-                const response = await axios.post(`http://localhost:5172/admin/update-user/${user.idaccount}`, formData);
+                const response = await apiHandler.post(`/admin/update-user/${user.idaccount}`, formData);
 
                 if (response.status === 200 || response.status === 201) {
                     setShowConfirmModal(false);
@@ -122,7 +123,7 @@ export default function UserForm({ user, show, onHide, onReload }) {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${address.idaddress}`, {
+            await apiHandler.delete(`/admin/delete/${address.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);

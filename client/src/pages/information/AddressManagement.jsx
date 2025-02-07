@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import AddressItem from "../../components/address/AddressItem.jsx";
 import AddressForm from "../../components/modal/form/AddressForm.jsx";
 import axios from "axios";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const AddressManagement = () => {
     const [addresses, setAddresses] = useState([]);
@@ -21,7 +22,7 @@ export const AddressManagement = () => {
         try {
             // setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5172/address/list', {
+            const response = await apiHandler.get('/address/list', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

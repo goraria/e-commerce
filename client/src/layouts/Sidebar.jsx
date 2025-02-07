@@ -7,10 +7,15 @@ const Sidebar = ({ menu, source }) => {
         <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
             <div className="app-brand demo">
                 <Link aria-label='Navigate homepage' to={source} className="app-brand-link">
-                    {/* <span className="app-brand-logo demo">
-                        <img src="/assets/img/sneat.svg" alt="sneat-logo" aria-label='Sneat logo image' />
+                    <span className="app-brand-logo demo">
+                        <img
+                            src="/assets/img/favicon/webkit.png"
+                            alt="Logo"
+                            aria-label='Cipher logo image'
+                            className="w-px-50 h-auto"
+                        />
                     </span>
-                    <span className="app-brand-text demo menu-text fw-bold ms-2">Bill Cipher</span> */}
+                    {/*<span className="app-brand-text demo menu-text fw-bold ms-2">Bill Cipher</span>*/}
                     <span className="app-brand-text demo menu-text fw-bold ms-2 text-capitalize">Cipher</span>
                 </Link>
 

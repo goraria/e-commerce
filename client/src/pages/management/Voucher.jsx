@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 // import "./DataTables.css"; // Add custom styling here
 import VoucherForm from "../../components/modal/form/VoucherForm.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const Voucher = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export const Voucher = () => {
     const [data, setData] = useState([])
 
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-voucher")
+        const response = await apiHandler.get("/admin/get-voucher")
         setData(response.data)
     };
 
@@ -63,7 +64,7 @@ export const Voucher = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-voucher/${id}`);
+            await apiHandler.delete(`/admin/delete-voucher/${id}`);
 
             // Optionally, fetch the updated data again
             fetchAPI();
@@ -96,7 +97,7 @@ export const Voucher = () => {
         // console.log(newStatus)
         // console.log(iddiscount)
         try {
-            await axios.patch(`http://localhost:5172/admin/update-voucher-status/${iddiscount}`, {
+            await apiHandler.patch(`/admin/update-voucher-status/${iddiscount}`, {
                 status: newStatus
             });
 

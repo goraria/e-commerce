@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-bootstrap";
 import axios from 'axios';
 import ColorForm from "../../components/modal/form/ColorForm.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const ProductColor = () => {
     const [data, setData] = useState([])
@@ -26,8 +27,8 @@ export const ProductColor = () => {
     const fetchData = async () => {
         try {
             const [colorsResponse, productsResponse] = await Promise.all([
-                axios.get("http://localhost:5172/admin/get-color"),
-                axios.get("http://localhost:5172/products/get-product"),
+                apiHandler.get("/admin/get-color"),
+                apiHandler.get("/products/get-product"),
                 // axios.get("http://localhost:5172/admin/payhd"),
             ]);
             setData(colorsResponse.data);
@@ -89,7 +90,7 @@ export const ProductColor = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-color/${id}`);
+            await apiHandler.delete(`/admin/delete-color/${id}`);
 
             // Optionally, fetch the updated data again
             fetchData();

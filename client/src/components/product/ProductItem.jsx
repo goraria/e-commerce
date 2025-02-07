@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import RatingStar from "./RatingStar.jsx";
 import { NotifyModal } from "../modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function ProductItem(product, state) {
     const [descriptions, setArray] = useState([]);
@@ -23,7 +24,7 @@ export default function ProductItem(product, state) {
 
     const getProperties = () => {
         try {
-            const response = axios.get(`http://localhost:5172/products/load-properties/${obj.idproduct}`);
+            const response = apiHandler.get(`/products/load-properties/${obj.idproduct}`);
 
             setProperties(response.data);
             console.log(response.data)
@@ -34,13 +35,11 @@ export default function ProductItem(product, state) {
 
     const fetchCart = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/cart/loadcart`,{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+            const response = await apiHandler.get(`/cart/loadcart`,{
+                headers: { Authorization: `Bearer ${token}` }
             });
-            const data = await response.json();
-            setCart(data)
+
+            setCart(response.data)
             // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
@@ -49,9 +48,9 @@ export default function ProductItem(product, state) {
 
     const fetchProductDetails = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/products/load-productid/${obj.idproduct}`);
-            const data = await response.json();
-            setProduct(data[0]); // Cập nhật thông tin sản phẩm từ backend
+            const response = await apiHandler.get(`/products/load-productid/${obj.idproduct}`);
+
+            setProduct(response.data[0]); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
@@ -60,9 +59,9 @@ export default function ProductItem(product, state) {
 
     const fetchProductDecription = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/products/load-description/${obj.idproduct}`);
-            const data = await response.json();
-            setArray(data[0]); // Cập nhật thông tin sản phẩm từ backend
+            const response = await apiHandler.get(`/products/load-description/${obj.idproduct}`);
+
+            setArray(response.data[0]); // Cập nhật thông tin sản phẩm từ backend
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
@@ -70,9 +69,9 @@ export default function ProductItem(product, state) {
 
     const fetchProductRating = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/products/load-rating/${obj.idproduct}`);
-            const data = await response.json();
-            setRating(data); // Cập nhật thông tin sản phẩm từ backend
+            const response = await apiHandler.get(`/products/load-rating/${obj.idproduct}`);
+
+            setRating(response.data); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
@@ -81,9 +80,9 @@ export default function ProductItem(product, state) {
 
     const fetchProductColor = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/products/load-color/${obj.idproduct}`);
-            const data = await response.json();
-            setColor(data[0]); // Cập nhật thông tin sản phẩm từ backend
+            const response = await apiHandler.get(`/load-color/${obj.idproduct}`);
+
+            setColor(response.data[0]); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
@@ -92,9 +91,9 @@ export default function ProductItem(product, state) {
 
     const fetchProductConfiguration = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/products/load-configuration/${obj.idproduct}`);
-            const data = await response.json();
-            setconfig(data[0]); // Cập nhật thông tin sản phẩm từ backend
+            const response = await apiHandler.get(`/products/load-configuration/${obj.idproduct}`);
+
+            setconfig(response.data[0]); // Cập nhật thông tin sản phẩm từ backend
             // console.log(data)
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
@@ -119,7 +118,7 @@ export default function ProductItem(product, state) {
     const handleAddToCart = async () => {
         try {
             // console.log(carts.idcart,obj.idproduct,colors.idcolor,configurations.idconfiguration)
-            const response = await axios.put(`http://localhost:5172/cart/add-cartitem`, {
+            const response = await apiHandler.put(`/cart/add-cartitem`, {
                 idcart: carts.idcart,
                 idproduct:  obj.idproduct,
                 quantity: 1,

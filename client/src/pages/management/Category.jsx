@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import axios from 'axios';
 import CategoryForm from "../../components/modal/form/CategoryForm.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const Category = () => {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ export const Category = () => {
     const [data, setData] = useState([])
     const fetchAPI = async () => {
         try {
-            const response = await axios.get("http://localhost:5172/category/get-category")
+            const response = await apiHandler.get("/category/get-category")
             setData(response.data)
         } catch (error) {
             console.error("Error fetching category data:", error);
@@ -37,7 +38,7 @@ export const Category = () => {
     const handleDelete = async (id) => {
         try {
             // await axios.delete(`http://localhost:5172/admin/delete-category/${id}`);
-            await axios.delete(`http://localhost:5172/category/delete-category/${id}`);
+            await apiHandler.delete(`/category/delete-category/${id}`);
 
             fetchAPI();
         } catch (error) {

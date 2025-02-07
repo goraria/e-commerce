@@ -9,6 +9,7 @@ import Notification from "../components/bar-elements/Notification.jsx";
 import getGreetingMessage from "../utils/greetingHandler.jsx";
 import Overside from "./Overside.jsx";
 import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
+import apiHandler from "../utils/apiHandler.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -57,7 +58,7 @@ export default function Activitybar({ children }) {
             try {
                 // const decoded = jwtDecode(token);
 
-                const response = await axios.get('http://localhost:5172/account/get-info', {
+                const response = await apiHandler.get('/account/get-info', {
                     headers: {Authorization: `Bearer ${token}`}
                 });
 
@@ -74,7 +75,7 @@ export default function Activitybar({ children }) {
     const useCart = async () => {
         if (token) {
             try {
-                const response = await axios.get('http://localhost:5172/cart/load-cart', {
+                const response = await apiHandler.get('/cart/load-cart', {
                     headers: {Authorization: `Bearer ${token}`}
                 });
 
@@ -91,8 +92,8 @@ export default function Activitybar({ children }) {
     const handleLogout = async () => {
         if (token) {
             try {
-                await axios.post(
-                    "http://localhost:5172/authentication/logout",
+                await apiHandler.post(
+                    "/authentication/logout",
                     {},
                     {
                         headers: { Authorization: `Bearer ${token}` },

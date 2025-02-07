@@ -6,6 +6,7 @@ import axios from "axios";
 import LoadingPage from "../misc/LoadingPage.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function ChangePasswordPage() {
     const [check, setCheck] = useState(false);
@@ -37,7 +38,7 @@ export default function ChangePasswordPage() {
                 return;
             }
 
-            const response = await axios.get('http://localhost:5172/account/get-info', {
+            const response = await apiHandler.get('/account/get-info', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -72,7 +73,7 @@ export default function ChangePasswordPage() {
         } else {
             setLoading(true);
             try {
-                const response = await axios.post('http://localhost:5172/authentication/change-password', {
+                const response = await apiHandler.post('/authentication/change-password', {
                     oldPassword: formData.oldPassword,
                     newPassword: formData.newPassword,
                     retypePassword: formData.retypePassword,

@@ -6,6 +6,7 @@ import CustomDropDown from "../../components/button/CustomDropDown";
 import ProductItem from "../../components/product/ProductItem";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
 import Overview from "../../layouts/Overview.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 const categories = [
     { categorical: 'CPU', varient: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
@@ -25,18 +26,18 @@ export default function ProductList() {
     const query = new URLSearchParams(location.search);
     const searchQuery = query.get("search");
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/products/load-product");
+        const response = await apiHandler.get("/products/load-product");
         setProductList(response.data);
     };
 
     const fetchProductByBrand = async (brand) => {
-        const response = await axios.get(`http://localhost:5172/products/load-productBrand/${brand}`);
+        const response = await apiHandler.get(`/products/load-productBrand/${brand}`);
         setProductList(response.data);
     };
 
     const fetchProductByName= async () => {
         try {
-           const response = await axios.get(`http://localhost:5172/products/load-productName/${searchQuery}`);
+           const response = await apiHandler.get(`/products/load-productName/${searchQuery}`);
             setProductList(response.data);
         } catch (error) {
             // console.log('chưa nhập tên tìm kiếm')
@@ -53,7 +54,7 @@ export default function ProductList() {
     // Function to filter products based on dropdown selection
     const filterProducts = (category, selectedItem) => {
         const filteredProducts = async () => {
-            const response = await axios.get(`http://localhost:5172/products/load-productCPU/${selectedItem}`);
+            const response = await apiHandler.get(`/products/load-productCPU/${selectedItem}`);
             setProductList(response.data);
         };
         filteredProducts();

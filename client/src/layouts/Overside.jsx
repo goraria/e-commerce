@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import React from "react";
 import button from "bootstrap/js/src/button.js";
 
-const Overside = () => {
+export default function Overside() {
     return (
         <>
             {/*<aside id="layout-menu" className="layout-menu-horizontal menu menu-horizontal container-fluid bg-menu-theme p-0">*/}
@@ -40,12 +40,44 @@ const Overside = () => {
 
             <div className="navbar-nav">
                 <ul className="navbar-nav flex-row align-items-center ms-auto">
-                    <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
-                        <Link
-                            className="navbar-brand app-brand-text demo menu-text fw-bold text-capitalize"
-                            to={"/"}
-                        >
-                            <span>Cipher</span>
+                    {/*<li className="nav-item navbar-search-wrapper me-3 me-xl-2">*/}
+                    {/*    <Link*/}
+                    {/*        className="navbar-brand app-brand-text demo menu-text fw-bold text-capitalize"*/}
+                    {/*        to={"/"}*/}
+                    {/*    >*/}
+                    {/*        <span>Cipher</span>*/}
+                    {/*    </Link>*/}
+                    {/*</li>*/}
+                    <li className="nav-item me-3 me-xl-2">
+                        {/*<Link*/}
+                        {/*    aria-label="dropdown profile avatar"*/}
+                        {/*    className="nav-link hide-arrow d-flex justify-content-center align-items-center"*/}
+                        {/*    to="/"*/}
+                        {/*>*/}
+                        {/*    <div className="avatar me-2">*/}
+                        {/*        <img*/}
+                        {/*            src="/assets/img/favicon/webkit.ico"*/}
+                        {/*            className="w-px-40 h-auto rounded"*/}
+                        {/*            alt="avatar"*/}
+                        {/*            aria-label="Avatar Image"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*    <div className="app-brand-text demo menu-text fw-bold text-capitalize">*/}
+                        {/*        /!* navbar-brand *!/*/}
+                        {/*        <span>Cipher</span>*/}
+                        {/*    </div>*/}
+                        {/*</Link>*/}
+                        <Link aria-label='Navigate homepage' to={"/"} className="app-brand-link">
+                            <span className="app-brand-logo demo">
+                                <img
+                                    src="/assets/img/favicon/webkit.png"
+                                    alt="Logo"
+                                    aria-label='Cipher logo image'
+                                    className="w-px-50 h-auto"
+                                />
+                            </span>
+                            {/*<span className="app-brand-text demo menu-text fw-bold ms-2">Bill Cipher</span>*/}
+                            <span className="app-brand-text demo menu-text fw-bold ms-2 text-capitalize text-body">Cipher</span>
                         </Link>
                     </li>
                     <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
@@ -87,5 +119,3 @@ const Overside = () => {
         </>
     )
 }
-
-export default Overside

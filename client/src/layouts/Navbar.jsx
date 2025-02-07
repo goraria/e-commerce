@@ -9,6 +9,7 @@ import Notification from "../components/bar-elements/Notification.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
+import apiHandler from "../utils/apiHandler.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -53,7 +54,7 @@ export default function Navbar({ children }) {
             try {
                 // const decoded = jwtDecode(token);
 
-                const response = await axios.get('http://localhost:5172/account/get-info', {
+                const response = await apiHandler.get('/account/get-info', {
                     headers: {Authorization: `Bearer ${token}`}
                 });
 
@@ -70,7 +71,7 @@ export default function Navbar({ children }) {
     const handleLogout = async () => {
         if (token) {
             try {
-                await axios.post("http://localhost:5172/authentication/logout", {}, {
+                await apiHandler.post("/authentication/logout", {}, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 

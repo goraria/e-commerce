@@ -4,6 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { AccountWrapper } from "../../components/wrapper/AccountWrapper";
 import axios from "axios";
 import { ConfirmModal } from "../../components/modal/notice/ConfirmModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function AccountPage({ onReload }) {
     const [validated, setValidated] = useState(false);
@@ -28,7 +29,7 @@ export default function AccountPage({ onReload }) {
                 return;
             }
 
-            const response = await axios.get('http://localhost:5172/account/get-info', {
+            const response = await apiHandler.get('/account/get-info', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -99,7 +100,7 @@ export default function AccountPage({ onReload }) {
             formDataToSend.append('phone', formData.phone);
 
             // Gửi yêu cầu POST để upload avatar (nếu có thay đổi avatar)
-            const avatarResponse = file ? await axios.post(`http://localhost:5172/account/upload-avatar`, formDataToSend, {
+            const avatarResponse = file ? await apiHandler.post(`/account/upload-avatar`, formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -107,7 +108,7 @@ export default function AccountPage({ onReload }) {
             }) : null;
 
             // Gửi yêu cầu PUT để cập nhật thông tin người dùng (bao gồm cả trường hợp không thay đổi avatar)
-            const userInfoResponse = await axios.put(`http://localhost:5172/account/set-info`, formData, {
+            const userInfoResponse = await apiHandler.put(`/account/set-info`, formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -321,6 +322,7 @@ export default function AccountPage({ onReload }) {
             </div>
 
             <ConfirmModal
+                type="primary"
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 onSave={handleSaveChanges}

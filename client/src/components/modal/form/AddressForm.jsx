@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import axios from "axios";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function AddressForm({ address, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -75,10 +76,10 @@ export default function AddressForm({ address, show, onHide, onReload }) {
         try {
             const token = localStorage.getItem('token');
             const response = address
-                ? await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData, {
+                ? await apiHandler.put(`/address/update/${address.idaddress}`, formData, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
-                : await axios.post('http://localhost:5172/address/addition', formData, {
+                : await apiHandler.post('/address/addition', formData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -96,7 +97,7 @@ export default function AddressForm({ address, show, onHide, onReload }) {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/address/delete/${address.idaddress}`, {
+            await apiHandler.delete(`/address/delete/${address.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);

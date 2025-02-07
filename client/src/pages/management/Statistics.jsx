@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import axios from "axios";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
 import { Link } from "react-router-dom";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const Statistics = () => {
     const [data, setData] = useState([]);
@@ -37,7 +38,7 @@ export const Statistics = () => {
 
     const fetchStatistics = async () => {
         try {
-            const response = await axios.get('http://localhost:5172/bill/list-all');
+            const response = await apiHandler.get('/bill/list-all');
             setData(response.data);
             // console.log(response.data);
         } catch (error) {

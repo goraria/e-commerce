@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { Button, Col, Form, InputGroup, Modal } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function RatingForm({ rate, prod, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -42,13 +43,13 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
     const handleConfirmSave = async () => {
         try {
             const endpoint = rate
-                ? `http://localhost:5172/products/change-rating/${rate.idrating}`
-                : 'http://localhost:5172/products/create-rating';
+                ? `/products/change-rating/${rate.idrating}`
+                : '/products/create-rating';
             const method = rate ? 'put' : 'post';
 
             // console.log(formData);
 
-            const response = await axios[method](endpoint, {...formData, idproduct: prod.idproduct}, {
+            const response = await apiHandler[method](endpoint, {...formData, idproduct: prod.idproduct}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -64,8 +65,8 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(
-                `http://localhost:5172/products/remove-rating/${rate.idrating}`,
+            await apiHandler.delete(
+                `/products/remove-rating/${rate.idrating}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 

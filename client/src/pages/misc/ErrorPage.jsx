@@ -11,10 +11,10 @@ export default function ErrorPage() {
                 <Link aria-label='Go to Home Page' to="/" className="btn btn-primary">Back to home</Link>
                 <div className="mt-3">
                     <img
-                        src="../assets/img/illustrations/page-misc-error-light.png"
+                        src="/assets/img/illustrations/page-misc-error-light.png"
                         alt="page-misc-error-light"
                         aria-label="page misc error light"
-                        width="500"
+                        width={500}
                         className="img-fluid"
                         data-app-dark-img="illustrations/page-misc-error-dark.png"
                         data-app-light-img="illustrations/page-misc-error-light.png" />

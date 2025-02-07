@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function NameForm({ name, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -94,12 +95,12 @@ export default function NameForm({ name, show, onHide, onReload }) {
         try {
             // const token = localStorage.getItem('token');
             const response = name
-                ? await axios.post(`http://localhost:5172/admin//update-user/${name.idaccount}`, formData)
-                : await axios.put('http://localhost:5172/address/addition', formData);
+                ? await apiHandler.post(`/admin//update-user/${name.idaccount}`, formData)
+                : await apiHandler.put('/address/addition', formData);
 
             // const response = address ?
-            //     await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
-            //     await axios.post('http://localhost:5172/address/addition', formData, {
+            //     await apiHandler.put(`/address/update/${address.idaddress}`, formData) :
+            //     await apiHandler.post('/address/addition', formData, {
             //         headers: {
             //             Authorization: `Bearer ${token}`
             //         }
@@ -119,7 +120,7 @@ export default function NameForm({ name, show, onHide, onReload }) {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${address.idaddress}`, {
+            await apiHandler.delete(`/admin/delete/${address.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -130,6 +131,7 @@ export default function NameForm({ name, show, onHide, onReload }) {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     return (
         <>
             <Modal

@@ -8,6 +8,7 @@ import Notification from "../components/bar-elements/Notification.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Overside from "./Overside.jsx";
+import apiHandler from "../utils/apiHandler.jsx";
 
 export default function Outbar({ children }) {
     useEffect(() => {
@@ -34,8 +35,8 @@ export default function Outbar({ children }) {
         }
 
         try {
-            const response = await axios.get(
-                "http://localhost:5172/authentication/check",
+            const response = await apiHandler.get(
+                "/authentication/check",
                 {
                     headers: {Authorization: `Bearer ${token}`},
                 }
@@ -59,8 +60,8 @@ export default function Outbar({ children }) {
     const handleLogout = async () => {
         const token = localStorage.getItem("token");
         try {
-            await axios.post(
-                "http://localhost:5172/authentication/logout",
+            await apiHandler.post(
+                "/authentication/logout",
                 {},
                 {
                     headers: {Authorization: `Bearer ${token}`},

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function ProductForm({ product, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -16,11 +17,10 @@ export default function ProductForm({ product, show, onHide, onReload }) {
     const [data1, setData1] = useState([])
 
     const fetchCategory = async () => {
-        const response = await axios.get("http://localhost:5172/category/get-category")
+        const response = await apiHandler.get("/category/get-category")
         setCategory(response.data)
         // console.log(response.data)
     }
-
 
     const findIdCategoryByName = (name) => {
         const category = data1.find(cat => cat.category_name.toLowerCase() === name.toLowerCase());
@@ -102,13 +102,13 @@ export default function ProductForm({ product, show, onHide, onReload }) {
 
 
             const response = product
-                ? await axios.post(`http://localhost:5172/products/update-productname/${product.idproduct}`, formDataToSend, {
+                ? await apiHandler.post(`/products/update-productname/${product.idproduct}`, formDataToSend, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
                     product_name: formDataToSend.product_name,
                 })
-                : await axios.put('http://localhost:5172/products/create-productname', formDataToSend, {
+                : await apiHandler.put('/products/create-productname', formDataToSend, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -134,7 +134,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5172/products/delete-productname/${product.idproduct}`);
+            await apiHandler.delete(`/products/delete-productname/${product.idproduct}`);
             setShowConfirmDelete(false);
             onHide();
             onReload()
@@ -143,6 +143,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
             setError(error.response ? error.response.data.message : 'Failed to save product name');
         }
     };
+
     const getImage = () => {
         // Update/reset user image of account page
         let productImage = document.getElementById('uploadedImage');
@@ -166,6 +167,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
             };
         }
     };
+
     useEffect(() => {
         getImage();
         // fetchAPI1();
@@ -192,6 +194,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
         setValidated(false);
         setError(null);
     }, [show]);
+
     return (
         <>
             <Modal
