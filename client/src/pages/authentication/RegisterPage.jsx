@@ -8,6 +8,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 const sclItems = [
     // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
@@ -80,7 +81,7 @@ export default function RegisterPage({ checker }) {
 
             if (formData.password === formData.retypepass) {
                 try {
-                    const response = await axios.post('http://localhost:5172/authentication/register', formData);
+                    const response = await apiHandler.post('/authentication/register', formData);
 
                     if (response.status === 201) {
                         setShowSuccess(true)
@@ -105,7 +106,7 @@ export default function RegisterPage({ checker }) {
         try {
             const merge = jwtDecode(response.credential);
 
-            const fetch = await axios.post("http://localhost:5172/authentication/login-google", {
+            const fetch = await apiHandler.post("/authentication/login-google", {
                 merge,
                 token: response.credential,
             });
@@ -456,8 +457,6 @@ export default function RegisterPage({ checker }) {
                             <div className="d-flex justify-content-center w-100"
                                  style={{minWidth: '120px'}}>
                                 <ReCaptchaComponent
-                                    siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
-                                    verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
                                     onSuccess={handleSuccess}
                                     onError={handleError}
                                 />

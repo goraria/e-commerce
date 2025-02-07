@@ -6,6 +6,7 @@ import axios from "axios";
 import LoadingPage from "../misc/LoadingPage.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function ResetPasswordPage() {
     const [check, setCheck] = useState(false);
@@ -42,7 +43,7 @@ export default function ResetPasswordPage() {
         else {
             setLoading(true);
             try {
-                const response = await axios.post('http://localhost:5172/authentication/reset-password', {
+                const response = await apiHandler.post('/authentication/reset-password', {
                     token: token,
                     newPassword: formData.password
                 });

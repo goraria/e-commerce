@@ -2,6 +2,7 @@ import axios, { formToJSON } from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function CategoryForm({ category, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -62,8 +63,8 @@ export default function CategoryForm({ category, show, onHide, onReload }) {
             formDataToSend.append('idcategory', formData.idcategory);
 
             const response = category
-                ? await axios.put(`http://localhost:5172/category/update-category/${category.idcategory}`, formData)
-                : await axios.post('http://localhost:5172/category/create-category', formData);
+                ? await apiHandler.put(`/category/update-category/${category.idcategory}`, formData)
+                : await apiHandler.post('/category/create-category', formData);
             if (response.status === 200 || response.status === 201) {
                 setShowConfirmModal(false)
                 onHide();
@@ -87,7 +88,7 @@ export default function CategoryForm({ category, show, onHide, onReload }) {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5172/category/delete-category/${category.idcategory}`);
+            await apiHandler.delete(`/category/delete-category/${category.idcategory}`);
             setShowConfirmDelete(false);
             onHide();
             onReload()

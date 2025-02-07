@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function ColorForm({ color, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -13,8 +14,9 @@ export default function ColorForm({ color, show, onHide, onReload }) {
     const [product, setData] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/products/get-product")
+        const response = await apiHandler.get("/products/get-product")
         setData(response.data)
     };
 
@@ -47,8 +49,8 @@ export default function ColorForm({ color, show, onHide, onReload }) {
             // const token = localStorage.getItem('token');
             // console.log(formData);
             const response = color
-                ? await axios.post(`http://localhost:5172/admin/update-color/${color.idcolor}`, formData)
-                : await axios.put('http://localhost:5172/admin/create-color', formData);
+                ? await apiHandler.post(`/admin/update-color/${color.idcolor}`, formData)
+                : await apiHandler.put('/admin/create-color', formData);
 
 
             if (response.status === 200 || response.status === 201) {
@@ -65,7 +67,7 @@ export default function ColorForm({ color, show, onHide, onReload }) {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${color.idaddress}`, {
+            await apiHandler.delete(`/admin/delete/${color.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -76,6 +78,7 @@ export default function ColorForm({ color, show, onHide, onReload }) {
             setError(error.response ? error.response.data.message : 'Failed to save address');
         }
     };
+
     useEffect(() => {
         fetchAPI()
         if (color) {
@@ -93,6 +96,7 @@ export default function ColorForm({ color, show, onHide, onReload }) {
         setValidated(false);
         setError(null);
     }, [show]);
+
     return (
         <>
             <Modal

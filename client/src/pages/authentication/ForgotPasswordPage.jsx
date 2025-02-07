@@ -6,6 +6,7 @@ import axios from "axios";
 import LoadingPage from "../misc/LoadingPage.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function ForgotPasswordPage() {
     const [check, setCheck] = useState(false);
@@ -50,7 +51,7 @@ export default function ForgotPasswordPage() {
             setLoading(true);
             try {
                 // console.log(1)
-                const response = await axios.post('http://localhost:5172/authentication/forgot-password', {
+                const response = await apiHandler.post('/authentication/forgot-password', {
                     email: formData.email
                 });
                 setShowSuccess(true);
@@ -103,8 +104,6 @@ export default function ForgotPasswordPage() {
                             <div className="d-flex justify-content-center w-100"
                                  style={{minWidth: '120px'}}>
                                 <ReCaptchaComponent
-                                    siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
-                                    verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
                                     onSuccess={handleSuccess}
                                     onError={handleError}
                                 />

@@ -15,7 +15,9 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-const port = 5172;
+const port = process.env.PORT
+
+sequelize.sync();
 
 // app.use(cors());
 app.use(session({

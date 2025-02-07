@@ -5,6 +5,7 @@ import axios from 'axios';
 // import "./DataTables.css"; // Add custom styling here
 import ProductForm from "../../components/modal/form/ProductForm.jsx";
 import CategoryBadge from "../../components/badge/CategoryBadge.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const ProductName = () => {
     const navigate = useNavigate();
@@ -35,12 +36,12 @@ export const ProductName = () => {
     };
 
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/products/get-product")
+        const response = await apiHandler.get("/products/get-product")
         setData(response.data)
     };
 
     const getCategory = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-category")
+        const response = await apiHandler.get("/admin/get-category")
         setData1(response.data)
     };
 
@@ -95,7 +96,7 @@ export const ProductName = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/products/delete-productname/${id}`);
+            await apiHandler.delete(`/products/delete-productname/${id}`);
 
             // Optionally, fetch the updated data again
             setShowConfirmDelete(false);
@@ -128,7 +129,7 @@ export const ProductName = () => {
         const newStatus = e.target.checked;
 
         try {
-            await axios.patch(`http://localhost:5172/products/update-status/${idproduct}`, {
+            await apiHandler.patch(`/products/update-status/${idproduct}`, {
                 status: newStatus
             });
 

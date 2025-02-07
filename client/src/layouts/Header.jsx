@@ -9,6 +9,7 @@ import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
+import apiHandler from "../utils/apiHandler.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -79,8 +80,8 @@ export default function Header() {
     const handleLogout = async () => {
         if (token) {
             try {
-                await axios.post(
-                    "http://localhost:5172/authentication/logout",
+                await apiHandler.post(
+                    "/authentication/logout",
                     {},
                     {
                         headers: { Authorization: `Bearer ${token}` },
@@ -88,7 +89,7 @@ export default function Header() {
                 );
 
                 localStorage.removeItem("token"); // Xóa JWT
-                setShowModal(false);
+                // setShowModal(false);
                 navigate("/auth/login");
             } catch (error) {
                 // console.error("Logout failed", error);

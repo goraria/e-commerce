@@ -4,6 +4,7 @@ import { Container, Button, Row, Col, Card, Form } from 'react-bootstrap';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
 import CardItem from '../../components/product/CartItem.jsx';
 import axios from 'axios';
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function CartList() {
     const [carts, setCart] = useState();
@@ -22,7 +23,7 @@ export default function CartList() {
 
     const loadFullCart = async () => {
         try {
-            const response = await axios.get('http://localhost:5172/cart/load-cart', {
+            const response = await apiHandler.get('/cart/load-cart', {
                 headers: {Authorization: `Bearer ${token}`}
             });
 
@@ -35,7 +36,7 @@ export default function CartList() {
 
     const getVoucher = async () => {
         try {
-            const response = await axios.get('http://localhost:5172/cart/get-voucher');
+            const response = await apiHandler.get('/cart/get-voucher');
             setVouchers(response.data);
 
             // console.log(response.data)
@@ -136,64 +137,6 @@ export default function CartList() {
                 totalPrice: total,
             },
         });
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    const fetchCartItem = async (Carts) => {
-        try {
-            const response = await axios.get(`http://localhost:5172/cart/load-cartItem/${Carts.id}`);
-            setCartItem(response.data);
-        } catch {
-            // console.error('Error fetching CartItem details:');
-        }
-    };
-
-    const fetchCartItemLoad = async (idcart) => {
-        try {
-            const response = await axios.get(`http://localhost:5172/cart/load-cartItem/${idcart}`);
-            setCartItem(response.data);
-        } catch {
-            // console.error('Error fetching CartItem details:');
-        }
-    };
-
-    const fetchVoucherName = async (voucher) => {
-        try {
-            const response = await fetch('http://localhost:5172/admin/get-voucherid', {
-                VoucherName: voucher.name
-            });
-            const data = await response.json();
-            setVoucherName(data[0]);
-            // console.log(data)
-        } catch (error) {
-            // console.error('Error fetching product details:', error);
-        }
-    };
-
-    const fetchVoucher = async (voucher) => {
-        try {
-            const response = await fetch('http://localhost:5172/admin/get-voucher');
-            const data = await response.json();
-            setVouchers(data);
-
-            // console.log(data)
-        } catch (error) {
-            // console.error('Error fetching product details:', error);
-        }
-    };
-
-    const fetchProductDetails = async (CartItems) => {
-        if (cartItems && cartItems.idproduct) {  // Check if idproduct is available
-            try {
-                const response = await fetch(`http://localhost:5172/products/load-productid/${CartItems.idproduct}`);
-                const data = await response.json();
-                setProduct(data[0]);
-                // console.log(data)
-            } catch (error) {
-                // console.error('Error fetching product details:', error);
-            }
-        }
     };
 
     // const handleCheckboxChange = (price, isSelected, item) => {

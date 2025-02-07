@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import axios from 'axios';
 import { NotifyModal } from "../modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function CardItem({ element, onChange, onReload, onCheckboxChange, onQuantityChange }) {
     const [product, setProduct] = useState([]);
@@ -17,7 +18,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
 
     // const fetchProductDetails = async () => {
     //     try {
-    //         const response = await fetch(`http://localhost:5172/products/load-productid/${element.idproduct}`);
+    //         const response = await fetch(`/products/load-productid/${element.idproduct}`);
     //         const data = await response.json();
     //         setProduct(data[0]);
     //     } catch (error) {
@@ -27,7 +28,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
 
     // const fetchProductConfiguration = async () => {
     //     try {
-    //         const response = await fetch(`http://localhost:5172/products/load-idconfiguration/${element.idconfiguration}`);
+    //         const response = await fetch(`/products/load-idconfiguration/${element.idconfiguration}`);
     //         const data = await response.json();
     //         setdefaultconfig(data[0]);
     //     } catch (error) {
@@ -37,7 +38,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
 
     // const fetchProductDescription = async () => {
     //     try {
-    //         const response = await fetch(`http://localhost:5172/products/load-description/${element.idproduct}`);
+    //         const response = await fetch(`/products/load-description/${element.idproduct}`);
     //         const data = await response.json();
     //         setArray(data[0]);
     //     } catch (error) {
@@ -85,7 +86,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
 
     const handleUpdateQuantity = async (quantity) => {
         try {
-            await axios.put(`http://localhost:5172/cart/update-cartitem`, {
+            await apiHandler.put(`/cart/update-cartitem`, {
                 idcart_item: element.idcart_item,
                 quantity: quantity
             });
@@ -100,7 +101,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
 
     const handleRemoveItem = async () => {
         try {
-            await axios.put(`http://localhost:5172/cart/remove-cartitem`, {
+            await apiHandler.put(`/cart/remove-cartitem`, {
                 idcartItem: element.idcart_item,
             });
 

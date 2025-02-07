@@ -9,6 +9,7 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function LoginPage({ checker }) {
     // const [modalShow, setModalShow] = useState(false);
@@ -75,7 +76,8 @@ export default function LoginPage({ checker }) {
         const form = event.currentTarget;
 
         if (!captchaVerified) {
-            alert('Please verify the captcha before submitting.');
+            setError("Please verify the captcha before submitting.");
+            setShowError(true)
             return;
         }
 
@@ -87,7 +89,7 @@ export default function LoginPage({ checker }) {
 
         setLoading(true);
         try {
-            const response = await axios.post("http://localhost:5172/authentication/login", {
+            const response = await apiHandler.post("/authentication/login", {
                 username: formData.username,
                 password: formData.password,
             });
@@ -118,7 +120,7 @@ export default function LoginPage({ checker }) {
         try {
             const merge = jwtDecode(response.credential);
 
-            const fetch = await axios.post("http://localhost:5172/authentication/login-google", {
+            const fetch = await apiHandler.post("/authentication/login-google", {
                 merge,
                 token: response.credential,
             });
@@ -166,12 +168,13 @@ export default function LoginPage({ checker }) {
                             type="text"
                             className="form-control"
                             id="username"
-                            value={formData.name}
+                            value={formData.username}
                             onChange={handleChange}
                             name="username"
                             placeholder="Enter your username"
                             required
-                            autoFocus/>
+                            // autoFocus
+                        />
                     </div>
                     <div className="mb-3 form-password-toggle">
                         <div className="d-flex justify-content-between">
@@ -191,7 +194,8 @@ export default function LoginPage({ checker }) {
                                 name="password"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 aria-describedby="password"
-                                required/>
+                                required
+                            />
                             {/*<span className="input-group-text cursor-pointer"></span>*/}
                         </div>
                     </div>
@@ -213,8 +217,6 @@ export default function LoginPage({ checker }) {
                             <div className="d-flex justify-content-center w-100"
                                  style={{minWidth: '120px'}}>
                                 <ReCaptchaComponent
-                                    siteKey="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
-                                    verifyUrl="http://localhost:5172/recaptcha/verify-captcha"
                                     onSuccess={handleSuccess}
                                     onError={handleError}
                                 />
@@ -265,7 +267,6 @@ export default function LoginPage({ checker }) {
                 show={showSuccess}  // truyền showSuccess vào NotifySuccess
                 onHide={() => setShowSuccess(false)}  // đóng khi người dùng click
             />
-
             <NotifyModal
                 type="danger"
                 title="Login Failed"

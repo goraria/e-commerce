@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Badge, Button, Form, Table } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const OrderDetails = () => {
     const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -14,7 +15,7 @@ export const OrderDetails = () => {
     const handleGetBill = async () => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.get(`http://localhost:5172/bill/get-bill/${id}`, {
+            const response = await apiHandler.get(`/bill/get-bill/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

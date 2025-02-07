@@ -3,19 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import axios from 'axios';
 import UserForm from "../../components/modal/form/UserForm.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const UserManagement = () => {
     const navigate = useNavigate();
 
     const [data, setData] = useState([])
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-user")
+        const response = await apiHandler.get("/admin/get-user")
         // console.log(response.data)
         setData(response.data)
     };
     const [data1, setData1] = useState([])
     const fetchAPI1 = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-account")
+        const response = await apiHandler.get("/admin/get-account")
         // console.log(response.data)
         setData1(response.data)
     };

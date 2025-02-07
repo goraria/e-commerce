@@ -3,6 +3,7 @@ import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-b
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import ConfigurationForm from "../../components/modal/form/ConfigurationForm.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const ProductConfiguration = () => {
     const navigate = useNavigate();
@@ -11,12 +12,12 @@ export const ProductConfiguration = () => {
     const [products, setProducts] = useState([])
 
     const fetchAPI = async () => {
-        const response = await axios.get("http://localhost:5172/admin/get-configration")
+        const response = await apiHandler.get("/admin/get-configration")
         setdata(response.data)
     };
 
     const productList = async () => {
-        const response = await axios.get("http://localhost:5172/products/get-product")
+        const response = await apiHandler.get("/products/get-product")
         setProducts(response.data)
     };
 
@@ -81,7 +82,7 @@ export const ProductConfiguration = () => {
     const handleDelete = async (id) => {
         try {
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-configuration/${id}`);
+            await apiHandler.delete(`/admin/delete-configuration/${id}`);
 
             // Optionally, fetch the updated data again
             fetchAPI();

@@ -2,13 +2,14 @@ import React, {useEffect, useRef, useState} from "react";
 import { Badge, Button, Form, Pagination, Table } from "react-bootstrap";
 import OrderExpand from "../../components/order/OrderExpand.jsx";
 import axios from "axios";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
 
     const getOrders = async () => {
         try {
-            const response = await axios.get('http://localhost:5172/bill/get-all');
+            const response = await apiHandler.get('/bill/get-all');
             // console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -19,7 +20,7 @@ export const OrderHistory = () => {
         try {
             // setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5172/bill/list-bill', {
+            const response = await apiHandler.get('/bill/list-bill', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

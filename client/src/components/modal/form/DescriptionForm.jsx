@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import {ConfirmModal} from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function DescriptionForm({ description, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -63,8 +64,8 @@ export default function DescriptionForm({ description, show, onHide, onReload })
             // const token = localStorage.getItem('token');
             // console.log(formData);
             const response = description
-                ? await axios.post(`http://localhost:5172/admin/update-description/${description.iddescription}`, formData)
-                : await axios.put('http://localhost:5172/admin/create-description', formData);
+                ? await apiHandler.post(`/admin/update-description/${description.iddescription}`, formData)
+                : await apiHandler.put('/admin/create-description', formData);
 
             if (response.status === 200 || response.status === 201) {
                 // alert(address ? 'Address updated successfully' : 'Address added successfully');
@@ -80,7 +81,7 @@ export default function DescriptionForm({ description, show, onHide, onReload })
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${color.idaddress}`, {
+            await apiHandler.delete(`/admin/delete/${color.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);

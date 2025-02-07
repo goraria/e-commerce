@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Badge, Button, Form, Pagination, Table } from "react-bootstrap";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function PreviewPage() {
     const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ export default function PreviewPage() {
         const token = localStorage.getItem("token");
 
         try {
-            const response = await axios.get('http://localhost:5172/bill/list-bill', {
+            const response = await apiHandler.get('/bill/list-bill', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -269,7 +270,7 @@ export default function PreviewPage() {
                 return;
             }
 
-            const response = await axios.get('http://localhost:5172/account/get-info', {
+            const response = await apiHandler.get('/account/get-info', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import axios from "axios";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function StatisticView({ item, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -75,8 +76,8 @@ export default function StatisticView({ item, show, onHide, onReload }) {
         try {
             const token = localStorage.getItem('token');
             const response = item ?
-                await axios.put(`http://localhost:5172/address/update/${address.idaddress}`, formData) :
-                await axios.post('http://localhost:5172/address/addition', formData, {
+                await apiHandler.put(`/address/update/${address.idaddress}`, formData) :
+                await apiHandler.post('/address/addition', formData, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

@@ -6,6 +6,7 @@ import axios from 'axios';
 import Transitionbar from '../../layouts/Transitionbar.jsx';
 import OrderItem from "../../components/product/OrderItem.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function CheckOutPage() {
     const location = useLocation();
@@ -81,7 +82,7 @@ export default function CheckOutPage() {
 
             // console.log('Dữ liệu gửi lên:', requestData);
 
-            await axios.post(`http://localhost:5172/bill/add-bill`, requestData, {
+            await apiHandler.post(`/bill/add-bill`, requestData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

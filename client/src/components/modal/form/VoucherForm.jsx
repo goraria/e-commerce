@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import Calendar from "react-calendar";
 import {ConfirmModal} from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function VoucherForm({ voucher, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -32,7 +33,9 @@ export default function VoucherForm({ voucher, show, onHide, onReload }) {
             setShowToCalendar(false);
         }
     };
+
     const [showToCalendar, setShowToCalendar] = useState(false);
+
     useEffect(() => {
         setError(null);
         if (voucher) {
@@ -62,11 +65,13 @@ export default function VoucherForm({ voucher, show, onHide, onReload }) {
         const { name, value } = event.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
     };
+
     const convertFormDataToString = (data) => {
         return Object.fromEntries(
             Object.entries(data).map(([key, value]) => [key, String(value || "")])
         );
     };
+
     const handleInvalid = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -90,8 +95,8 @@ export default function VoucherForm({ voucher, show, onHide, onReload }) {
     const handleConfirmSave = async () => {
         try {
             const response = voucher
-                ? await axios.put(`http://localhost:5172/admin/update-voucher/${voucher.iddiscount}`, formData)
-                : await axios.post('http://localhost:5172/admin/create-voucher', formData);
+                ? await apiHandler.put(`/admin/update-voucher/${voucher.iddiscount}`, formData)
+                : await apiHandler.post('/admin/create-voucher', formData);
             if (response.status === 200 || response.status === 201) {
                 setShowConfirmModal(false)
                 onHide();
@@ -105,7 +110,7 @@ export default function VoucherForm({ voucher, show, onHide, onReload }) {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete-voucher/${voucher.iddiscount}`, {
+            await apiHandler.delete(`/admin/delete-voucher/${voucher.iddiscount}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -116,6 +121,7 @@ export default function VoucherForm({ voucher, show, onHide, onReload }) {
             setError(error.response ? error.response.data.message : 'Failed to save voucher');
         }
     };
+
     const onFromDateChange = (date) => {
         if (toDate && date >= toDate) {
             setError("Ngày bắt đầu phải trước ngày kết thúc.");
@@ -126,6 +132,7 @@ export default function VoucherForm({ voucher, show, onHide, onReload }) {
             setShowFromCalendar(false);
         }
     };
+
     return (
         <>
             <Modal

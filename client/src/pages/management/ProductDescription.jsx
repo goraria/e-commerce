@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import axios from 'axios';
 import DescriptionForm from "../../components/modal/form/DescriptionForm.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export const ProductDescription = () => {
     const [data, setData] = useState([])
@@ -10,8 +11,8 @@ export const ProductDescription = () => {
     const fetchData = async () => {
         try {
             const [descriptionResponse, productsResponse] = await Promise.all([
-                axios.get("http://localhost:5172/admin/get-description"),
-                axios.get("http://localhost:5172/products/get-product"),
+                apiHandler.get("/admin/get-description"),
+                apiHandler.get("/products/get-product"),
                 // axios.get("http://localhost:5172/admin/payhd"),
             ]);
             setData(descriptionResponse.data);
@@ -71,7 +72,7 @@ export const ProductDescription = () => {
         try {
 
             // Send delete request to the server
-            await axios.delete(`http://localhost:5172/admin/delete-description/${id}`);
+            await apiHandler.delete(`/admin/delete-description/${id}`);
 
             // Optionally, fetch the updated data again
             fetchData();

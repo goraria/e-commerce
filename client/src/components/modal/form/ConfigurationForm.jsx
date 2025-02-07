@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { ConfirmModal } from "../notice/ConfirmModal.jsx";
+import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function ConfigurationForm({ configuration, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
@@ -92,8 +93,8 @@ export default function ConfigurationForm({ configuration, show, onHide, onReloa
             // const token = localStorage.getItem('token');
             // console.log(formData)
             const response = configuration
-                ? await axios.post(`http://localhost:5172/admin/update-configuration/${configuration.idconfiguration}`, formData)
-                : await axios.put('http://localhost:5172/admin/create-configuration', formData);
+                ? await apiHandler.post(`/admin/update-configuration/${configuration.idconfiguration}`, formData)
+                : await apiHandler.put('/admin/create-configuration', formData);
 
 
             if (response.status === 200 || response.status === 201) {
@@ -110,7 +111,7 @@ export default function ConfigurationForm({ configuration, show, onHide, onReloa
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5172/admin/delete/${configuration.idaddress}`, {
+            await apiHandler.delete(`/admin/delete/${configuration.idaddress}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowConfirmDelete(false);
@@ -124,7 +125,7 @@ export default function ConfigurationForm({ configuration, show, onHide, onReloa
 
     const getProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:5172/products/get-product');
+            const response = await apiHandler.get('/products/get-product');
             setProductList(response.data);
         } catch (error) {
             console.error("Error fetching products:", error);

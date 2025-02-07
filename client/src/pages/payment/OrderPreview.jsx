@@ -5,6 +5,7 @@ import Transitionbar from '../../layouts/Transitionbar.jsx';
 import CardItem from '../../components/product/CartItem.jsx';
 import OrderItem from "../../components/product/OrderItem.jsx";
 import axios from 'axios';
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function OrderPreview() {
     const [user, setUser] = useState([]);
@@ -37,11 +38,11 @@ export default function OrderPreview() {
 
     const fetchUser = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/account/get-info`, {
+            const response = await apiHandler.get(`/account/get-info`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            const data = await response.json();
-            setUser(data)
+
+            setUser(response.data)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
         }
@@ -49,7 +50,7 @@ export default function OrderPreview() {
 
     const fetchAddress = async () => {
         try {
-            const response = await axios.get(`http://localhost:5172/address/list`, {
+            const response = await apiHandler.get(`/address/list`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
