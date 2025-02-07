@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-export default function ReCaptchaComponent ({ siteKey, verifyUrl, onSuccess, onError }) {
+export const ReCaptchaComponent = ({ siteKey, verifyUrl, onSuccess, onError }) => {
     const [isVerifying, setIsVerifying] = useState(false);
     const [verificationResult, setVerificationResult] = useState(null);
 

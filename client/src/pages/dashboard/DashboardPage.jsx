@@ -10,7 +10,7 @@ import ToastBox from "../../components/toast/ToastBox.jsx";
 //
 // type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export const DashboardPage = () => {
+export default function DashboardPage() {
     // const [value, onChange] = useState<Value>(new Date());
     useEffect(() => {
         dashboardAnalitics();
@@ -749,7 +749,7 @@ export const DashboardPage = () => {
             </div>
             <div className="row">
                 <div className="col-lg-12 mb-4 order-0">
-                    <ToastBox title="Notify" type="Info" position="Top right" message="Japtor"/>
+                    <ToastBox title="NotifyModal" type="Info" position="Top right" message="Japtor"/>
                     <div className="col-md-3">
                         <label className="form-label" htmlFor="showToastPlacement">
                             &nbsp;

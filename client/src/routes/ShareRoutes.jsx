@@ -1,23 +1,23 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { NotFound } from "../pages/overview/NotFound.jsx";
-import { Home } from "../pages/overview/Home.jsx";
-import { About } from "../pages/overview/About.jsx";
-import { Contact } from "../pages/overview/Contact.jsx";
-import { Product } from "../pages/overview/Product.jsx";
-import { ProductList } from "../pages/overview/ProductList.jsx";
-import {ErrorPage} from "../pages/misc/ErrorPage.jsx";
+import HomePage from "../pages/overview/HomePage.jsx";
+import AboutPage from "../pages/overview/AboutPage.jsx";
+import ContactPage from "../pages/overview/ContactPage.jsx";
+import ProductPage from "../pages/overview/ProductPage.jsx";
+import ProductList from "../pages/overview/ProductList.jsx";
+import ErrorPage from "../pages/misc/ErrorPage.jsx";
+import NotfoundPage from "../pages/misc/NotfoundPage.jsx";
 
 export const ShareRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/product" element={<Product />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/product" element={<ProductPage />} />
             <Route path="/search" element={<ProductList />} />
-            <Route path="/faq" element={<NotFound />} />
-            {/*<Route path="/404" element={<NotFound />} />*/}
+            <Route path="/faq" element={<NotfoundPage />} />
+            {/*<Route path="/404" element={<NotfoundPage />} />*/}
 
             <Route path="*" element={<ErrorPage />} />
         </Routes>

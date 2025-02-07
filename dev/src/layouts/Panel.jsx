@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import Activitybar from "./Activitybar.jsx";
 import Navbar from './Navbar';
 import Copyright from './Copyright.jsx';
-import getGreetingMessage from "../utils/greetingHandler.jsx";
+import getGreetingMessage from "../utils/greetingHandler.js";
 
 const menu = [
     {

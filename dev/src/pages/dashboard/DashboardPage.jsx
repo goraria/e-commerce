@@ -19,6 +19,11 @@ export const DashboardPage = () => {
     return (
         <>
             <div className="row">
+                <div className="col-12 col mb-4">
+                    <DataTables/>
+                </div>
+            </div>
+            <div className="row">
                 <div className="col-lg-8 mb-4 order-0">
                     <div className="card">
                         <div className="d-flex align-items-end row">
@@ -760,7 +765,6 @@ export const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-            <DataTables/>
         </>
     );
 };

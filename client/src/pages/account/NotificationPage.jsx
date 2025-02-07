@@ -1,7 +1,7 @@
 import React from 'react'
 import { AccountWrapper } from '../../components/wrapper/AccountWrapper'
 
-export const NotificationPage = () => {
+export default function NotificationPage() {
     return (
         <AccountWrapper title="Notification" >
             <div className="card">

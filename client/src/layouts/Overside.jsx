@@ -25,12 +25,12 @@ const Overside = () => {
             {/*                </li>*/}
             {/*                <li className="menu-item me-3">*/}
             {/*                    <Link className="menu-link nav-link" to="/contact">*/}
-            {/*                        <h5 className="m-0">Contact</h5>*/}
+            {/*                        <h5 className="m-0">ContactPage</h5>*/}
             {/*                    </Link>*/}
             {/*                </li>*/}
             {/*                <li className="menu-item">*/}
             {/*                    <Link className="menu-link nav-link" to="/about">*/}
-            {/*                        <h5 className="m-0">About</h5>*/}
+            {/*                        <h5 className="m-0">AboutPage</h5>*/}
             {/*                    </Link>*/}
             {/*                </li>*/}
             {/*            </ul>*/}

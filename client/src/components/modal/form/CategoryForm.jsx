@@ -1,9 +1,9 @@
 import axios, { formToJSON } from "axios";
-import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
+import { ConfirmModal } from "../notice/ConfirmModal.jsx";
 
-const CategoryForm = ({ category, show, onHide, onReload }) => {
+export default function CategoryForm({ category, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         idcategory: '',
@@ -254,15 +254,17 @@ const CategoryForm = ({ category, show, onHide, onReload }) => {
                     }
                 </Modal.Footer>
             </Modal>
-            <SaveChangeOld
+
+            <ConfirmModal
+                type="info"
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
-                onSave={() => {
-                    handleConfirmSave();
-                    setShowConfirmModal(false)
-                }}
+                onSave={() => { handleConfirmSave(); setShowConfirmModal(false) }}
             />
-            <SaveChangeOld
+            <ConfirmModal
+                title="Delete Category"
+                type="danger"
+                button="Delete"
                 show={showConfirmDelete}
                 onHide={() => setShowConfirmDelete(false)}
                 onSave={handleDelete}
@@ -270,5 +272,3 @@ const CategoryForm = ({ category, show, onHide, onReload }) => {
         </>
     )
 }
-
-export default CategoryForm

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {AccountPage} from "./AccountPage.jsx";
+import AccountPage from "./AccountPage.jsx";
 
-export const ProfilePage = () => {
+export default function ProfilePage() {
     const [reloadAccountInfo, setReloadAccountInfo] = useState(0);
 
     const handleReloadAccountInfo = () => {

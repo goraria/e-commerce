@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import { Carousel, Image } from "react-bootstrap";
 import Overview from "../../layouts/Overview.jsx";
 import ProductItem from "../../components/product/ProductItem.jsx";
+import { useFetch } from "../../hooks/useFetch.jsx";
 import axios from "axios";
 
 const banners = [
@@ -37,6 +38,16 @@ export const Home = () => {
 
         }
     }
+
+    const fetchUser = async () => {
+        try {
+            const data = await get("/api/user");
+            setUser(data);
+        } catch (err) {
+            console.error("Lỗi khi lấy dữ liệu người dùng:", err);
+            setError(err);
+        }
+    };
 
     const fetchProductTopSpotlight = async () => {
         try {

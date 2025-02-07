@@ -6,7 +6,7 @@ import Basket from "../components/bar-elements/Basket.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
 import {Button, Form} from "react-bootstrap";
-import getGreetingMessage from "../utils/greetingHandler.jsx";
+import getGreetingMessage from "../utils/greetingHandler.js";
 import Overside from "./Overside.jsx";
 
 const notifies = [

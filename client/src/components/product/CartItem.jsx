@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import axios from 'axios';
-import NotifySuccess from "../modal/notice/NotifySuccess.jsx";
+import { NotifyModal } from "../modal/notice/NotifyModal.jsx";
 
 export default function CardItem({ element, onChange, onReload, onCheckboxChange, onQuantityChange }) {
     const [product, setProduct] = useState([]);
@@ -207,7 +207,8 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
                     </Button>
                 </div>
             </div>
-            <NotifySuccess
+            <NotifyModal
+                type="primary"
                 title="Remove item successfully"
                 message="Product has been removed from the cart!"
                 show={showSuccess}

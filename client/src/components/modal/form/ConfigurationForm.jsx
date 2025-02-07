@@ -1,9 +1,9 @@
 import axios from "axios";
-import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
+import { ConfirmModal } from "../notice/ConfirmModal.jsx";
 
-const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
+export default function ConfigurationForm({ configuration, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         cpu: '',
@@ -338,12 +338,17 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
                     }
                 </Modal.Footer>
             </Modal>
-            <SaveChangeOld
+
+            <ConfirmModal
+                type="info"
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
                 onSave={() => { handleConfirmSave(); setShowConfirmModal(false) }}
             />
-            <SaveChangeOld
+            <ConfirmModal
+                title="Delete Configuration"
+                type="danger"
+                button="Delete"
                 show={showConfirmDelete}
                 onHide={() => setShowConfirmDelete(false)}
                 onSave={handleDelete}
@@ -351,5 +356,3 @@ const ConfigurationForm = ({ configuration, show, onHide, onReload }) => {
         </>
     )
 }
-
-export default ConfigurationForm;

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Button, Form } from "react-bootstrap";
 import axios from "axios";
-import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
+
 import Basket from "../components/bar-elements/Basket.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
-import {Button, Form} from "react-bootstrap";
 import getGreetingMessage from "../utils/greetingHandler.jsx";
 import Overside from "./Overside.jsx";
+import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -33,7 +34,7 @@ const baskets = [
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
 
-const Activitybar = ({ children }) => {
+export default function Activitybar({ children }) {
     useEffect(() => {
         Main();
 
@@ -157,12 +158,12 @@ const Activitybar = ({ children }) => {
                 {/*        </li>*/}
                 {/*        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">*/}
                 {/*            <Link className="nav-link" to="/contact">*/}
-                {/*                <h5 className="m-0">Contact</h5>*/}
+                {/*                <h5 className="m-0">ContactPage</h5>*/}
                 {/*            </Link>*/}
                 {/*        </li>*/}
                 {/*        <li className="nav-item navbar-search-wrapper me-3 me-xl-2">*/}
                 {/*            <Link className="nav-link" to="/about">*/}
-                {/*                <h5 className="m-0">About</h5>*/}
+                {/*                <h5 className="m-0">AboutPage</h5>*/}
                 {/*            </Link>*/}
                 {/*        </li>*/}
                 {/*    </ul>*/}
@@ -387,10 +388,10 @@ const Activitybar = ({ children }) => {
                             </a>
                             <ul className="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a
+                                    <Link
                                         aria-label="go to profile"
                                         className="dropdown-item"
-                                        href="#"
+                                        to={"/user"}
                                     >
                                         <div className="d-flex">
                                             <div className="flex-shrink-0 me-3">
@@ -409,21 +410,21 @@ const Activitybar = ({ children }) => {
                                                 <small className="text-muted">User</small>
                                             </div>
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
                                 </li>
-                                <li>
-                                    <Link
-                                        to={"/user"}
-                                        aria-label="dashboard"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bxs-dashboard bx-sm me-2"></i>Dashboard</span>
-                                    </Link>
-                                </li>
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={"/user"}*/}
+                                {/*        aria-label="dashboard"*/}
+                                {/*        className="dropdown-item"*/}
+                                {/*    >*/}
+                                {/*        <span className="align-middle"><i*/}
+                                {/*            className="bx bxs-dashboard bx-sm me-2"></i>Dashboard</span>*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
                                 <li>
                                     <Link
                                         to={"/user/profile"}
@@ -489,16 +490,16 @@ const Activitybar = ({ children }) => {
                     <i className="bx bx-x bx-md search-toggler cursor-pointer"></i>
                 </div>
             </nav>
-            <SaveChangeOld
+
+            <ConfirmModal
                 show={showModalHeader}
                 onHide={() => setShowModalHeader(false)}
                 onSave={handleLogout}
                 title="Log out"
-                text="Do you want to log out?"
+                message="Do you want to log out?"
                 button="Log out"
+                type="primary"
             />
         </>
     );
 }
-
-export default Activitybar;

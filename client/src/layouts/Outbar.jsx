@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Form, Nav, Navbar } from "react-bootstrap";
+import axios from "axios";
+import getGreetingMessage from "../utils/greetingHandler.jsx";
+
 import Notification from "../components/bar-elements/Notification.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Overside from "./Overside.jsx";
-import axios from "axios";
-import {Button, Form, Nav, Navbar} from "react-bootstrap";
-import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
-import getGreetingMessage from "../utils/greetingHandler.jsx";
 
-const Outbar = ({ children }) => {
+export default function Outbar({ children }) {
     useEffect(() => {
         Main();
     },[])
@@ -433,5 +433,3 @@ const Outbar = ({ children }) => {
         </>
     )
 }
-
-export default Outbar;

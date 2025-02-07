@@ -5,23 +5,23 @@ import axios from "axios";
 
 import { AddressManagement } from "../pages/information/AddressManagement.jsx";
 import { VoucherWallet } from "../pages/information/VoucherWallet.jsx";
-import { Preview } from "../pages/dashboard/Preview.jsx";
+import PreviewPage from "../pages/dashboard/PreviewPage.jsx";
 import { OrderHistory } from "../pages/information/OrderHistory.jsx";
-import { ProfilePage } from "../pages/account/ProfilePage.jsx";
+import ProfilePage from "../pages/account/ProfilePage.jsx";
 import { OrderDetails } from "../pages/information/OrderDetails.jsx";
-import { ErrorPage } from "../pages/misc/ErrorPage.jsx";
-import { NotFound } from "../pages/overview/NotFound.jsx";
+import ErrorPage from "../pages/misc/ErrorPage.jsx";
+import NotfoundPage from "../pages/misc/NotfoundPage.jsx";
 
 export const UserRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Preview />} />
+            <Route path="/" element={<PreviewPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/address" element={<AddressManagement />} />
             <Route path="/voucher" element={<VoucherWallet />} />
             <Route path="/order" element={<OrderHistory />} />
             <Route path="/bill" element={<OrderDetails />} />
-            <Route path="/rating" element={<NotFound />} />
+            <Route path="/rating" element={<NotfoundPage />} />
 
             <Route path="*" element={<ErrorPage />} />
         </Routes>
