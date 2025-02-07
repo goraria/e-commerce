@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import Copyright from './Copyright.jsx';
-import getGreetingMessage from "../utils/greetingHandler.jsx";
+import getGreetingMessage from "../utils/greetingHandler.js";
 
 const menu = [
     {

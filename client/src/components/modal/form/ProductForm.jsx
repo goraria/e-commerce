@@ -1,9 +1,9 @@
 import axios from "axios";
-import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
+import { ConfirmModal } from "../notice/ConfirmModal.jsx";
 
-const ProductForm = ({ product, show, onHide, onReload }) => {
+export default function ProductForm({ product, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         brand: '',
@@ -335,15 +335,17 @@ const ProductForm = ({ product, show, onHide, onReload }) => {
                     }
                 </Modal.Footer>
             </Modal>
-            <SaveChangeOld
+
+            <ConfirmModal
+                type="info"
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
-                onSave={() => {
-                    handleConfirmSave();
-                    setShowConfirmModal(false)
-                }}
+                onSave={() => { handleConfirmSave(); setShowConfirmModal(false) }}
             />
-            <SaveChangeOld
+            <ConfirmModal
+                title="Delete Product"
+                type="danger"
+                button="Delete"
                 show={showConfirmDelete}
                 onHide={() => setShowConfirmDelete(false)}
                 onSave={handleDelete}
@@ -351,5 +353,3 @@ const ProductForm = ({ product, show, onHide, onReload }) => {
         </>
     )
 }
-
-export default ProductForm;

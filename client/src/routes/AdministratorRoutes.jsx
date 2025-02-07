@@ -11,14 +11,14 @@ import { ContainerPage } from "../pages/others/layouts/ContainerPage";
 import { FluidPage } from "../pages/others/layouts/FluidPage";
 import { BlankPage } from "../pages/others/layouts/BlankPage";
 
-import { LoginPage } from "../pages/authentication/LoginPage";
-import { RegisterPage } from "../pages/authentication/RegisterPage";
-import { ForgotPasswordPage } from "../pages/authentication/ForgotPasswordPage";
-import { AccountPage } from "../pages/account/AccountPage";
-import { Connections } from "../pages/account/ConnectionsPage";
-import { NotificationPage } from "../pages/account/NotificationPage";
-import { ErrorPage } from "../pages/misc/ErrorPage";
-import { MaintenancePage } from "../pages/misc/MaintenancePage";
+// import { LoginPage } from "../pages/authentication/LoginPage";
+// import { RegisterPage } from "../pages/authentication/RegisterPage";
+// import { ForgotPasswordPage } from "../pages/authentication/ForgotPasswordPage";
+import AccountPage from "../pages/account/AccountPage";
+import ConnectionsPage from "../pages/account/ConnectionsPage";
+import NotificationPage from "../pages/account/NotificationPage";
+import ErrorPage from "../pages/misc/ErrorPage";
+import MaintenancePage from "../pages/misc/MaintenancePage.jsx";
 
 import { AccordionPage } from "../pages/others/user-interface/AccordionPage";
 import { AlertPage } from "../pages/others/user-interface/AlertPage";
@@ -47,8 +47,8 @@ import { BasicInputPage } from "../pages/others/form-element/BasicInputPage";
 import { InputGroupPage } from "../pages/others/form-element/InputGroupPage";
 import { HorizontalFormPage } from "../pages/others/form-layout/HorizontalFormPage";
 import { VerticalFormPage } from "../pages/others/form-layout/VerticalFormPage";
-import { TablesPage } from "../pages/dashboard/TablesPage.jsx";
-import { DashboardPage } from "../pages/dashboard/DashboardPage.jsx";
+import { TablesPage } from "../pages/others/TablesPage.jsx";
+import DashboardPage from "../pages/dashboard/DashboardPage.jsx";
 
 import { PerfectScrollbarPage } from "../pages/others/extended-ui/PerfectScrollbar";
 import { TextDividerPage } from "../pages/others/extended-ui/TextDividerPage";
@@ -60,7 +60,7 @@ import { ProductConfiguration } from "../pages/management/ProductConfiguration"
 import { ProductAccessory } from "../pages/management/ProductAccessory"
 import { ProductDescription } from "../pages/management/ProductDescription"
 import { ProductColor } from "../pages/management/ProductColor"
-import { ProfilePage } from "../pages/account/ProfilePage.jsx";
+import ProfilePage from "../pages/account/ProfilePage.jsx";
 import { Voucher } from '../pages/management/Voucher.jsx';
 ///////////////////////////////////////
 
@@ -115,13 +115,13 @@ export const AdministratorRoutes = () => {
             <Route path="/ui/typography" element={<TypographyPage />} />
 
 
-            <Route path="/auth/login" element={<LoginPage />} />
-            <Route path="/auth/register" element={<RegisterPage />} />
-            <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+            {/*<Route path="/auth/login" element={<LoginPage />} />*/}
+            {/*<Route path="/auth/register" element={<RegisterPage />} />*/}
+            {/*<Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />*/}
 
             <Route path="/account/settings" element={<AccountPage />} />
             <Route path="/account/notifications" element={<NotificationPage />} />
-            <Route path="/account/connections" element={<Connections />} />
+            <Route path="/account/connections" element={<ConnectionsPage />} />
 
             <Route path="/misc/error" element={<ErrorPage />} />
             <Route path="/misc/under-maintenance" element={<MaintenancePage />} />

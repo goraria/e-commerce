@@ -1,13 +1,14 @@
-import getGreetingMessage from '../utils/greetingHandler.jsx';
-import {Button, ButtonToolbar, Form, Nav} from "react-bootstrap";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button, ButtonToolbar, Form, Nav } from "react-bootstrap";
 import axios from "axios";
-import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
+import { jwtDecode } from "jwt-decode";
+
+import getGreetingMessage from '../utils/greetingHandler.jsx';
 import Notification from "../components/bar-elements/Notification.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
-import {jwtDecode} from "jwt-decode";
+import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -33,7 +34,7 @@ const baskets = [
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
 
-const Navbar = ({ children }) => {
+export default function Navbar({ children }) {
     useEffect(() => {
         Main();
 
@@ -429,10 +430,10 @@ const Navbar = ({ children }) => {
                             </a>
                             <ul className="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a
+                                    <Link
                                         aria-label="go to profile"
                                         className="dropdown-item"
-                                        href="#"
+                                        to={"/admin"}
                                     >
                                         <div className="d-flex">
                                             <div className="flex-shrink-0 me-3">
@@ -451,21 +452,21 @@ const Navbar = ({ children }) => {
                                                 <small className="text-muted">Administrator</small>
                                             </div>
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <div className="dropdown-divider"></div>
                                 </li>
-                                <li>
-                                    <Link
-                                        to={"/admin"}
-                                        aria-label="dashboard"
-                                        className="dropdown-item"
-                                    >
-                                        <span className="align-middle"><i
-                                            className="bx bxs-dashboard bx-sm me-2"></i>Dashboard</span>
-                                    </Link>
-                                </li>
+                                {/*<li>*/}
+                                {/*    <Link*/}
+                                {/*        to={"/admin"}*/}
+                                {/*        aria-label="dashboard"*/}
+                                {/*        className="dropdown-item"*/}
+                                {/*    >*/}
+                                {/*        <span className="align-middle"><i*/}
+                                {/*            className="bx bxs-dashboard bx-sm me-2"></i>Dashboard</span>*/}
+                                {/*    </Link>*/}
+                                {/*</li>*/}
                                 <li>
                                     <Link
                                         to={"/admin/profile"}
@@ -522,16 +523,15 @@ const Navbar = ({ children }) => {
                 </div>
             </nav>
 
-            <SaveChangeOld
+            <ConfirmModal
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 onSave={handleLogout}
                 title="Log out"
-                text="Do you want to log out?"
+                message="Do you want to log out?"
                 button="Log out"
+                type="primary"
             />
         </>
     );
 }
-
-export default Navbar;

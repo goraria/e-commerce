@@ -11,11 +11,11 @@ import { AdministratorRoutes } from "./routes/AdministratorRoutes.jsx";
 import { UserRoutes } from "./routes/UserRoutes.jsx";
 import { CustomerRoutes } from "./routes/CustomerRoutes.jsx";
 import { ShareRoutes } from "./routes/ShareRoutes.jsx";
-import { Loading } from "./pages/overview/Loading.jsx";
-import { Login } from "./pages/authentication/Login.jsx";
-import { Register } from "./pages/authentication/Register.jsx";
+import LoadingPage from "./pages/misc/LoadingPage.jsx";
+import LoginPage from "./pages/authentication/LoginPage.jsx";
+import RegisterPage from "./pages/authentication/RegisterPage.jsx";
 import { AuthenticationRoutes } from "./routes/AuthenticationRoutes.jsx";
-import { ErrorPage } from "./pages/misc/ErrorPage.jsx";
+import ErrorPage from "./pages/misc/ErrorPage.jsx";
 
 import Protected from "./routes/Protected.jsx";
 import viteLogo from "/vite.svg";
@@ -63,7 +63,7 @@ export default function App() {
         authentication();
     }, []);
 
-    if (loading) return <Loading />; // Hiển thị loading nếu đang tải
+    if (loading) return <LoadingPage />; // Hiển thị loading nếu đang tải
 
     return (
         <Routes>
@@ -80,11 +80,11 @@ export default function App() {
 
             <Route
                 path="/auth/login"
-                element={<Login checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+                element={<LoginPage checker={authentication} />} // Truyền hàm authentication dưới dạng callback
             />
             <Route
                 path="/auth/register"
-                element={<Register checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+                element={<RegisterPage checker={authentication} />} // Truyền hàm authentication dưới dạng callback
             />
 
             <Route

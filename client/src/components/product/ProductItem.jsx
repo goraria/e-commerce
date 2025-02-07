@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import axios from 'axios';
 
-import NotifySuccess from "../modal/notice/NotifySuccess.jsx";
 import RatingStar from "./RatingStar.jsx";
+import { NotifyModal } from "../modal/notice/NotifyModal.jsx";
 
 export default function ProductItem(product, state) {
     const [descriptions, setArray] = useState([]);
@@ -175,7 +175,8 @@ export default function ProductItem(product, state) {
                     </div>
                 </div>
             </div>
-            <NotifySuccess
+            <NotifyModal
+                type="primary"
                 title="Add to cart successfully"
                 message="Sản phẩm đã được thêm vào giỏ hàng!"
                 show={showSuccess}

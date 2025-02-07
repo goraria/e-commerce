@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
 
-export const OrderSuccess = () => {
+export default function OrderSuccess() {
     const location = useLocation();
     const navigate = useNavigate();
 

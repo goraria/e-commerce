@@ -1,6 +1,6 @@
 import { AccountWrapper } from "../../components/wrapper/AccountWrapper";
 
-export const Connections = () => {
+export default function ConnectionsPage() {
     return (
         <AccountWrapper title="Connection">
             <div className="row">

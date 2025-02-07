@@ -3,15 +3,12 @@ import React, { Component, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
-import SaveChangeOld from "../components/modal/notice/SaveChangeOld.jsx";
 import Message from "../components/bar-elements/Message.jsx";
 import Basket from "../components/bar-elements/Basket.jsx";
 import Notification from "../components/bar-elements/Notification.jsx";
-import Activitybar from "./Activitybar.jsx";
-import Outbar from "./Outbar.jsx";
-import Overside from "./Overside.jsx";
+import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
 
 const notifies = [
     { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
@@ -37,7 +34,7 @@ const baskets = [
     { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
 ]
 
-const Header = () => {
+export default function Header() {
     const [showModalHeader, setShowModalHeader] = useState(false);
     const [submit, setSubmit] = useState({search: ""});
 
@@ -502,16 +499,15 @@ const Header = () => {
                     <i className="bx bx-x bx-md search-toggler cursor-pointer"></i>
                 </div>
             </nav>
-            <SaveChangeOld
+            <ConfirmModal
                 show={showModalHeader}
                 onHide={() => setShowModalHeader(false)}
                 onSave={handleLogout}
                 title="Log out"
-                text="Do you want to log out?"
+                message="Do you want to log out?"
                 button="Log out"
+                type="primary"
             />
         </>
     );
 };
-
-export default Header;

@@ -1,11 +1,11 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AccountWrapper } from "../../components/wrapper/AccountWrapper";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import SaveChangeOld from "../../components/modal/notice/SaveChangeOld.jsx";
+import { AccountWrapper } from "../../components/wrapper/AccountWrapper";
+import axios from "axios";
+import { ConfirmModal } from "../../components/modal/notice/ConfirmModal.jsx";
 
-export const AccountPage = ({ onReload }) => {
+export default function AccountPage({ onReload }) {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
@@ -319,7 +319,12 @@ export const AccountPage = ({ onReload }) => {
                     </form>
                 </div>
             </div>
-            <SaveChangeOld show={showModal} onHide={() => setShowModal(false)} onSave={handleSaveChanges} />
+
+            <ConfirmModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                onSave={handleSaveChanges}
+            />
         </>
     )
 }

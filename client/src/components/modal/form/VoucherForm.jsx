@@ -1,10 +1,10 @@
 import axios, { formToJSON } from "axios";
-import SaveChangeOld from "../notice/SaveChangeOld.jsx";
 import React, { useEffect, useState, useRef } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import Calendar from "react-calendar";
+import {ConfirmModal} from "../notice/ConfirmModal.jsx";
 
-const VoucherForm = ({ voucher, show, onHide, onReload }) => {
+export default function VoucherForm({ voucher, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         iddiscount: '',
@@ -277,15 +277,17 @@ const VoucherForm = ({ voucher, show, onHide, onReload }) => {
                     }
                 </Modal.Footer>
             </Modal>
-            <SaveChangeOld
+
+            <ConfirmModal
+                type="info"
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
-                onSave={() => {
-                    handleConfirmSave();
-                    setShowConfirmModal(false)
-                }}
+                onSave={() => { handleConfirmSave(); setShowConfirmModal(false) }}
             />
-            <SaveChangeOld
+            <ConfirmModal
+                title="Delete Voucher"
+                type="danger"
+                button="Delete"
                 show={showConfirmDelete}
                 onHide={() => setShowConfirmDelete(false)}
                 onSave={handleDelete}
@@ -293,5 +295,3 @@ const VoucherForm = ({ voucher, show, onHide, onReload }) => {
         </>
     )
 }
-
-export default VoucherForm;

@@ -15,7 +15,7 @@ const categories = [
     { categorical: 'Screen', varient: 'danger', item: ['15', '14', '12','16'] },
 ];
 
-export const ProductList = () => {
+export default function ProductList() {
     const brands = ['Lenovo', 'Dell', 'HP', 'Acer', 'Microsoft', 'Asus', 'LG', 'Apple', 'Razer', 'Samsung']
     const [count, setCount] = useState(0);
     const [productList, setProductList] = useState([]);

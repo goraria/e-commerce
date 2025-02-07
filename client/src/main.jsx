@@ -5,16 +5,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from './context/Context.jsx'; // Import Provider từ Context
 
-const CLIENT_ID = "293479668173-jnahitc17msp2gal1f7abdoia4agkogo.apps.googleusercontent.com"; // Có thể thay bằng process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID nếu dùng dotenv
+// const CLIENT_ID = import.meta.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID; // Có thể thay bằng process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID nếu dùng dotenv
+const CLIENT_ID = "293479668173-jnahitc17msp2gal1f7abdoia4agkogo.apps.googleusercontent.com"
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider> {/* Đảm bảo Provider bọc toàn bộ ứng dụng */}
-        <BrowserRouter>
-            <GoogleOAuthProvider clientId={CLIENT_ID}>
-                <App />
-            </GoogleOAuthProvider>
-        </BrowserRouter>
-    </Provider>,
+    <BrowserRouter>
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+            <App />
+        </GoogleOAuthProvider>
+    </BrowserRouter>
 );
 
 // import { StrictMode } from 'react'
