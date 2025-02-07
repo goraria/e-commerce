@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize('ws_proj', 'root', 'Japtor@1999', {
+const sequelize = new Sequelize(process.env.DATABASE, 'root', process.env.SQL_PASSWORD, {
     host: 'localhost',
     dialect: 'mysql',
     dialectModule: require('mysql2'),

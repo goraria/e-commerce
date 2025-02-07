@@ -63,10 +63,12 @@ To Do {
 }
 
 .env server {
-    PORT=5172
-    EMAIL_USER="zzphananhzz@gmail.com"
-    EMAIL_APSS="paxp vsub cdhb uohj"
-    EMAIL_PASS=Gorth$1999
-    JWT_SECRET=gorth
-    SecretKey= "6LfaA50qAAAAAM1aoWsGwTTm9_HNinFwcSs_q_am"
+PORT=5172
+DATABASE="ws_proj"
+SQL_PASSWORD="Japtor@1999"
+EMAIL_USER="zzphananhzz@gmail.com"
+EMAIL_APSS="paxp vsub cdhb uohj"
+EMAIL_PASS=Gorth$1999
+JWT_SECRET=gorth
+SecretKey="6LfaA50qAAAAAM1aoWsGwTTm9_HNinFwcSs_q_am"
 }
