@@ -99,16 +99,11 @@ export default function ForgotPasswordPage() {
                             Send Reset Link
                         </button>
                     </div>
-                    <div className="row d-flex justify-content-center flex-wrap">
-                        <div className="col-lg-12">
-                            <div className="d-flex justify-content-center w-100"
-                                 style={{minWidth: '120px'}}>
-                                <ReCaptchaComponent
-                                    onSuccess={handleSuccess}
-                                    onError={handleError}
-                                />
-                            </div>
-                        </div>
+                    <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={handleSuccess}
+                            onError={handleError}
+                        />
                     </div>
                 </Form>
                 <div className="text-center">

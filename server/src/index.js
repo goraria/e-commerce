@@ -7,15 +7,20 @@ const session = require('express-session');
 
 const sequelize = require('./config/database');
 const routes = require("./routes/routes");
+require('dotenv').config();
 
 const app = express();
+const host = `${process.env.METHOD}://${process.env.HOST}`
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:8081'],
+    origin: [
+        `${host}:${process.env.CLIENT_PORT}`,
+        `${host}:${process.env.MOBILE_PORT}`
+    ],
     credentials: true,
 }
 app.use(cors(corsOptions));
 
-const port = process.env.PORT
+const port = process.env.SERVER_PORT
 
 sequelize.sync();
 
@@ -31,7 +36,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/assets", express.static(path.join(__dirname, '../client/public/assets/')));
 routes(app)
 
-
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at ${host}:${port}`);
 });
