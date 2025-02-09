@@ -1,0 +1,25 @@
+/*!* recaptcha-custom.css *!*/
+
+/*!* Outer container styles *!*/
+/*#recaptcha-custom {*/
+/*    width: 100% !important;*/
+/*    border-radius: 5px !important;*/
+/*    box-sizing: border-box;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*!* Apply full width and border-radius to all descendant div elements *!*/
+/*#recaptcha-custom div,*/
+/*#recaptcha-custom div * {*/
+/*    width: 100% !important;*/
+/*    border-radius: 5px !important;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+/*#rc-anchor-container.rc-anchor.rc-anchor-normal.rc-anchor-light {*/
+/*    border-radius: 0.375rem !important;*/
+/*}*/
+
+/*.rc-anchor-light.rc-anchor-normal, .rc-anchor-light.rc-anchor-compact {*/
+/*    border: none;*/
+/*}*/
