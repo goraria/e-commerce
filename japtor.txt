@@ -63,12 +63,17 @@ To Do {
 }
 
 .env server {
-PORT=5172
+METHOD="http"
+HOST="localhost"
+SERVER_PORT=5172
+CLIENT_PORT=5173
+MOBILE_PORT=8081
 DATABASE="ws_proj"
+SQL_USERNAME="root"
 SQL_PASSWORD="Japtor@1999"
-EMAIL_USER="zzphananhzz@gmail.com"
-EMAIL_APSS="paxp vsub cdhb uohj"
-EMAIL_PASS=Gorth$1999
-JWT_SECRET=gorth
-SecretKey="6LfaA50qAAAAAM1aoWsGwTTm9_HNinFwcSs_q_am"
+EMAIL_USER="uipackgorth@gmail.com"
+EMAIL_APSS="vprj acmu qtgb qwny"
+EMAIL_PASS="Gorth$1999"
+JWT_SECRET="gorth"
+SecretKey= "6LfaA50qAAAAAM1aoWsGwTTm9_HNinFwcSs_q_am"
 }
