@@ -10,7 +10,7 @@ import { AuthWrapper } from "./AuthWrapper.jsx";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-import {GoogleOAuthButton} from "../../components/button/GoogleOAuthButton.jsx";
+import { GoogleOAuthButton } from "../../components/button/GoogleOAuthButton.jsx";
 const CLIENT_ID = "293479668173-jnahitc17msp2gal1f7abdoia4agkogo.apps.googleusercontent.com"
 
 export default function LoginPage({ checker }) {
@@ -271,14 +271,14 @@ export default function LoginPage({ checker }) {
                     <div className="divider-text">or</div>
                 </div>
                 {/*<div className="text-center mb-3">or log in with</div>*/}
-                <div className="row d-flex justify-content-center flex-wrap">
-                    <div className="col-lg-12">
-                        <div className="d-flex justify-content-center w-100"
-                             style={{minWidth: '120px'}}>
+                {/*<div className="row d-flex justify-content-center flex-wrap">*/}
+                {/*    <div className="col-lg-12">*/}
+                {/*        <div className="d-flex justify-content-center w-100"*/}
+                {/*             style={{minWidth: '120px'}}>*/}
 
-                        </div>
-                    </div>
-                </div>
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className="d-flex justify-content-center">
                     {/*<button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#0866ff'}}>*/}
                     {/*    <i className="icon-base bx bxl-facebook-circle bx-sm"></i>*/}
