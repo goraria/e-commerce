@@ -6,7 +6,7 @@ const CustomDropDown = ({ category, onSelect }) => {
             as={ButtonGroup}
             key={category.categorical}
             id={`dropdown-variants-${category.categorical}`}
-            variant={category.varient}
+            variant={category.variant}
             title={category.categorical}
         >
             {category.item.map((product, index) => (
