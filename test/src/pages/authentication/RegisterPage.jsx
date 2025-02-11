@@ -9,14 +9,8 @@ import { jwtDecode } from "jwt-decode";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-
-const sclItems = [
-    // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
-    { id: 1, name: "Apple", color: "dark" },
-    { id: 2, name: "Google", color: "success" },
-    { id: 3, name: "Meta", color: "primary" },
-    // { id: 4, name: "Twitter", icon: faTwitter },
-]
+import { GoogleOAuthButton } from "../../components/button/GoogleOAuthButton.jsx";
+import LoadingPage from "../misc/LoadingPage.jsx";
 
 export default function RegisterPage({ checker }) {
     const [validated, setValidated] = useState(false);
@@ -29,6 +23,9 @@ export default function RegisterPage({ checker }) {
         lastname: '',
         phone: ''
     });
+
+    const [showTypePassword, setShowTypePassword] = useState(false);
+    const [showVerifyPassword, setShowVerifyPassword] = useState(false);
 
     const [captchaVerified, setCaptchaVerified] = useState(false); // New state
     const handleSuccess = (data) => {
@@ -49,7 +46,7 @@ export default function RegisterPage({ checker }) {
     const [loading, setLoading] = useState(false);  // Thêm trạng thái loading
 
     const navigate = useNavigate();
-    let role = null;
+    // let role = null;
 
     const handleNavigate = (role) => {
         if (role === 1) {
@@ -69,17 +66,21 @@ export default function RegisterPage({ checker }) {
         const form = event.currentTarget;
 
         if (!captchaVerified) {
-            alert('Please verify the captcha before submitting.');
+            // alert('Please verify the captcha before submitting.');
+            setError("Please verify the captcha before submitting.");
+            setShowError(true)
             return;
         }
 
-        if (form.checkValidity() === false) {
+        if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
         } else {
             event.preventDefault();
 
             if (formData.password === formData.retypepass) {
+                setLoading(true);
+
                 try {
                     const response = await apiHandler.post('/authentication/register', formData);
 
@@ -92,8 +93,11 @@ export default function RegisterPage({ checker }) {
                     // console.log(error)
                     setError(error.response ? error.response.data.message : 'Registration failed');
                     setShowError(true);
+                } finally {
+                    setLoading(false);
                 }
             } else {
+                setLoading(false);
                 setError('Password is not match!');
                 setShowError(true);
             }
@@ -131,6 +135,8 @@ export default function RegisterPage({ checker }) {
             setLoading(false);
         }
     };
+
+    if (loading) return <LoadingPage/>
 
     return (
         <>
@@ -352,7 +358,7 @@ export default function RegisterPage({ checker }) {
                             <input
                                 required
                                 name="password"
-                                type="password"
+                                type={showTypePassword ? "text" : "password"}
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 minLength={8}
                                 value={formData.password}
@@ -361,7 +367,12 @@ export default function RegisterPage({ checker }) {
                                 className="form-control"
                                 aria-label="Password"
                             />
-                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                            <span
+                                className="input-group-text cursor-pointer"
+                                onClick={() => setShowTypePassword(!showTypePassword)}
+                            >
+                                <i className={!showTypePassword ? "bx bx-show" : "bx bx-hide"}></i>
+                            </span>
                         </div>
                     </div>
                     <div className="mb-3">
@@ -369,7 +380,7 @@ export default function RegisterPage({ checker }) {
                         <div className="input-group">
                             <input
                                 required
-                                type="password"
+                                type={showVerifyPassword ? "text" : "password"}
                                 name="retypepass"
                                 minLength={8}
                                 value={formData.retypepass}
@@ -379,7 +390,12 @@ export default function RegisterPage({ checker }) {
                                 className="form-control"
                                 aria-label="Password"
                             />
-                            <span className="input-group-text cursor-pointer"><i className="bx bx-hide"></i></span>
+                            <span
+                                className="input-group-text cursor-pointer"
+                                onClick={() => setShowVerifyPassword(!showVerifyPassword)}
+                            >
+                                <i className={!showVerifyPassword ? "bx bx-show" : "bx bx-hide"}></i>
+                            </span>
                         </div>
                     </div>
                     <div className="mb-3">
@@ -452,21 +468,17 @@ export default function RegisterPage({ checker }) {
                             </label>
                         </div>
                     </div>
-                    <div className="row d-flex justify-content-center flex-wrap mb-3">
-                        <div className="col-lg-12">
-                            <div className="d-flex justify-content-center w-100"
-                                 style={{minWidth: '120px'}}>
-                                <ReCaptchaComponent
-                                    onSuccess={handleSuccess}
-                                    onError={handleError}
-                                />
-                            </div>
-                        </div>
-                    </div>
                     <div className="mb-3">
                         <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">
                             Register
                         </button>
+                    </div>
+
+                    <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={handleSuccess}
+                            onError={handleError}
+                        />
                     </div>
                 </Form>
 
@@ -490,17 +502,51 @@ export default function RegisterPage({ checker }) {
                     <div className="divider-text">or</div>
                 </div>
                 {/*<div className="text-center mb-3">or log in with</div>*/}
-                <div className="row d-flex justify-content-center flex-wrap">
-                    <div className="col-lg-12">
-                        <div className="d-flex justify-content-center w-100"
-                             style={{minWidth: '120px'}}>
-                            <GoogleLogin
-                                onSuccess={handleGoogleLogin}
-                                onError={() => false}
-                                style={{width: '100%'}}
-                            />
-                        </div>
-                    </div>
+                {/*<div className="row d-flex justify-content-center flex-wrap">*/}
+                {/*    <div className="col-lg-12">*/}
+                {/*        <div className="d-flex justify-content-center w-100"*/}
+                {/*             style={{minWidth: '120px'}}>*/}
+                {/*            <GoogleLogin*/}
+                {/*                onSuccess={handleGoogleLogin}*/}
+                {/*                onError={() => false}*/}
+                {/*                style={{width: '100%'}}*/}
+                {/*            />*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                <div className="d-flex justify-content-center">
+                    <button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#0866ff'}}>
+                        <i className="icon-base bx bxl-facebook-circle bx-sm"></i>
+                    </button>
+                    <button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#1da1f2'}}>
+                        <i className="icon-base bx bxl-twitter bx-sm"></i>
+                    </button>
+                    <button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#384551'}}>
+                        <i className="icon-base bx bxl-github bx-sm"></i>
+                    </button>
+                    {/*<button*/}
+                    {/*    className="btn btn-sm btn-icon rounded-circle"*/}
+                    {/*    style={{color: '#dd4b39'}}*/}
+                    {/*>*/}
+                    {/*    <i className="icon-base bx bxl-google bx-sm"></i>*/}
+                    {/*</button>*/}
+                    {/*<GoogleOAuthProvider clientId={CLIENT_ID}>*/}
+                    {/*    <button*/}
+                    {/*        className="btn btn-sm btn-icon rounded-circle"*/}
+                    {/*        // onClick={() => handleGoogle}*/}
+                    {/*        style={{color: '#dd4b39'}}*/}
+                    {/*    >*/}
+                    {/*        <i className="icon-base bx bxl-google bx-sm"></i>*/}
+                    {/*    </button>*/}
+                    <GoogleOAuthButton/>
+                    {/*</GoogleOAuthProvider>*/}
+                    <GoogleLogin
+                        onSuccess={handleGoogleLogin}
+                        onError={() => setShowError(true)}
+                        logo_alignment="center"
+                        type="icon"
+                        shape="circle"
+                    />
                 </div>
             </AuthWrapper>
 
