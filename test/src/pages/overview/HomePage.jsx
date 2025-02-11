@@ -74,30 +74,30 @@ export default function HomePage() {
                     </Carousel.Item>
                 ))}
             </Carousel>
-            <Overview mt={4}>
-                <h3 className="text-center m-0">Spotlight</h3>
-            </Overview>
-            <div className="container">
-                <div className="row">
-                    {spotlights.map((product, index) => (
-                        <div key={index} className="col col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <ProductItem obj={product} />
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <Overview>
-                <h3 className="text-center m-0">Random</h3>
-            </Overview>
-            <div className="container">
-                <div className="row">
-                    {randoms.map((product, index) => (
-                        <div key={index} className="col col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <ProductItem obj={product} />
-                        </div>
-                    ))}
-                </div>
-            </div>
+            {/*<Overview mt={4}>*/}
+            {/*    <h3 className="text-center m-0">Spotlight</h3>*/}
+            {/*</Overview>*/}
+            {/*<div className="container">*/}
+            {/*    <div className="row">*/}
+            {/*        {spotlights.map((product, index) => (*/}
+            {/*            <div key={index} className="col col-sm-12 col-md-6 col-lg-4 mb-4">*/}
+            {/*                <ProductItem obj={product} />*/}
+            {/*            </div>*/}
+            {/*        ))}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            {/*<Overview>*/}
+            {/*    <h3 className="text-center m-0">Random</h3>*/}
+            {/*</Overview>*/}
+            {/*<div className="container">*/}
+            {/*    <div className="row">*/}
+            {/*        {randoms.map((product, index) => (*/}
+            {/*            <div key={index} className="col col-sm-12 col-md-6 col-lg-4 mb-4">*/}
+            {/*                <ProductItem obj={product} />*/}
+            {/*            </div>*/}
+            {/*        ))}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </>
     )
 }

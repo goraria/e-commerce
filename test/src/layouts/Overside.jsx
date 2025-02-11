@@ -77,10 +77,10 @@ export default function Overside() {
                                 />
                             </span>
                             {/*<span className="app-brand-text demo menu-text fw-bold ms-2">Bill Cipher</span>*/}
-                            <span className="app-brand-text demo menu-text fw-bold ms-2 text-capitalize text-body">Cipher</span>
+                            <span className="app-brand-text demo menu-text fw-bold ms-2 text-capitalize text-body">MeiFang</span>
                         </Link>
                     </li>
-                    <li className="nav-item navbar-search-wrapper me-3 me-xl-2">
+                    <li className="nav-item navbar-search-wrapper me-3 me-xl-2 d-none">
                         <Link className="nav-link" to="/search">
                             <h5 className="m-0">Product</h5>
                         </Link>

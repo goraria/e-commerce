@@ -5,11 +5,13 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 import LoadingPage from "../misc/LoadingPage.jsx";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin, googleLogout, GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import { GoogleOAuthButton } from "../../components/button/GoogleOAuthButton.jsx";
+const CLIENT_ID = "293479668173-jnahitc17msp2gal1f7abdoia4agkogo.apps.googleusercontent.com"
 
 export default function LoginPage({ checker }) {
     // const [modalShow, setModalShow] = useState(false);
@@ -19,6 +21,7 @@ export default function LoginPage({ checker }) {
         username: '',
         password: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const [captchaVerified, setCaptchaVerified] = useState(false); // New state
     const handleSuccess = (data) => {
@@ -39,7 +42,7 @@ export default function LoginPage({ checker }) {
     const [showError, setShowError] = useState(false);  // trạng thái cho NotifyError
     const [loading, setLoading] = useState(false);  // Thêm trạng thái loading
     const navigate = useNavigate();
-    let role = null;
+    // let role = null;
 
     const handleNavigate = (role) => {
         if (role === 1) {
@@ -150,6 +153,11 @@ export default function LoginPage({ checker }) {
 
     }
 
+    // const handleGoogle = useGoogleLogin({
+    //     onSuccess: handleGoogleLogin,
+    //     onError: () => setShowError(true),
+    // })
+
     useEffect(() => {
         handleCheck();
     }, []);
@@ -175,20 +183,29 @@ export default function LoginPage({ checker }) {
                             required
                             // autoFocus
                         />
+                        {/*<div className="valid-feedback">*/}
+                        {/*    Looks good!*/}
+                        {/*</div>*/}
+                        {/*<div className="invalid-feedback">*/}
+                        {/*    Please enter your username.*/}
+                        {/*</div>*/}
                     </div>
                     <div className="mb-3 form-password-toggle">
-                        <div className="d-flex justify-content-between">
-                            <label className="form-label" htmlFor="password">Password</label>
-                            <Link aria-label="Go to Forgot Password Page" to="/auth/forgot-password">
-                                <small>Forgot Password?</small>
-                            </Link>
-                        </div>
-                        <div className="input-group input-group-merge">
+                        <label className="form-label" htmlFor="password">Password</label>
+                        {/*<div className="d-flex justify-content-between">*/}
+                        {/*    <label className="form-label" htmlFor="password">Password</label>*/}
+                        {/*    <Link aria-label="Go to Forgot Password Page" to="/auth/forgot-password">*/}
+                        {/*        <small>Forgot Password?</small>*/}
+                        {/*    </Link>*/}
+                        {/*</div>*/}
+                        <div className="input-group">
+                            {/* input-group-merge */}
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 autoComplete="true"
                                 id="password"
                                 value={formData.password}
+                                minLength={8}
                                 onChange={handleChange}
                                 className="form-control"
                                 name="password"
@@ -196,31 +213,36 @@ export default function LoginPage({ checker }) {
                                 aria-describedby="password"
                                 required
                             />
-                            {/*<span className="input-group-text cursor-pointer"></span>*/}
+                            <span
+                                className="input-group-text cursor-pointer"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                <i className={!showPassword ? "bx bx-show" : "bx bx-hide"}></i>
+                            </span>
+                            {/*<div className="valid-feedback">*/}
+                            {/*    Make sure enter correct password!*/}
+                            {/*</div>*/}
+                            {/*<div className="invalid-feedback">*/}
+                            {/*    Please enter your password.*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                     <div className="mb-3">
-                        <div className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="remember-me"
-                                name="rememberMe"
-                                // checked={formData.rememberMe}
-                                onChange={handleChange}
-                            />
-                            <label className="form-check-label" htmlFor="remember-me"> Remember Me </label>
-                        </div>
-                    </div>
-                    <div className="row d-flex justify-content-center flex-wrap mb-3">
-                        <div className="col-lg-12">
-                            <div className="d-flex justify-content-center w-100"
-                                 style={{minWidth: '120px'}}>
-                                <ReCaptchaComponent
-                                    onSuccess={handleSuccess}
-                                    onError={handleError}
+                        <div className="d-flex justify-content-between">
+                            <div className="form-check">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    id="remember-me"
+                                    name="rememberMe"
+                                    // checked={formData.rememberMe}
+                                    // onChange={handleChange}
                                 />
+                                <label className="form-check-label" htmlFor="remember-me"> Remember Me </label>
                             </div>
+                            <Link aria-label="Go to Forgot Password Page" to="/auth/forgot-password">
+                                <small>Forgot Password?</small>
+                            </Link>
                         </div>
                     </div>
                     <div className="mb-3">
@@ -232,6 +254,20 @@ export default function LoginPage({ checker }) {
                         >
                             Log in
                         </button>
+                    </div>
+                    {/*<div className="row d-flex justify-content-center flex-wrap mb-3">*/}
+                    {/*    <div className="col-lg-12">*/}
+                    {/*        <div className="d-flex justify-content-center w-100"*/}
+                    {/*             style={{minWidth: '120px'}}>*/}
+
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                    <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={handleSuccess}
+                            onError={handleError}
+                        />
                     </div>
                 </Form>
 
@@ -246,17 +282,47 @@ export default function LoginPage({ checker }) {
                     <div className="divider-text">or</div>
                 </div>
                 {/*<div className="text-center mb-3">or log in with</div>*/}
-                <div className="row d-flex justify-content-center flex-wrap">
-                    <div className="col-lg-12">
-                        <div className="d-flex justify-content-center w-100"
-                             style={{minWidth: '120px'}}>
-                            <GoogleLogin
-                                onSuccess={handleGoogleLogin}
-                                onError={() => setShowError(true)}
-                                style={{width: '100%'}}
-                            />
-                        </div>
-                    </div>
+                {/*<div className="row d-flex justify-content-center flex-wrap">*/}
+                {/*    <div className="col-lg-12">*/}
+                {/*        <div className="d-flex justify-content-center w-100"*/}
+                {/*             style={{minWidth: '120px'}}>*/}
+
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                <div className="d-flex justify-content-center">
+                    {/*<button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#0866ff'}}>*/}
+                    {/*    <i className="icon-base bx bxl-facebook-circle bx-sm"></i>*/}
+                    {/*</button>*/}
+                    {/*<button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#1da1f2'}}>*/}
+                    {/*    <i className="icon-base bx bxl-twitter bx-sm"></i>*/}
+                    {/*</button>*/}
+                    {/*<button className="btn btn-sm btn-icon rounded-circle me-2" style={{color: '#384551'}}>*/}
+                    {/*    <i className="icon-base bx bxl-github bx-sm"></i>*/}
+                    {/*</button>*/}
+                    {/*<button*/}
+                    {/*    className="btn btn-sm btn-icon rounded-circle"*/}
+                    {/*    style={{color: '#dd4b39'}}*/}
+                    {/*>*/}
+                    {/*    <i className="icon-base bx bxl-google bx-sm"></i>*/}
+                    {/*</button>*/}
+                    {/*<GoogleOAuthProvider clientId={CLIENT_ID}>*/}
+                    {/*    <button*/}
+                    {/*        className="btn btn-sm btn-icon rounded-circle"*/}
+                    {/*        // onClick={() => handleGoogle}*/}
+                    {/*        style={{color: '#dd4b39'}}*/}
+                    {/*    >*/}
+                    {/*        <i className="icon-base bx bxl-google bx-sm"></i>*/}
+                    {/*    </button>*/}
+                    {/*    <GoogleOAuthButton/>*/}
+                    {/*</GoogleOAuthProvider>*/}
+                    <GoogleLogin
+                        onSuccess={handleGoogleLogin}
+                        onError={() => setShowError(true)}
+                        logo_alignment="center"
+                        type="icon"
+                        shape="circle"
+                    />
                 </div>
             </AuthWrapper>
 
