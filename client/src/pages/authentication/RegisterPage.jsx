@@ -9,15 +9,8 @@ import { jwtDecode } from "jwt-decode";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-import {GoogleOAuthButton} from "../../components/button/GoogleOAuthButton.jsx";
-
-const sclItems = [
-    // { id: 0, name: "Github", icon: faGithub, color: "secondary" },
-    { id: 1, name: "Apple", color: "dark" },
-    { id: 2, name: "Google", color: "success" },
-    { id: 3, name: "Meta", color: "primary" },
-    // { id: 4, name: "Twitter", icon: faTwitter },
-]
+import { GoogleOAuthButton } from "../../components/button/GoogleOAuthButton.jsx";
+import LoadingPage from "../misc/LoadingPage.jsx";
 
 export default function RegisterPage({ checker }) {
     const [validated, setValidated] = useState(false);
@@ -73,17 +66,21 @@ export default function RegisterPage({ checker }) {
         const form = event.currentTarget;
 
         if (!captchaVerified) {
-            alert('Please verify the captcha before submitting.');
+            // alert('Please verify the captcha before submitting.');
+            setError("Please verify the captcha before submitting.");
+            setShowError(true)
             return;
         }
 
-        if (form.checkValidity() === false) {
+        if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
         } else {
             event.preventDefault();
 
             if (formData.password === formData.retypepass) {
+                setLoading(true);
+
                 try {
                     const response = await apiHandler.post('/authentication/register', formData);
 
@@ -96,8 +93,11 @@ export default function RegisterPage({ checker }) {
                     // console.log(error)
                     setError(error.response ? error.response.data.message : 'Registration failed');
                     setShowError(true);
+                } finally {
+                    setLoading(false);
                 }
             } else {
+                setLoading(false);
                 setError('Password is not match!');
                 setShowError(true);
             }
@@ -135,6 +135,8 @@ export default function RegisterPage({ checker }) {
             setLoading(false);
         }
     };
+
+    if (loading) return <LoadingPage/>
 
     return (
         <>

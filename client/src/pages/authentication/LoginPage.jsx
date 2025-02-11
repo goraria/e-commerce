@@ -183,6 +183,12 @@ export default function LoginPage({ checker }) {
                             required
                             // autoFocus
                         />
+                        {/*<div className="valid-feedback">*/}
+                        {/*    Looks good!*/}
+                        {/*</div>*/}
+                        {/*<div className="invalid-feedback">*/}
+                        {/*    Please enter your username.*/}
+                        {/*</div>*/}
                     </div>
                     <div className="mb-3 form-password-toggle">
                         <label className="form-label" htmlFor="password">Password</label>
@@ -213,7 +219,12 @@ export default function LoginPage({ checker }) {
                             >
                                 <i className={!showPassword ? "bx bx-show" : "bx bx-hide"}></i>
                             </span>
-                            {/*<span className="input-group-text cursor-pointer"></span>*/}
+                            {/*<div className="valid-feedback">*/}
+                            {/*    Make sure enter correct password!*/}
+                            {/*</div>*/}
+                            {/*<div className="invalid-feedback">*/}
+                            {/*    Please enter your password.*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                     <div className="mb-3">
