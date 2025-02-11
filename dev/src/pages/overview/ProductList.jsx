@@ -8,11 +8,11 @@ import Transitionbar from "../../layouts/Transitionbar.jsx";
 import Overview from "../../layouts/Overview.jsx";
 
 const categories = [
-    { categorical: 'CPU', varient: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
-    { categorical: 'RAM', varient: 'info', item: ['4','8','16','32','64'] },
-    { categorical: 'GPU', varient: 'success', item: ['RTX 2060', 'RTX 3060','RTX 3090', 'RTX 4070','GTX 1660 Ti'] },
-    { categorical: 'SSD', varient: 'warning', item: ['128', '256', '512', '1024', "2048"] },
-    { categorical: 'Screen', varient: 'danger', item: ['15', '14', '12','16'] },
+    { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
+    { categorical: 'RAM', variant: 'info', item: ['4','8','16','32','64'] },
+    { categorical: 'GPU', variant: 'success', item: ['RTX 2060', 'RTX 3060','RTX 3090', 'RTX 4070','GTX 1660 Ti'] },
+    { categorical: 'SSD', variant: 'warning', item: ['128', '256', '512', '1024', "2048"] },
+    { categorical: 'Screen', variant: 'danger', item: ['15', '14', '12','16'] },
 ];
 
 export const ProductList = () => {

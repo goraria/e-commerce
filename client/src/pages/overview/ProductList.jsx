@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import {Container, Button, Row, Col, Stack} from 'react-bootstrap';
-import CustomDropDown from "../../components/button/CustomDropDown";
+import { Container, Button, Row, Col, Stack } from 'react-bootstrap';
+import { SelectSortButton } from "../../components/button/SelectSortButton.jsx";
 import ProductItem from "../../components/product/ProductItem";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
 import Overview from "../../layouts/Overview.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-
-const categories = [
-    { categorical: 'CPU', varient: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
-    { categorical: 'RAM', varient: 'info', item: ['4','8','16','32','64'] },
-    { categorical: 'GPU', varient: 'success', item: ['RTX 2060', 'RTX 3060','RTX 3090', 'RTX 4070','GTX 1660 Ti'] },
-    { categorical: 'SSD', varient: 'warning', item: ['128', '256', '512', '1024', "2048"] },
-    { categorical: 'Screen', varient: 'danger', item: ['15', '14', '12','16'] },
-];
+import {BrandButton} from "../../components/button/BrandButton.jsx";
 
 export default function ProductList() {
+    const categories = [
+        { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
+        { categorical: 'RAM', variant: 'info', item: ['4','8','16','32','64'] },
+        { categorical: 'GPU', variant: 'success', item: ['RTX 2060', 'RTX 3060','RTX 3090', 'RTX 4070','GTX 1660 Ti'] },
+        { categorical: 'SSD', variant: 'warning', item: ['128', '256', '512', '1024', "2048"] },
+        { categorical: 'Screen', variant: 'danger', item: ['15', '14', '12','16'] },
+    ];
+
     const brands = ['Lenovo', 'Dell', 'HP', 'Acer', 'Microsoft', 'Asus', 'LG', 'Apple', 'Razer', 'Samsung']
     const [count, setCount] = useState(0);
     const [productList, setProductList] = useState([]);
@@ -68,34 +69,61 @@ export default function ProductList() {
                 <h6 className="card-subtitle text-muted">
                     Laptop is best mobile device to work...
                 </h6>
-                <hr/>
-                <Row className="justify-content-center">
-                    <Stack direction="horizontal" gap={3}>
-                        {brands.map((brand, index) => (
-                            <button
-                                key={index}
-                                className="btn btn-outline-primary"
-                                onClick={() => fetchProductByBrand(brand)}
-                            >
-                                {brand}
-                            </button>
-                        ))}
-                    </Stack>
-                </Row>
+                <hr className="mb-0"/>
+                {/*<Row className="justify-content-center">*/}
+                {/*    <Stack direction="horizontal" gap={3}>*/}
+                {/*        {brands.map((brand, index) => (*/}
+                {/*            <button*/}
+                {/*                key={index}*/}
+                {/*                className="btn btn-outline-primary"*/}
+                {/*                onClick={() => fetchProductByBrand(brand)}*/}
+                {/*            >*/}
+                {/*                {brand}*/}
+                {/*            </button>*/}
+                {/*        ))}*/}
+                {/*    </Stack>*/}
+                {/*</Row>*/}
+                <div className="demo-inline-spacing">
+                    {/*row justify-content-center*/}
+                    {/*<Stack direction="horizontal" gap={3}>*/}
+                    {/*    {categories.map((category, index) => (*/}
+                    {/*        <SelectSortButton key={index} category={category} onSelect={filterProducts}/>*/}
+                    {/*    ))}*/}
+                    {/*</Stack>*/}
+
+                    {brands.map((brand, index) => (
+                        <BrandButton
+                            key={index}
+                            brand={brand}
+                            onSelect={filterProducts}
+                        />
+                    ))}
+                </div>
             </Overview>
             <Overview>
                 <h5 className="card-title">Sort by</h5>
                 <h6 className="card-subtitle text-muted">
                     Choose one of config to sort...
                 </h6>
-                <hr/>
-                <Row className="justify-content-center">
-                    <Stack direction="horizontal" gap={3}>
-                        {categories.map((category, index) => (
-                            <CustomDropDown key={index} category={category} onSelect={filterProducts}/>
-                        ))}
-                    </Stack>
-                </Row>
+                <hr className="mb-0"/>
+                <div className="demo-inline-spacing">
+                    {/*row justify-content-center*/}
+                    {/*<Stack direction="horizontal" gap={3}>*/}
+                    {/*    {categories.map((category, index) => (*/}
+                    {/*        <SelectSortButton key={index} category={category} onSelect={filterProducts}/>*/}
+                    {/*    ))}*/}
+                    {/*</Stack>*/}
+
+                    {categories.map((category, index) => (
+                        <SelectSortButton
+                            key={index}
+                            categorical={category.categorical}
+                            variant={category.variant}
+                            items={category.item}
+                            onSelect={filterProducts}
+                        />
+                    ))}
+                </div>
             </Overview>
             <Overview>
                 <h3 className="text-center m-0">Spotlight</h3>
