@@ -32,48 +32,48 @@ Please [visit](#) our docs for installation guide.
 ## Included 📦
 
 - Data
-  - Analytics
+    - Analytics
 - Ajax
-  - jQuery
-  - JavaScript
+    - jQuery
+    - JavaScript
 - Options
-  - **Japtor**
-  - **Goraria**
+    - **Japtor**
+    - **Goraria**
 - API
-  - **Locst**
-  - **Ichibulup**
+    - **Locst**
+    - **Ichibulup**
 - Security
-  - **Payhd**
+    - **Payhd**
 - Test
-  - **Meifang**
+    - **Meifang**
 - Search
-  - **Schweitzenburg**
+    - **Schweitzenburg**
 - Styling
-  - **Braunschweig**
+    - **Braunschweig**
 - Server-side processing
-  - Einmalow
+    - Einmalow
 - Client-side processing
-  - Einmalow
+    - Einmalow
 - Event
-  - Henovia
+    - Henovia
 - Internationalisation
-  - UK
+    - UK
 - React
-  - Native
+    - Native
 - Vue
-  - Next
+    - Next
 - Plug-in development
-  - ?
+    - ?
 - Technical notes
-  - ?
+    - ?
 - Development
-  - Administrator
+    - Administrator
 
 ## Premium 💎
 
 | Author         | Framework           | IDEA                                      |
 |----------------|---------------------|-------------------------------------------|
-| Japtor         | Vite - React Native | JetBrains WebStorm                        |
+| Japtor         | Vite - React Native | JetBrains WebStorm - JetBrains DataGrip   |
 | Payhd          | Node - Django       | Microsoft Visual Studio Code              |
 | Locst          | TensorFlow - Django | JetBrains Pycharm                         |
 | Meifang        | Spring Boot         | JetBrains Intellij - JetBrains Aqua       |
