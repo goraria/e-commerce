@@ -7,7 +7,7 @@ import ProductItem from "../../components/product/ProductItem";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
 import Overview from "../../layouts/Overview.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-import {BrandButton} from "../../components/button/BrandButton.jsx";
+import { BrandButton } from "../../components/button/BrandButton.jsx";
 
 export default function ProductList() {
     const categories = [

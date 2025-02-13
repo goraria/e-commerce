@@ -42,15 +42,19 @@ Please [visit](#) our docs for installation guide.
 - API
   - **Locst**
   - **Ichibulup**
+- Security
+  - **Payhd**
+- Test
+  - **Meifang**
 - Search
   - **Schweitzenburg**
 - Styling
   - **Braunschweig**
-- Events
-  - **Payhd**
 - Server-side processing
   - Einmalow
-- Security
+- Client-side processing
+  - Einmalow
+- Event
   - Henovia
 - Internationalisation
   - UK
@@ -67,17 +71,18 @@ Please [visit](#) our docs for installation guide.
 
 ## Premium 💎
 
-| Author         | Framework    | IDEA                         |
-|----------------|--------------|------------------------------|
-| Japtor         | ViteJs       | JetBrains WebStorm           |
-| Payhd          | NodeJs       | Microsoft Visual Studio Code |
-| Locst          | ReactJs      | Microsoft Visual Studio      |
-| Schweitzenburg | TensorFlowJs | JetBrains Android Studio     |
-| Braunschweig   | NextJs       | JetBrains Aqua               |
-| Goraria        | VueJs        | JetBrains RustRover          |
-| Ichibulup      | Django       | JetBrains Pycharm            |
-| Destine        | Spring Boot  | JetBrains Intellij           |
-| Gortheia       | ASP.NET Core | JetBrains Rider              |
+| Author         | Framework           | IDEA                                      |
+|----------------|---------------------|-------------------------------------------|
+| Japtor         | Vite - React Native | JetBrains WebStorm                        |
+| Payhd          | Node - Django       | Microsoft Visual Studio Code              |
+| Locst          | TensorFlow - Django | JetBrains Pycharm                         |
+| Meifang        | Spring Boot         | JetBrains Intellij - JetBrains Aqua       |
+| Goraria        | Flutter - FireBase  | JetBrains Intellij - Android Studio       |
+| Braunschweig   | Next - Vue          | JetBrains GoLand                          |
+| Schweitzenburg | React               | JetBrains RubyMine                        |
+| Ichibulup      | Angular - Laravel   | JetBrains PhpStorm - JetBrains RustRover  |
+| Destine        | Unreal Engine       | JetBrains CLion                           |
+| Gortheia       | ASP.NET Core        | JetBrains Rider - Microsoft Visual Studio |
 
 ## Documentation 📜
 
