@@ -17,7 +17,7 @@ export const ShareRoutes = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/product" element={<ProductPage />} />
             <Route path="/search" element={<ProductList />} />
-            <Route path="/chat-bot" element={<Chatbot />} />
+            <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/faq" element={<NotfoundPage />} />
             {/*<Route path="/404" element={<NotfoundPage />} />*/}
 
