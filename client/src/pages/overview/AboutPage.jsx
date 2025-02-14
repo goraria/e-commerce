@@ -4,8 +4,8 @@ import { Carousel, Dropdown, Image } from "react-bootstrap";
 import Overview from "../../layouts/Overview.jsx";
 
 const carouselItems = [
-    { id: 0, name: "jg", src: "../assets/img/overviews/jp.jpeg", caption: "Bill", description: "Famous Brand in our website" },
     { id: 1, name: "bill", src: "../assets/img/overviews/sfc.jpeg", caption: "Cipher", description: "Famous Brand in our website" },
+    { id: 0, name: "jg", src: "../assets/img/overviews/jp.jpeg", caption: "Bill", description: "Famous Brand in our website" },
 ]
 
 const imgItems = [
@@ -33,12 +33,12 @@ export default function AboutPage() {
     return (
         <>
             <div className="mt-4">
-                <Carousel fade>
-                    {
-                        carouselItems.map((item, index) => (
+                <div className="container">
+                    <Carousel fade>
+                        {carouselItems.map((item, index) => (
                             <Carousel.Item key={index}>
                                 <Image
-                                    className="d-block w-100 object-fit-cover"
+                                    className="d-block w-100 object-fit-cover rounded-3"
                                     src={item.src}
                                     alt={item.name}
                                     style={{height: '500px'}}
@@ -48,9 +48,9 @@ export default function AboutPage() {
                                     <p>Famous Brand in our website</p>
                                 </Carousel.Caption>
                             </Carousel.Item>
-                        ))
-                    }
-                </Carousel>
+                        ))}
+                    </Carousel>
+                </div>
                 <Overview mt={4}>
                     <div>
                         <h5>About us</h5>

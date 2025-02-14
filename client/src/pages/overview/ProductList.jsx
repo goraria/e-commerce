@@ -131,13 +131,13 @@ export default function ProductList() {
 
             <div className="container">
                 {/*<h2 className="text-center mb-4">Spotlight</h2>*/}
-                <Row>
+                <div className="row">
                     {productList.map(product => (
-                        <div key={product.idproduct} className="col col-xxl-3 col-md-6 col-sm-12 mb-4">
+                        <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
                             <ProductItem obj={product} state={count}/>
                         </div>
                     ))}
-                </Row>
+                </div>
             </div>
         </>
     );
