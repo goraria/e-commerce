@@ -75,5 +75,5 @@ EMAIL_USER="uipackgorth@gmail.com"
 EMAIL_APSS="vprj acmu qtgb qwny"
 EMAIL_PASS="Gorth$1999"
 JWT_SECRET="gorth"
-SecretKey= "6LfaA50qAAAAAM1aoWsGwTTm9_HNinFwcSs_q_am"
+SecretKey="6LfaA50qAAAAAM1aoWsGwTTm9_HNinFwcSs_q_am"
 }

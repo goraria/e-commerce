@@ -83,7 +83,7 @@ export default function HomePage() {
                 <div className="row">
                     {spotlights.map((product, index) => (
                         <div key={index} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
-                            <ProductItem obj={product} />
+                            <ProductItem product={product} />
                         </div>
                     ))}
                 </div>
@@ -95,7 +95,7 @@ export default function HomePage() {
                 <div className="row">
                     {randoms.map((product, index) => (
                         <div key={index} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
-                            <ProductItem obj={product} />
+                            <ProductItem product={product} />
                         </div>
                     ))}
                 </div>

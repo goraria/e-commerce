@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,11 +9,13 @@ import { Provider } from './context/Context.jsx'; // Import Provider từ Contex
 const CLIENT_ID = "579906761509-v41sv4gqqdv12nbju6k95cpr8e7sm3b2.apps.googleusercontent.com"
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <BrowserRouter>
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-            <App />
-        </GoogleOAuthProvider>
-    </BrowserRouter>
+    // <StrictMode>
+        <BrowserRouter>
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
+                <App />
+            </GoogleOAuthProvider>
+        </BrowserRouter>
+    // {/*</StrictMode>*/}
 );
 
 // import { StrictMode } from 'react'

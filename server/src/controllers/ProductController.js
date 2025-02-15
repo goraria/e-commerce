@@ -14,6 +14,7 @@ const { Op, where, Sequelize } = require("sequelize");
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
+
 class ProductController {
     async loadProduct(req, res) {
         try {
@@ -26,7 +27,8 @@ class ProductController {
 
     async loadProperties(req, res) {
         try {
-            // Fetch product by its primary key (using req.params.productId) and include related models
+            // Fetch product by its primary key (using req.params.idproduct) and include related models
+
             const product = await Product.findByPk(req.params.idproduct, {
                 attributes: ['idproduct', 'product_name', 'brand', 'product_image', 'status'],
                 include: [
@@ -36,18 +38,20 @@ class ProductController {
                     },
                     {
                         model: Color, // Including the Color model (if applicable)
-                        attributes: ['idcolor', 'color_name'],
+                        attributes: ['idcolor', 'color'],
                     },
                     {
                         model: Description, // Including the Description model (assuming you have one)
-                        attributes: ['iddescription', 'description_text'],
+                        attributes: ['iddescription', 'title_description', 'sub_description'],
                     },
                     {
                         model: Accessory, // Including Accessory model (if applicable)
-                        attributes: ['idaccessory', 'accessory_name'],
+                        attributes: ['idaccessory', 'nums_key', 'switch_type', 'connection', 'price'],
                     }
                 ],
             });
+
+            // console.log(product)
 
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
@@ -73,22 +77,26 @@ class ProductController {
                 })),
                 colors: product.Colors.map(color => ({
                     idcolor: color.idcolor,
-                    color_name: color.color_name,
+                    color: color.color,
                 })),
                 descriptions: product.Descriptions.map(desc => ({
                     iddescription: desc.iddescription,
-                    description_text: desc.description_text,
+                    title_description: desc.title_description,
+                    sub_description: desc.sub_description,
                 })),
                 accessories: product.Accessories.map(accessory => ({
                     idaccessory: accessory.idaccessory,
-                    accessory_name: accessory.accessory_name,
+                    nums_key: accessory.nums_key,
+                    switch_type: accessory.switch_type,
+                    connection: accessory.connection,
+                    price: accessory.price,
                 }))
             };
 
             // console.log(result);
             return res.json(result);
         } catch (error) {
-            console.error('Error fetching product properties:', error);
+            // console.error('Error fetching product properties:', error);
             return res.status(500).json({ error: 'Failed to load product properties' });
         }
     }
@@ -281,14 +289,14 @@ class ProductController {
     }
 
     async loadProductWithName(req, res) {
-        const { Name } = req.params; // Retrieve idProduct from request parameters
+        const { name } = req.params; // Retrieve idProduct from request parameters
 
         try {
             // Find descriptions where idProduct matches the provided id
             const product = await Product.findAll({
                 where: {
                     product_name: {
-                        [Op.like]: `%${Name}%`
+                        [Op.like]: `%${name}%`
                     }
                 }
             });

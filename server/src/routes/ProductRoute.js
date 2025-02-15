@@ -6,6 +6,7 @@ const path = require('path');
 const getMulterMiddleware = require('../middleware/multer.js');
 const ImageUpload = getMulterMiddleware(path.join(__dirname, '../../../client/public/assets/img/product'));
 // Route để lấy tất cả người dùng
+
 router.get('/load-product', productController.loadProduct);
 router.get('/load-productid/:idProduct', productController.loadProductWithID);
 router.get('/load-description/:idProduct', productController.loadDescription);
@@ -16,8 +17,8 @@ router.get('/load-rating/:idproduct', productController.loadRating);
 router.get('/load-color/:idProduct', productController.loadColor);
 router.get('/load-idconfiguration/:idConfiguration', productController.loadConfigurationByID);
 router.get('/load-productCPU/:CPU', productController.loadProductWithCondition);
-router.get('/load-productBrand/:Brand', productController.loadProductWithBrand);
-router.get('/load-productName/:Name', productController.loadProductWithName);
+router.get('/load-product-brand/:Brand', productController.loadProductWithBrand);
+router.get('/load-product-name/:Name', productController.loadProductWithName);
 
 router.post('/update-productname/:idProduct', ImageUpload.single('product_image'), productController.updateProductName);
 router.delete('/delete-productname/:idProduct', productController.deleteProductName);
