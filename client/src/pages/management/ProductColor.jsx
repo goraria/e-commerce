@@ -3,6 +3,7 @@ import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-b
 import axios from 'axios';
 import ColorForm from "../../components/modal/form/ColorForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 
 export default function ProductColor() {
     const [data, setData] = useState([])
@@ -202,28 +203,6 @@ export default function ProductColor() {
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
-    const renderStatusBadge = (status) => {
-        status = status.toLowerCase();
-        switch (status) {
-            case "green":
-                return <Badge bg="label-success">Green</Badge>;
-            case "yellow":
-                return <Badge bg="label-warning">Yellow</Badge>;
-            case "blue":
-                return <Badge bg="label-primary">Blue</Badge>;
-            case "cyan":
-                return <Badge bg="label-info">Cyan</Badge>;
-            case "red":
-                return <Badge bg="label-danger">Red</Badge>;
-            case "dark":
-                return <Badge bg="label-dark">Dark</Badge>;
-            case "light":
-                return <Badge bg="label-secondary">Light</Badge>;
-            default:
-                return <Badge bg="label-secondary">{status}</Badge>;
-        }
-    };
-
     useEffect(() => {
         // fetchAPI();
         // fetchAPI1();
@@ -343,7 +322,7 @@ export default function ProductColor() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{renderStatusBadge(item.color)}</td>
+                                    <td>{renderStatusDelivery(item.color)}</td>
                                     <td>
                                         <Button
                                             variant="link"

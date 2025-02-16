@@ -84,7 +84,7 @@ export default function OrderExpand({ order }) {
                                                 className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                                 <div className="avatar">
                                                     <img
-                                                        src={`../assets/img/categories/product-7.png`}
+                                                        src={`/assets/img/categories/product-7.png`}
                                                         alt="Product-8"
                                                         className="rounded"
                                                     />

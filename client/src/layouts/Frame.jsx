@@ -1,4 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import Header from './Header';
 import Footer from './Footer';
 import Copyright from './Copyright.jsx';
@@ -9,10 +11,9 @@ import Navbar from "./Navbar.jsx";
 import Activitybar from "./Activitybar.jsx";
 import getGreetingMessage from "../utils/greetingHandler.jsx";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { renderComponentByRole } from "../utils/renderHandler.jsx";
 
-const Frame = ({ children, role }) => {
+export default function Frame({ children, role }) {
     useEffect(() => {
         Main();
 
@@ -57,28 +58,6 @@ const Frame = ({ children, role }) => {
         }
     };
 
-    const renderComponentByRole = (r) => {
-        if (r === 1) {
-            return (
-                <Navbar>
-                    <Overside/>
-                </Navbar>
-            );
-        } else if (r === 0) {
-            return (
-                <Activitybar>
-                    <Overside/>
-                </Activitybar>
-            );
-        } else {
-            return (
-                <Outbar>
-                    <Overside/>
-                </Outbar>
-            );
-        }
-    }
-
     return (
         <>
             <div className="mb-4">
@@ -91,5 +70,3 @@ const Frame = ({ children, role }) => {
         </>
     );
 };
-
-export default Frame

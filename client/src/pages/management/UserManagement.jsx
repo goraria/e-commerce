@@ -4,6 +4,7 @@ import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstra
 import axios from 'axios';
 import UserForm from "../../components/modal/form/UserForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import { renderUserRole } from "../../utils/renderHandler.jsx";
 
 export default function UserManagement() {
     const navigate = useNavigate();
@@ -176,30 +177,6 @@ export default function UserManagement() {
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
-
-    const renderRoleBadge = (role) => {
-        switch (role) {
-            case 1: // "Admin"
-                return <span className="text-truncate d-flex align-items-center text-heading">
-                    <i className="bx bx-desktop text-danger me-2"></i>Admin</span>;
-            case 0: // "User"
-                return <span className="text-truncate d-flex align-items-center text-heading">
-                    <i className="bx bx-user text-success me-2"></i>User</span>;
-            case "Subscriber":
-                return <span className="text-truncate d-flex align-items-center text-heading">
-                    <i className="bx bx-crown text-primary me-2"></i>Subscriber</span>;
-            case "Editor":
-                return <span className="text-truncate d-flex align-items-center text-heading">
-                    <i className="bx bx-pie-chart-alt text-info me-2"></i>Editor</span>;
-            case "Author":
-                return <span className="text-truncate d-flex align-items-center text-heading">
-                    <i className="bx bx-edit text-warning me-2"></i>Author</span>;
-            default:
-                return <span className="text-truncate d-flex align-items-center text-heading">
-                    <i className="bx bx-badge text-primary me-2"></i>Other</span>;
-        }
-    };
-
     useEffect(() => {
         fetchAPI();
         fetchAPI1();
@@ -303,7 +280,7 @@ export default function UserManagement() {
                                 <td>
                                     {item.username}
                                 </td>
-                                <td>{renderRoleBadge(item.role)}</td>
+                                <td>{renderUserRole(item.role)}</td>
                                 <td>{item.phone_number}</td>
                                 <td>
                                     <Button variant="link" onClick={() => handleEdit(item.idaccount)}>

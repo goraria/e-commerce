@@ -6,6 +6,7 @@ import axios from 'axios';
 import ProductForm from "../../components/modal/form/ProductForm.jsx";
 import CategoryBadge from "../../components/badge/CategoryBadge.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import { renderCategory } from "../../utils/renderHandler.jsx";
 
 export default function ProductName() {
     const navigate = useNavigate();
@@ -231,47 +232,6 @@ export default function ProductName() {
 
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
-
-    const renderCategory = (category) => {
-        switch (category) {
-            case "Laptop":
-                return <CategoryBadge cate="Laptop" icon="bx-laptop" color="primary" />
-            case "Keyboard":
-                return <CategoryBadge cate="Keyboard" icon="bxs-keyboard" color="warning" />
-            case "Mouse":
-                return <CategoryBadge cate="Mouse" icon="bx-mouse-alt" color="success" />
-            case "Tablet":
-                return <CategoryBadge cate="Tablet" icon="bx-devices" color="danger" />
-            case "Smartphone":
-                return <CategoryBadge cate="Smartphone" icon="bx-mobile-alt" color="info" />
-            case "Smartwatch":
-                return <CategoryBadge cate="Smartwatch" icon="bxs-watch-alt" color="secondary" />
-            case "Screen":
-                return <CategoryBadge cate="Screen" icon="bx-desktop" color="primary" />
-            case "Monitor":
-                return <CategoryBadge cate="Monitor" icon="bx-desktop" color="danger" />
-            case "Play Station":
-                return <CategoryBadge cate="Play Station" icon="bx-coin-stack" color="secondary" />
-            case "Camera":
-                return <CategoryBadge cate="Camera" icon="bx-camera" color="secondary" />
-            case "Sound":
-                return <CategoryBadge cate="Sound" icon="bx-headphone" color="secondary" />
-            case "Household":
-                return <CategoryBadge cate="Household" icon="bx-briefcase" color="warning" />
-            case "Office":
-                return <CategoryBadge cate="Office" icon="bx-home-smile" color="info" />
-            case "Game":
-                return <CategoryBadge cate="Game" icon="bx-laptop" color="primary" />
-            case "Electronics":
-                return <CategoryBadge cate="Electronics" icon="bx-headphone" color="danger" />
-            case "Accessories":
-                return <CategoryBadge cate="Accessories" icon="bxs-watch" color="secondary" />
-            case "Shoes":
-                return <CategoryBadge cate="Shoes" icon="bx-walk" color="success" />
-            default:
-                return <CategoryBadge cate="Unknown" icon="bx-question-mark" color="dark" />
-        }
-    }
 
     useEffect(() => {
         fetchAPI();

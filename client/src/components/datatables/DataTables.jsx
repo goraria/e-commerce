@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
+import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 
 export default function DataTables() {
     const [data, setData] = useState([
@@ -234,23 +235,6 @@ export default function DataTables() {
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case "Professional":
-                return <Badge bg="label-success">Professional</Badge>;
-            case "Resigned":
-                return <Badge bg="label-warning">Resigned</Badge>;
-            case "Current":
-                return <Badge bg="label-primary">Current</Badge>;
-            case "Applied":
-                return <Badge bg="label-info">Applied</Badge>;
-            case "Rejected":
-                return <Badge bg="label-danger">Rejected</Badge>;
-            default:
-                return <Badge bg="label-secondary">{status}</Badge>;
-        }
-    };
-
     return (
         <div className="card">
             <div className="card-datatable table-responsive">
@@ -389,7 +373,7 @@ export default function DataTables() {
                             {/*<td>{item.email}</td>*/}
                             <td>{item.date}</td>
                             <td>{item.salary}</td>
-                            <td>{renderStatusBadge(item.status)}</td>
+                            <td>{renderStatusDelivery(item.status)}</td>
                             <td>
                                 <Button
                                     variant="link"

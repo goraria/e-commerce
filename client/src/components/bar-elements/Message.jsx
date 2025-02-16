@@ -1,6 +1,6 @@
 import React from "react";
 
-const Message = ({ message, user = {firstname: 'Bill', lastname: 'Cipher', avatar: '../assets/img/avatars/1.png'} }) => {
+const Message = ({ message, user = {firstname: 'Bill', lastname: 'Cipher', avatar: '/assets/img/avatars/1.png'} }) => {
     return (
         <>
             <li className="list-group-item list-group-item-action dropdown-notifications-item">
