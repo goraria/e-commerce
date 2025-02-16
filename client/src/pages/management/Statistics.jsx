@@ -4,9 +4,11 @@ import Calendar from "react-calendar";
 import axios from "axios";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
 import { Link } from "react-router-dom";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
+import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const Statistics = () => {
+export default function Statistics() {
     const [data, setData] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -114,7 +116,6 @@ export const Statistics = () => {
         // item.email.toLowerCase().includes(searchTerm.toLowerCase())
 
         item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
-
     );
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -213,41 +214,6 @@ export const Statistics = () => {
 
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
-
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case 5: // "Delivered"
-                return <Badge bg="label-success">Delivered</Badge>;
-            case 0: // "Ordered"
-                return <Badge bg="label-warning">Ordered</Badge>;
-            case 3: // "Dispatched"
-                return <Badge bg="label-primary">Dispatched</Badge>;
-            case 1: // "Pickup"
-                return <Badge bg="label-info">Pickup</Badge>;
-            case 6: // "Rejected"
-                return <Badge bg="label-danger">Rejected</Badge>;
-            case 2: // "Arrival"
-                return <Badge bg="label-dark">Arrival</Badge>;
-            case 4: // "Arrival"
-                return <Badge bg="label-secondary">Arrival</Badge>;
-            default:
-                return <Badge bg="label-light">{status}</Badge>;
-        }
-    };
-
-    const formatDateTime = (inputDateTime) => {
-        const date = new Date(inputDateTime);
-
-        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
-        const formattedDate = date.toLocaleDateString("en-US", options);
-
-        const hours = date.getUTCHours(); // Giờ theo UTC
-        const minutes = date.getUTCMinutes(); // Phút theo UTC
-
-        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-        return `${formattedDate}, ${formattedTime}`;
-    }
 
     const handleOpenModal = (item) => {
         setModalData(item); // Cập nhật dữ liệu cho modal
@@ -469,7 +435,7 @@ export const Statistics = () => {
                                         {/*<td>{item.date ? new Date(item.date).toLocaleString() : "N/A"}</td>*/}
                                         <td>{formatDateTime(item.date)}</td>
                                         <td>{item.price ? item.price : "$?"}</td>
-                                        <td>{renderStatusBadge(item.status)}</td>
+                                        <td>{renderStatusDelivery(item.status)}</td>
                                         <td>
                                             <Button
                                                 variant="link"

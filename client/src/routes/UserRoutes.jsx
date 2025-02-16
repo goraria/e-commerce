@@ -11,6 +11,7 @@ import ProfilePage from "../pages/account/ProfilePage.jsx";
 import { OrderDetails } from "../pages/information/OrderDetails.jsx";
 import ErrorPage from "../pages/misc/ErrorPage.jsx";
 import NotfoundPage from "../pages/misc/NotfoundPage.jsx";
+import Scroll from "../layouts/Scroll.jsx";
 
 export const UserRoutes = () => {
     return (

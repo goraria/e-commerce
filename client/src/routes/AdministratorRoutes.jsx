@@ -53,15 +53,15 @@ import DashboardPage from "../pages/dashboard/DashboardPage.jsx";
 import { PerfectScrollbarPage } from "../pages/others/extended-ui/PerfectScrollbar";
 import { TextDividerPage } from "../pages/others/extended-ui/TextDividerPage";
 
-import { Category } from "../pages/management/Category"
-import { UserManagement } from "../pages/management/UserManagement"
-import { ProductName } from "../pages/management/ProductName"
-import { ProductConfiguration } from "../pages/management/ProductConfiguration"
-import { ProductAccessory } from "../pages/management/ProductAccessory"
-import { ProductDescription } from "../pages/management/ProductDescription"
-import { ProductColor } from "../pages/management/ProductColor"
+import Category from "../pages/management/Category"
+import UserManagement from "../pages/management/UserManagement"
+import ProductName from "../pages/management/ProductName"
+import ProductConfiguration from "../pages/management/ProductConfiguration"
+import ProductAccessory from "../pages/management/ProductAccessory"
+import ProductDescription from "../pages/management/ProductDescription"
+import ProductColor from "../pages/management/ProductColor"
 import ProfilePage from "../pages/account/ProfilePage.jsx";
-import { Voucher } from '../pages/management/Voucher.jsx';
+import Voucher from '../pages/management/Voucher.jsx';
 ///////////////////////////////////////
 
 export const AdministratorRoutes = () => {

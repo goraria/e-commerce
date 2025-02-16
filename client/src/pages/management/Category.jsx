@@ -5,7 +5,7 @@ import axios from 'axios';
 import CategoryForm from "../../components/modal/form/CategoryForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const Category = () => {
+export default function Category() {
     const navigate = useNavigate();
 
     const [data, setData] = useState([])

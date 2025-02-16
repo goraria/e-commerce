@@ -4,9 +4,10 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 // import "./DataTables.css"; // Add custom styling here
 import VoucherForm from "../../components/modal/form/VoucherForm.jsx";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const Voucher = () => {
+export default function Voucher() {
     const navigate = useNavigate();
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -199,19 +200,6 @@ export const Voucher = () => {
 
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
-    const formatDateTime = (inputDateTime) => {
-        const date = new Date(inputDateTime);
-
-        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
-        const formattedDate = date.toLocaleDateString("en-US", options);
-
-        const hours = date.getUTCHours(); // Giờ theo UTC
-        const minutes = date.getUTCMinutes(); // Phút theo UTC
-
-        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-        return `${formattedDate}, ${formattedTime}`;
-    }
 
     useEffect(() => {
         fetchAPI();

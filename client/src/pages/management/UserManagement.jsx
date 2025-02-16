@@ -5,7 +5,7 @@ import axios from 'axios';
 import UserForm from "../../components/modal/form/UserForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const UserManagement = () => {
+export default function UserManagement() {
     const navigate = useNavigate();
 
     const [data, setData] = useState([])

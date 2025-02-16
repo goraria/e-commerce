@@ -8,58 +8,82 @@ import Transitionbar from "../../layouts/Transitionbar.jsx";
 import Overview from "../../layouts/Overview.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 import { BrandButton } from "../../components/button/BrandButton.jsx";
+import { PaginationCustom } from "../../components/pagination/PaginationCustom.jsx";
 
 export default function ProductList() {
     const categories = [
         { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
-        { categorical: 'RAM', variant: 'info', item: ['4','8','16','32','64'] },
         { categorical: 'GPU', variant: 'success', item: ['RTX 2060', 'RTX 3060','RTX 3090', 'RTX 4070','GTX 1660 Ti'] },
+        { categorical: 'RAM', variant: 'info', item: ['4','8','16','32','64'] },
         { categorical: 'SSD', variant: 'warning', item: ['128', '256', '512', '1024', "2048"] },
         { categorical: 'Screen', variant: 'danger', item: ['15', '14', '12','16'] },
     ];
+    const brands = ['Apple', 'Dell', 'Lenovo', 'Asus', 'HP', 'Acer', 'Microsoft', 'LG']
 
-    const brands = ['Lenovo', 'Dell', 'HP', 'Acer', 'Microsoft', 'Asus', 'LG', 'Apple', 'Razer', 'Samsung']
-    const [productList, setProductList] = useState([]);
+    const [list, setList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8);
+
+    // Giả sử filteredData là mảng productList sau khi lọc theo search, v.v.
+    const filteredData = list; // Hoặc thêm logic lọc
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const location = useLocation();
 
     // Extract search query from URL
     const query = new URLSearchParams(location.search);
     const searchQuery = query.get("search");
 
-    const fetchAPI = async () => {
-        const response = await apiHandler.get("/products/load-product");
-        setProductList(response.data);
+    const handleLoadProducts = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-product");
+            setList(response.data);
+        } catch (error) {}
     };
 
     const fetchProductByBrand = async (brand) => {
         const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
-        setProductList(response.data);
+        setList(response.data);
     };
 
-    const fetchProductByName= async () => {
+    const fetchProductByName = async () => {
         try {
             const response = await apiHandler.get(`/products/load-product-name/${searchQuery}`);
-            setProductList(response.data);
+            setList(response.data);
         } catch (error) {
             // console.log('chưa nhập tên tìm kiếm')
         }
     };
 
-    useEffect(() => {
-        fetchAPI();
-        if(searchQuery != ''){
-            // fetchProductByName();
-        }
-    }, []);
-
     // Function to filter products based on dropdown selection
     const filterProducts = (category, selectedItem) => {
         const filteredProducts = async () => {
             const response = await apiHandler.get(`/products/load-productCPU/${selectedItem}`);
-            setProductList(response.data);
+            setList(response.data);
         };
         filteredProducts();
     };
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    useEffect(() => {
+        handleLoadProducts();
+
+        if (searchQuery !== '') {
+            fetchProductByName();
+        }
+
+    }, []);
+
+    // useEffect(() => {
+    //     window.scrollTo({ top: 0, behavior: "smooth" });
+    // }, [currentPage]);
 
     return (
         <>
@@ -108,22 +132,46 @@ export default function ProductList() {
             <Overview>
                 <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
+            <Overview>
+                <div className="d-flex justify-content-between">
+                    <div className="m-0">
+                        <Form.Select
+                            // className="w-100"
+                            value={itemsPerPage}
+                            onChange={handleItemsPerPageChange}
+                        >
+                            <option value={2}>2</option>
+                            <option value={4}>4</option>
+                            <option value={8}>8</option>
+                            <option value={12}>12</option>
+                            <option value={24}>24</option>
+                        </Form.Select>
+                    </div>
+                    <PaginationCustom
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            </Overview>
 
             <div className="container">
                 {/*<h2 className="text-center mb-4">Spotlight</h2>*/}
                 <div className="row">
-                    {productList.map(product => (
+                    {currentItems.map(product => (
                         <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
                             <ProductItem product={product} />
                         </div>
                     ))}
                 </div>
             </div>
+
+            {/*<ProductListv/>*/}
         </>
     )
 }
 
-export function ProductListc() {
+function ProductListc() {
     const productsPerPage = 8; // Số sản phẩm mỗi trang
 
     const categories = [
@@ -230,7 +278,7 @@ export function ProductListc() {
                 <div className="row">
                     {currentProducts.map(product => (
                         <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
-                            <ProductItem obj={product} state={count}/>
+                            <ProductItem product={product}/>
                         </div>
                     ))}
                 </div>
@@ -269,7 +317,7 @@ export function ProductListc() {
     );
 }
 
-export function ProductListx() {
+function ProductListx() {
     // State quản lý danh sách sản phẩm
     const [productList, setProductList] = useState([]);
     // State phân trang
@@ -443,7 +491,7 @@ export function ProductListx() {
             <Row>
                 {currentItems.map(product => (
                     <Col key={product.idproduct} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                        <ProductItem obj={product} />
+                        <ProductItem product={product} />
                     </Col>
                 ))}
             </Row>
@@ -454,7 +502,7 @@ export function ProductListx() {
     );
 }
 
-export function ProductListz() {
+function ProductListz() {
     const categories = [
         { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
         { categorical: 'RAM', variant: 'info', item: ['4','8','16','32','64'] },
@@ -579,11 +627,78 @@ export function ProductListz() {
                 <div className="row">
                     {productList.map(product => (
                         <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
-                            <ProductItem product={product} state={count}/>
+                            <ProductItem product={product}/>
                         </div>
                     ))}
                 </div>
             </div>
         </>
+    );
+}
+
+function ProductListv() {
+    const [productList, setProductList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
+
+    // Giả sử filteredData là mảng productList sau khi lọc theo search, v.v.
+    const filteredData = productList; // Hoặc thêm logic lọc
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const fetchAPI = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-product");
+            setProductList(response.data);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAPI();
+    }, []);
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    return (
+        <Container>
+            <Row>
+                {currentItems.map(product => (
+                    <Col key={product.idproduct} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                        <ProductItem product={product} />
+                    </Col>
+                ))}
+            </Row>
+            <Row className="justify-content-center">
+                <Col xs="auto">
+                    <PaginationCustom
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </Col>
+            </Row>
+            <Row>
+                <Form.Select
+                    style={{ width: 100 }}
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                >
+                    <option value={7}>7</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                    <option value={70}>70</option>
+                    <option value={100}>100</option>
+                </Form.Select>
+            </Row>
+        </Container>
     );
 }

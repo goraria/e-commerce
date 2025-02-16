@@ -47,7 +47,11 @@ class ProductController {
                     {
                         model: Accessory, // Including Accessory model (if applicable)
                         attributes: ['idaccessory', 'nums_key', 'switch_type', 'connection', 'price'],
-                    }
+                    },
+                    // {
+                    //     model: Rating, // Including Rating model (if applicable)
+                    //     attributes: ['idaccessory', 'nums_key', 'switch_type', 'connection', 'price'],
+                    // }
                 ],
             });
 
@@ -193,6 +197,54 @@ class ProductController {
     }
 
     async loadRating(req, res) {
+        const { idproduct } = req.params;
+        try {
+            const ratings = await Rating.findAll({
+                where: { idproduct },
+                attributes: ['idrating', 'score', 'comment', 'rating_date'],
+                include: [
+                    {
+                        model: Account,
+                        attributes: ['idaccount', 'username', 'email'],
+                        include: [
+                            {
+                                model: User,
+                                attributes: ['iduser', 'firstname', 'lastname', 'avatar']
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            if (ratings.length === 0) {
+                return res.status(200).json([]);
+            }
+
+            // Nếu có đánh giá, định dạng lại kết quả
+            const results = ratings.map(rating => ({
+                idrating: rating.idrating,
+                score: rating.score,
+                comment: rating.comment,
+                rating_date: rating.rating_date,
+                reviewer: rating.Account && rating.Account.User ? {
+                    username: rating.Account.username,
+                    email: rating.Account.email,
+                    firstname: rating.Account.User.firstname,
+                    lastname: rating.Account.User.lastname,
+                    avatar: rating.Account.User.avatar,
+                } : null
+            }));
+
+            results.sort((a, b) => new Date(b.rating_date) - new Date(a.rating_date));
+
+            return res.status(200).json(results);
+        } catch (error) {
+            // console.error("Error fetching ratings:", error);
+            return res.status(500).json({ message: "Error fetching ratings", error });
+        }
+    }
+
+    async loadRatingOld(req, res) {
         const { idproduct } = req.params; // Retrieve idProduct from request parametersid
         try {
             // Find ratings with associated Account and User
@@ -208,6 +260,8 @@ class ProductController {
                     }]
                 }]
             });
+
+            console.log(ratings, idproduct);
 
             // If ratings are found, return them in the desired format
             if (ratings.length > 0) {
@@ -231,15 +285,16 @@ class ProductController {
 
                 results.sort((up, down) => new Date(down.rating_date) - new Date(up.rating_date));
 
+                // console.log(results, idproduct)
                 res.status(200).json(results);
             } else {
+                // console.log(idproduct)
                 res.status(404).json({ message: `No ratings found for product with id ${idProduct}` });
             }
         } catch (error) {
             res.status(500).json({ message: 'Error fetching ratings', error });
         }
     }
-
 
     async loadColor(req, res) {
         const { idProduct } = req.params; // Retrieve idProduct from request parameters

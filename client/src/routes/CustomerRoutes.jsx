@@ -8,6 +8,7 @@ import OrderPreview from '../pages/payment/OrderPreview.jsx';
 import CheckOutPage from "../pages/payment/CheckoutPage.jsx";
 import OrderSuccess from "../pages/payment/OrderSuccess.jsx";
 import ErrorPage from "../pages/misc/ErrorPage.jsx";
+import Scroll from "../layouts/Scroll.jsx";
 
 export const CustomerRoutes = () => {
     return (

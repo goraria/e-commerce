@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Badge, Button, Form, Table } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
+import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 import axios from "axios";
 import apiHandler from "../../utils/apiHandler.jsx";
 
@@ -65,41 +67,6 @@ export const OrderDetails = () => {
         return result;
     }
 
-    const formatDateTime = (inputDateTime) => {
-        const date = new Date(inputDateTime);
-
-        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
-        const formattedDate = date.toLocaleDateString("en-US", options);
-
-        const hours = date.getUTCHours(); // Giờ theo UTC
-        const minutes = date.getUTCMinutes(); // Phút theo UTC
-
-        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-        return `${formattedDate}, ${formattedTime}`;
-    }
-
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case 5: // "Delivered"
-                return <Badge bg="label-success">Delivered</Badge>;
-            case 0: // "Ordered"
-                return <Badge bg="label-warning">Ordered</Badge>;
-            case 3: // "Dispatched"
-                return <Badge bg="label-primary">Dispatched</Badge>;
-            case 1: // "Pickup"
-                return <Badge bg="label-info">Pickup</Badge>;
-            case 6: // "Rejected"
-                return <Badge bg="label-danger">Rejected</Badge>;
-            case 2: // "Arrival"
-                return <Badge bg="label-dark">Arrival</Badge>;
-            case 4: // "Arrival"
-                return <Badge bg="label-secondary">Arrival</Badge>;
-            default:
-                return <Badge bg="label-light">{status}</Badge>;
-        }
-    };
-
     useEffect(() => {
         handleGetBill();
     }, []);
@@ -115,7 +82,7 @@ export const OrderDetails = () => {
                                     <span className="h5 me-3">Order #{bill.id}</span>
                                     {/*<span className="badge bg-label-success me-1 ms-2">Paid</span>*/}
                                     {/*<span className="badge bg-label-info">Ready to Pickup</span>*/}
-                                    {renderStatusBadge(bill.status)}
+                                    {renderStatusDelivery(bill.status)}
                                 </div>
                                 {/*<p className="mb-0">Aug 17, <span id="orderYear">2024</span>, 5:48 (ET)</p>*/}
                                 <p className="mb-0">{formatDateTime(bill.date)}</p>

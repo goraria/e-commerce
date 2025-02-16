@@ -7,7 +7,7 @@ import ProductForm from "../../components/modal/form/ProductForm.jsx";
 import CategoryBadge from "../../components/badge/CategoryBadge.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const ProductName = () => {
+export default function ProductName() {
     const navigate = useNavigate();
 
     const [searchTerm, setSearchTerm] = useState("");

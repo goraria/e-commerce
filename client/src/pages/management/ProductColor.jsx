@@ -4,7 +4,7 @@ import axios from 'axios';
 import ColorForm from "../../components/modal/form/ColorForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const ProductColor = () => {
+export default function ProductColor() {
     const [data, setData] = useState([])
     const [data1, setData1] = useState([])
     const handleShow = (id) => {

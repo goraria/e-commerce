@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ConfigurationForm from "../../components/modal/form/ConfigurationForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const ProductConfiguration = () => {
+export default function ProductConfiguration() {
     const navigate = useNavigate();
 
     const [data, setdata] = useState([])

@@ -4,7 +4,7 @@ import axios from 'axios';
 import DescriptionForm from "../../components/modal/form/DescriptionForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 
-export const ProductDescription = () => {
+export default function ProductDescription() {
     const [data, setData] = useState([])
 
     const [data1, setData1] = useState([])
