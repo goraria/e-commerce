@@ -14,6 +14,7 @@ const { Op, where, Sequelize } = require("sequelize");
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
+
 class ProductController {
     async loadProduct(req, res) {
         try {
@@ -26,7 +27,8 @@ class ProductController {
 
     async loadProperties(req, res) {
         try {
-            // Fetch product by its primary key (using req.params.productId) and include related models
+            // Fetch product by its primary key (using req.params.idproduct) and include related models
+
             const product = await Product.findByPk(req.params.idproduct, {
                 attributes: ['idproduct', 'product_name', 'brand', 'product_image', 'status'],
                 include: [
@@ -36,18 +38,24 @@ class ProductController {
                     },
                     {
                         model: Color, // Including the Color model (if applicable)
-                        attributes: ['idcolor', 'color_name'],
+                        attributes: ['idcolor', 'color'],
                     },
                     {
                         model: Description, // Including the Description model (assuming you have one)
-                        attributes: ['iddescription', 'description_text'],
+                        attributes: ['iddescription', 'title_description', 'sub_description'],
                     },
                     {
                         model: Accessory, // Including Accessory model (if applicable)
-                        attributes: ['idaccessory', 'accessory_name'],
-                    }
+                        attributes: ['idaccessory', 'nums_key', 'switch_type', 'connection', 'price'],
+                    },
+                    // {
+                    //     model: Rating, // Including Rating model (if applicable)
+                    //     attributes: ['idaccessory', 'nums_key', 'switch_type', 'connection', 'price'],
+                    // }
                 ],
             });
+
+            // console.log(product)
 
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
@@ -73,22 +81,26 @@ class ProductController {
                 })),
                 colors: product.Colors.map(color => ({
                     idcolor: color.idcolor,
-                    color_name: color.color_name,
+                    color: color.color,
                 })),
                 descriptions: product.Descriptions.map(desc => ({
                     iddescription: desc.iddescription,
-                    description_text: desc.description_text,
+                    title_description: desc.title_description,
+                    sub_description: desc.sub_description,
                 })),
                 accessories: product.Accessories.map(accessory => ({
                     idaccessory: accessory.idaccessory,
-                    accessory_name: accessory.accessory_name,
+                    nums_key: accessory.nums_key,
+                    switch_type: accessory.switch_type,
+                    connection: accessory.connection,
+                    price: accessory.price,
                 }))
             };
 
             // console.log(result);
             return res.json(result);
         } catch (error) {
-            console.error('Error fetching product properties:', error);
+            // console.error('Error fetching product properties:', error);
             return res.status(500).json({ error: 'Failed to load product properties' });
         }
     }
@@ -185,6 +197,54 @@ class ProductController {
     }
 
     async loadRating(req, res) {
+        const { idproduct } = req.params;
+        try {
+            const ratings = await Rating.findAll({
+                where: { idproduct },
+                attributes: ['idrating', 'score', 'comment', 'rating_date'],
+                include: [
+                    {
+                        model: Account,
+                        attributes: ['idaccount', 'username', 'email'],
+                        include: [
+                            {
+                                model: User,
+                                attributes: ['iduser', 'firstname', 'lastname', 'avatar']
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            if (ratings.length === 0) {
+                return res.status(200).json([]);
+            }
+
+            // Nếu có đánh giá, định dạng lại kết quả
+            const results = ratings.map(rating => ({
+                idrating: rating.idrating,
+                score: rating.score,
+                comment: rating.comment,
+                rating_date: rating.rating_date,
+                reviewer: rating.Account && rating.Account.User ? {
+                    username: rating.Account.username,
+                    email: rating.Account.email,
+                    firstname: rating.Account.User.firstname,
+                    lastname: rating.Account.User.lastname,
+                    avatar: rating.Account.User.avatar,
+                } : null
+            }));
+
+            results.sort((a, b) => new Date(b.rating_date) - new Date(a.rating_date));
+
+            return res.status(200).json(results);
+        } catch (error) {
+            // console.error("Error fetching ratings:", error);
+            return res.status(500).json({ message: "Error fetching ratings", error });
+        }
+    }
+
+    async loadRatingOld(req, res) {
         const { idproduct } = req.params; // Retrieve idProduct from request parametersid
         try {
             // Find ratings with associated Account and User
@@ -200,6 +260,8 @@ class ProductController {
                     }]
                 }]
             });
+
+            console.log(ratings, idproduct);
 
             // If ratings are found, return them in the desired format
             if (ratings.length > 0) {
@@ -223,15 +285,16 @@ class ProductController {
 
                 results.sort((up, down) => new Date(down.rating_date) - new Date(up.rating_date));
 
+                // console.log(results, idproduct)
                 res.status(200).json(results);
             } else {
+                // console.log(idproduct)
                 res.status(404).json({ message: `No ratings found for product with id ${idProduct}` });
             }
         } catch (error) {
             res.status(500).json({ message: 'Error fetching ratings', error });
         }
     }
-
 
     async loadColor(req, res) {
         const { idProduct } = req.params; // Retrieve idProduct from request parameters
@@ -281,14 +344,14 @@ class ProductController {
     }
 
     async loadProductWithName(req, res) {
-        const { Name } = req.params; // Retrieve idProduct from request parameters
+        const { name } = req.params; // Retrieve idProduct from request parameters
 
         try {
             // Find descriptions where idProduct matches the provided id
             const product = await Product.findAll({
                 where: {
                     product_name: {
-                        [Op.like]: `%${Name}%`
+                        [Op.like]: `%${name}%`
                     }
                 }
             });

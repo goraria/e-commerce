@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Badge, Button, Form, Table } from "react-bootstrap";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
+import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 
-const OrderExpand = ({ order }) => {
+export default function OrderExpand({ order }) {
     // console.log(order)
     const sanitized = (array) => array.map(obj => Object.assign({}, obj))
 
@@ -11,41 +13,6 @@ const OrderExpand = ({ order }) => {
             return sum + (detail.price * detail.quantity);
         }, 0)
     }
-
-    const formatDateTime = (inputDateTime) => {
-        const date = new Date(inputDateTime);
-
-        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
-        const formattedDate = date.toLocaleDateString("en-US", options);
-
-        const hours = date.getUTCHours(); // Giờ theo UTC
-        const minutes = date.getUTCMinutes(); // Phút theo UTC
-
-        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-        return `${formattedDate}, ${formattedTime}`;
-    }
-
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case 5: // "Delivered"
-                return <Badge bg="label-success">Delivered</Badge>;
-            case 0: // "Ordered"
-                return <Badge bg="label-warning">Ordered</Badge>;
-            case 3: // "Dispatched"
-                return <Badge bg="label-primary">Dispatched</Badge>;
-            case 1: // "Pickup"
-                return <Badge bg="label-info">Pickup</Badge>;
-            case 6: // "Rejected"
-                return <Badge bg="label-danger">Rejected</Badge>;
-            case 2: // "Arrival"
-                return <Badge bg="label-dark">Arrival</Badge>;
-            case 4: // "Arrival"
-                return <Badge bg="label-secondary">Arrival</Badge>;
-            default:
-                return <Badge bg="label-light">{status}</Badge>;
-        }
-    };
 
     return (
         <>
@@ -61,7 +28,7 @@ const OrderExpand = ({ order }) => {
                             <span className="h5 me-3">Order #{order?.id}</span>
                             {/*<span className="badge bg-label-success me-1 ms-2">Paid</span>*/}
                             {/*<span className="badge bg-label-info">Ready to Pickup</span>*/}
-                            {renderStatusBadge(order?.status)}
+                            {renderStatusDelivery(order?.status)}
                         </div>
                         <p className="mb-0">{formatDateTime(order?.date)}</p>
                     </div>
@@ -102,64 +69,62 @@ const OrderExpand = ({ order }) => {
                             </tr>
                             </thead>
                             <tbody>
-                            {
-                                order?.bill_details.map((item, index) => (
-                                    <tr key={index}>
-                                        <td className="dt-checkboxes-cell">
-                                            <Form.Check
-                                                type="checkbox"
-                                                // onChange={() => handleSelectRow(product.id)}
-                                                // checked={selectedEntries.includes(product.id)}
-                                            />
-                                        </td>
-                                        <td className="sorting_1">
-                                            <div className="d-flex align-items-center">
-                                                <div
-                                                    className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
-                                                    <div className="avatar">
-                                                        <img
-                                                            src={`../assets/img/categories/product-7.png`}
-                                                            alt="Product-8"
-                                                            className="rounded"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="d-flex flex-column justify-content-center">
-                                                    <span className="text-heading text-wrap fw-medium">
-                                                        {`${item?.brand} ${item?.product}`}
-                                                    </span>
-                                                    <span className="text-truncate mb-0 d-none d-sm-block">
-                                                        <small>
-                                                            {`
-                                                                ${item?.configuration?.cpu}
-                                                                |
-                                                                ${item?.configuration?.gpu}
-                                                                |
-                                                                ${item?.configuration?.ram} GB
-                                                                |
-                                                                ${item?.configuration?.storage} GB
-                                                                |
-                                                                ${item?.configuration?.screen}'
-                                                                |
-                                                                ${item?.configuration?.resolution}
-                                                            `}
-                                                        </small>
-                                                    </span>
+                            {order?.bill_details.map((item, index) => (
+                                <tr key={index}>
+                                    <td className="dt-checkboxes-cell">
+                                        <Form.Check
+                                            type="checkbox"
+                                            // onChange={() => handleSelectRow(product.id)}
+                                            // checked={selectedEntries.includes(product.id)}
+                                        />
+                                    </td>
+                                    <td className="sorting_1">
+                                        <div className="d-flex align-items-center">
+                                            <div
+                                                className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                                <div className="avatar">
+                                                    <img
+                                                        src={`../assets/img/categories/product-7.png`}
+                                                        alt="Product-8"
+                                                        className="rounded"
+                                                    />
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <span>${item?.price}</span>
-                                        </td>
-                                        <td>
-                                            <span>{item?.quantity}</span>
-                                        </td>
-                                        <td>
-                                            <span>${item?.price * item?.quantity}</span>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
+                                            <div className="d-flex flex-column justify-content-center">
+                                                <span className="text-heading text-wrap fw-medium">
+                                                    {`${item?.brand} ${item?.product}`}
+                                                </span>
+                                                <span className="text-truncate mb-0 d-none d-sm-block">
+                                                    <small>
+                                                        {`
+                                                            ${item?.configuration?.cpu}
+                                                            |
+                                                            ${item?.configuration?.gpu}
+                                                            |
+                                                            ${item?.configuration?.ram} GB
+                                                            |
+                                                            ${item?.configuration?.storage} GB
+                                                            |
+                                                            ${item?.configuration?.screen}'
+                                                            |
+                                                            ${item?.configuration?.resolution}
+                                                        `}
+                                                    </small>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span>${item?.price}</span>
+                                    </td>
+                                    <td>
+                                        <span>{item?.quantity}</span>
+                                    </td>
+                                    <td>
+                                        <span>${item?.price * item?.quantity}</span>
+                                    </td>
+                                </tr>
+                            ))}
                             </tbody>
                         </Table>
                     </div>
@@ -196,5 +161,3 @@ const OrderExpand = ({ order }) => {
         </>
     )
 }
-
-export default OrderExpand;

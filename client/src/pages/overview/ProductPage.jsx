@@ -1,17 +1,6 @@
 import React, { Component, useState, useEffect, version } from "react";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import {
-    Container,
-    Button,
-    Form,
-    Row,
-    Col,
-    Card,
-    Image,
-    ListGroup,
-    Badge,
-    Table, Pagination
-} from 'react-bootstrap';
+import { Container, Button, Form, Row, Col, Card, Image, ListGroup, Badge, Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 
 import Transitionbar from "../../layouts/Transitionbar.jsx";
@@ -20,20 +9,26 @@ import ProductItem from "../../components/product/ProductItem.jsx";
 import RatingStar from "../../components/product/RatingStar.jsx";
 import RatingForm from "../../components/modal/form/RatingForm.jsx";
 import MaintenancePage from "../misc/MaintenancePage.jsx";
+import LoadingPage from "../misc/LoadingPage.jsx";
 import Calendar from "react-calendar";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
+import { renderRatingStar, renderStatusDelivery } from "../../utils/renderHandler.jsx";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function ProductPage() {
     const location = useLocation(); // Lấy thông tin URL hiện tại
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
+    const [properties, setProperties] = useState([]);
+
     const [descriptions, setArray] = useState([]);
     const [configurations, setconfig] = useState([]);
     const [default_config, setdefaultconfig] = useState([]);
     const [colors, setcolor] = useState([]);
     const [ratings, setRating] = useState([]);
     const [products, setProduct] = useState([]);
-    const [evaluate, setEvaluate] = useState([]);
+    const [evaluate, setEvaluate] = useState(null);
     const [carts, setCart] = useState();
     const [similars, setSimilars] = useState([]);
     const [ChoosedColor, setChoosedColor] = useState(null);
@@ -47,6 +42,7 @@ export default function ProductPage() {
 
     const [showEvaluate, setShowEvaluate] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
 
     const token = localStorage.getItem('token');
 
@@ -62,19 +58,30 @@ export default function ProductPage() {
         // setShowModal(true);
     };
 
-    const fetchCart = async () => {
+    const getProperties = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/cart/loadcart`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            setCart(data)
+            const response = await apiHandler.get(`/products/load-properties/${product.idproduct}`);
+
+            setProperties(response.data);
+            console.log(response.data)
         } catch (error) {
-            // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
-    };
+    }
+
+    // const fetchCart = async () => {
+    //     try {
+    //         const response = await fetch(`http://localhost:5172/cart/loadcart`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         const data = await response.json();
+    //         setCart(data)
+    //     } catch (error) {
+    //         // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
+    //     }
+    // };
 
     const fetchProductDetails = async () => {
         try {
@@ -104,7 +111,7 @@ export default function ProductPage() {
             const response = await fetch(`http://localhost:5172/products/load-rating/${id}`);
             const data = await response.json();
             setRating(data); // Cập nhật thông tin sản phẩm từ backend
-            setData(data);
+            // setData(data);
             // console.log(data)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
@@ -134,15 +141,13 @@ export default function ProductPage() {
         }
     };
 
-    const fetchProductSimilars = async () => {
+    const getSimilars = async () => {
         try {
-            const response = await axios.get(`http://localhost:5172/products/load-similarity/${id}`);
+            const response = await apiHandler.get(`/products/load-similarity/${id}`);
             // const response = await fetch(`http://localhost:5172/products/load-similarity/${id}`);
             // const data = await response.json();
-
             setSimilars(response.data)
             // setSimilars(data)
-
             // console.log(similars)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
@@ -153,8 +158,8 @@ export default function ProductPage() {
         if (!id || !token) return;
 
         try {
-            const response = await axios.post(
-                'http://localhost:5172/products/load-rating',
+            const response = await apiHandler.post(
+                '/products/load-rating',
                 { idproduct: id },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -199,7 +204,8 @@ export default function ProductPage() {
                 setShowSuccess(true)
             }
         } catch (error) {
-            console.error('Lỗi khi thêm vào giỏ hàng:', error);
+            // console.error('Lỗi khi thêm vào giỏ hàng:', error);
+            setShowWarning(true)
         }
     };
 
@@ -321,71 +327,50 @@ export default function ProductPage() {
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case 5: // "Delivered"
-                return <Badge bg="label-success">Delivered</Badge>;
-            case 0: // "Ordered"
-                return <Badge bg="label-warning">Ordered</Badge>;
-            case 3: // "Dispatched"
-                return <Badge bg="label-primary">Dispatched</Badge>;
-            case 1: // "Pickup"
-                return <Badge bg="label-info">Pickup</Badge>;
-            case 6: // "Rejected"
-                return <Badge bg="label-danger">Rejected</Badge>;
-            case 2: // "Arrival"
-                return <Badge bg="label-dark">Arrival</Badge>;
-            case 4: // "Arrival"
-                return <Badge bg="label-secondary">Arrival</Badge>;
-            default:
-                return <Badge bg="label-light">{status}</Badge>;
+    const calculateScore = (ratings) => {
+        if (ratings) {
+            const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
+            const averageScore = totalScore / ratings.length;
+            return averageScore
+        } else {
+            return 0
         }
-    };
-
-    const formatDateTime = (inputDateTime) => {
-        const date = new Date(inputDateTime);
-
-        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
-        const formattedDate = date.toLocaleDateString("en-US", options);
-
-        const hours = date.getUTCHours(); // Giờ theo UTC
-        const minutes = date.getUTCMinutes(); // Phút theo UTC
-
-        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-        return `${formattedDate}, ${formattedTime}`;
     }
 
-    const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
-    const averageScore = totalScore / ratings.length;
-
     useEffect(() => {
-        if (!id) return <MaintenancePage/>;
-
         fetchProductConfiguration();
         fetchProductDetails();
         fetchProductDecription();
         fetchProductRating();
         fetchProductColor();
-        fetchCart();
-        fetchProductSimilars();
+        // fetchCart();
+
 
         // setData(ratings);
+        getProperties()
         handleLoadRating()
-    }, [id, location.search]);
+        getSimilars();
+        // calculateScore(ratings)
+    }, [id]);
+
+    if (!id) return <MaintenancePage/>;
+
+    // if (!properties || !properties.idproduct) return <></>
 
     return (
         <>
             <Transitionbar/>
             <div className="container">
                 <div className="row">
-                    <div className="col col-sm-12 col-md-8 col-lg-8 align-items-center">
-                        <div className="mb-4 d-flex justify-content-center">
-                            <img
-                                className="d-block object-fit-cover w-100 h-100 rounded-4"
-                                src={products.product_image}
-                                alt="Second slide"
-                            />
+                    <div className="col col-sm-12 col-md-12 col-lg-8 align-items-center">
+                        <div className="card p-0 mb-4">
+                            <div className="d-flex justify-content-center">
+                                <img
+                                    className="d-block object-fit-cover w-100 h-100 rounded-4 bg-white"
+                                    src={products.product_image}
+                                    alt="Second slide"
+                                />
+                            </div>
                         </div>
                         <div className="card p-3 mb-4">
                             <Card.Body>
@@ -744,7 +729,8 @@ export default function ProductPage() {
 
                                                         <div
                                                             className="jq-ry-normal-group jq-ry-group text-warning mb-2">
-                                                            <RatingStar rating={1}/>
+                                                            {/*<RatingStar rating={1}/>*/}
+                                                            {renderRatingStar(5)}
                                                         </div>
                                                     </div>
                                                     <p className="h6 mb-1 text-truncate">Good</p>
@@ -771,7 +757,7 @@ export default function ProductPage() {
                                             {/*    </div>*/}
                                             {/*</td>*/}
                                             <td>{formatDateTime(new Date())}</td>
-                                            <td>{renderStatusBadge(3)}</td>
+                                            <td>{renderStatusDelivery(3)}</td>
                                         </tr>
                                         {ratings.map((item, index) => (
                                             <tr key={index} style={{height: 64}}>
@@ -784,8 +770,7 @@ export default function ProductPage() {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <div
-                                                        className="d-flex justify-content-start align-items-center customer-name">
+                                                    <div className="d-flex justify-content-start align-items-center customer-name">
                                                         <div className="avatar-wrapper">
                                                             <div className="avatar me-4">{/* avatar-sm */}
                                                                 <img
@@ -813,14 +798,15 @@ export default function ProductPage() {
                                                         <div className="jq-ry-group-wrapper">
                                                             <div
                                                                 className="jq-ry-normal-group jq-ry-group text-warning mb-2">
-                                                                <RatingStar rating={item.score}/>
+                                                                {/*<RatingStar rating={item.score}/>*/}
+                                                                {renderRatingStar(item.score)}
                                                             </div>
                                                         </div>
                                                         <p className="h6 mb-1 text-truncate">{item.comment}</p>
                                                     </div>
                                                 </td>
                                                 <td>{formatDateTime(formatDateTime(item.rating_date))}</td>
-                                                <td>{renderStatusBadge(5)}</td>
+                                                <td>{renderStatusDelivery(5)}</td>
                                             </tr>
                                         ))}
                                         </tbody>
@@ -860,17 +846,19 @@ export default function ProductPage() {
                             </div>
                         </div>
                     </div>
-                    <div className="col col-sm-12 col-md-4 col-lg-4">
+                    <div className="col col-sm-12 col-md-12 col-lg-4">
                         <div className="card p-3 position-sticky" style={{top: 24}}>
                             <div className="container px-3">
                                 <div className="row mt-4">
                                     <div className="col">
                                         <h3>{`${products.brand} ${products.product_name}`}</h3>
                                         <p className="text-warning">
-                                            {
-                                                averageScore ?
-                                                    <RatingStar rating={averageScore}/>
-                                                    : 'Chưa có đánh giá'
+                                            {calculateScore(ratings)
+                                                // <RatingStar rating={calculateScore(ratings)}/> //
+                                                ? renderRatingStar(calculateScore(ratings))
+                                                // <>{renderRatingStar(calculateScore(ratings))}<span className="ms-3">{calculateScore(ratings)}</span></>
+                                                : renderRatingStar(0)
+                                                // <>{renderRatingStar(0)}<span className="ms-3">No rating</span></>
                                             }
                                         </p>
                                     </div>
@@ -937,7 +925,13 @@ export default function ProductPage() {
                                 <Button
                                     variant="primary"
                                     className="mb-3 w-100"
-                                    onClick={() => setShowEvaluate(true)}
+                                    onClick={() => {
+                                        if (evaluate) {
+                                            setShowEvaluate(true);
+                                        } else {
+                                            setShowWarning(true);
+                                        }
+                                    }}
                                 >
                                     Evaluate
                                 </Button>
@@ -952,8 +946,8 @@ export default function ProductPage() {
             <div className="container">
                 <div className="row">
                     {similars.map((product, index) =>
-                        <div key={index} className="col col-sm-12 col-md-6 col-lg-3 mb-4">
-                            <ProductItem obj={product}/>
+                        <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
+                            <ProductItem product={product}/>
                         </div>
                     )}
                 </div>
@@ -969,9 +963,19 @@ export default function ProductPage() {
             <NotifyModal
                 type="primary"
                 title="Add to cart successfully"
-                message="Sản phẩm đã được thêm vào giỏ hàng!"
+                message="Product added to cart!"
                 show={showSuccess}
                 onHide={() => setShowSuccess(false)}
+            />
+            <NotifyModal
+                type="warning"
+                title="Not Allowed"
+                message="You must login to use this feature!"
+                show={showWarning}
+                onHide={() => {
+                    setShowWarning(false);
+                    navigate('/auth/login');
+                }}
             />
         </>
     )

@@ -12,13 +12,13 @@ export default function RatingStar({ rating }) {
         <>
             {/* Full stars */}
             {Array.from({ length: fullStars }).map((_, index) => (
-                <i key={`full-${index}`} className='bx bxs-star'></i>
+                <i key={`full-${index}`} className='bx bxs-star bx-sm'></i>
             ))}
             {/* Half star */}
-            {halfStar === 1 && <i className='bx bxs-star-half' key="half" />}
+            {halfStar === 1 && <i className='bx bxs-star-half bx-sm' key="half" />}
             {/* Empty stars */}
             {Array.from({ length: emptyStars }).map((_, index) => (
-                <i key={`empty-${index}`} className='bx bx-star'></i>
+                <i key={`empty-${index}`} className='bx bx-star bx-sm'></i>
             ))}
         </>
     );

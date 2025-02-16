@@ -8,6 +8,7 @@ import ProductList from "../pages/overview/ProductList.jsx";
 import ErrorPage from "../pages/misc/ErrorPage.jsx";
 import NotfoundPage from "../pages/misc/NotfoundPage.jsx";
 import Chatbot from "../pages/overview/Chatbot.jsx";
+import Scroll from "../layouts/Scroll.jsx";
 
 export const ShareRoutes = () => {
     return (

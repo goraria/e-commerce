@@ -1,5 +1,6 @@
 import AccessoryForm from "../../components/modal/form/AccessoryForm"
-export const ProductAccessory = () => {
+
+export default function ProductAccessory() {
     const obj = {
         tower: '1111',
         street: '2222',

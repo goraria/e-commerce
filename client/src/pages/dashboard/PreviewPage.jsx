@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge, Button, Form, Pagination, Table } from "react-bootstrap";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
+import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 import Calendar from "react-calendar";
 import StatisticView from "../../components/modal/form/StatisticView.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
@@ -226,41 +228,6 @@ export default function PreviewPage() {
 
         return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
-
-    const renderStatusBadge = (status) => {
-        switch (status) {
-            case 5: // "Delivered"
-                return <Badge bg="label-success">Delivered</Badge>;
-            case 0: // "Ordered"
-                return <Badge bg="label-warning">Ordered</Badge>;
-            case 3: // "Dispatched"
-                return <Badge bg="label-primary">Dispatched</Badge>;
-            case 1: // "Pickup"
-                return <Badge bg="label-info">Pickup</Badge>;
-            case 6: // "Rejected"
-                return <Badge bg="label-danger">Rejected</Badge>;
-            case 2: // "Arrival"
-                return <Badge bg="label-dark">Arrival</Badge>;
-            case 4: // "Arrival"
-                return <Badge bg="label-secondary">Arrival</Badge>;
-            default:
-                return <Badge bg="label-light">{status}</Badge>;
-        }
-    };
-
-    const formatDateTime = (inputDateTime) => {
-        const date = new Date(inputDateTime);
-
-        const options = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" };
-        const formattedDate = date.toLocaleDateString("en-US", options);
-
-        const hours = date.getUTCHours(); // Giờ theo UTC
-        const minutes = date.getUTCMinutes(); // Phút theo UTC
-
-        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-        return `${formattedDate}, ${formattedTime}`;
-    }
 
     const getInformation = async () => {
         try {
@@ -573,7 +540,7 @@ export default function PreviewPage() {
                                                         </td>
                                                         <td>{formatDateTime(item.date)}</td>
                                                         <td>{item.price ? item.price : "$?"}</td>
-                                                        <td>{renderStatusBadge(item.status)}</td>
+                                                        <td>{renderStatusDelivery(item.status)}</td>
                                                         <td>
                                                             <Link to={`/user/bill?id=${item.id}`}>
                                                                 <i className='bx bx-bullseye'></i>
