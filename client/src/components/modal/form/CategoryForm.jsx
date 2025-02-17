@@ -118,6 +118,7 @@ export default function CategoryForm({ category, show, onHide, onReload }) {
             };
         }
     };
+
     useEffect(() => {
         getImage();
         setError(null);
@@ -140,6 +141,7 @@ export default function CategoryForm({ category, show, onHide, onReload }) {
             setError(null);
         }
     }, [show]);
+
     return (
         <>
             <Modal
@@ -161,7 +163,7 @@ export default function CategoryForm({ category, show, onHide, onReload }) {
                             <div className="d-flex align-items-start align-items-sm-center gap-4 rounded-2 col-7 mb-3">
                                 <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                     <img
-                                        src={`${formData.category_image}` || "/assets/img/product/default.png"}
+                                        src={formData.category_image ? `/assets/img/categories/${formData.category_image}` : `/assets/img/product/default.png`}
                                         alt="category"
                                         className="d-block rounded"
                                         height="100"

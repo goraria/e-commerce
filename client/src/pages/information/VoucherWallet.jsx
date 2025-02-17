@@ -62,7 +62,7 @@ export const VoucherWallet = () => {
             {/*<div className="row mb-4">*/}
             {/*    <VoucherCard left={1} right={2}/>*/}
             {/*</div>*/}
-            {[[1, 2], [3, 4], [5, 7], [11, 12], [13, 17], [18, 19]].map((item, index) => (
+            {[[1, 2], [3, 4], [5, 7], [11, 12], [13, 17], [18, 19], [20, 21], [22, 23], [24, 25]].map((item, index) => (
                 <div className="row mb-4" key={index}>
                     <VoucherCard left={item[0]} right={item[1]}/>
                 </div>
@@ -86,7 +86,7 @@ const VoucherCard = ({ left, right}) => {
                 <div className="card">
                     <div className="row g-0">
                         <div className="col-md-4">
-                            <img aria-label='card image' className="card-img card-img-left" src={`/assets/img/elements/${left}.jpg`} alt="Card image" />
+                            <img aria-label='card image' className="card-img card-img-left" src={`/assets/img/elements/${left}.png`} alt="Card image" />
                         </div>
                         <div className="col-md-8">
                             <div className="card-body">
@@ -113,7 +113,7 @@ const VoucherCard = ({ left, right}) => {
                             </div>
                         </div>
                         <div className="col-md-4">
-                            <img aria-label='card image' className="card-img card-img-right" src={`/assets/img/elements/${right}.jpg`} alt="Card image" />
+                            <img aria-label='card image' className="card-img card-img-right" src={`/assets/img/elements/${right}.png`} alt="Card image" />
                         </div>
                     </div>
                 </div>

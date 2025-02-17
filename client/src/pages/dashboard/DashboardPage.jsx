@@ -5,6 +5,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'
 import '../../components/calendar/calendar.css'
 import ToastBox from "../../components/toast/ToastBox.jsx";
+import ToastDemo from "../../components/toast/ToastDemo.jsx";
 
 // type ValuePiece = Date | null;
 //
@@ -760,6 +761,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
+            <ToastDemo/>
             <DataTables/>
         </>
     );

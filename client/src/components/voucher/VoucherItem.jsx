@@ -39,7 +39,7 @@ export default function VoucherItem({ voucher }) {
             <div className="card">
                 <div className="row g-0">
                     <div className="col-md-4">
-                        <img aria-label='card image' className="card-img card-img-left" src="/assets/img/elements/20.jpg" alt="Card image" />
+                        <img aria-label='card image' className="card-img card-img-left" src="/assets/img/elements/5.png" alt="Card image" />
                     </div>
                     <div className="col-md-8">
                         <div className="card-body">

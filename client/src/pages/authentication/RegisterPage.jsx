@@ -371,7 +371,7 @@ export default function RegisterPage({ checker }) {
                                 className="input-group-text cursor-pointer"
                                 onClick={() => setShowTypePassword(!showTypePassword)}
                             >
-                                <i className={!showTypePassword ? "bx bx-show" : "bx bx-hide"}></i>
+                                <i className={showTypePassword ? "bx bx-show" : "bx bx-hide"}></i>
                             </span>
                         </div>
                     </div>
@@ -394,7 +394,7 @@ export default function RegisterPage({ checker }) {
                                 className="input-group-text cursor-pointer"
                                 onClick={() => setShowVerifyPassword(!showVerifyPassword)}
                             >
-                                <i className={!showVerifyPassword ? "bx bx-show" : "bx bx-hide"}></i>
+                                <i className={showVerifyPassword ? "bx bx-show" : "bx bx-hide"}></i>
                             </span>
                         </div>
                     </div>
