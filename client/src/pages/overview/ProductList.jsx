@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Button, Row, Col, Stack, Pagination, Form } from 'react-bootstrap';
+import { Container, Button, Row, Col, Stack, Pagination, Form, Badge } from 'react-bootstrap';
 import { SelectSortButton } from "../../components/button/SelectSortButton.jsx";
 import ProductItem from "../../components/product/ProductItem";
 import Transitionbar from "../../layouts/Transitionbar.jsx";
@@ -9,17 +9,18 @@ import Overview from "../../layouts/Overview.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 import { BrandButton } from "../../components/button/BrandButton.jsx";
 import { PaginationCustom } from "../../components/pagination/PaginationCustom.jsx";
+import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
 
 export default function ProductList() {
     const categories = [
-        { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','Apple M1'] },
-        { categorical: 'GPU', variant: 'success', item: ['RTX 2060', 'RTX 3060','RTX 3090', 'RTX 4070','GTX 1660 Ti'] },
-        { categorical: 'RAM', variant: 'info', item: ['4','8','16','32','64'] },
-        { categorical: 'SSD', variant: 'warning', item: ['128', '256', '512', '1024', "2048"] },
-        { categorical: 'Screen', variant: 'danger', item: ['15', '14', '12','16'] },
+        { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','AMD Ryzen 9','Apple M2','Apple M3','Apple M4'] },
+        { categorical: 'GPU', variant: 'success', item: ['RTX 1660','RTX 2060','RTX 3050','RTX 3060','RTX 4050','RTX 4060'] },
+        { categorical: 'RAM', variant: 'info', item: ['8 GB','16 GB','24 GB','32 GB','64 GB'] },
+        { categorical: 'SSD', variant: 'warning', item: ['256 GB','512 GB','1 TB',"2TB"] },
+        { categorical: 'Screen', variant: 'danger', item: ['13\'','14\'','15\'','16\''] },
     ];
-    const brands = ['Apple', 'Dell', 'Lenovo', 'Asus', 'HP', 'Acer', 'Microsoft', 'LG']
-
+    // const brands = ['Apple', 'Dell', 'Lenovo', 'Asus', 'HP', 'Acer', 'Microsoft', 'LG']
+    const [brands, setBrands] = useState([]);
     const [list, setList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
@@ -44,9 +45,18 @@ export default function ProductList() {
         } catch (error) {}
     };
 
-    const fetchProductByBrand = async (brand) => {
-        const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
-        setList(response.data);
+    const handleLoadBrand = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-brand");
+            setBrands(response.data);
+        } catch (error) {}
+    }
+
+    const loadProductByBrand = async (brand) => {
+        try {
+            const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
+            setList(response.data);
+        } catch (error) {}
     };
 
     const fetchProductByName = async () => {
@@ -61,8 +71,10 @@ export default function ProductList() {
     // Function to filter products based on dropdown selection
     const filterProducts = (category, selectedItem) => {
         const filteredProducts = async () => {
-            const response = await apiHandler.get(`/products/load-productCPU/${selectedItem}`);
-            setList(response.data);
+            try {
+                const response = await apiHandler.get(`/products/load-product-condition/${selectedItem}`);
+                setList(response.data);
+            } catch (error) {}
         };
         filteredProducts();
     };
@@ -74,9 +86,10 @@ export default function ProductList() {
 
     useEffect(() => {
         handleLoadProducts();
+        handleLoadBrand();
 
         if (searchQuery !== '') {
-            fetchProductByName();
+            // fetchProductByName();
         }
 
     }, []);
@@ -84,6 +97,9 @@ export default function ProductList() {
     // useEffect(() => {
     //     window.scrollTo({ top: 0, behavior: "smooth" });
     // }, [currentPage]);
+
+    usePerfectScrollbar("brand-button-group")
+    usePerfectScrollbar("sort-button-group")
 
     return (
         <>
@@ -94,15 +110,25 @@ export default function ProductList() {
                     Laptop is best mobile device to work...
                 </h6>
                 <hr className="mb-0"/>
-                <div className="demo-inline-spacing">
+                {/*<div className="demo-inline-spacing" id="brand-button-group">*/}
+                {/*    {brands.map((brand, index) => (*/}
+                {/*        <BrandButton*/}
+                {/*            key={index}*/}
+                {/*            brand={brand}*/}
+                {/*            onSelect={filterProducts}*/}
+                {/*        />*/}
+                {/*    ))}*/}
+                {/*</div>*/}
+
+                <Stack className="demo-inline-spacing" direction="horizontal" id="brand-button-group">
                     {brands.map((brand, index) => (
                         <BrandButton
                             key={index}
                             brand={brand}
-                            onSelect={filterProducts}
+                            onSelect={loadProductByBrand}
                         />
                     ))}
-                </div>
+                </Stack>
             </Overview>
             <Overview>
                 <h5 className="card-title">Sort by</h5>
@@ -110,14 +136,18 @@ export default function ProductList() {
                     Choose one of config to sort...
                 </h6>
                 <hr className="mb-0"/>
+                {/*<Stack className="demo-inline-spacing" direction="horizontal" id="sort-button-group">*/}
+                {/*    {categories.map((category, index) => (*/}
+                {/*        <SelectSortButton*/}
+                {/*            key={index}*/}
+                {/*            categorical={category.categorical}*/}
+                {/*            variant={category.variant}*/}
+                {/*            items={category.item}*/}
+                {/*            onSelect={filterProducts}*/}
+                {/*        />*/}
+                {/*    ))}*/}
+                {/*</Stack>*/}
                 <div className="demo-inline-spacing">
-                    {/*row justify-content-center*/}
-                    {/*<Stack direction="horizontal" gap={3}>*/}
-                    {/*    {categories.map((category, index) => (*/}
-                    {/*        <SelectSortButton key={index} category={category} onSelect={filterProducts}/>*/}
-                    {/*    ))}*/}
-                    {/*</Stack>*/}
-
                     {categories.map((category, index) => (
                         <SelectSortButton
                             key={index}
@@ -128,24 +158,69 @@ export default function ProductList() {
                         />
                     ))}
                 </div>
+                <div className="demo-inline-spacing">
+                    {categories.map((category) => (
+                        <div key={category.categorical} className="mb-3" id="sort-button-group">
+                            {/* Hiển thị tên category trên một dòng riêng */}
+                            <Badge bg={`label-${category.variant}`} className="mb-2 me-2">
+                                {category.categorical}
+                            </Badge>
+                            {/* Các checkbox của category hiển thị theo hàng */}
+                            {category.item.map((item) => (
+                                <div key={item} className="form-check form-check-inline">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value={item}
+                                        onChange={() => filterProducts(category.categorical, item)}
+                                    />
+                                    <label className="form-check-label">{item}</label>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+
+                {/*<Stack className="demo-inline-spacing" direction="horizontal" id="sort-button-group">*/}
+                {/*    {categories.map((category, index) => (*/}
+                {/*        <>*/}
+                {/*            <Badge key={index} bg={`label-${category.variant}`} className="d-block">{category.categorical}</Badge>*/}
+                {/*            {category.item.map((item, index) => (*/}
+                {/*                <div key={index} className="form-check">*/}
+                {/*                    <input className="form-check-input" type="checkbox" value=""*/}
+                {/*                           onClick={() => filterProducts(category.categorical, item)}/>*/}
+                {/*                    <label className="form-check-label"> {item} </label>*/}
+                {/*                </div>*/}
+                {/*            ))}*/}
+                {/*        </>*/}
+                {/*    ))}*/}
+                {/*</Stack>*/}
             </Overview>
             <Overview>
                 <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
             <Overview>
-                <div className="d-flex justify-content-between">
-                    <div className="m-0">
-                        <Form.Select
-                            // className="w-100"
-                            value={itemsPerPage}
-                            onChange={handleItemsPerPageChange}
+                <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div className="m-0">
+                            <Form.Select
+                                // className="w-100"
+                                value={itemsPerPage}
+                                onChange={handleItemsPerPageChange}
+                            >
+                                <option value={2}>2</option>
+                                <option value={4}>4</option>
+                                <option value={8}>8</option>
+                                <option value={12}>12</option>
+                                <option value={24}>24</option>
+                            </Form.Select>
+                        </div>
+                        <Button
+                            className="ms-3"
+                            onClick={handleLoadProducts}
                         >
-                            <option value={2}>2</option>
-                            <option value={4}>4</option>
-                            <option value={8}>8</option>
-                            <option value={12}>12</option>
-                            <option value={24}>24</option>
-                        </Form.Select>
+                            Clear Filter
+                        </Button>
                     </div>
                     <PaginationCustom
                         currentPage={currentPage}
@@ -221,7 +296,7 @@ function ProductListc() {
     // Hàm lọc sản phẩm theo category, brand, v.v.
     const filterProducts = (category, selectedItem) => {
         const filteredProducts = async () => {
-            const response = await apiHandler.get(`/products/load-productCPU/${selectedItem}`);
+            const response = await apiHandler.get(`/products/load-selected-brand/${selectedItem}`);
             setProductList(response.data);
             setCurrentPage(1); // Reset về trang 1 sau khi lọc
         };
@@ -548,7 +623,7 @@ function ProductListz() {
     // Function to filter products based on dropdown selection
     const filterProducts = (category, selectedItem) => {
         const filteredProducts = async () => {
-            const response = await apiHandler.get(`/products/load-productCPU/${selectedItem}`);
+            const response = await apiHandler.get(`/products/load-selected-brand/${selectedItem}`);
             setProductList(response.data);
         };
         filteredProducts();

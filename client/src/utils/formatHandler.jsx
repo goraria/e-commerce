@@ -26,3 +26,5 @@ export const formatDateTimeMySQL = (date) => {
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
+
+export const formatRatings = (ratings) => Math.floor(ratings * Math.pow(10, 1)) / Math.pow(10, 1)

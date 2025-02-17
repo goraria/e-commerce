@@ -169,7 +169,8 @@ export default function LoginPage({ checker }) {
             <AuthWrapper>
                 <h4 className="mb-2">Welcome to Cipher! 👋</h4>
                 <p className="mb-4">Please sign-in to your account and start the adventure</p>
-                <Form id="formAuthentication" className="mb-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                <Form id="formAuthentication" className="mb-3" noValidate
+                      validated={validated} onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
                         <input
@@ -217,14 +218,14 @@ export default function LoginPage({ checker }) {
                                 className="input-group-text cursor-pointer"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
-                                <i className={showPassword ? "bx bx-show" : "bx bx-hide"}></i>
+                                <i className={`icon-base ${showPassword ? "bx bx-show" : "bx bx-hide"}`}></i>
                             </span>
-                            {/*<div className="valid-feedback">*/}
-                            {/*    Make sure enter correct password!*/}
-                            {/*</div>*/}
-                            {/*<div className="invalid-feedback">*/}
-                            {/*    Please enter your password.*/}
-                            {/*</div>*/}
+                        </div>
+                        <div className="valid-feedback">
+                            Make sure enter correct password!
+                        </div>
+                        <div className="invalid-feedback">
+                            Please enter your correct password.
                         </div>
                     </div>
                     <div className="mb-3">

@@ -1,7 +1,7 @@
 import {Col, Row} from "react-bootstrap";
 import React from "react";
 
-const Copyright = () => {
+export default function Copyright() {
     return (
         <footer className="content-footer footer bg-footer-theme">
             <div className="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
@@ -42,4 +42,3 @@ const Copyright = () => {
         </footer>
     );
 }
-export default Copyright;

@@ -103,10 +103,8 @@ class CartController {
         try {
             const id = req.user.id;
             // console.log(id,  req.user.id);
-            const cart = await Cart.findOne({
-                where: {
-                    idaccount: id
-                }
+            const cart = await Cart.findByPk({
+                where: { idaccount: id }
             })
 
             res.status(200).json(cart);
@@ -132,12 +130,16 @@ class CartController {
     }
 
     async addCartItem(req, res) {
-        const { idcart, idproduct, quantity,idcolor, idconfiguration } = req.body;  // Nhận thông tin từ yêu cầu
+        const { idproduct, quantity,idcolor, idconfiguration } = req.body;  // Nhận thông tin từ yêu cầu
             // console.log(req.body)
         try {
             // Tạo một mục mới trong bảng CartItem
+            const cart = await Cart.findOne({ where: { idaccount: req.user.id } })
+
+            // if (cart) return;
+
             const newCartItem = await CartItem.create({
-                idcart: idcart,
+                idcart: cart.idcart,
                 idproduct: idproduct,
                 quantity: quantity,
                 idcolor: idcolor,

@@ -10,6 +10,7 @@ const User = require("../models/User")
 const BillDetail = require("../models/BillDetail")
 const CartItem = require("../models/CartItem")
 const Cart = require("../models/Cart");
+const Brand = require("../models/Brand");
 const { Op, where, Sequelize } = require("sequelize");
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -102,6 +103,16 @@ class ProductController {
         } catch (error) {
             // console.error('Error fetching product properties:', error);
             return res.status(500).json({ error: 'Failed to load product properties' });
+        }
+    }
+
+    async loadBrands(req, res) {
+        try {
+            // const brands = await Product.findAll({ attributes: ['brand'], group: ['brand'] });
+            const brands = await Brand.findAll();
+            res.json(brands);
+        } catch (error) {
+
         }
     }
 

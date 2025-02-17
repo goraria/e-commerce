@@ -13,8 +13,9 @@ import LoadingPage from "../misc/LoadingPage.jsx";
 import Calendar from "react-calendar";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 import { renderRatingStar, renderStatusDelivery } from "../../utils/renderHandler.jsx";
-import { formatDateTime } from "../../utils/formatHandler.jsx";
+import { formatDateTime, formatRatings } from "../../utils/formatHandler.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import {PaginationCustom} from "../../components/pagination/PaginationCustom.jsx";
 
 export default function ProductPage() {
     const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -37,7 +38,7 @@ export default function ProductPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(7);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [selectedItem, setSelectedItem] = useState(null);
 
     const [showEvaluate, setShowEvaluate] = useState(false);
@@ -192,17 +193,19 @@ export default function ProductPage() {
 
     const handleAddToCart = async () => {
         try {
-            const response = await axios.put(`http://localhost:5172/cart/add-cartitem`, {
-                idcart: carts.idcart,
+            const response = await apiHandler.put(`/cart/add-cartitem`, {
                 idproduct: parseInt(id),
                 quantity: 1,
                 idcolor: ChoosedColor,
                 idconfiguration: default_config.idconfiguration,
+            }, {
+                headers: {Authorization: `Bearer ${token}`}
             });
-            if (response.status === 201) {
-                // alert("Sản phẩm đã được thêm vào giỏ hàng!");
-                setShowSuccess(true)
-            }
+            // if (response.status === 201) {
+            //     // alert("Sản phẩm đã được thêm vào giỏ hàng!");
+            //     setShowSuccess(true)
+            // }
+            setShowSuccess(true)
         } catch (error) {
             // console.error('Lỗi khi thêm vào giỏ hàng:', error);
             setShowWarning(true)
@@ -226,9 +229,10 @@ export default function ProductPage() {
         }
     };
 
-    const filteredData = data.filter(item =>
-        item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // const filteredData = data.filter(item =>
+    //     item.account?.username?.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+    const filteredData = ratings
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -244,87 +248,6 @@ export default function ProductPage() {
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
-    };
-
-    const renderPagination = () => {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
-        if (totalPages <= 1) return null;
-
-        const paginationItems = [];
-        const addPageButton = (pageNumber) => (
-            <Pagination.Item
-                key={pageNumber}
-                active={pageNumber === currentPage}
-                onClick={() => setCurrentPage(pageNumber)}
-            >
-                {pageNumber}
-            </Pagination.Item>
-        );
-
-        // Thêm nút 'First' và 'Previous'
-        paginationItems.push(
-            <Pagination.First
-                key="first"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-            />,
-            <Pagination.Prev
-                key="prev"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-            />
-        );
-
-        if (totalPages <= 7) {
-            // Hiển thị tất cả các trang nếu số trang <= 7
-            for (let i = 1; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        } else {
-            // Hiển thị phân trang với dấu `...`
-            if (currentPage <= 4) {
-                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
-                for (let i = 1; i <= 5; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            } else if (currentPage >= totalPages - 3) {
-                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                for (let i = totalPages - 4; i <= totalPages; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-            } else {
-                // Trường hợp trang hiện tại ở giữa
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                paginationItems.push(addPageButton(currentPage - 1));
-                paginationItems.push(addPageButton(currentPage));
-                paginationItems.push(addPageButton(currentPage + 1));
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            }
-        }
-
-        // Thêm nút 'Next' và 'Last'
-        paginationItems.push(
-            <Pagination.Next
-                key="next"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-            />,
-            <Pagination.Last
-                key="last"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-            />
-        );
-
-        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
     const calculateScore = (ratings) => {
@@ -473,7 +396,7 @@ export default function ProductPage() {
                                     <div className="card-body row widget-separator g-0">
                                         <div className="col-sm-5 border-shift border-end pe-sm-4">
                                             <h3 className="text-primary d-flex align-items-center gap-2 mb-2">
-                                                4.89
+                                                {formatRatings(calculateScore(ratings))}
                                                 <i className="bx bxs-star bx-sm"></i>
                                             </h3>
                                             <p className="h6 mb-2">Total 187 reviews</p>
@@ -638,12 +561,11 @@ export default function ProductPage() {
                                                             onChange={handleItemsPerPageChange}
                                                             value={itemsPerPage}
                                                         >
-                                                            <option value="10">7</option>
+                                                            <option value="5">5</option>
                                                             <option value="10">10</option>
-                                                            <option value="25">20</option>
-                                                            <option value="50">50</option>
-                                                            <option value="50">70</option>
-                                                            <option value="50">100</option>
+                                                            <option value="15">15</option>
+                                                            <option value="20">20</option>
+                                                            <option value="25">25</option>
                                                         </select>
                                                     </label>
                                                 </div>
@@ -699,7 +621,7 @@ export default function ProductPage() {
                                                     <div className="avatar-wrapper">
                                                         <div className="avatar me-4">{/* avatar-sm */}
                                                             <img
-                                                                src="../../assets/img/avatars/5.png"
+                                                                src="/assets/img/avatars/5.png"
                                                                 alt="Avatar"
                                                                 className="rounded-circle"
                                                             />
@@ -759,7 +681,7 @@ export default function ProductPage() {
                                             <td>{formatDateTime(new Date())}</td>
                                             <td>{renderStatusDelivery(3)}</td>
                                         </tr>
-                                        {ratings.map((item, index) => (
+                                        {currentItems.map((item, index) => (
                                             <tr key={index} style={{height: 64}}>
                                                 <td>
                                                     <Form.Check
@@ -838,7 +760,12 @@ export default function ProductPage() {
                                             </div>
                                             <div
                                                 className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                                                {renderPagination()}
+                                                {/*{renderPagination()}*/}
+                                                <PaginationCustom
+                                                    currentPage={currentPage}
+                                                    totalPages={totalPages}
+                                                    onPageChange={setCurrentPage}
+                                                />
                                             </div>
                                         </div>
                                     </div>

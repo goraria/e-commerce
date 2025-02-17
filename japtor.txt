@@ -58,6 +58,10 @@ To Do {
     Order History - View Order
 }
 
+Color {
+    #696cff, #0d9394, #ffab1d, #eb3d63, #2092ec
+}
+
 .env client {
 
 }

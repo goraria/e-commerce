@@ -201,6 +201,7 @@ class AdminController {
             res.status(500).json({ success: false, message: 'Error create user', error });
         }
     }
+
     async updateUserData(req, res) {
         const { idaccount } = req.params;
         const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
@@ -245,6 +246,7 @@ class AdminController {
             res.status(500).json({ success: false, message: 'Error updating user', error });
         }
     }
+
     async createdejaptor(req, res) {
         const a = req.body
         try {
@@ -268,9 +270,9 @@ class AdminController {
             console.log(error)
         }
     }
+
     async getConfiguration(req, res) {
         try {
-
             const configuration = await Configuration.findAll();
             res.status(200).json(configuration);
         } catch (error) {
@@ -278,6 +280,7 @@ class AdminController {
         }
 
     }
+
     async updateConfiguration(req, res) {
         const { idConfiguration } = req.params;
         // console.log(idConfiguration);
@@ -314,6 +317,7 @@ class AdminController {
             res.status(500).json({ success: false, message: 'Error updating configuration', error });
         }
     }
+
     async createConfiguration(req, res) {
         const Data = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
         console.log(Data)
@@ -343,6 +347,7 @@ class AdminController {
             res.status(500).json({ success: false, message: 'Error create configuration', error });
         }
     }
+
     async deleteConfiguration(req, res) {
         try {
             const { idConfiguration } = req.params
