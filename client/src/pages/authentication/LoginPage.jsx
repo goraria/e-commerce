@@ -217,7 +217,7 @@ export default function LoginPage({ checker }) {
                                 className="input-group-text cursor-pointer"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
-                                <i className={!showPassword ? "bx bx-show" : "bx bx-hide"}></i>
+                                <i className={showPassword ? "bx bx-show" : "bx bx-hide"}></i>
                             </span>
                             {/*<div className="valid-feedback">*/}
                             {/*    Make sure enter correct password!*/}

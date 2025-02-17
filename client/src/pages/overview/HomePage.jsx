@@ -13,6 +13,7 @@ const banners = [
     // { id: 4, name: "/assets/img/overviews/pri.jpeg", alt: "Fourth slide", title: "Sale Off 8%", description: "The best Workstation" },
     { id: 5, name: "/assets/img/overviews/sfc.jpeg", alt: "Fifth slide", title: "Sale Off 15%", description: "Surface x Copilot" },
     { id: 6, name: "/assets/img/overviews/yogabook.jpeg", alt: "Sixth slide", title: "Sale Off 20%", description: "Double Display" },
+    { id: 9, name: "/assets/img/overviews/jp.jpeg", alt: "Gorth slide", title: "Bill Cipher", description: "Powered by Gorth inc." },
 ]
 
 export default function HomePage() {

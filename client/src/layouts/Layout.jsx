@@ -142,6 +142,11 @@ const menu = [
                         "link": "https://github.com/LocPhamn"
                     },
                     {
+                        "text": "Meifang",
+                        "available": true,
+                        "link": "https://github.com/maiphuong22103"
+                    },
+                    {
                         "text": "Zamcha",
                         "available": true,
                         "link": "https://github.com/zamchar"
@@ -200,6 +205,11 @@ const menu = [
                         "link": "#"
                     },
                     {
+                        "text": "meifang",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
                         "text": "zamcha",
                         "available": true,
                         "link": "#"
@@ -239,6 +249,11 @@ const menu = [
                     },
                     {
                         "text": "locst",
+                        "available": true,
+                        "link": "#"
+                    },
+                    {
+                        "text": "meifang",
                         "available": true,
                         "link": "#"
                     }

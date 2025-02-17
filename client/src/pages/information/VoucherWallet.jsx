@@ -51,9 +51,71 @@ export const VoucherWallet = () => {
                     </div>
                 </div>
             </div>
-            <div className="row mb-5">
-                <div className="col-lg-4 col-md-6 col-md col-sm-12">
+            {/*<div className="row g-6">*/}
+            {/*    <div className="col col-md-6 col-sm-12"> /!* col col-xl-3 col-lg-4 col-md-6 col-sm-12 *!/*/}
+            {/*        <VoucherItem/>*/}
+            {/*    </div>*/}
+            {/*    <div className="col-md"> /!* col col-xl-3 col-lg-4 col-md-6 col-sm-12 *!/*/}
+            {/*        <VoucherItem/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            {/*<div className="row mb-4">*/}
+            {/*    <VoucherCard left={1} right={2}/>*/}
+            {/*</div>*/}
+            {[[1, 2], [3, 4], [5, 7], [11, 12], [13, 17], [18, 19], [20, 21], [22, 23], [24, 25]].map((item, index) => (
+                <div className="row mb-4" key={index}>
+                    <VoucherCard left={item[0]} right={item[1]}/>
+                </div>
+            ))}
+            <div className="row mb-4">
+                <div className="col-md">
                     <VoucherItem/>
+                </div>
+                <div className="col-md">
+                    <VoucherItem/>
+                </div>
+            </div>
+        </>
+    )
+}
+
+const VoucherCard = ({ left, right}) => {
+    return (
+        <>
+            <div className="col-md">
+                <div className="card">
+                    <div className="row g-0">
+                        <div className="col-md-4">
+                            <img aria-label='card image' className="card-img card-img-left" src={`/assets/img/elements/${left}.png`} alt="Card image" />
+                        </div>
+                        <div className="col-md-8">
+                            <div className="card-body">
+                                <h5 className="card-title">Card title</h5>
+                                <p className="card-text">
+                                    Japtor
+                                </p>
+                                <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="col-md">
+                <div className="card">
+                    <div className="row g-0">
+                        <div className="col-md-8">
+                            <div className="card-body">
+                                <h5 className="card-title">Card title</h5>
+                                <p className="card-text">
+                                    Goraria
+                                </p>
+                                <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <img aria-label='card image' className="card-img card-img-right" src={`/assets/img/elements/${right}.png`} alt="Card image" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

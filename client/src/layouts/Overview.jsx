@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-const Overview = ({ children, mt }) => {
+export default function Overview({ children, mt }) {
     useEffect(() => {
         Main();
     }, [])
@@ -21,5 +21,3 @@ const Overview = ({ children, mt }) => {
         </>
     );
 }
-
-export default Overview

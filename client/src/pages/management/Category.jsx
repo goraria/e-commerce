@@ -354,7 +354,7 @@ export default function Category() {
                                         <div className="d-flex align-items-center">
                                             <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                                 <div className="avatar"><img
-                                                    src={`../assets/img/categories/${item.category_image}`}
+                                                    src={`/assets/img/categories/${item.category_image}`}
                                                     alt="Product-8"
                                                     className="rounded" /></div>
                                             </div>

@@ -12,6 +12,8 @@ export default function Transitionbar() {
         { category: "Keyboard", box: "bxs-keyboard", items: ['#action1', '#action1', '#action1',] },
     ]
 
+    const cates = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+
     return (
         <>
             <nav
@@ -22,6 +24,25 @@ export default function Transitionbar() {
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
                         {classifications.map((cate, index) => (
                             <TransitionButton icon={cate.box} href="#" key={index}/>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="navbar-nav-left d-flex align-items-center" id="navbar-collapse">
+                    <ul className="navbar-nav flex-row align-items-center ms-auto">
+                        {cates.map((cate, index) => (
+                            <div className="d-flex align-items-center" key={index}>
+                                <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                                    <div className="avatar"><img
+                                        src={`/assets/img/categories/product-${cate}.png`}
+                                        alt="Product-8"
+                                        className="rounded" /></div>
+                                </div>
+                                <div className="d-flex flex-column justify-content-center"><span
+                                    className="text-heading text-wrap fw-medium"></span><span
+                                    className="text-truncate mb-0 d-none d-sm-block"><small></small></span>
+                                </div>
+                            </div>
                         ))}
                     </ul>
                 </div>
