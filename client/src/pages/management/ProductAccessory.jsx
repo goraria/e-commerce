@@ -11,7 +11,7 @@ export default function ProductAccessory() {
     }
     return (
         <>
-            <div>Quy Dinh</div>
+            <div>Mai Phuong</div>
             <AccessoryForm
                 address={obj}
                 onHide={() => true}

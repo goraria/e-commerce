@@ -16,7 +16,7 @@ router.get('/load-rating/:idproduct', productController.loadRating);
 
 router.get('/load-color/:idProduct', productController.loadColor);
 router.get('/load-idconfiguration/:idConfiguration', productController.loadConfigurationByID);
-router.get('/load-productCPU/:CPU', productController.loadProductWithCondition);
+router.get('/load-product-condition/:CPU', productController.loadProductWithCondition);
 router.get('/load-product-brand/:Brand', productController.loadProductWithBrand);
 router.get('/load-product-name/:Name', productController.loadProductWithName);
 
@@ -28,6 +28,8 @@ router.get('/get-product', productController.loadAllProduct);
 router.patch('/update-status/:idProduct', productController.updateStatus);
 
 ////////////////////////////
+
+router.get('/load-brand', productController.loadBrands);
 
 router.get('/load-properties/:idproduct', productController.loadProperties);
 router.get('/load-spotlight', productController.loadSpotlight);

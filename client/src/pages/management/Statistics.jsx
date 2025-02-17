@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { formatDateTime } from "../../utils/formatHandler.jsx";
 import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import {PaginationCustom} from "../../components/pagination/PaginationCustom.jsx";
 
 export default function Statistics() {
     const [data, setData] = useState([]);
@@ -132,87 +133,6 @@ export default function Statistics() {
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
-    };
-
-    const renderPagination = () => {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
-        if (totalPages <= 1) return null;
-
-        const paginationItems = [];
-        const addPageButton = (pageNumber) => (
-            <Pagination.Item
-                key={pageNumber}
-                active={pageNumber === currentPage}
-                onClick={() => setCurrentPage(pageNumber)}
-            >
-                {pageNumber}
-            </Pagination.Item>
-        );
-
-        // Thêm nút 'First' và 'Previous'
-        paginationItems.push(
-            <Pagination.First
-                key="first"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-            />,
-            <Pagination.Prev
-                key="prev"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-            />
-        );
-
-        if (totalPages <= 7) {
-            // Hiển thị tất cả các trang nếu số trang <= 7
-            for (let i = 1; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        } else {
-            // Hiển thị phân trang với dấu `...`
-            if (currentPage <= 4) {
-                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
-                for (let i = 1; i <= 5; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            } else if (currentPage >= totalPages - 3) {
-                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                for (let i = totalPages - 4; i <= totalPages; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-            } else {
-                // Trường hợp trang hiện tại ở giữa
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                paginationItems.push(addPageButton(currentPage - 1));
-                paginationItems.push(addPageButton(currentPage));
-                paginationItems.push(addPageButton(currentPage + 1));
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            }
-        }
-
-        // Thêm nút 'Next' và 'Last'
-        paginationItems.push(
-            <Pagination.Next
-                key="next"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-            />,
-            <Pagination.Last
-                key="last"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-            />
-        );
-
-        return <Pagination className="m-0">{paginationItems}</Pagination>;
     };
 
     const handleOpenModal = (item) => {
@@ -413,9 +333,16 @@ export default function Statistics() {
                                             <div className="d-flex justify-content-start align-items-center user-name">
                                                 <div className="avatar-wrapper">
                                                     <div className="avatar avatar-sm me-4">
-                                                        <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
-                                                            {item.account.user.firstname[0]}{item.account.user.lastname[0]}
-                                                        </span>
+                                                        {item.account.user.avatar
+                                                            ? <img
+                                                                className="rounded-circle"
+                                                                src={item.account.user.avatar}
+                                                                alt="avatar"
+                                                            />
+                                                            : <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
+                                                                {item.account.user.firstname[0]}{item.account.user.lastname[0]}
+                                                            </span>
+                                                        }
                                                     </div>
                                                 </div>
                                                 <div className="d-flex flex-column">
@@ -472,7 +399,11 @@ export default function Statistics() {
                                     </div>
                                 </div>
                                 <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                                    {renderPagination()}
+                                    <PaginationCustom
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPageChange={setCurrentPage}
+                                    />
                                 </div>
                             </div>
                         </div>

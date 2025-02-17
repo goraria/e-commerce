@@ -63,6 +63,7 @@ export default function RegisterPage({ checker }) {
     };
 
     const handleSubmit = async (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
 
         if (!captchaVerified) {
@@ -73,35 +74,44 @@ export default function RegisterPage({ checker }) {
         }
 
         if (!form.checkValidity()) {
-            event.preventDefault();
             event.stopPropagation();
-        } else {
-            event.preventDefault();
-
-            if (formData.password === formData.retypepass) {
-                setLoading(true);
-
-                try {
-                    const response = await apiHandler.post('/authentication/register', formData);
-
-                    if (response.status === 201) {
-                        setShowSuccess(true)
-                        // navigate('/login');  // Redirect to login after successful registration
-                        // setTimeout(() => navigate('/login'), 2000);
-                    }
-                } catch (error) {
-                    // console.log(error)
-                    setError(error.response ? error.response.data.message : 'Registration failed');
-                    setShowError(true);
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setLoading(false);
-                setError('Password is not match!');
-                setShowError(true);
-            }
+            setValidated(true);
+            return;
         }
+
+        // if (!form.checkValidity()) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        // } else {
+        //     event.preventDefault();
+        //
+        //
+        // }
+
+        if (formData.password === formData.retypepass) {
+            setLoading(true);
+
+            try {
+                const response = await apiHandler.post('/authentication/register', formData);
+
+                if (response.status === 201) {
+                    setShowSuccess(true)
+                    // navigate('/login');  // Redirect to login after successful registration
+                    // setTimeout(() => navigate('/login'), 2000);
+                }
+            } catch (error) {
+                // console.log(error)
+                setError(error.response ? error.response.data.message : 'Registration failed');
+                setShowError(true);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
+            setError('Password is not match!');
+            setShowError(true);
+        }
+
         setValidated(true);
     };
 
@@ -469,7 +479,11 @@ export default function RegisterPage({ checker }) {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button aria-label='Click me' className="btn btn-primary d-grid w-100" type="submit">
+                        <button
+                            aria-label='Click me'
+                            className="btn btn-primary d-grid w-100"
+                            type="submit"
+                        >
                             Register
                         </button>
                     </div>

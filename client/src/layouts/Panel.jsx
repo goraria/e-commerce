@@ -93,7 +93,7 @@ const menu = [
     }
 ]
 
-const Panel = ({ children }) => {
+export default function Panel({ children }) {
     useEffect(() => {
         Main();
     },[])
@@ -118,5 +118,3 @@ const Panel = ({ children }) => {
         </div>
     );
 };
-
-export default Panel;

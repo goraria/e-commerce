@@ -3,7 +3,8 @@ import { Table, Button, Form, Pagination, Dropdown, Badge, Modal } from "react-b
 import axios from 'axios';
 import ColorForm from "../../components/modal/form/ColorForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
+import { renderProductColor } from "../../utils/renderHandler.jsx";
+import { PaginationCustom } from "../../components/pagination/PaginationCustom.jsx";
 
 export default function ProductColor() {
     const [data, setData] = useState([])
@@ -122,87 +123,6 @@ export default function ProductColor() {
         setCurrentPage(1);
     };
 
-    const renderPagination = () => {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
-        if (totalPages <= 1) return null;
-
-        const paginationItems = [];
-        const addPageButton = (pageNumber) => (
-            <Pagination.Item
-                key={pageNumber}
-                active={pageNumber === currentPage}
-                onClick={() => setCurrentPage(pageNumber)}
-            >
-                {pageNumber}
-            </Pagination.Item>
-        );
-
-        // Thêm nút 'First' và 'Previous'
-        paginationItems.push(
-            <Pagination.First
-                key="first"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-            />,
-            <Pagination.Prev
-                key="prev"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-            />
-        );
-
-        if (totalPages <= 7) {
-            // Hiển thị tất cả các trang nếu số trang <= 7
-            for (let i = 1; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        } else {
-            // Hiển thị phân trang với dấu `...`
-            if (currentPage <= 4) {
-                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
-                for (let i = 1; i <= 5; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            } else if (currentPage >= totalPages - 3) {
-                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                for (let i = totalPages - 4; i <= totalPages; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-            } else {
-                // Trường hợp trang hiện tại ở giữa
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                paginationItems.push(addPageButton(currentPage - 1));
-                paginationItems.push(addPageButton(currentPage));
-                paginationItems.push(addPageButton(currentPage + 1));
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            }
-        }
-
-        // Thêm nút 'Next' và 'Last'
-        paginationItems.push(
-            <Pagination.Next
-                key="next"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-            />,
-            <Pagination.Last
-                key="last"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-            />
-        );
-
-        return <Pagination className="m-0">{paginationItems}</Pagination>;
-    };
-
     useEffect(() => {
         // fetchAPI();
         // fetchAPI1();
@@ -238,7 +158,7 @@ export default function ProductColor() {
                                                 onChange={handleItemsPerPageChange}
                                                 value={itemsPerPage}
                                             >
-                                                <option value="10">7</option>
+                                                <option value="7">7</option>
                                                 <option value="10">10</option>
                                                 <option value="25">20</option>
                                                 <option value="50">50</option>
@@ -277,13 +197,19 @@ export default function ProductColor() {
                                         checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
                                     />
                                 </th>
-                                {
-                                    ["Product Name", "Color"].map((item, index) => (
-                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13 }}>
-                                            {item}
-                                        </th>
-                                    ))
-                                }
+                                {/*{*/}
+                                {/*    ["Product Name", "Color"].map((item, index) => (*/}
+                                {/*        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13 }}>*/}
+                                {/*            {item}*/}
+                                {/*        </th>*/}
+                                {/*    ))*/}
+                                {/*}*/}
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13 }}>
+                                    Product Name
+                                </th>
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13, width: 100 }}>
+                                    Color
+                                </th>
                                 <th className="sorting_disabled text-center"
                                     style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>Actions
                                 </th>
@@ -322,7 +248,7 @@ export default function ProductColor() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{renderStatusDelivery(item.color)}</td>
+                                    <td>{renderProductColor(item.color)}</td>
                                     <td>
                                         <Button
                                             variant="link"
@@ -357,7 +283,11 @@ export default function ProductColor() {
                                 </div>
                             </div>
                             <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                                {renderPagination()}
+                                <PaginationCustom
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={setCurrentPage}
+                                />
                             </div>
                             <ColorForm
                                 show={modalShow}

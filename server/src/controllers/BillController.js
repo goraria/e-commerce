@@ -21,7 +21,7 @@ class BillController {
                         include: [
                             {
                                 model: User,
-                                attributes: ['iduser', 'firstname', 'lastname', 'phone_number'], // Các trường cần từ User
+                                attributes: ['iduser', 'firstname', 'lastname', 'phone_number', 'avatar'], // Các trường cần từ User
                             }
                         ]
                     }
@@ -41,7 +41,8 @@ class BillController {
                         iduser: bill.Account.User.iduser,
                         firstname: bill.Account.User.firstname,
                         lastname: bill.Account.User.lastname,
-                        phone_number: bill.Account.User.phone_number
+                        phone_number: bill.Account.User.phone_number,
+                        avatar: bill.Account.User.avatar
                     } : null
                 } : null,
                 address: bill.Address ? {

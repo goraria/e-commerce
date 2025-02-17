@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import {ResponseButton} from "../components/button/ResponseButton.jsx";
 
 const paymentIcons = [
     { id: 1, name: "Banking", box: "bxs-dollar-circle", link: "#" },
@@ -49,7 +50,7 @@ const FooterLink = ({ item }) => {
     )
 }
 
-const Footer = () => {
+export default function Footer() {
     return (
         <>
             <footer className="bg-light text-dark text-left">
@@ -91,9 +92,10 @@ const Footer = () => {
                                 Phản hồi nóng về chất lượng sản phẩm và dịch vụ.
                                 Đội ngũ Kiểm Soát Chất Lượng của chúng tôi sẵn sàng lắng nghe quý khách.
                             </p>
-                            <Button href="#" variant="secondary">
-                                Gửi phản hồi ngay
-                            </Button>
+                            {/*<Button href="#" variant="secondary" style={{ backgroundColor: '#ff00aa' }}>*/}
+                            {/*    Gửi phản hồi ngay*/}
+                            {/*</Button>*/}
+                            <ResponseButton/>
                         </div>
                     </div>
                     <div className="row">
@@ -111,7 +113,5 @@ const Footer = () => {
         </>
     )
 }
-
-export default Footer;
 
 

@@ -51,24 +51,41 @@ export const renderStatusDelivery = (status) => {
     }
 };
 
-export const renderProductColor = (status) => {
-    switch (status) {
-        case 5: // "Delivered"
-            return <Badge bg="label-success">Delivered</Badge>;
-        case 0: // "Ordered"
-            return <Badge bg="label-warning">Ordered</Badge>;
-        case 3: // "Dispatched"
-            return <Badge bg="label-primary">Dispatched</Badge>;
-        case 1: // "Pickup"
-            return <Badge bg="label-info">Pickup</Badge>;
-        case 6: // "Rejected"
-            return <Badge bg="label-danger">Rejected</Badge>;
-        case 2: // "Arrival"
-            return <Badge bg="label-dark">Arrival</Badge>;
-        case 4: // "Arrival"
-            return <Badge bg="label-secondary">Arrival</Badge>;
+export const renderProductColor = (color) => {
+    switch (color) {
+        case 'dark':
+            return <Badge bg="label-dark">Black</Badge>;
+        case 'light':
+            return <Badge bg="label-secondary">White</Badge>;
+        case 'gold':
+            return <Badge bg="label-warning">Gold</Badge>;
+        case '':
+            return <Badge bg="label-info">Color</Badge>;
+        case 'red':
+            return <Badge bg="label-danger">Red</Badge>;
+        case 'blue':
+            return <Badge bg="label-primary">Blue</Badge>;
+        case 'green':
+            return <Badge bg="label-success">Green</Badge>;
         default:
-            return <Badge bg="label-light">{status}</Badge>;
+            return <Badge bg="label-light">{color}</Badge>;
+    }
+};
+
+export const renderAddressType = (type) => {
+    switch (type) {
+        case 'Company':
+            return <Badge bg="label-primary">Company</Badge>;
+        case 'Home':
+            return <Badge bg="label-info">Ordered</Badge>;
+        case 'Office':
+            return <Badge bg="label-success">Dispatched</Badge>;
+        case 'Travel':
+            return <Badge bg="label-warning">Travel</Badge>;
+        case 'Post':
+            return <Badge bg="label-danger">Post</Badge>;
+        default:
+            return <Badge bg="label-secondary">Other</Badge>;
     }
 };
 
@@ -113,7 +130,39 @@ export const renderCategory = (category) => {
     }
 };
 
-export const renderUserRole = (role) => {
+export const renderProductType = (type) => {
+    switch (type) {
+        case 'office':
+            return <Badge bg="label-info">Office</Badge>;
+        case 'gaming':
+            return <Badge bg="label-danger">Gaming</Badge>;
+        case 'education':
+            return <Badge bg="label-success">Education</Badge>;
+        case 'graphic':
+            return <Badge bg="label-warning">Graphic</Badge>;
+        case 'workstation':
+            return <Badge bg="label-primary">Workstation</Badge>;
+        default:
+            return <Badge bg="label-secondary">Other</Badge>;
+    }
+};
+
+export const renderRoleBadge = (role) => {
+    switch (role) {
+        case 1:
+            return <Badge bg="label-danger">Administrator</Badge>;
+        case 0:
+            return <><Badge bg="label-primary" className="me-1">User</Badge><Badge bg="label-info">Buyer</Badge></>;
+        case 2:
+            return <Badge bg="label-success">Deliver</Badge>;
+        case 3:
+            return <Badge bg="label-warning">Seller</Badge>;
+        default:
+            return <Badge bg="label-secondary">Other</Badge>;
+    }
+};
+
+export const renderRoleIcon = (role) => {
     switch (role) {
         case 1: // "Admin"
             return <span className="text-truncate d-flex align-items-center text-heading">

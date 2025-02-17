@@ -309,13 +309,20 @@ export default function ProductName() {
                                 <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13 }}>
                                     Product Name
                                 </th>
-                                {
-                                    ["Stock", "Category", "Actions"].map((item, index) => (
-                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>
-                                            {item}
-                                        </th>
-                                    ))
-                                }
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13, width: 100 }}>
+                                    Stock
+                                </th>
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13, width: 160 }}>
+                                    Category
+                                </th>
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>
+                                    Actions
+                                </th>
+                                {/*{["Stock", "Category", "Actions"].map((item, index) => (*/}
+                                {/*    <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>*/}
+                                {/*        {item}*/}
+                                {/*    </th>*/}
+                                {/*))}*/}
                             </tr>
                         </thead>
                         <tbody>

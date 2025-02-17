@@ -252,7 +252,7 @@ export default function Voucher() {
                                                 className="btn btn-secondary create-new btn-primary d-flex text-center"
                                                 onClick={() => setModalShow(true)}>
                                                 <i className='bx bx-plus me-2'></i>
-                                                Add New Product
+                                                Add New Voucher
                                             </Button>
                                         </div>
                                     </div>
@@ -290,13 +290,19 @@ export default function Voucher() {
                                         </th>
                                     ))
                                 }
-                                {
-                                    ["Stock", "Actions"].map((item, index) => (
-                                        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>
-                                            {item}
-                                        </th>
-                                    ))
-                                }
+                                {/*{*/}
+                                {/*    ["Stock", "Actions"].map((item, index) => (*/}
+                                {/*        <th className="sorting" key={index} style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>*/}
+                                {/*            {item}*/}
+                                {/*        </th>*/}
+                                {/*    ))*/}
+                                {/*}*/}
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13, width: 100 }}>
+                                    Stock
+                                </th>
+                                <th className="sorting" style={{ verticalAlign: "middle", fontSize: 13, width: 120 }}>
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody>

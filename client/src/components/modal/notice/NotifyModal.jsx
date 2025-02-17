@@ -10,15 +10,15 @@ export const NotifyModal = ({ title, message, type, show, onHide }) => {
             // centered
         >
             <Modal.Header closeButton>
-                <div className="card-icon me-2">
-                    <div className="avatar">
-                        <div className={`avatar-initial rounded bg-label-${type}`}>
-                            <i className={`bx ${getNoticeIcon(type)} bx-sm`}></i>
+                <Modal.Title id="contained-modal-title-vcenter" className="d-flex align-items-center">
+                    <div className="card-icon me-2">
+                        <div className="avatar">
+                            <div className={`avatar-initial rounded bg-label-${type}`}>
+                                <i className={`bx ${getNoticeIcon(type)} bx-sm`}></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    {title}
+                    <span>{title}</span>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

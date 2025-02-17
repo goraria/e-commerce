@@ -11,6 +11,10 @@ const Brand = sequelize.define('Brand', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    brand_logo: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     tableName: 'brand',
     timestamps: false,

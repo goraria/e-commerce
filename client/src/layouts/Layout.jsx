@@ -332,7 +332,7 @@ const menu = [
     }
 ]
 
-const Layout = ({ children }) => {
+export default function Layout({ children }) {
     useEffect(() => {
         Main();
     }, [])
@@ -357,5 +357,3 @@ const Layout = ({ children }) => {
         </div>
     );
 };
-
-export default Layout;

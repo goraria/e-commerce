@@ -28,7 +28,7 @@ export default function Transitionbar() {
                     </ul>
                 </div>
 
-                <div className="navbar-nav-left d-flex align-items-center" id="navbar-collapse">
+                <div className="d-none navbar-nav-left d-flex align-items-center" id="navbar-collapse">
                     <ul className="navbar-nav flex-row align-items-center ms-auto">
                         {cates.map((cate, index) => (
                             <div className="d-flex align-items-center" key={index}>

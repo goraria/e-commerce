@@ -4,7 +4,8 @@ import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstra
 import axios from 'axios';
 import UserForm from "../../components/modal/form/UserForm.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
-import { renderUserRole } from "../../utils/renderHandler.jsx";
+import { renderRoleBadge } from "../../utils/renderHandler.jsx";
+import { PaginationCustom } from "../../components/pagination/PaginationCustom.jsx";
 
 export default function UserManagement() {
     const navigate = useNavigate();
@@ -96,87 +97,6 @@ export default function UserManagement() {
         setCurrentPage(1);
     };
 
-    const renderPagination = () => {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-        // Nếu chỉ có 1 trang, không cần hiển thị phân trang
-        if (totalPages <= 1) return null;
-
-        const paginationItems = [];
-        const addPageButton = (pageNumber) => (
-            <Pagination.Item
-                key={pageNumber}
-                active={pageNumber === currentPage}
-                onClick={() => setCurrentPage(pageNumber)}
-            >
-                {pageNumber}
-            </Pagination.Item>
-        );
-
-        // Thêm nút 'First' và 'Previous'
-        paginationItems.push(
-            <Pagination.First
-                key="first"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-            />,
-            <Pagination.Prev
-                key="prev"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-            />
-        );
-
-        if (totalPages <= 7) {
-            // Hiển thị tất cả các trang nếu số trang <= 7
-            for (let i = 1; i <= totalPages; i++) {
-                paginationItems.push(addPageButton(i));
-            }
-        } else {
-            // Hiển thị phân trang với dấu `...`
-            if (currentPage <= 4) {
-                // Trường hợp trang hiện tại nằm trong khoảng 1 - 4
-                for (let i = 1; i <= 5; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            } else if (currentPage >= totalPages - 3) {
-                // Trường hợp trang hiện tại nằm trong khoảng cuối (totalPages - 3 đến totalPages)
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                for (let i = totalPages - 4; i <= totalPages; i++) {
-                    paginationItems.push(addPageButton(i));
-                }
-            } else {
-                // Trường hợp trang hiện tại ở giữa
-                paginationItems.push(addPageButton(1));
-                paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-                paginationItems.push(addPageButton(currentPage - 1));
-                paginationItems.push(addPageButton(currentPage));
-                paginationItems.push(addPageButton(currentPage + 1));
-                paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-                paginationItems.push(addPageButton(totalPages));
-            }
-        }
-
-        // Thêm nút 'Next' và 'Last'
-        paginationItems.push(
-            <Pagination.Next
-                key="next"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-            />,
-            <Pagination.Last
-                key="last"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-            />
-        );
-
-        return <Pagination className="m-0">{paginationItems}</Pagination>;
-    };
-
     useEffect(() => {
         fetchAPI();
         fetchAPI1();
@@ -238,13 +158,19 @@ export default function UserManagement() {
                                     checked={selectedEntries.length === currentItems.length && currentItems.length > 0}
                                 />
                             </th>
-                            {
-                                ["User", "UserName", "Role", "Phone Number"].map((item, index) => (
-                                    <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>
-                                        {item}
-                                    </th>
-                                ))
-                            }
+                            {/*{*/}
+                            {/*    ["User", "UserName", "Role", "Phone Number"].map((item, index) => (*/}
+                            {/*        <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13}}>*/}
+                            {/*            {item}*/}
+                            {/*        </th>*/}
+                            {/*    ))*/}
+                            {/*}*/}
+                            <th className="sorting" style={{verticalAlign: "middle", fontSize: 13}}>
+                                User
+                            </th>
+                            <th className="sorting" style={{verticalAlign: "middle", fontSize: 13, width: 160}}>
+                                Role
+                            </th>
                             <th className="sorting_disabled text-center"
                                 style={{verticalAlign: "middle", fontSize: 13, width: 120}}>Actions
                             </th>
@@ -264,24 +190,34 @@ export default function UserManagement() {
                                     <div className="d-flex justify-content-start align-items-center user-name">
                                         <div className="avatar-wrapper">
                                             <div className="avatar avatar-sm me-4">
-                                                <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
-                                                    {item.firstname[0]}{item.lastname[0]}
-                                                </span>
+                                                {/*<span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>*/}
+                                                {/*    {item.firstname[0]}{item.lastname[0]}*/}
+                                                {/*</span>*/}
+                                                {item.avatar
+                                                    ? <img
+                                                        className="rounded-circle"
+                                                        src={item.avatar}
+                                                        alt="avatar"
+                                                    />
+                                                    : <span className={`avatar-initial rounded-circle bg-label-${"primary"}`}>
+                                                        {item.account.user.firstname[0]}{item.account.user.lastname[0]}
+                                                    </span>
+                                                }
                                             </div>
                                         </div>
                                         <div className="d-flex flex-column">
                                             <a className="text-heading text-truncate">
                                                 <span className="fw-medium">{`${item.firstname} ${item.lastname}`}</span>
                                             </a>
-                                            <small>{item.email}</small>
+                                            <small>{`${item.email}  |  ${item.username}  |  ${item.phone_number || "Unknown"}`}</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    {item.username}
-                                </td>
-                                <td>{renderUserRole(item.role)}</td>
-                                <td>{item.phone_number}</td>
+                                {/*<td>*/}
+                                {/*    {item.username}*/}
+                                {/*</td>*/}
+                                <td>{renderRoleBadge(item.role)}</td>
+                                {/*<td>{item.phone_number}</td>*/}
                                 <td>
                                     <Button variant="link" onClick={() => handleEdit(item.idaccount)}>
                                         <i className='bx bx-edit' ></i>
@@ -309,7 +245,11 @@ export default function UserManagement() {
                             </div>
 
                             <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                                {renderPagination()}
+                                <PaginationCustom
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={setCurrentPage}
+                                />
                             </div>
                             <UserForm
                                 show={modalShow}
