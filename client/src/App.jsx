@@ -69,28 +69,26 @@ export default function App() {
         <Routes>
             <Route
                 path="/*"
-                element={
-                    <Frame role={auth.role}>
-                        <ShareRoutes />
-                    </Frame>
-                }
+                element={<Frame role={auth.role}><ShareRoutes /></Frame>}
             />
 
-            <Route path="/auth/*" element={<AuthenticationRoutes />} />
-
+            <Route
+                path="/auth/*"
+                element={<AuthenticationRoutes />}
+            />
             <Route
                 path="/auth/login"
-                element={<LoginPage checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+                element={<LoginPage checker={authentication} />}
             />
             <Route
                 path="/auth/register"
-                element={<RegisterPage checker={authentication} />} // Truyền hàm authentication dưới dạng callback
+                element={<RegisterPage checker={authentication} />}
             />
 
             <Route
                 path="/user/*"
                 element={
-                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
+                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/notauthorized">
                         <Panel>
                             <UserRoutes />
                         </Panel>
@@ -101,7 +99,7 @@ export default function App() {
             <Route
                 path="/pay/*"
                 element={
-                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/error">
+                    <Protected isAllowed={auth.isAuthenticated && auth.role === 0} redirectTo="/auth/notauthorized">
                         <Frame role={auth.role}>
                             <CustomerRoutes />
                         </Frame>
@@ -112,7 +110,7 @@ export default function App() {
             <Route
                 path="/admin/*"
                 element={
-                    <Protected isAllowed={auth.isAuthenticated && auth.role === 1} redirectTo="/auth/error">
+                    <Protected isAllowed={auth.isAuthenticated && auth.role === 1} redirectTo="/auth/notauthorized">
                         <Layout>
                             <AdministratorRoutes />
                         </Layout>
