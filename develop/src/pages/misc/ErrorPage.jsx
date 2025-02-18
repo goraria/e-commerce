@@ -1,0 +1,25 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import './page-misc.css'
+
+export default function ErrorPage() {
+    return (
+        <>
+            <div className="misc-wrapper">
+                <h2 className="mb-2 mx-2">Page Not Found️ ⚠️</h2>
+                <p className="mb-4 mx-2">Oops! 😖 We couldn&#39;t find the page you are looking for.</p>
+                <Link aria-label='Go to Home Page' to="/" className="btn btn-primary">Back to home</Link>
+                <div className="mt-3">
+                    <img
+                        src="/assets/img/illustrations/page-misc-error-new.png"
+                        alt="page-misc-error-light"
+                        aria-label="page misc error light"
+                        width={500}
+                        className="img-fluid"
+                        data-app-dark-img="illustrations/page-misc-error-dark.png"
+                        data-app-light-img="illustrations/page-misc-error-light.png" />
+                </div>
+            </div>
+        </>
+    )
+}
