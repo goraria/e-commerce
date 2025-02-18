@@ -63,15 +63,16 @@ Color {
 }
 
 .env client {
-
+VITE_SERVER_URL="http://localhost:5172"
 }
 
 .env server {
 METHOD="http"
 HOST="localhost"
-SERVER_PORT=5172
-CLIENT_PORT=5173
-MOBILE_PORT=8081
+PORT=5172
+SERVER_URL="http://localhost:5172"
+CLIENT_URL="http://localhost:5173"
+MOBILE_URL="http://localhost:8081"
 DATABASE="es_proj"
 SQL_USERNAME="root"
 SQL_PASSWORD="Japtor@1999"

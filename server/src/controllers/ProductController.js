@@ -31,7 +31,7 @@ class ProductController {
             // Fetch product by its primary key (using req.params.idproduct) and include related models
 
             const product = await Product.findByPk(req.params.idproduct, {
-                attributes: ['idproduct', 'product_name', 'brand', 'product_image', 'status'],
+                attributes: ['idproduct', 'product_name', 'brand', 'product_image', 'status', 'type'],
                 include: [
                     {
                         model: Configuration, // Including the Configuration model
@@ -69,6 +69,7 @@ class ProductController {
                 brand: product.brand,
                 image: product.product_image,
                 status: product.status,
+                type: product.type,
                 configurations: product.Configurations.map(config => ({
                     idconfiguration: config.idconfiguration,
                     cpu: config.cpu,
@@ -106,6 +107,141 @@ class ProductController {
         }
     }
 
+    async loadSpotlight(req, res) {
+        try {
+            let productsByBrand = await Product.findAll({
+                where: { status: 1 },
+                order: Sequelize.literal('RAND()'),  // Lấy ngẫu nhiên sử dụng literal nếu random() gặp lỗi
+                limit: 8
+            });
+
+            if (productsByBrand.length < 4) {
+                const remainingProducts = 4 - productsByBrand.length;
+
+                const additionalProducts = await Product.findAll({
+                    order: Sequelize.literal('RAND()'),  // Lấy ngẫu nhiên
+                    limit: remainingProducts
+                });
+
+                productsByBrand = [...productsByBrand, ...additionalProducts];
+            }
+
+            res.status(200).json(productsByBrand);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching spotlight products', error });
+        }
+    }
+
+    async loadTopSpotlight(req, res) {
+        try {
+            const productsFromBillDetails = await BillDetail.findAll({
+                attributes: [
+                    'idproduct', // Lọc theo sản phẩm
+                    [Sequelize.fn('SUM', Sequelize.col('quantity')), 'totalQuantity'] // Tổng số lượng sản phẩm đã mua
+                ],
+                group: ['idproduct'], // Group theo id sản phẩm
+                order: [[Sequelize.col('totalQuantity'), 'DESC']], // Sắp xếp theo số lượng giảm dần
+                limit: 8  // Lấy 8 sản phẩm bán chạy nhất từ BillDetail
+            });
+
+            const productsFromCartItems = await CartItem.findAll({
+                attributes: [
+                    'idproduct',
+                    [Sequelize.fn('SUM', Sequelize.col('quantity')), 'totalQuantity']
+                ],
+                group: ['idproduct'],
+                order: [[Sequelize.col('totalQuantity'), 'DESC']]
+            });
+
+            let allProducts = [];
+
+            productsFromBillDetails.forEach(product => {
+                allProducts.push({
+                    idproduct: product.idproduct,
+                    totalQuantity: parseInt(product.dataValues.totalQuantity),
+                    source: 'BillDetail'
+                });
+            });
+
+            productsFromCartItems.forEach(product => {
+                let existingProduct = allProducts.find(p => p.idproduct === product.idproduct);
+                if (existingProduct) {
+                    existingProduct.totalQuantity += parseInt(product.dataValues.totalQuantity);
+                } else {
+                    allProducts.push({
+                        idproduct: product.idproduct,
+                        totalQuantity: parseInt(product.dataValues.totalQuantity),
+                        source: 'CartItem'
+                    });
+                }
+            });
+
+            allProducts.sort((a, b) => b.totalQuantity - a.totalQuantity);
+
+            const topSellingProducts = await Product.findAll({
+                where: {
+                    idproduct: {
+                        [Op.in]: allProducts.slice(0, 8).map(product => product.idproduct) // Lấy 8 sản phẩm bán chạy nhất
+                    },
+                    status: 1
+                }
+            });
+
+            res.status(200).json(topSellingProducts);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching top selling products', error });
+        }
+    }
+
+    async loadSimilarity(req, res) {
+        const { idproduct } = req.params;
+        try {
+            const product = await Product.findByPk(idproduct);
+
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            const productsByBrand = await Product.findAll({
+                where: {
+                    brand: product.brand,
+                    idproduct: { [Op.ne]: idproduct }
+                },
+                limit: 4
+            });
+            // console.log(productsByBrand)
+
+            if (productsByBrand.length < 4) {
+                const remainingProducts = 4 - productsByBrand.length;
+
+                const productsByCategory = await Product.findAll({
+                    where: {
+                        idcategory: product.idcategory,
+                        idproduct: { [Op.ne]: idproduct }
+                    },
+                    limit: remainingProducts
+                });
+
+                productsByBrand.push(...productsByCategory);
+
+                if (productsByBrand.length < 4) {
+                    const additionalProducts = await Product.findAll({
+                        where: {
+                            idproduct: { [Op.ne]: idproduct }
+                        },
+                        limit: 4 - productsByBrand.length
+                    });
+
+                    productsByBrand.push(...additionalProducts);
+                }
+            }
+
+            res.status(200).json(productsByBrand);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching similar products', error });
+        }
+    }
+
     async loadBrands(req, res) {
         try {
             // const brands = await Product.findAll({ attributes: ['brand'], group: ['brand'] });
@@ -125,85 +261,28 @@ class ProductController {
         }
     }
 
-    async loadProductWithID(req, res) {
-        const { idProduct } = req.params; // Retrieve idProduct from request parameters
+    async updateStatus(req, res) {
+        const { idproduct } = req.params;
+        const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
+
         try {
-            const products = await Product.findAll({
-                where: {
-                    idProduct: idProduct
-                }
+            const product = await Product.findOne({
+                where: { idproduct: idproduct },
             });
 
-            res.status(200).json(products);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching products', error });
-        }
-    }
-
-    async loadDescription(req, res) {
-        const { idProduct } = req.params; // Retrieve idProduct from request parameters
-        // console.log(req.params)
-        try {
-            // Find descriptions where idProduct matches the provided id
-            const description = await Description.findAll({
-                where: {
-                    idProduct: idProduct
-                }
-            });
-
-            // If descriptions are found, return them, otherwise return a 404
-            if (description.length > 0) {
-                res.status(200).json(description);
-            } else {
-                res.status(404).json({ message: `No descriptions found for product with id ${idProduct}` });
+            if (!product) {
+                return res.status(404).json({ message: `No account found with id ${idproduct}` });
             }
 
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching descriptions', error });
-        }
-    }
-
-    async loadConfiguration(req, res) {
-        const { idProduct } = req.params; // Retrieve idProduct from request parameters
-
-        try {
-            // Find descriptions where idProduct matches the provided id
-            const configuration = await Configuration.findAll({
-                where: {
-                    idProduct: idProduct
-                }
+            await product.update({
+                status: updatedData.status
             });
 
-            // If configurations are found, return them, otherwise return a 404
-            if (configuration.length > 0) {
-                res.status(200).json(configuration);
-            } else {
-                res.status(404).json({ message: `No configurations found for product with id ${idProduct}` });
-            }
+            res.status(200).json({ success: true, message: 'User updated successfully', data: updatedData });
 
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching configurations', error });
-        }
-    }
-
-    async loadConfigurationByID(req, res) {
-        const { idConfiguration } = req.params; // Retrieve idProduct from request parameters
-
-        try {
-            // Find descriptions where idProduct matches the provided id
-            const configuration = await Configuration.findAll({
-                where: {
-                    idconfiguration: idConfiguration
-                }
-            });
-
-            // If configurations are found, return them, otherwise return a 404
-            if (configuration.length > 0) {
-                res.status(200).json(configuration);
-            }
-
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching configurations', error });
+            // console.error('Error updating product name:', error);
+            res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
     }
 
@@ -304,6 +383,204 @@ class ProductController {
             }
         } catch (error) {
             res.status(500).json({ message: 'Error fetching ratings', error });
+        }
+    }
+
+    async loadRatingMiddleware(req, res) {
+        // console.log(req.body, req.user);
+        try {
+            const rating = await Rating.findOne({
+                where: {
+                    idaccount: req.user.id,
+                    idproduct: req.body.idproduct
+                }
+            });
+
+            // console.log(rating);
+            res.json(rating);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching ratings', error });
+        }
+    }
+
+    async createRatingMiddleware(req, res) {
+        try {
+            const { idproduct, score, comment } = req.body;
+
+            // Kiểm tra xem đã có đánh giá cho sản phẩm này chưa
+            const existingRating = await Rating.findOne({
+                where: {
+                    idaccount: req.user.id,
+                    idproduct: idproduct
+                }
+            });
+
+            if (existingRating) {
+                return res.status(400).json({ message: 'You have already rated this product' });
+            }
+
+            // Tạo mới đánh giá
+            const newRating = await Rating.create({
+                idaccount: req.user.id,
+                idproduct: idproduct,
+                score: score,
+                comment: comment,
+                rating_date: new Date()
+            });
+
+            res.status(201).json({
+                message: 'Rating created successfully',
+                data: newRating
+            });
+        } catch (error) {
+            // console.error(error);
+            res.status(500).json({ message: 'Error creating rating', error });
+        }
+    }
+
+    async changeRatingMiddleware(req, res) {
+        try {
+            const { score, comment } = req.body;
+            const ratingId = req.params.id;
+
+            // Tìm đánh giá hiện tại
+            // const rating = await Rating.findOne({
+            //     where: {
+            //         idaccount: req.user.id,
+            //         idrating: ratingId
+            //     }
+            // });
+
+            const rating = await Rating.findByPk(ratingId);
+
+            if (!rating) {
+                return res.status(404).json({ message: 'Rating not found' });
+            }
+
+            // Cập nhật đánh giá
+            rating.score = score || rating.score;
+            rating.comment = comment || rating.comment;
+
+            await rating.save();
+
+            res.status(200).json({
+                message: 'Rating updated successfully',
+                data: rating
+            });
+        } catch (error) {
+            // console.error(error);
+            res.status(500).json({ message: 'Error updating rating', error });
+        }
+    }
+
+    async removeRatingMiddleware(req, res) {
+        try {
+            const ratingId = req.params.id;
+
+            const rating = await Rating.findOne({
+                where: {
+                    idaccount: req.user.id,
+                    idrating: ratingId
+                }
+            });
+
+            if (!rating) {
+                return res.status(404).json({ message: 'Rating not found' });
+            }
+
+            // Xóa đánh giá
+            await rating.destroy();
+
+            res.status(200).json({
+                message: 'Rating removed successfully'
+            });
+        } catch (error) {
+            // console.error(error);
+            res.status(500).json({ message: 'Error removing rating', error });
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    async loadProductWithID(req, res) {
+        const { idProduct } = req.params; // Retrieve idProduct from request parameters
+        try {
+            const products = await Product.findAll({
+                where: {
+                    idProduct: idProduct
+                }
+            });
+
+            res.status(200).json(products);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching products', error });
+        }
+    }
+
+    async loadDescription(req, res) {
+        const { idProduct } = req.params; // Retrieve idProduct from request parameters
+        // console.log(req.params)
+        try {
+            // Find descriptions where idProduct matches the provided id
+            const description = await Description.findAll({
+                where: {
+                    idProduct: idProduct
+                }
+            });
+
+            // If descriptions are found, return them, otherwise return a 404
+            if (description.length > 0) {
+                res.status(200).json(description);
+            } else {
+                res.status(404).json({ message: `No descriptions found for product with id ${idProduct}` });
+            }
+
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching descriptions', error });
+        }
+    }
+
+    async loadConfiguration(req, res) {
+        const { idProduct } = req.params; // Retrieve idProduct from request parameters
+
+        try {
+            // Find descriptions where idProduct matches the provided id
+            const configuration = await Configuration.findAll({
+                where: {
+                    idProduct: idProduct
+                }
+            });
+
+            // If configurations are found, return them, otherwise return a 404
+            if (configuration.length > 0) {
+                res.status(200).json(configuration);
+            } else {
+                res.status(404).json({ message: `No configurations found for product with id ${idProduct}` });
+            }
+
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching configurations', error });
+        }
+    }
+
+    async loadConfigurationByID(req, res) {
+        const { idConfiguration } = req.params; // Retrieve idProduct from request parameters
+
+        try {
+            // Find descriptions where idProduct matches the provided id
+            const configuration = await Configuration.findAll({
+                where: {
+                    idconfiguration: idConfiguration
+                }
+            });
+
+            // If configurations are found, return them, otherwise return a 404
+            if (configuration.length > 0) {
+                res.status(200).json(configuration);
+            }
+
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching configurations', error });
         }
     }
 
@@ -536,277 +813,6 @@ class ProductController {
         }
     }
 
-    async updateStatus(req, res) {
-        const { idProduct } = req.params;
-        const updatedData = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
-
-        try {
-            const product = await Product.findOne({
-                where: { idProduct: idProduct },
-            });
-
-            if (!product) {
-                return res.status(404).json({ message: `No account found with id ${idProduct}` });
-            }
-
-            await product.update({
-                status: updatedData.status
-            });
-
-            res.status(200).json({ success: true, message: 'User updated successfully', data: updatedData });
-
-        } catch (error) {
-            // console.error('Error updating product name:', error);
-            res.status(500).json({ success: false, message: 'Error updating product name', error });
-        }
-    }
-
-    async loadRatingMiddleware(req, res) {
-        // console.log(req.body, req.user);
-        try {
-            const rating = await Rating.findOne({
-                where: {
-                    idaccount: req.user.id,
-                    idproduct: req.body.idproduct
-                }
-            });
-
-            // console.log(rating);
-            res.json(rating);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching ratings', error });
-        }
-    }
-
-    async createRatingMiddleware(req, res) {
-        try {
-            const { idproduct, score, comment } = req.body;
-
-            // Kiểm tra xem đã có đánh giá cho sản phẩm này chưa
-            const existingRating = await Rating.findOne({
-                where: {
-                    idaccount: req.user.id,
-                    idproduct: idproduct
-                }
-            });
-
-            if (existingRating) {
-                return res.status(400).json({ message: 'You have already rated this product' });
-            }
-
-            // Tạo mới đánh giá
-            const newRating = await Rating.create({
-                idaccount: req.user.id,
-                idproduct: idproduct,
-                score: score,
-                comment: comment,
-                rating_date: new Date()
-            });
-
-            res.status(201).json({
-                message: 'Rating created successfully',
-                data: newRating
-            });
-        } catch (error) {
-            // console.error(error);
-            res.status(500).json({ message: 'Error creating rating', error });
-        }
-    }
-
-    async changeRatingMiddleware(req, res) {
-        try {
-            const { score, comment } = req.body;
-            const ratingId = req.params.id;
-
-            // Tìm đánh giá hiện tại
-            // const rating = await Rating.findOne({
-            //     where: {
-            //         idaccount: req.user.id,
-            //         idrating: ratingId
-            //     }
-            // });
-
-            const rating = await Rating.findByPk(ratingId);
-
-            if (!rating) {
-                return res.status(404).json({ message: 'Rating not found' });
-            }
-
-            // Cập nhật đánh giá
-            rating.score = score || rating.score;
-            rating.comment = comment || rating.comment;
-
-            await rating.save();
-
-            res.status(200).json({
-                message: 'Rating updated successfully',
-                data: rating
-            });
-        } catch (error) {
-            // console.error(error);
-            res.status(500).json({ message: 'Error updating rating', error });
-        }
-    }
-
-    async removeRatingMiddleware(req, res) {
-        try {
-            const ratingId = req.params.id;
-
-            const rating = await Rating.findOne({
-                where: {
-                    idaccount: req.user.id,
-                    idrating: ratingId
-                }
-            });
-
-            if (!rating) {
-                return res.status(404).json({ message: 'Rating not found' });
-            }
-
-            // Xóa đánh giá
-            await rating.destroy();
-
-            res.status(200).json({
-                message: 'Rating removed successfully'
-            });
-        } catch (error) {
-            // console.error(error);
-            res.status(500).json({ message: 'Error removing rating', error });
-        }
-    }
-
-    async loadSpotlight(req, res) {
-        try {
-            let productsByBrand = await Product.findAll({
-                order: Sequelize.literal('RAND()'),  // Lấy ngẫu nhiên sử dụng literal nếu random() gặp lỗi
-                limit: 6
-            });
-
-            if (productsByBrand.length < 4) {
-                const remainingProducts = 4 - productsByBrand.length;
-
-                const additionalProducts = await Product.findAll({
-                    order: Sequelize.literal('RAND()'),  // Lấy ngẫu nhiên
-                    limit: remainingProducts
-                });
-
-                productsByBrand = [...productsByBrand, ...additionalProducts];
-            }
-
-            res.status(200).json(productsByBrand);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching spotlight products', error });
-        }
-    }
-
-    async loadTopSpotlight(req, res) {
-        try {
-            const productsFromBillDetails = await BillDetail.findAll({
-                attributes: [
-                    'idproduct', // Lọc theo sản phẩm
-                    [Sequelize.fn('SUM', Sequelize.col('quantity')), 'totalQuantity'] // Tổng số lượng sản phẩm đã mua
-                ],
-                group: ['idproduct'], // Group theo id sản phẩm
-                order: [[Sequelize.col('totalQuantity'), 'DESC']], // Sắp xếp theo số lượng giảm dần
-                limit: 8  // Lấy 8 sản phẩm bán chạy nhất từ BillDetail
-            });
-
-            const productsFromCartItems = await CartItem.findAll({
-                attributes: [
-                    'idproduct',
-                    [Sequelize.fn('SUM', Sequelize.col('quantity')), 'totalQuantity']
-                ],
-                group: ['idproduct'],
-                order: [[Sequelize.col('totalQuantity'), 'DESC']]
-            });
-
-            let allProducts = [];
-
-            productsFromBillDetails.forEach(product => {
-                allProducts.push({
-                    idproduct: product.idproduct,
-                    totalQuantity: parseInt(product.dataValues.totalQuantity),
-                    source: 'BillDetail'
-                });
-            });
-
-            productsFromCartItems.forEach(product => {
-                let existingProduct = allProducts.find(p => p.idproduct === product.idproduct);
-                if (existingProduct) {
-                    existingProduct.totalQuantity += parseInt(product.dataValues.totalQuantity);
-                } else {
-                    allProducts.push({
-                        idproduct: product.idproduct,
-                        totalQuantity: parseInt(product.dataValues.totalQuantity),
-                        source: 'CartItem'
-                    });
-                }
-            });
-
-            allProducts.sort((a, b) => b.totalQuantity - a.totalQuantity);
-
-            const topSellingProducts = await Product.findAll({
-                where: {
-                    idproduct: {
-                        [Op.in]: allProducts.slice(0, 8).map(product => product.idproduct) // Lấy 8 sản phẩm bán chạy nhất
-                    }
-                }
-            });
-
-            res.status(200).json(topSellingProducts);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching top selling products', error });
-        }
-    }
-
-    async loadSimilarity(req, res) {
-        const { idproduct } = req.params;
-        try {
-            const product = await Product.findByPk(idproduct);
-
-            if (!product) {
-                return res.status(404).json({ message: 'Product not found' });
-            }
-
-            const productsByBrand = await Product.findAll({
-                where: {
-                    brand: product.brand,
-                    idproduct: { [Op.ne]: idproduct }
-                },
-                limit: 4
-            });
-            // console.log(productsByBrand)
-
-            if (productsByBrand.length < 4) {
-                const remainingProducts = 4 - productsByBrand.length;
-
-                const productsByCategory = await Product.findAll({
-                    where: {
-                        idcategory: product.idcategory,
-                        idproduct: { [Op.ne]: idproduct }
-                    },
-                    limit: remainingProducts
-                });
-
-                productsByBrand.push(...productsByCategory);
-
-                if (productsByBrand.length < 4) {
-                    const additionalProducts = await Product.findAll({
-                        where: {
-                            idproduct: { [Op.ne]: idproduct }
-                        },
-                        limit: 4 - productsByBrand.length
-                    });
-
-                    productsByBrand.push(...additionalProducts);
-                }
-            }
-
-            res.status(200).json(productsByBrand);
-        } catch (error) {
-            res.status(500).json({ message: 'Error fetching similar products', error });
-        }
-    }
     async UploadProductImage(req, res) {
         try {
             function convertBackslashesToSlashes(path) {

@@ -63,8 +63,8 @@
     min-width: 50px;
     text-transform: none;
     padding: 0.625rem 1.25rem;
-    /*background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);*/
-    background: linear-gradient(-45deg, #e7e7ff, #e8fadf, #d7f5fc, #fff2d6, #ffe0db);
+    background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+    /*background: linear-gradient(-45deg, #e7e7ff, #e8fadf, #d7f5fc, #fff2d6, #ffe0db);*/
     /*background: linear-gradient(-45deg, #696cff, #eb3d63, #2092ec, #ffab1d, #0d9394);*/
     background-size: 600%;
     animation: gradient 12s ease infinite;

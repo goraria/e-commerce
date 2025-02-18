@@ -61,7 +61,7 @@ export default function ProductPage() {
 
     const getProperties = async () => {
         try {
-            const response = await apiHandler.get(`/products/load-properties/${product.idproduct}`);
+            const response = await apiHandler.get(`/products/load-properties/${id}`);
 
             setProperties(response.data);
             console.log(response.data)
@@ -276,7 +276,7 @@ export default function ProductPage() {
         // calculateScore(ratings)
     }, [id]);
 
-    if (!id) return <MaintenancePage/>;
+    if (!id || !properties.status) return <MaintenancePage/>;
 
     // if (!properties || !properties.idproduct) return <></>
 

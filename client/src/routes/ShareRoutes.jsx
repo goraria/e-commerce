@@ -6,9 +6,8 @@ import ContactPage from "../pages/overview/ContactPage.jsx";
 import ProductPage from "../pages/overview/ProductPage.jsx";
 import ProductList from "../pages/overview/ProductList.jsx";
 import ErrorPage from "../pages/misc/ErrorPage.jsx";
-import NotfoundPage from "../pages/misc/NotfoundPage.jsx";
+import NotAuthorizedPage from "../pages/misc/NotAuthorizedPage.jsx";
 import Chatbot from "../pages/overview/Chatbot.jsx";
-import Scroll from "../layouts/Scroll.jsx";
 
 export const ShareRoutes = () => {
     return (
@@ -19,8 +18,8 @@ export const ShareRoutes = () => {
             <Route path="/product" element={<ProductPage />} />
             <Route path="/search" element={<ProductList />} />
             <Route path="/chatbot" element={<Chatbot />} />
-            <Route path="/faq" element={<NotfoundPage />} />
-            {/*<Route path="/404" element={<NotfoundPage />} />*/}
+            <Route path="/faq" element={<NotAuthorizedPage />} />
+            {/*<Route path="/404" element={<NotAuthorizedPage />} />*/}
 
             <Route path="*" element={<ErrorPage />} />
         </Routes>
