@@ -28,6 +28,10 @@ const Accessory = sequelize.define('Accessory', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
 }, {
     tableName: 'accessory',
     timestamps: false,

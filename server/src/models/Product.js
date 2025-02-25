@@ -33,6 +33,11 @@ const Product = sequelize.define('Product', {
         allowNull: false,
         defaultValue: 1,
     },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'office',
+    },
 }, {
     tableName: 'product',
     timestamps: false,

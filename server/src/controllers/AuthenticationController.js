@@ -73,6 +73,7 @@ class AuthenticationController {
                     lastname: data.merge.family_name || null,
                     phone_number: '', // Google không trả số điện thoại, có thể để trống
                     avatar: data.merge.picture, // Sử dụng ảnh đại diện từ Google
+                    birthday: null
                 });
 
                 await Cart.create({
@@ -180,6 +181,8 @@ class AuthenticationController {
                 firstname,
                 lastname,
                 phone_number: phone,
+                // avatar: null,
+                birthday: null
             });
 
             const newCart = await Cart.create({

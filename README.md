@@ -32,52 +32,57 @@ Please [visit](#) our docs for installation guide.
 ## Included 📦
 
 - Data
-  - Analytics
+    - Analytics
 - Ajax
-  - jQuery
-  - JavaScript
+    - jQuery
+    - JavaScript
 - Options
-  - **Japtor**
-  - **Goraria**
+    - **Japtor**
+    - **Goraria**
 - API
-  - **Locst**
-  - **Ichibulup**
-- Search
-  - **Schweitzenburg**
-- Styling
-  - **Braunschweig**
-- Events
-  - **Payhd**
-- Server-side processing
-  - Einmalow
+    - **Locst**
+    - **Ichibulup**
 - Security
-  - Henovia
+    - **Payhd**
+- Test
+    - **Meifang**
+- Search
+    - **Schweitzenburg**
+- Styling
+    - **Braunschweig**
+- Server-side processing
+    - Einmalow
+- Client-side processing
+    - Einmalow
+- Event
+    - Henovia
 - Internationalisation
-  - UK
+    - UK
 - React
-  - Native
+    - Native
 - Vue
-  - Next
+    - Next
 - Plug-in development
-  - ?
+    - ?
 - Technical notes
-  - ?
+    - ?
 - Development
-  - Administrator
+    - Administrator
 
 ## Premium 💎
 
-| Author         | Framework    | IDEA                         |
-|----------------|--------------|------------------------------|
-| Japtor         | ViteJs       | JetBrains WebStorm           |
-| Payhd          | NodeJs       | Microsoft Visual Studio Code |
-| Locst          | ReactJs      | Microsoft Visual Studio      |
-| Schweitzenburg | TensorFlowJs | JetBrains Android Studio     |
-| Braunschweig   | NextJs       | JetBrains Aqua               |
-| Goraria        | VueJs        | JetBrains RustRover          |
-| Ichibulup      | Django       | JetBrains Pycharm            |
-| Destine        | Spring Boot  | JetBrains Intellij           |
-| Gortheia       | ASP.NET Core | JetBrains Rider              |
+| Author         | Framework           | IDEA                                      |
+|----------------|---------------------|-------------------------------------------|
+| Japtor         | Vite - React Native | JetBrains WebStorm - JetBrains DataGrip   |
+| Payhd          | Node - Django       | Microsoft Visual Studio Code              |
+| Locst          | TensorFlow - Django | JetBrains Pycharm                         |
+| Meifang        | Spring Boot         | JetBrains Intellij - JetBrains Aqua       |
+| Goraria        | Flutter - FireBase  | JetBrains Intellij - Android Studio       |
+| Braunschweig   | Next - Vue          | JetBrains GoLand                          |
+| Schweitzenburg | React               | JetBrains RubyMine                        |
+| Ichibulup      | Angular - Laravel   | JetBrains PhpStorm - JetBrains RustRover  |
+| Destine        | Unreal Engine       | JetBrains CLion                           |
+| Gortheia       | ASP.NET Core        | JetBrains Rider - Microsoft Visual Studio |
 
 ## Documentation 📜
 
