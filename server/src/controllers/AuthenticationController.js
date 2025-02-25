@@ -200,6 +200,7 @@ class AuthenticationController {
 
         } catch (error) {
             // console.error('Registration error:', error);
+            console.log(error);
             return res.status(500).json({ error: 'Error registering user' });
         }
     }
