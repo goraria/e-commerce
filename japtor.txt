@@ -70,6 +70,8 @@ Color {
 }
 
 .env client {
+REACT_APP_GOOGLE_OAUTH_CLIENT_ID="293479668173-jnahitc17msp2gal1f7abdoia4agkogo.apps.googleusercontent.com"
+STICKY_NOTES_API_URL="6LfaA50qAAAAAGbL3FubZuwBEaLuDMAfEPjN48lX"
 VITE_SERVER_URL="http://localhost:5172"
 }
 
