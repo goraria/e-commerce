@@ -12,7 +12,8 @@ const banners = [
     { id: 3, name: "/assets/img/overviews/xps.jpeg", alt: "Third slide", title: "Sale Off 12%", description: "Most beautiful Ultrabook" },
     // { id: 4, name: "/assets/img/overviews/pri.jpeg", alt: "Fourth slide", title: "Sale Off 8%", description: "The best Workstation" },
     { id: 5, name: "/assets/img/overviews/sfc.jpeg", alt: "Fifth slide", title: "Sale Off 15%", description: "Surface x Copilot" },
-    { id: 6, name: "/assets/img/overviews/yogabook.jpeg", alt: "Sixth slide", title: "Sale Off 20%", description: "Double Display" },
+    { id: 6, name: "/assets/img/overviews/purple.jpeg", alt: "Sixth slide", title: "Sale Off 20%", description: "Products" },
+    { id: 7, name: "/assets/img/overviews/yogabook.jpeg", alt: "Seventh slide", title: "Sale Off 10%", description: "Double Display" },
     { id: 9, name: "/assets/img/overviews/jp.jpeg", alt: "Gorth slide", title: "Bill Cipher", description: "Powered by Gorth inc." },
 ]
 

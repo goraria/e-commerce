@@ -60,6 +60,8 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
             }
         } catch (err) {
             setError(err.response ? err.response.data.message : 'Failed to save rating');
+        } finally {
+            setShowConfirmModal(false)
         }
     };
 
@@ -84,14 +86,16 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
             setFormData({
                 score: rate.score || 0,
                 comment: rate.comment || '',
-                product_name: prod.product_name || '',
+                // product_name: prod.product_name || '',
+                product_name: prod.name || '',
                 rating_date: rate.rating_date || '',
             });
         } else {
             setFormData({
                 score: 0,
                 comment: '',
-                product_name: prod.product_name || '',
+                // product_name: prod.product_name || '',
+                product_name: prod.name || '',
                 rating_date: '',
             });
         }
@@ -118,7 +122,7 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
                             <div className="d-flex align-items-start align-items-sm-center gap-4 rounded-2 col-lg-8 col-md-12 col-sm-12 mb-3">
                                 <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                     <img
-                                        src={`${prod.product_image}`}
+                                        src={`${prod.image}`}
                                         alt="product"
                                         className="d-block rounded"
                                         height="100"
@@ -128,13 +132,13 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
                                 </div>
                                 <div className="d-flex flex-column">
                                     <span className="fw-medium text-nowrap text-heading">
-                                        {`${prod.brand} ${prod.product_name}`}
+                                        {`${prod.brand} ${prod.name}`}
                                     </span>
                                     <small>Professional</small>
                                 </div>
                             </div>
                             <div className="col-lg-4 col-md-12 col-sm-12">
-                                <Form.Label>Score</Form.Label>
+                                <label>Score</label>
                                 <div className="d-flex">
                                     {[...Array(5)].map((_, index) => (
                                         <i
@@ -204,7 +208,7 @@ export default function RatingForm({ rate, prod, show, onHide, onReload }) {
                 type="info"
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}
-                onSave={() => { handleConfirmSave(); setShowConfirmModal(false) }}
+                onSave={handleConfirmSave}
             />
             <ConfirmModal
                 title="Delete Rating"
