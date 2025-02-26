@@ -13,11 +13,11 @@ import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
 
 export default function ProductList() {
     const categories = [
-        { categorical: 'CPU', variant: 'primary', item: ['Intel core i3','Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','AMD Ryzen 9','Apple M2','Apple M3','Apple M4'] },
+        { categorical: 'CPU', variant: 'danger', item: ['Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','AMD Ryzen 9','Apple M2','Apple M3','Apple M4'] },
         { categorical: 'GPU', variant: 'success', item: ['RTX 1660','RTX 2060','RTX 3050','RTX 3060','RTX 4050','RTX 4060'] },
         { categorical: 'RAM', variant: 'info', item: ['8 GB','16 GB','24 GB','32 GB','64 GB'] },
-        { categorical: 'SSD', variant: 'warning', item: ['256 GB','512 GB','1 TB',"2TB"] },
-        { categorical: 'Screen', variant: 'danger', item: ['13\'','14\'','15\'','16\''] },
+        { categorical: 'Storage', variant: 'warning', item: ['256 GB','512 GB','1 TB',"2TB"] },
+        { categorical: 'Screen', variant: 'primary', item: ['13\'','14\'','15\'','16\''] },
     ];
     // const brands = ['Apple', 'Dell', 'Lenovo', 'Asus', 'HP', 'Acer', 'Microsoft', 'LG']
     const [brands, setBrands] = useState([]);
@@ -57,15 +57,6 @@ export default function ProductList() {
             const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
             setList(response.data);
         } catch (error) {}
-    };
-
-    const fetchProductByName = async () => {
-        try {
-            const response = await apiHandler.get(`/products/load-product-name/${searchQuery}`);
-            setList(response.data);
-        } catch (error) {
-            // console.log('chưa nhập tên tìm kiếm')
-        }
     };
 
     // Function to filter products based on dropdown selection
@@ -147,17 +138,19 @@ export default function ProductList() {
                 {/*        />*/}
                 {/*    ))}*/}
                 {/*</Stack>*/}
-                <div className="demo-inline-spacing">
-                    {categories.map((category, index) => (
-                        <SelectSortButton
-                            key={index}
-                            categorical={category.categorical}
-                            variant={category.variant}
-                            items={category.item}
-                            onSelect={filterProducts}
-                        />
-                    ))}
-                </div>
+
+                {/*<div className="demo-inline-spacing">*/}
+                {/*    {categories.map((category, index) => (*/}
+                {/*        <SelectSortButton*/}
+                {/*            key={index}*/}
+                {/*            categorical={category.categorical}*/}
+                {/*            variant={category.variant}*/}
+                {/*            items={category.item}*/}
+                {/*            onSelect={filterProducts}*/}
+                {/*        />*/}
+                {/*    ))}*/}
+                {/*</div>*/}
+
                 <div className="demo-inline-spacing">
                     {categories.map((category) => (
                         <div key={category.categorical} className="mb-3" id="sort-button-group">

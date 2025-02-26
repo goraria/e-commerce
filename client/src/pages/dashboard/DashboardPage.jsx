@@ -45,7 +45,7 @@ export default function DashboardPage() {
                                 <div className="card-body pb-0 px-0 px-md-4">
                                     <img aria-label='dsahboard icon image'
                                          src="/assets/img/illustrations/man-with-laptop-light.png"
-                                         height="170.48"
+                                         height={170.48}
                                          alt="View Badge User"
                                          data-app-dark-img="illustrations/man-with-laptop-dark.png"
                                          data-app-light-img="illustrations/man-with-laptop-light.png"
@@ -509,7 +509,6 @@ export default function DashboardPage() {
                                         className="nav-link active"
                                         id="navs-tabs-line-card-income-tab"
                                         data-bs-toggle="tab"
-                                        href="#navs-tabs-line-card-income"
                                         role="tab"
                                         aria-controls="navs-tabs-line-card-income"
                                         aria-selected="true"
@@ -523,7 +522,6 @@ export default function DashboardPage() {
                                         className="nav-link"
                                         id="navs-tabs-line-card-expenses-tab"
                                         data-bs-toggle="tab"
-                                        href="#navs-tabs-line-card-expenses"
                                         role="tab"
                                         aria-controls="navs-tabs-line-card-expenses"
                                         aria-selected="false"
@@ -537,7 +535,6 @@ export default function DashboardPage() {
                                         className="nav-link"
                                         id="navs-tabs-line-card-profit-tab"
                                         data-bs-toggle="tab"
-                                        href="#navs-tabs-line-card-profit"
                                         role="tab"
                                         aria-controls="navs-tabs-line-card-profit"
                                         aria-selected="false"

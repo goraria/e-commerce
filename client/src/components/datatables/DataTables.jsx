@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Button, Form, Pagination, Dropdown, Badge } from "react-bootstrap";
 import { renderStatusDelivery } from "../../utils/renderHandler.jsx";
+import {PaginationCustom} from "../pagination/PaginationCustom.jsx";
 
 export default function DataTables() {
     const [data, setData] = useState([
@@ -407,7 +408,12 @@ export default function DataTables() {
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                            {renderPagination()}
+                            {/*{renderPagination()}*/}
+                            <PaginationCustom
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={setCurrentPage}
+                            />
                         </div>
                     </div>
                 </div>
