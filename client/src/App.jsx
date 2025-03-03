@@ -14,6 +14,8 @@ import { ShareRoutes } from "./routes/ShareRoutes.jsx";
 import LoadingPage from "./pages/misc/LoadingPage.jsx";
 import LoginPage from "./pages/authentication/LoginPage.jsx";
 import RegisterPage from "./pages/authentication/RegisterPage.jsx";
+import TestLoginPage from "./pages/authentication/TestLoginPage.jsx";
+import TestRegisterPage from "./pages/authentication/TestRegisterPage.jsx";
 import { AuthenticationRoutes } from "./routes/AuthenticationRoutes.jsx";
 import ErrorPage from "./pages/misc/ErrorPage.jsx";
 
@@ -78,11 +80,11 @@ export default function App() {
             />
             <Route
                 path="/auth/login"
-                element={<LoginPage checker={authentication} />}
+                element={<TestLoginPage checker={authentication} />}
             />
             <Route
                 path="/auth/register"
-                element={<RegisterPage checker={authentication} />}
+                element={<TestRegisterPage checker={authentication} />}
             />
 
             <Route

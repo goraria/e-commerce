@@ -173,7 +173,7 @@ class AuthenticationController {
                 role: 0,
                 status: 0,
                 verificationtoken: token,
-                isverify: false,
+                isverify: true,
             });
 
             const newUser = await User.create({
@@ -189,7 +189,7 @@ class AuthenticationController {
                 idaccount: newAccount.idaccount
             });
 
-            await AuthenticationController.sendConfirmationEmail(email, token, req, res);
+            // await AuthenticationController.sendConfirmationEmail(email, token, req, res);
 
             return res.status(201).json({
                 message: 'User registered successfully and confirmation email sent',
