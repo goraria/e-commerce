@@ -8,7 +8,7 @@ const CartRoute = require('./CartRoute')
 const BillRoute = require('./BillRoute')
 const PaypalRoute = require('./PaypalRoute')
 const RecaptchaRoute = require('./RecaptchaRoute'); //
-
+const ConversationRoute = require('./ConversationRoute')
 const routes = (app) => {
     app.use('/authentication', AuthenticationRoute);
     app.use('/category', CategoryRoute);
@@ -20,6 +20,7 @@ const routes = (app) => {
     app.use('/account', AccountRoute);
     app.use('/paypal', PaypalRoute);
     app.use('/recaptcha', RecaptchaRoute);
+    app.use('/chatbot',ConversationRoute);
 }
 
 module.exports = routes;
