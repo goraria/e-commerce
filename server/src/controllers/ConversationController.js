@@ -7,13 +7,46 @@ require('dotenv').config();
 
 class AccountController {
     async getHistory(req, res) {
+        console.log("User ID:", req.user.id);
         try {
-            console.log(req.user.id)
             const conversations = await Conversation.findAll({
-                where: {
-                    idaccount: req.user.id,
-                }
+                where: {idaccount: req.user.id},
+                include: [
+                    {
+                        model: Account,
+                        attributes: ['idaccount', 'username'],
+                        include: [{
+                            model: User,
+                            attributes: ['avatar', 'firstname', 'lastname'],
+                        }]
+                    }
+                ],
+                attributes: ['id', 'idaccount', 'type', 'message', 'time'],
             });
+
+            if (!conversations || conversations.length === 0) {
+                console.log("Không tìm thấy hội thoại");
+                return res.status(404).json({message: 'Conversation not found'});
+            }
+
+            console.log(conversations);
+
+            const result = conversations.map((item) => ({
+                id: item.id,
+                type: item.type,
+                message: item.message,
+                time: item.time,
+                user: item.Account && item.Account.User ? {
+                    idaccount: item.Account.idaccount,
+                    username: item.Account.username,
+                    avatar: item.Account.User.avatar,
+                    firstname: item.Account.User.firstname,
+                    lastname: item.Account.User.lastname
+                } : null,
+            }));
+
+            console.log("Dữ liệu sau khi xử lý:", result);
+
             res.json(conversations);
         } catch (error) {
             res.json({error: 'Server error'});
