@@ -879,7 +879,12 @@ export default function ProductPage() {
                                     variant="primary"
                                     className="mb-3 w-100"
                                     onClick={() => {
-                                        if (evaluate) {
+                                        // if (evaluate) {
+                                        //     setShowEvaluate(true);
+                                        // } else {
+                                        //     setShowWarning(true);
+                                        // }
+                                        if (token) {
                                             setShowEvaluate(true);
                                         } else {
                                             setShowWarning(true);
