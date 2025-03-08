@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
+import axios from "axios";
 
 const ChatbotMessage = ({ chat }) => {
     usePerfectScrollbar("chat-bot")
@@ -65,6 +67,7 @@ const ChatbotUserMessage = ({ chat }) => {
         </>
     )
 }
+
 
 export default function Chatbot() {
     const data = [
@@ -225,6 +228,58 @@ export default function Chatbot() {
             time: "10:04 AM",
         },
     ]
+
+    usePerfectScrollbar("chat-bot")
+    const [rasaResponse, setRasaResponse] = useState("");
+    const [message, setMessage] = useState("");
+    const token = localStorage.getItem("token");
+
+    const loadConversationHistory = async () => {
+        try {
+            const response = await apiHandler.get('/chatbot/get-history', {
+                headers: {Authorization: `Bearer ${token}`},
+            })
+            console.log(response.data);
+        } catch (e) {
+
+        }
+    }
+
+
+    const handleSendMessage = async () => {
+        // if (message.trim() !== "") {
+        //     console.log(message);
+        //     sendMessage(message); // Gửi tin nhắn
+        //     setMessage(""); // Xóa input sau khi gửi
+        // }
+
+        try {
+            const response = await apiHandler.post('/chatbot/send-message', {message: message}, {
+                headers: {Authorization: `Bearer ${token}`},
+            })
+        } catch (e) {
+        }
+    };
+    const sendMessage = async (message) => {
+        try {
+            const response = await axios.post("http://localhost:3000/chat", {
+                headers: {"Content-Type": "application/json"},
+                message
+            });
+
+            const data = await response.data;
+            console.log(response);
+            setRasaResponse(data.reply);
+            console.log("Chatbot reply:", data.reply);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        loadConversationHistory();
+    }, [])
+
     usePerfectScrollbar("chat-bot")
 
     return (
