@@ -11,7 +11,7 @@ import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function CheckOutPage() {
     const location = useLocation();
-    const [paymentMethod, setPaymentMethod] = useState("qr"); // State for delivery method
+    const [paymentMethod, setPaymentMethod] = useState("paypal"); // State for delivery method
     const [status, setStatus] = useState(1); // State for delivery method
     const [isPaypalSelected, setIsPaypalSelected] = useState(false);
 
@@ -46,7 +46,7 @@ export default function CheckOutPage() {
                         body: JSON.stringify({ orderID: data.orderID }),
                     }).then(res => res.json())
                         .then(details => {
-                            alert('Thanh toán thành công');
+                            // alert('Thanh toán thành công');
                             handleStatusChange(1);
                             handleOrder()
                         });
@@ -163,30 +163,30 @@ export default function CheckOutPage() {
                                 {/*        checked/>*/}
                                 {/*    <label className="form-check-label" htmlFor="defaultRadio2"> Checked </label>*/}
                                 {/*</div>*/}
-                                <Form.Check
-                                    className="form-check"
-                                    type="radio"
-                                    label="Bank transfer by QR"
-                                    name="paymentMethod"
-                                    value="qr"
-                                    checked={paymentMethod === "qr"}
-                                    onChange={handlePaymentMethodChange}
-                                />
+                                {/*<Form.Check*/}
+                                {/*    className="form-check"*/}
+                                {/*    type="radio"*/}
+                                {/*    label="Bank transfer by QR"*/}
+                                {/*    name="paymentMethod"*/}
+                                {/*    value="qr"*/}
+                                {/*    checked={paymentMethod === "qr"}*/}
+                                {/*    onChange={handlePaymentMethodChange}*/}
+                                {/*/>*/}
                                 {/* Other Payment Methods */}
-                                <Form.Check
-                                    type="radio"
-                                    label="Cash on Delivery"
-                                    name="paymentMethod"
-                                    value="cod"
-                                    checked={paymentMethod === "cod"}
-                                    onChange={handlePaymentMethodChange}
-                                />
                                 <Form.Check
                                     type="radio"
                                     label="Pay with Paypal"
                                     name="paymentMethod"
                                     value="paypal"
                                     checked={paymentMethod === "paypal"}
+                                    onChange={handlePaymentMethodChange}
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    label="Cash on Delivery"
+                                    name="paymentMethod"
+                                    value="cod"
+                                    checked={paymentMethod === "cod"}
                                     onChange={handlePaymentMethodChange}
                                 />
                             </div>
