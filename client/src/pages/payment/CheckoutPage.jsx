@@ -28,8 +28,8 @@ export default function CheckOutPage() {
         if (window.paypal) {
             paypal.Buttons({
                 createOrder: function (data, actions) {
-                    return apiHandler.post('/paypal/create-order', {
-                        // method: 'POST',
+                    return fetch('http://localhost:5172/paypal/create-order', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -38,8 +38,8 @@ export default function CheckOutPage() {
                         .then(order => order.id);
                 },
                 onApprove: function (data, actions) {
-                    return apiHandler.post('/paypal/capture-order', {
-                        // method: 'POST',
+                    return fetch('http://localhost:5172/paypal/capture-order', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },

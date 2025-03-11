@@ -10,38 +10,42 @@ import getGreetingMessage from "../utils/greetingHandler.jsx";
 import Overside from "./Overside.jsx";
 import { ConfirmModal } from "../components/modal/notice/ConfirmModal.jsx";
 import apiHandler from "../utils/apiHandler.jsx";
-
-const notifies = [
-    { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
-    { id: 2, title: "CPU is running high", content: "CPU Utilization Percent is currently at 88.63%,", time: "12h" },
-    { id: 3, title: "Monthly report is generated", content: "July monthly financial report is generated", time: "1d" },
-    { id: 4, title: "Whoo! You have new order 🛒", content: "ACME Inc. made new order $1,154", time: "1 day ago" },
-    { id: 5, title: "Application has been approved 🚀", content: "Your ABC project application has been approved.", time: "2 days ago" },
-]
-
-const messages = [
-    { id: 1, title: "Charles Franklin", content: "Accepted your connection", time: "1h ago" },
-    { id: 2, title: "New Message ✉️", content: "You have new message from Natalie", time: "12hr ago" },
-    { id: 3, title: "Send connection request", content: "Peter sent you connection request", time: "1h ago" },
-    { id: 4, title: "New message from Jane", content: "Your have new message from Jane", time: "1 day ago" },
-    { id: 5, title: "Japtor", content: "Your ABC project application has been approved.", time: "2 days ago" },
-]
-
-const baskets = [
-    { id: 1, name: "Name", description: "Accepted your connection", quantity: 3 },
-    { id: 2, name: "Keychron K2 Max", description: "You have new message from Natalie", quantity: 4 },
-    { id: 3, name: "MacBook Pro 16' M4 Pro", description: "New Arrived", quantity: 2 },
-    { id: 4, name: "DELL Precision 16' 5690", description: "Best Workstation", quantity: 1 },
-    { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
-]
+import usePerfectScrollbar from "../hooks/usePerfectScrollbar.jsx";
 
 export default function Activitybar({ children }) {
+    const notifies = [
+        { id: 1, title: "Congratulation Lettie 🎉", content: "Won the monthly best seller gold badge", time: "1h ago" },
+        { id: 2, title: "CPU is running high", content: "CPU Utilization Percent is currently at 88.63%,", time: "12h" },
+        { id: 3, title: "Monthly report is generated", content: "July monthly financial report is generated", time: "1d" },
+        { id: 4, title: "Whoo! You have new order 🛒", content: "ACME Inc. made new order $1,154", time: "1 day ago" },
+        { id: 5, title: "Application has been approved 🚀", content: "Your ABC project application has been approved.", time: "2 days ago" },
+    ]
+
+    const messages = [
+        { id: 1, title: "Charles Franklin", content: "Accepted your connection", time: "1h ago" },
+        { id: 2, title: "New Message ✉️", content: "You have new message from Natalie", time: "12hr ago" },
+        { id: 3, title: "Send connection request", content: "Peter sent you connection request", time: "1h ago" },
+        { id: 4, title: "New message from Jane", content: "Your have new message from Jane", time: "1 day ago" },
+        { id: 5, title: "Japtor", content: "Your ABC project application has been approved.", time: "2 days ago" },
+    ]
+
+    const baskets = [
+        { id: 1, name: "Name", description: "Accepted your connection", quantity: 3 },
+        { id: 2, name: "Keychron K2 Max", description: "You have new message from Natalie", quantity: 4 },
+        { id: 3, name: "MacBook Pro 16' M4 Pro", description: "New Arrived", quantity: 2 },
+        { id: 4, name: "DELL Precision 16' 5690", description: "Best Workstation", quantity: 1 },
+        { id: 5, name: "Japtor", description: "Your ABC project application has been approved.", quantity: 2 },
+    ]
+
     useEffect(() => {
         Main();
 
         useLoad();
         useCart();
     },[])
+
+    usePerfectScrollbar("#navbar-notification")
+    usePerfectScrollbar("#navbar-cart-list")
 
     const [account, setAccount] = useState({});
     const [cart, setCart] = useState({});
@@ -297,17 +301,17 @@ export default function Activitybar({ children }) {
                                     </div>
                                 </li>
                                 <li className="dropdown-notifications-list scrollable-container ps">
-                                    <ul className="list-group list-group-flush">
-                                        {
-                                            notifies.map((noty, index) => (
-                                                <Notification key={index} notify={noty}/>
-                                            ))
-                                        }
-                                        {
-                                            messages.map((mess, index) => (
-                                                <Message key={index} message={mess}/>
-                                            ))
-                                        }
+                                    <ul
+                                        className="list-group list-group-flush"
+                                        id="#navbar-notification"
+                                        style={{height: "50vh"}}
+                                    >
+                                        {notifies.map((noty, index) => (
+                                            <Notification key={index} notify={noty}/>
+                                        ))}
+                                        {messages.map((mess, index) => (
+                                            <Message key={index} message={mess}/>
+                                        ))}
                                     </ul>
                                 </li>
                                 <li className="border-top">
@@ -349,12 +353,14 @@ export default function Activitybar({ children }) {
                                     </div>
                                 </li>
                                 <li className="dropdown-notifications-list scrollable-container ps">
-                                    <ul className="list-group list-group-flush">
-                                        {
-                                            cart.cart_items?.map((bask, index) => (
-                                                <Basket key={index} bask={bask}/>
-                                            ))
-                                        }
+                                    <ul
+                                        className="list-group list-group-flush"
+                                        id="#navbar-cart-list"
+                                        style={{height: "50vh"}}
+                                    >
+                                        {cart.cart_items?.map((bask, index) => (
+                                            <Basket key={index} bask={bask}/>
+                                        ))}
                                     </ul>
                                 </li>
                                 <li className="border-top">
