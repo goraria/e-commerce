@@ -8,10 +8,16 @@ export default function OrderExpand({ order }) {
     // console.log(order)
     const sanitized = (array) => array.map(obj => Object.assign({}, obj))
 
-    const totalPrice = (item) => {
-        return item.bill_details.reduce((sum, detail) => {
+    const subPrice = () => {
+        return order.bill_details.reduce((sum, detail) => {
             return sum + (detail.price * detail.quantity);
         }, 0)
+    }
+
+    const totalPrice = () => {
+        return order.bill_details.reduce((sum, detail) => {
+            return sum + (detail.price * detail.quantity);
+        }, 0) * (100 - order?.discount?.percentage_discount) / 100
     }
 
     return (
@@ -58,14 +64,12 @@ export default function OrderExpand({ order }) {
                                     style={{verticalAlign: "middle", fontSize: 13}}>
                                     Products
                                 </th>
-                                {
-                                    ["Price", "Qty", "Total"].map((item, index) => (
-                                        <th className="sorting" key={index}
-                                            style={{verticalAlign: "middle", fontSize: 13, width: 100}}>
-                                            {item}
-                                        </th>
-                                    ))
-                                }
+                                {["Price", "Qty", "Total"].map((item, index) => (
+                                    <th className="sorting" key={index}
+                                        style={{verticalAlign: "middle", fontSize: 13, width: 100}}>
+                                        {item}
+                                    </th>
+                                ))}
                             </tr>
                             </thead>
                             <tbody>
@@ -133,16 +137,16 @@ export default function OrderExpand({ order }) {
                             <div className="d-flex justify-content-start mb-2">
                                 <span className="w-px-100 text-heading">Subtotal:</span>
                                 <h6 className="mb-0">
-                                    ${order?.price}  |  {order?.bill_details.reduce((sum, detail) => {
-                                        return sum + (detail.price * detail.quantity);
-                                    }, 0)}
+                                    {/*${order?.price}  |  {order?.bill_details?.reduce((sum, detail) => {*/}
+                                    {/*    return sum + (detail.price * detail.quantity);*/}
+                                    {/*}, 0)}*/}
+                                    ${subPrice()}
                                 </h6>
                             </div>
                             <div className="d-flex justify-content-start mb-2">
                                 <span className="w-px-100 text-heading">Discount:</span>
-                                <h6 className="mb-0">${order?.bill_details.reduce((sum, detail) => {
-                                    return sum + (detail.price * detail.quantity);
-                                }, 0) * order?.discount?.percentage_discount / 100}</h6>
+                                <h6 className="mb-0">${order.discount ?
+                                    (subPrice() * order?.discount?.percentage_discount / 100) : 0}</h6>
                             </div>
                             {/*<div className="d-flex justify-content-start mb-2">*/}
                             {/*    <span className="w-px-100 text-heading">Tax:</span>*/}
@@ -150,9 +154,7 @@ export default function OrderExpand({ order }) {
                             {/*</div>*/}
                             <div className="d-flex justify-content-start">
                                 <h6 className="w-px-100 mb-0">Total:</h6>
-                                <h6 className="mb-0">${order?.bill_details.reduce((sum, detail) => {
-                                    return sum + (detail.price * detail.quantity);
-                                }, 0) * (100 - order?.discount?.percentage_discount) / 100}</h6>
+                                <h6 className="mb-0">${order.price}</h6>
                             </div>
                         </div>
                     </div>
