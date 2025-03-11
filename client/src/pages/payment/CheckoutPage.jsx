@@ -16,6 +16,7 @@ export default function CheckOutPage() {
     const [isPaypalSelected, setIsPaypalSelected] = useState(false);
 
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
@@ -52,8 +53,9 @@ export default function CheckOutPage() {
                         });
                 },
                 onError: function (err) {
+                    setShowError(true);
                     console.error(err);
-                    alert('Có lỗi xảy ra trong quá trình thanh toán');
+                    // alert('Có lỗi xảy ra trong quá trình thanh toán');
                 }
             }).render('#paypal-button-container');
         }
@@ -78,7 +80,8 @@ export default function CheckOutPage() {
 
             setShowSuccess(true);
         } catch (error) {
-            console.error('Lỗi khi tạo hóa đơn:', error.response ? error.response.data : error.message);
+            // console.error('Lỗi khi tạo hóa đơn:', error.response ? error.response.data : error.message);
+            setShowError(true);
         }
     };
 
@@ -341,6 +344,16 @@ export default function CheckOutPage() {
                 onHide={() => {
                     setShowSuccess(false)
                     handleNavigate()
+                }}
+            />
+
+            <NotifyModal
+                type="error"
+                title="Order failed"
+                message="Something went wrong!"
+                show={showError}
+                onHide={() => {
+                    setShowError(false)
                 }}
             />
         </>
