@@ -3,6 +3,7 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import axios from 'axios';
 import { NotifyModal } from "../modal/notice/NotifyModal.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import { Link } from "react-router-dom";
 
 export default function CardItem({ element, onChange, onReload, onCheckboxChange, onQuantityChange }) {
     const [product, setProduct] = useState([]);
@@ -133,7 +134,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
                 </div>
                 <div className="col col-sm-12 col-md-12 col-lg-8 d-flex flex-column justify-content-center text-lg-start text-center">
                     <div className="d-flex justify-content-lg-start justify-content-center align-items-center product-name">
-                        <div className="avatar-wrapper">
+                        <Link className="avatar-wrapper" to={`/product/?id=${element.product.idproduct}`}>
                             <div
                                 className="avatar me-4 rounded-2 bg-label-secondary"
                                 style={{width: 112, height: 112}}
@@ -144,7 +145,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
                                     alt="item"
                                 />
                             </div>
-                        </div>
+                        </Link>
                         <div className="d-flex flex-column">
                             <h6 className="text-nowrap mb-2">{`${element.product.brand} ${element.product.name}`}</h6>
                             <small className="text-truncate d-none d-sm-block">
@@ -184,6 +185,7 @@ export default function CardItem({ element, onChange, onReload, onCheckboxChange
                             // type="text"
                             placeholder="0"
                             // defaultValue={quantity}
+                            readOnly
                             value={quantity}
                             max={element.configuration.quantity}
                             min={1}

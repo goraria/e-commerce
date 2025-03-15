@@ -89,7 +89,7 @@ export default function ProductPage() {
 
             setArray(data.descriptions[0])
 
-            console.log(data)
+            // console.log(data)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
@@ -168,6 +168,15 @@ export default function ProductPage() {
             setShowSuccess(true)
         } catch (error) {
             // console.error('Lỗi khi thêm vào giỏ hàng:', error);
+            setShowWarning(true)
+        }
+    };
+
+    const handleBuyNow = async () => {
+        if (token) {
+            await handleAddToCart();
+            navigate("/pay/cart");
+        } else {
             setShowWarning(true)
         }
     };
@@ -868,9 +877,10 @@ export default function ProductPage() {
                                     <div className="col col-sm-12 col-md-6 col-lg-6 mb-3">
                                         <Button
                                             className="w-100"
-                                            as={Link}
-                                            to={"/pay/cart"}
+                                            // as={Link}
+                                            // to={"/pay/cart"}
                                             variant="danger"
+                                            onClick={handleBuyNow}
                                         >Buy now</Button>
                                     </div>
                                 </div>
@@ -879,7 +889,12 @@ export default function ProductPage() {
                                     variant="primary"
                                     className="mb-3 w-100"
                                     onClick={() => {
-                                        if (evaluate) {
+                                        // if (evaluate) {
+                                        //     setShowEvaluate(true);
+                                        // } else {
+                                        //     setShowWarning(true);
+                                        // }
+                                        if (token) {
                                             setShowEvaluate(true);
                                         } else {
                                             setShowWarning(true);

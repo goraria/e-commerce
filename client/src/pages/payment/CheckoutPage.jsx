@@ -11,11 +11,12 @@ import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function CheckOutPage() {
     const location = useLocation();
-    const [paymentMethod, setPaymentMethod] = useState("qr"); // State for delivery method
+    const [paymentMethod, setPaymentMethod] = useState("paypal"); // State for delivery method
     const [status, setStatus] = useState(1); // State for delivery method
     const [isPaypalSelected, setIsPaypalSelected] = useState(false);
 
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
@@ -28,8 +29,8 @@ export default function CheckOutPage() {
         if (window.paypal) {
             paypal.Buttons({
                 createOrder: function (data, actions) {
-                    return apiHandler.post('/paypal/create-order', {
-                        // method: 'POST',
+                    return fetch('http://localhost:5172/paypal/create-order', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -38,22 +39,23 @@ export default function CheckOutPage() {
                         .then(order => order.id);
                 },
                 onApprove: function (data, actions) {
-                    return apiHandler.post('/paypal/capture-order', {
-                        // method: 'POST',
+                    return fetch('http://localhost:5172/paypal/capture-order', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ orderID: data.orderID }),
                     }).then(res => res.json())
                         .then(details => {
-                            alert('Thanh toán thành công');
+                            // alert('Thanh toán thành công');
                             handleStatusChange(1);
                             handleOrder()
                         });
                 },
                 onError: function (err) {
+                    setShowError(true);
                     console.error(err);
-                    alert('Có lỗi xảy ra trong quá trình thanh toán');
+                    // alert('Có lỗi xảy ra trong quá trình thanh toán');
                 }
             }).render('#paypal-button-container');
         }
@@ -78,7 +80,8 @@ export default function CheckOutPage() {
 
             setShowSuccess(true);
         } catch (error) {
-            console.error('Lỗi khi tạo hóa đơn:', error.response ? error.response.data : error.message);
+            // console.error('Lỗi khi tạo hóa đơn:', error.response ? error.response.data : error.message);
+            setShowError(true);
         }
     };
 
@@ -163,30 +166,30 @@ export default function CheckOutPage() {
                                 {/*        checked/>*/}
                                 {/*    <label className="form-check-label" htmlFor="defaultRadio2"> Checked </label>*/}
                                 {/*</div>*/}
-                                <Form.Check
-                                    className="form-check"
-                                    type="radio"
-                                    label="Bank transfer by QR"
-                                    name="paymentMethod"
-                                    value="qr"
-                                    checked={paymentMethod === "qr"}
-                                    onChange={handlePaymentMethodChange}
-                                />
+                                {/*<Form.Check*/}
+                                {/*    className="form-check"*/}
+                                {/*    type="radio"*/}
+                                {/*    label="Bank transfer by QR"*/}
+                                {/*    name="paymentMethod"*/}
+                                {/*    value="qr"*/}
+                                {/*    checked={paymentMethod === "qr"}*/}
+                                {/*    onChange={handlePaymentMethodChange}*/}
+                                {/*/>*/}
                                 {/* Other Payment Methods */}
-                                <Form.Check
-                                    type="radio"
-                                    label="Cash on Delivery"
-                                    name="paymentMethod"
-                                    value="cod"
-                                    checked={paymentMethod === "cod"}
-                                    onChange={handlePaymentMethodChange}
-                                />
                                 <Form.Check
                                     type="radio"
                                     label="Pay with Paypal"
                                     name="paymentMethod"
                                     value="paypal"
                                     checked={paymentMethod === "paypal"}
+                                    onChange={handlePaymentMethodChange}
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    label="Cash on Delivery"
+                                    name="paymentMethod"
+                                    value="cod"
+                                    checked={paymentMethod === "cod"}
                                     onChange={handlePaymentMethodChange}
                                 />
                             </div>
@@ -341,6 +344,16 @@ export default function CheckOutPage() {
                 onHide={() => {
                     setShowSuccess(false)
                     handleNavigate()
+                }}
+            />
+
+            <NotifyModal
+                type="error"
+                title="Order failed"
+                message="Something went wrong!"
+                show={showError}
+                onHide={() => {
+                    setShowError(false)
                 }}
             />
         </>
