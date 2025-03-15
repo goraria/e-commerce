@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 import axios from "axios";
+import {Button} from "react-bootstrap";
 
-const ChatbotMessage = ({ chat }) => {
+const ChatbotMessage = ({chat}) => {
     usePerfectScrollbar("chat-bot")
 
     return (
@@ -35,7 +36,7 @@ const ChatbotMessage = ({ chat }) => {
     )
 }
 
-const ChatbotUserMessage = ({ chat }) => {
+const ChatbotUserMessage = ({chat}) => {
     usePerfectScrollbar("chat-bot")
 
     return (
@@ -247,34 +248,28 @@ export default function Chatbot() {
 
 
     const handleSendMessage = async () => {
-        // if (message.trim() !== "") {
-        //     console.log(message);
-        //     sendMessage(message); // Gửi tin nhắn
-        //     setMessage(""); // Xóa input sau khi gửi
-        // }
+        if (message.trim() !== "") {
+            try {
+                const response = await apiHandler.post('/chatbot/send-message',
+                    {message:message}, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            // "Content-Type": "application/json"
+                        },
+                    })
+                const data = response.data;
+                console.log(response);
+                setRasaResponse(data);
+                console.log("Chatbot reply:", data);
 
-        try {
-            const response = await apiHandler.post('/chatbot/send-message', {message: message}, {
-                headers: {Authorization: `Bearer ${token}`},
-            })
-        } catch (e) {
+            } catch (e) {
+            }
+            setMessage(""); // Xóa input sau khi gửi
+        } else {
+            setMessage("")
         }
     };
-    const sendMessage = async (message) => {
-        try {
-            const response = await axios.post("http://localhost:3000/chat", {
-                headers: {"Content-Type": "application/json"},
-                message
-            });
 
-            const data = await response.data;
-            console.log(response);
-            setRasaResponse(data.reply);
-            console.log("Chatbot reply:", data.reply);
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     useEffect(() => {
         loadConversationHistory();
@@ -350,16 +345,20 @@ export default function Chatbot() {
                                         <ul className="list-unstyled chat-history">
                                             {data.map((chat, index) => (
                                                 chat.type === "bot"
-                                                ? <ChatbotMessage chat={chat}/>
-                                                : <ChatbotUserMessage chat={chat}/>
+                                                    ? <ChatbotMessage chat={chat}/>
+                                                    : <ChatbotUserMessage chat={chat}/>
                                             ))}
                                         </ul>
                                     </div>
                                     <div className="chat-history-footer shadow-xs bg-white">
                                         <form
                                             className="form-send-message d-flex justify-content-between align-items-center ">
-                                            <input className="form-control message-input border-0 me-3 shadow-none"
-                                                   placeholder="Type your message here..."/>
+                                            <input
+                                                className="form-control message-input border-0 me-3 shadow-none"
+                                                placeholder="Type your message here..."
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
+                                            />
                                             <div className="message-actions d-flex align-items-center">
                                                 <span
                                                     className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer">
@@ -375,10 +374,13 @@ export default function Chatbot() {
                                                 {/*    </span>*/}
                                                 {/*    <input type="file" id="attach-doc" hidden=""/>*/}
                                                 {/*</label>*/}
-                                                <button className="btn btn-primary d-flex send-msg-btn">
+                                                <Button className="btn btn-primary d-flex send-msg-btn"
+                                                        onClick={handleSendMessage}
+
+                                                >
                                                     <span className="align-middle d-md-inline-block d-none">Send</span>
                                                     <i className="bx bx-paper-plane ms-md-2 ms-0"></i>
-                                                </button>
+                                                </Button>
                                             </div>
                                         </form>
                                     </div>
