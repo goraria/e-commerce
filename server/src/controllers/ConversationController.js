@@ -5,9 +5,8 @@ const Conversation = require('../models/Conversation');
 const axios = require("axios");
 require('dotenv').config();
 
-class AccountController {
+class ConversationController {
     async getHistory(req, res) {
-        console.log("User ID:", req.user.id);
         try {
             const conversations = await Conversation.findAll({
                 where: {idaccount: req.user.id},
@@ -29,8 +28,6 @@ class AccountController {
                 return res.status(404).json({message: 'Conversation not found'});
             }
 
-            console.log(conversations);
-
             const result = conversations.map((item) => ({
                 id: item.id,
                 type: item.type,
@@ -45,15 +42,13 @@ class AccountController {
                 } : null,
             }));
 
-            console.log("Dữ liệu sau khi xử lý:", result);
-
-            res.json(conversations);
+            res.json(result);
         } catch (error) {
             res.json({error: 'Server error'});
         }
     }
 
-    async sendMessage(req, res) {
+    async requestMessage(req, res) {
 
         try {
             const account = await Account.findByPk(req.user.id);
@@ -61,19 +56,42 @@ class AccountController {
             if (!account) {
                 res.json({error: 'Account not found'});
             }
-
             const userMessage = await Conversation.create({
                 idaccount: account.idaccount,
-                message: req.body,
+                message: req.body.message,
                 time: new Date(),
-                type: req.user.type,
+                type: "user",
             })
 
-            res.json({
-                message: 'Cập nhật thông tin tài khoản và người dùng thành công',
-                account,
-                user: accuser
+            const userMess = req.body.message;
+            const response = await axios.post(process.env.RASA_URL, {
+                // sender: "user",
+                message: userMess,
             });
+
+            const rasaReply = response.data.map((msg) => msg.text).join("\n");
+
+            const result = {
+                type: "bot",
+                user: {
+                    idaccount: 0,
+                    username: "chatbot",
+                    avatar: "/assets/img/avatars/8.png",
+                    firstname: "Bill",
+                    lastname: "Cipher"
+                },
+                message: rasaReply ,
+                time: new Date(),
+            }
+
+            const botMessage = await Conversation.create({
+                idaccount: 2,
+                message: rasaReply,
+                time: new Date(),
+                type: "bot",
+            })
+
+            res.json(result);
         } catch (error) {
             // console.error('Lỗi khi cập nhật thông tin tài khoản và người dùng:', error);
             // console.log(error);
@@ -84,7 +102,7 @@ class AccountController {
     async responseMessage(req, res) {
         try {
             const userMessage = req.body.message;
-            const response = await axios.post(RASA_SERVER_URL, {
+            const response = await axios.post(process.env.RASA_URL, {
                 sender: "user",
                 message: userMessage,
             });
@@ -99,4 +117,4 @@ class AccountController {
     }
 }
 
-module.exports = new AccountController();
+module.exports = new ConversationController();

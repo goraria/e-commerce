@@ -5,7 +5,7 @@ const Product = require("./Product");
 const Account = require("./Account");
 const User = require("./User");
 
-const Conversation = sequelize.define('Account', {
+const Conversation = sequelize.define('Conversation', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
