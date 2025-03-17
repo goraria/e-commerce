@@ -1,7 +1,21 @@
 import React, { Component, useState, useEffect, version } from "react";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Container, Button, Form, Row, Col, Card, Image, ListGroup, Badge, Table, Pagination } from 'react-bootstrap';
+import {
+    Container,
+    Button,
+    Form,
+    Row,
+    Col,
+    Card,
+    Image,
+    ListGroup,
+    Badge,
+    Table,
+    Pagination,
+    Dropdown
+} from 'react-bootstrap';
 import axios from 'axios';
+import apiHandler from "../../utils/apiHandler.jsx";
 
 import Transitionbar from "../../layouts/Transitionbar.jsx";
 import Overview from "../../layouts/Overview.jsx";
@@ -12,10 +26,10 @@ import MaintenancePage from "../misc/MaintenancePage.jsx";
 import LoadingPage from "../misc/LoadingPage.jsx";
 import Calendar from "react-calendar";
 import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
-import { renderRatingStar, renderStatusDelivery } from "../../utils/renderHandler.jsx";
+import {renderProductColor, renderRatingStar, renderStatusDelivery} from "../../utils/renderHandler.jsx";
 import { formatDateTime, formatRatings } from "../../utils/formatHandler.jsx";
-import apiHandler from "../../utils/apiHandler.jsx";
-import {PaginationCustom} from "../../components/pagination/PaginationCustom.jsx";
+import { PaginationCustom } from "../../components/pagination/PaginationCustom.jsx";
+import {AutoScroll} from "../../components/scroll/AutoScroll.jsx";
 
 export default function ProductPage() {
     const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -24,17 +38,18 @@ export default function ProductPage() {
     const [properties, setProperties] = useState([]);
 
     const [descriptions, setArray] = useState([]);
-    const [configurations, setconfig] = useState([]);
-    const [default_config, setdefaultconfig] = useState([]);
-    const [colors, setcolor] = useState([]);
+    const [configurations, setConfigurations] = useState([]);
+    const [defaultConfiguration, setDefaultConfiguration] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [defaultColor, setDefaultColor] = useState([]);
     const [ratings, setRating] = useState([]);
     const [products, setProduct] = useState([]);
     const [evaluate, setEvaluate] = useState(null);
     const [carts, setCart] = useState();
-    const [similars, setSimilars] = useState([]);
-    const [ChoosedColor, setChoosedColor] = useState(null);
+    const [similar, setSimilar] = useState([]);
+    const [chooseColor, setChooseColor] = useState(null);
 
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEntries, setSelectedEntries] = useState([]);
@@ -59,59 +74,31 @@ export default function ProductPage() {
         // setShowModal(true);
     };
 
-    const getProperties = async () => {
+    const handleLoadProperties = async () => {
         try {
             const response = await apiHandler.get(`/products/load-properties/${id}`);
+            const data = response.data;
 
-            setProperties(response.data);
-            console.log(response.data)
+            setProperties(data);
+
+            setConfigurations(data.configurations)
+            setDefaultConfiguration(data.configurations[0]);
+
+            setColors(data.colors)
+            setDefaultColor(data.colors[0]);
+
+            setArray(data.descriptions[0])
+
+            // console.log(data)
         } catch (error) {
             // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
         }
     }
 
-    // const fetchCart = async () => {
-    //     try {
-    //         const response = await fetch(`http://localhost:5172/cart/loadcart`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`
-    //             }
-    //         });
-    //         const data = await response.json();
-    //         setCart(data)
-    //     } catch (error) {
-    //         // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
-    //     }
-    // };
-
-    const fetchProductDetails = async () => {
+    const handleProductRating = async () => {
         try {
-            const response = await fetch(`http://localhost:5172/products/load-productid/${id}`);
-            const data = await response.json();
-            setProduct(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            // console.log(data)
-        } catch (error) {
-            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
-        }
-    };
-
-    const fetchProductDecription = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/products/load-description/${id}`);
-            const data = await response.json();
-            setArray(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            // console.log(data[0])
-
-        } catch (error) {
-            // console.error('Lỗi khi lấy dữ liệu mô tả của sản phẩm:', error);
-        }
-    };
-
-    const fetchProductRating = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/products/load-rating/${id}`);
-            const data = await response.json();
-            setRating(data); // Cập nhật thông tin sản phẩm từ backend
+            const response = await apiHandler.get(`http://localhost:5172/products/load-rating/${id}`);
+            setRating(response.data); // Cập nhật thông tin sản phẩm từ backend
             // setData(data);
             // console.log(data)
         } catch (error) {
@@ -119,35 +106,12 @@ export default function ProductPage() {
         }
     };
 
-    const fetchProductColor = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/products/load-color/${id}`);
-            const data = await response.json();
-            setcolor(data); // Cập nhật thông tin sản phẩm từ backend
-            // console.log(data);
-        } catch (error) {
-            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
-        }
-    };
-
-    const fetchProductConfiguration = async () => {
-        try {
-            const response = await fetch(`http://localhost:5172/products/load-configuration/${id}`);
-            const data = await response.json();
-            setconfig(data)
-            setdefaultconfig(data[0]); // Cập nhật thông tin sản phẩm từ backend
-            // console.log(data)
-        } catch (error) {
-            // console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
-        }
-    };
-
-    const getSimilars = async () => {
+    const handleLoadSimilar = async () => {
         try {
             const response = await apiHandler.get(`/products/load-similarity/${id}`);
             // const response = await fetch(`http://localhost:5172/products/load-similarity/${id}`);
             // const data = await response.json();
-            setSimilars(response.data)
+            setSimilar(response.data)
             // setSimilars(data)
             // console.log(similars)
         } catch (error) {
@@ -176,10 +140,6 @@ export default function ProductPage() {
         }
     };
 
-    const handleConfigurationChange = (config) => {
-        setdefaultconfig(config);
-    };
-
     // const [descriptions, setArray] = useState([]);
     // const currentUrl = window.location.href;
     // const url = new URL(currentUrl);
@@ -187,7 +147,7 @@ export default function ProductPage() {
     // const id = params.get('id');
 
     const handleColorSelect = (idcolor) => {
-        setChoosedColor(idcolor); // Cập nhật idcolor đã chọn
+        setChooseColor(idcolor); // Cập nhật idcolor đã chọn
         // console.log(idcolor)
     };
 
@@ -196,8 +156,8 @@ export default function ProductPage() {
             const response = await apiHandler.put(`/cart/add-cartitem`, {
                 idproduct: parseInt(id),
                 quantity: 1,
-                idcolor: ChoosedColor,
-                idconfiguration: default_config.idconfiguration,
+                idcolor: chooseColor,
+                idconfiguration: defaultConfiguration.idconfiguration,
             }, {
                 headers: {Authorization: `Bearer ${token}`}
             });
@@ -208,6 +168,15 @@ export default function ProductPage() {
             setShowSuccess(true)
         } catch (error) {
             // console.error('Lỗi khi thêm vào giỏ hàng:', error);
+            setShowWarning(true)
+        }
+    };
+
+    const handleBuyNow = async () => {
+        if (token) {
+            await handleAddToCart();
+            navigate("/pay/cart");
+        } else {
             setShowWarning(true)
         }
     };
@@ -260,19 +229,19 @@ export default function ProductPage() {
         }
     }
 
+    const onReload = () => {
+        handleProductRating();
+        handleLoadRating();
+    }
+
     useEffect(() => {
-        fetchProductConfiguration();
-        fetchProductDetails();
-        fetchProductDecription();
-        fetchProductRating();
-        fetchProductColor();
-        // fetchCart();
-
-
-        // setData(ratings);
-        getProperties()
+        handleLoadProperties()
+        handleProductRating();
         handleLoadRating()
-        getSimilars();
+        handleLoadSimilar();
+
+        // fetchCart();
+        // setData(ratings);
         // calculateScore(ratings)
     }, [id]);
 
@@ -290,56 +259,94 @@ export default function ProductPage() {
                             <div className="d-flex justify-content-center">
                                 <img
                                     className="d-block object-fit-cover w-100 h-100 rounded-4 bg-white"
-                                    src={products.product_image}
+                                    // src={products.product_image}
+                                    src={properties.image}
                                     alt="Second slide"
                                 />
                             </div>
                         </div>
-                        <div className="card p-3 mb-4">
-                            <Card.Body>
-                                {/* Section: Cấu hình đặc điểm */}
-                                <Card.Title>Cấu hình đặc điểm</Card.Title>
-                                <ListGroup variant="flush">
-                                    <ListGroup.Item>
-                                        <Row>
-                                            <Col md={4}><strong>Loại CPU:</strong></Col>
-                                            <Col md={8}>{default_config.cpu}</Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <Row>
-                                            <Col md={4}><strong>RAM:</strong></Col>
-                                            <Col md={8}>{default_config.ram}</Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <Row>
-                                            <Col md={4}><strong>GPU:</strong></Col>
-                                            <Col md={8}>{default_config.gpu}</Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <Row>
-                                            <Col md={4}><strong>Storage:</strong></Col>
-                                            <Col md={8}>{default_config.storage}</Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <Row>
-                                            <Col md={4}><strong>Screen:</strong></Col>
-                                            <Col md={8}>{default_config.screen}</Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <Row>
-                                            <Col md={4}><strong>Resolution:</strong></Col>
-                                            <Col md={8}>{default_config.resolution}</Col>
-                                        </Row>
-                                    </ListGroup.Item>
-
-                                </ListGroup>
-                                <Button variant="link" className="p-0">Xem cấu hình chi tiết</Button>
-                            </Card.Body>
+                        {/*<div className="card mb-4">*/}
+                        {/*    <AutoScroll speed={1}>*/}
+                        {/*        {["card-datatable table-responsive", "d-block object-fit-cover w-100 h-100 rounded-4", "object-fit-cover w-100 h-100 rounded-4", "none d-block object-fit-cover w-100 h-100 rounded-4"].map((item, index) => (*/}
+                        {/*            <div*/}
+                        {/*                key={index}*/}
+                        {/*                style={{*/}
+                        {/*                    display: 'inline-block',*/}
+                        {/*                    padding: '0 20px',*/}
+                        {/*                    fontSize: '16px',*/}
+                        {/*                    lineHeight: '50px'*/}
+                        {/*                }}*/}
+                        {/*            >*/}
+                        {/*                {item}*/}
+                        {/*            </div>*/}
+                        {/*        ))}*/}
+                        {/*    </AutoScroll>*/}
+                        {/*</div>*/}
+                        <div className="card mb-4">
+                            <div className="card-datatable table-responsive">
+                                <div className="dataTables_wrapper dt-bootstrap5 no-footer">
+                                    <div className="card-header flex-column flex-md-row"> {/* pb-0 */}
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div className="head-label text-center">
+                                                <h5 className="card-title mb-0">Configurations</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Table hover responsive className="table border-top dataTable no-footer dtr-column">
+                                    {/*<thead style={{height: 64}}>*/}
+                                    {/*<tr>*/}
+                                    {/*    <th className="sorting" style={{verticalAlign: "middle", fontSize: 13}}>*/}
+                                    {/*        Name*/}
+                                    {/*    </th>*/}
+                                    {/*    {["Date", "Salary", "Status"].map((item, index) => (*/}
+                                    {/*        <th className="sorting" key={index} style={{verticalAlign: "middle", fontSize: 13, width: 120}}>*/}
+                                    {/*            {item}*/}
+                                    {/*        </th>*/}
+                                    {/*    ))}*/}
+                                    {/*    <th className="sorting_disabled"*/}
+                                    {/*        style={{verticalAlign: "middle", fontSize: 13, width: 120}}>*/}
+                                    {/*        Actions*/}
+                                    {/*    </th>*/}
+                                    {/*</tr>*/}
+                                    {/*</thead>*/}
+                                    <tbody>
+                                    <tr style={{height: 64}}>
+                                        <td><strong>CPU</strong></td>
+                                        <td>{defaultConfiguration.cpu}</td>
+                                    </tr>
+                                    <tr style={{height: 64}}>
+                                        <td><strong>GPU</strong></td>
+                                        <td>{defaultConfiguration.gpu}</td>
+                                    </tr>
+                                    <tr style={{height: 64}}>
+                                        <td><strong>RAM</strong></td>
+                                        <td>{defaultConfiguration.ram} GB</td>
+                                    </tr>
+                                    <tr style={{height: 64}}>
+                                        <td><strong>Storage</strong></td>
+                                        <td>{defaultConfiguration.storage} GB</td>
+                                    </tr>
+                                    <tr style={{height: 64}}>
+                                        <td><strong>Screen</strong></td>
+                                        <td>{`${defaultConfiguration.screen}' inches - ${defaultConfiguration.resolution} pixels`}</td>
+                                    </tr>
+                                    </tbody>
+                                </Table>
+                                <div className="card-footer flex-column flex-md-row pb-0 pb-4">
+                                    <div className="row">
+                                        <div className="d-flex col-sm-12 col-md-6">
+                                            <div
+                                                className="dataTables_info d-flex justify-content-start align-items-center">
+                                                <div className="text-center mt-2">
+                                                    {/* Calculate starting and ending entries */}
+                                                    {`${properties.name}`}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="card p-3 mb-4">
                             <Card.Body>
@@ -362,8 +369,9 @@ export default function ProductPage() {
                                 <div className="mb-4 d-flex justify-content-center">
                                     <img
                                         className="d-block object-fit-cover w-100 h-100 rounded-4"
-                                        src={products.product_image}
-                                        alt="Second slide"
+                                        // src={products.product_image}
+                                        src={properties.image}
+                                        alt="Product image"
                                     />
                                 </div>
                                 <div>
@@ -372,11 +380,12 @@ export default function ProductPage() {
                                     <p>{descriptions.title_description}</p>
                                 </div>
                                 <div className="d-flex justify-content-center mb-4">
-                                    {products.product_image ? (
+                                    {properties.image ? (
                                         <div className="d-flex justify-content-center mb-4">
                                             <Image
                                                 className="d-block object-fit-cover w-100 h-100 rounded-4"
-                                                src={products.product_image}
+                                                // src={products.product_image}
+                                                src={properties.image}
                                                 alt="Product image"
                                             />
                                         </div>
@@ -692,7 +701,8 @@ export default function ProductPage() {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <div className="d-flex justify-content-start align-items-center customer-name">
+                                                    <div
+                                                        className="d-flex justify-content-start align-items-center customer-name">
                                                         <div className="avatar-wrapper">
                                                             <div className="avatar me-4">{/* avatar-sm */}
                                                                 <img
@@ -778,7 +788,8 @@ export default function ProductPage() {
                             <div className="container px-3">
                                 <div className="row mt-4">
                                     <div className="col">
-                                        <h3>{`${products.brand} ${products.product_name}`}</h3>
+                                        {/*<h3>{`${products.brand} ${products.product_name}`}</h3>*/}
+                                        <h3>{`${properties.brand} ${properties.name}`}</h3>
                                         <p className="text-warning">
                                             {calculateScore(ratings)
                                                 // <RatingStar rating={calculateScore(ratings)}/> //
@@ -792,31 +803,55 @@ export default function ProductPage() {
                                 </div>
                                 <div className="row mt-4">
                                     <div className="col">
-                                        <h5>Configurations</h5>
                                         <Form>
+                                            <h5>Configurations</h5>
                                             <div className="mb-3">
                                                 {configurations.map((config, index) =>
                                                     <Form.Check
                                                         key={index}
                                                         type="radio"
-                                                        label={config.cpu + " " + config.ram + "GB " + config.storage + "GB"}
+                                                        label={
+                                                            <>
+                                                                <Badge bg="label-danger me-1">{config.cpu}</Badge>
+                                                                <Badge bg="label-success me-1">{config.gpu}</Badge>
+                                                                <Badge bg="label-info me-1">{config.ram} GB</Badge>
+                                                                <Badge
+                                                                    bg="label-warning me-1">{config.storage} GB</Badge>
+                                                                {/*config.cpu + " " + config.ram + "GB " + config.storage + "GB"*/}
+                                                            </>
+                                                        }
                                                         name="version"
-                                                        id="version1"
-                                                        checked={config.idconfiguration === default_config.idconfiguration}
-                                                        onChange={() => handleConfigurationChange(config)}
+                                                        id="configuration"
+                                                        checked={config.idconfiguration === defaultConfiguration.idconfiguration}
+                                                        onChange={() => setDefaultConfiguration(config)}
                                                     />
                                                 )}
                                             </div>
                                             <h5>Colors</h5>
-                                            <div className="d-flex gap-3 mb-3">
-                                                {colors.map((colours, index) =>
-                                                    <Button
-                                                        key={index}
-                                                        variant={colours.color}
-                                                        // style={{boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'}}
-                                                        className="shadow-sm"
-                                                        onClick={() => handleColorSelect(colours.idcolor)}
-                                                    >{colours.color}</Button>
+                                            <div className="mb-3"> {/* d-flex gap-3 */}
+                                                {colors.map((colour, index) =>
+                                                    <>
+                                                        <Form.Check
+                                                            key={index}
+                                                            type="radio"
+                                                            label={renderProductColor(colour.color)}
+                                                            name="color"
+                                                            id="color"
+                                                            checked={colour.idcolor === defaultColor.idcolor}
+                                                            onChange={() => setDefaultColor(colour)}
+                                                        />
+
+                                                        {/*<Button*/}
+                                                        {/*    key={index}*/}
+                                                        {/*    variant={colours.color}*/}
+                                                        {/*    style={{boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'}}*/}
+                                                        {/*    className="shadow-sm"*/}
+                                                        {/*    onClick={() => handleColorSelect(colour.idcolor)}*/}
+                                                        {/*>{colour.color}</Button>*/}
+                                                        {/*<span key={index}>*/}
+                                                        {/*    {renderProductColor(colour.color)}*/}
+                                                        {/*</span>*/}
+                                                    </>
                                                 )}
                                             </div>
                                         </Form>
@@ -824,11 +859,11 @@ export default function ProductPage() {
                                 </div>
                                 <div className="row mt-4">
                                     <div className="col">
-                                        <h3 className="text-danger">${default_config.price}</h3>
-                                        <h6 className="text-muted">
-                                            <del>{default_config.price}</del>
-                                            <span className="text-danger">-47%</span>
-                                        </h6>
+                                        <h3 className="text-danger">${defaultConfiguration.price}</h3>
+                                        {/*<h6 className="text-muted">*/}
+                                        {/*    <del>{default_config.price}</del>*/}
+                                        {/*    <span className="text-danger">-47%</span>*/}
+                                        {/*</h6>*/}
                                     </div>
                                 </div>
                                 <div className="row mt-4">
@@ -842,9 +877,10 @@ export default function ProductPage() {
                                     <div className="col col-sm-12 col-md-6 col-lg-6 mb-3">
                                         <Button
                                             className="w-100"
-                                            as={Link}
-                                            to={"/pay/cart"}
+                                            // as={Link}
+                                            // to={"/pay/cart"}
                                             variant="danger"
+                                            onClick={handleBuyNow}
                                         >Buy now</Button>
                                     </div>
                                 </div>
@@ -853,7 +889,12 @@ export default function ProductPage() {
                                     variant="primary"
                                     className="mb-3 w-100"
                                     onClick={() => {
-                                        if (evaluate) {
+                                        // if (evaluate) {
+                                        //     setShowEvaluate(true);
+                                        // } else {
+                                        //     setShowWarning(true);
+                                        // }
+                                        if (token) {
                                             setShowEvaluate(true);
                                         } else {
                                             setShowWarning(true);
@@ -872,8 +913,8 @@ export default function ProductPage() {
             </Overview>
             <div className="container">
                 <div className="row">
-                    {similars.map((product, index) =>
-                        <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
+                    {similar.map((product, index) =>
+                        <div key={`${product.idproduct}-${index}`} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
                             <ProductItem product={product}/>
                         </div>
                     )}
@@ -882,10 +923,10 @@ export default function ProductPage() {
 
             <RatingForm
                 rate={evaluate}
-                prod={products}
+                prod={properties}
                 show={showEvaluate}
                 onHide={() => setShowEvaluate(false)}
-                // onReload={handleLoadRating()}
+                onReload={onReload}
             />
             <NotifyModal
                 type="primary"

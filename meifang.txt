@@ -1,0 +1,21 @@
+dùng use state và use deffect
+
+gọi api (79) định nghĩa api handler
+base url là import
+dong 14  -> dòng 33 tìm file by primary key, 34 thuộc tính : cột gồm các bảng phụ thuộc, 66->100 trả về json
+
+set rating =
+
+399-product page: calculateScore cộng tổng các điểm rating / tb; formatrating: lấy 1 số sau số thập phân và hiển thị
+
+handle loadrating: lấy id trên url, token: user đăng nhập tự sinh; try: lấy api (middleware: phải có token ms dung dc/ ko có token thi return luon)
+post: lay lai đc rating của ng dùng
+
+set form data:
+ỏneload(load lại rating sau khi đánh giá)
+use effect: nếu có rating -> set data = đoạn lấy lên (rate, prod...) nếu có -> ko thì mặc định
+- có gtri bên trong -> khi giá trị thay đổi thì chạy đoạn trên if / else
+- ngoặc rỗng: khi mỗi lần component thay đổi -> load lại 1 lần
+onhide:
+khi tồn tại rate thì hiện remove + change else hiện evalute
+

@@ -21,6 +21,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const port = process.env.PORT
+const RASA_SERVER_URL = "http://localhost:5005/webhooks/rest/webhook"; // API của Rasa
+
 
 sequelize.sync();
 

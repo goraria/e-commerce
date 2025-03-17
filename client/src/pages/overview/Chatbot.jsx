@@ -1,9 +1,402 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
+import apiHandler from "../../utils/apiHandler.jsx";
+import axios from "axios";
+import {Button} from "react-bootstrap";
 
-export default function Chatbot() {
+const ChatbotMessage = ({chat}) => {
     usePerfectScrollbar("chat-bot")
 
+    return (
+        <>
+            <li className="chat-message">
+                <div className="d-flex overflow-hidden">
+                    <div className="user-avatar flex-shrink-0 me-3">
+                        <div className="avatar avatar-sm avatar-online">
+                            <img
+                                src={chat.user.avatar}
+                                // src="/assets/img/avatars/8.png"
+                                className="h-auto rounded-circle"
+                                alt="avatar"
+                                aria-label="Avatar Image"
+                            />
+                        </div>
+                    </div>
+                    <div className="chat-message-wrapper flex-grow-1">
+                        <div className="chat-message-text bg-white">
+                            <p className="mb-0">{chat.message}</p>
+                        </div>
+                        <div className="text-body-secondary mt-1">
+                            <small>{chat.time}</small>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </>
+    )
+}
+
+const ChatbotUserMessage = ({chat}) => {
+    usePerfectScrollbar("chat-bot")
+
+    return (
+        <>
+            <li className="chat-message chat-message-right">
+                <div className="d-flex overflow-hidden">
+                    <div className="chat-message-wrapper flex-grow-1">
+                        <div className="chat-message-text">
+                            <p className="mb-0">{chat.message}</p>
+                        </div>
+                        <div className="text-end text-body-secondary mt-1">
+                            {/*<i className="icon-base bx bx-check-double icon-16px text-success me-1"></i>*/}
+                            <small>{chat.time}</small>
+                        </div>
+                    </div>
+                    <div className="flex-shrink-0 ms-3">
+                        <div className="avatar avatar-sm avatar-online">
+                            <img
+                                src={chat.user.avatar}
+                                // src="/assets/img/avatars/1.png"
+                                className="h-auto rounded-circle"
+                                alt="avatar"
+                                aria-label="Avatar Image"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </>
+    )
+}
+
+
+export default function Chatbot() {
+    const data = [
+        {
+            id: 1,
+            type: "bot",
+            user: {
+                idaccount: 0,
+                username: "chatbot",
+                avatar: "/assets/img/avatars/8.png",
+                firstname: "Bill",
+                lastname: "Cipher"
+            },
+            message: "How can we help? here for you! 😄",
+            time: "10:00 AM",
+        },
+        {
+            id: 2,
+            type: "user",
+            user: {
+                idaccount: 1,
+                username: "username",
+                avatar: "/assets/img/avatars/2.png",
+                firstname: "Japtor",
+                lastname: "Gorthenburg",
+            },
+            message: "Yeah, I am looking for the best admin template. Could you please help me to find it out? 🤔",
+            time: "10:02 AM",
+        },
+        {
+            id: 3,
+            type: "bot",
+            user: {
+                idaccount: 0,
+                username: "chatbot",
+                avatar: "/assets/img/avatars/8.png",
+                firstname: "Bill",
+                lastname: "Cipher"
+            },
+            message: "Hmm, You can also contact us via email at https://github.com/goraria",
+            time: "10:03 AM",
+        },
+        {
+            id: 4,
+            type: "user",
+            user: {
+                idaccount: 1,
+                username: "username",
+                avatar: "/assets/img/avatars/2.png",
+                firstname: "Japtor",
+                lastname: "Gorthenburg",
+            },
+            message: "Something went wrong!",
+            time: "10:04 AM",
+        },
+        {
+            id: 1,
+            type: "bot",
+            user: {
+                idaccount: 0,
+                username: "chatbot",
+                avatar: "/assets/img/avatars/8.png",
+                firstname: "Bill",
+                lastname: "Cipher"
+            },
+            message: "How can we help? here for you! 😄",
+            time: "10:00 AM",
+        },
+        {
+            id: 2,
+            type: "user",
+            user: {
+                idaccount: 1,
+                username: "username",
+                avatar: "/assets/img/avatars/2.png",
+                firstname: "Japtor",
+                lastname: "Gorthenburg",
+            },
+            message: "Yeah, I am looking for the best admin template. Could you please help me to find it out? 🤔",
+            time: "10:02 AM",
+        },
+        {
+            id: 3,
+            type: "bot",
+            user: {
+                idaccount: 0,
+                username: "chatbot",
+                avatar: "/assets/img/avatars/8.png",
+                firstname: "Bill",
+                lastname: "Cipher"
+            },
+            message: "Hmm, You can also contact us via email at https://github.com/goraria",
+            time: "10:03 AM",
+        },
+        {
+            id: 4,
+            type: "user",
+            user: {
+                idaccount: 1,
+                username: "username",
+                avatar: "/assets/img/avatars/2.png",
+                firstname: "Japtor",
+                lastname: "Gorthenburg",
+            },
+            message: "Something went wrong!",
+            time: "10:04 AM",
+        },
+        {
+            id: 1,
+            type: "bot",
+            user: {
+                idaccount: 0,
+                username: "chatbot",
+                avatar: "/assets/img/avatars/8.png",
+                firstname: "Bill",
+                lastname: "Cipher"
+            },
+            message: "How can we help? here for you! 😄",
+            time: "10:00 AM",
+        },
+        {
+            idchatbot: 2,
+            type: "user",
+            user: {
+                idaccount: 1,
+                username: "username",
+                avatar: "/assets/img/avatars/2.png",
+                firstname: "Japtor",
+                lastname: "Gorthenburg",
+            },
+            message: "Yeah, I am looking for the best admin template. Could you please help me to find it out? 🤔",
+            time: "10:02 AM",
+        },
+        {
+            idchatbot: 3,
+            type: "bot",
+            user: {
+                idaccount: 0,
+                username: "chatbot",
+                avatar: "/assets/img/avatars/8.png",
+                firstname: "Bill",
+                lastname: "Cipher"
+            },
+            message: "Hmm, You can also contact us via email at https://github.com/goraria",
+            time: "10:03 AM",
+        },
+        {
+            id: 4,
+            type: "user",
+            user: {
+                idaccount: 1,
+                username: "username",
+                avatar: "/assets/img/avatars/2.png",
+                firstname: "Japtor",
+                lastname: "Gorthenburg",
+            },
+            message: "Something went wrong!",
+            time: "10:04 AM",
+        },
+    ]
+
+    usePerfectScrollbar("chat-bot")
+    const [rasaResponse, setRasaResponse] = useState("");
+    const [message, setMessage] = useState("");
+    const token = localStorage.getItem("token");
+
+    const loadConversationHistory = async () => {
+        try {
+            const response = await apiHandler.get('/chatbot/get-history', {
+                headers: {Authorization: `Bearer ${token}`},
+            })
+            console.log(response.data);
+        } catch (e) {
+
+        }
+    }
+
+
+    const handleSendMessage = async () => {
+        if (message.trim() !== "") {
+            try {
+                const response = await apiHandler.post('/chatbot/send-message',
+                    {message:message}, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            // "Content-Type": "application/json"
+                        },
+                    })
+                const data = response.data;
+                console.log(response);
+                setRasaResponse(data);
+                console.log("Chatbot reply:", data);
+
+            } catch (e) {
+            }
+            setMessage(""); // Xóa input sau khi gửi
+        } else {
+            setMessage("")
+        }
+    };
+
+
+    useEffect(() => {
+        loadConversationHistory();
+    }, [])
+
+    usePerfectScrollbar("chat-bot")
+
+    return (
+        <>
+            <div className="content-wrapper mb-4">
+                <div className="container-xxl flex-grow-1">
+                    <div className="app-chat card overflow-hidden">
+                        <div className="row g-0">
+                            <div className="col app-chat-history d-block" id="app-chat-history">
+                                <div className="chat-history-wrapper">
+                                    <div className="chat-history-header border-bottom">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div className="d-flex overflow-hidden align-items-center">
+                                                <i className="icon-base bx bx-menu icon-lg cursor-pointer d-lg-none d-block me-3"
+                                                   data-bs-toggle="sidebar" data-overlay=""
+                                                   data-target="#app-chat-contacts"></i>
+                                                <div className="flex-shrink-0 avatar avatar-online">
+                                                    <img
+                                                        src="/assets/img/avatars/8.png"
+                                                        className="h-auto rounded-circle"
+                                                        alt="avatar"
+                                                        aria-label="Avatar Image"
+                                                    />
+                                                </div>
+                                                <div className="chat-contact-info flex-grow-1 ms-3">
+                                                    <h6 className="m-0 fw-normal">Japtor Gorthenburg</h6>
+                                                    <small className="user-status text-body">Administrator</small>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex align-items-center">
+                                                <span
+                                                    className="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
+                                                    <i className="bx bx-phone bx-sm"></i>
+                                                </span>
+                                                <span
+                                                    className="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
+                                                    <i className="bx bx-video bx-sm"></i>
+                                                </span>
+                                                <span
+                                                    className="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
+                                                    <i className="bx bx-search bx-sm"></i>
+                                                </span>
+                                                <div className="dropdown">
+                                                    <button
+                                                        className="btn btn-icon btn-text-secondary text-secondary rounded-pill dropdown-toggle hide-arrow"
+                                                        data-bs-toggle="dropdown" aria-expanded="false"
+                                                        id="chat-header-actions"><i
+                                                        className="bx bx-dots-vertical-rounded bx-sm"></i>
+                                                    </button>
+                                                    <div className="dropdown-menu dropdown-menu-end"
+                                                         aria-labelledby="chat-header-actions">
+                                                        <a className="dropdown-item">
+                                                            View Contact</a>
+                                                        <a className="dropdown-item">
+                                                            Mute Notifications</a>
+                                                        <a className="dropdown-item">
+                                                            Block Contact</a>
+                                                        <a className="dropdown-item">
+                                                            Clear Chat</a>
+                                                        <a className="dropdown-item">
+                                                            Report</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="chat-bot" className="chat-history-body ps ps--active-y">
+                                        <ul className="list-unstyled chat-history">
+                                            {data.map((chat, index) => (
+                                                chat.type === "bot"
+                                                    ? <ChatbotMessage chat={chat}/>
+                                                    : <ChatbotUserMessage chat={chat}/>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div className="chat-history-footer shadow-xs bg-white">
+                                        <form
+                                            className="form-send-message d-flex justify-content-between align-items-center ">
+                                            <input
+                                                className="form-control message-input border-0 me-3 shadow-none"
+                                                placeholder="Type your message here..."
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
+                                            />
+                                            <div className="message-actions d-flex align-items-center">
+                                                <span
+                                                    className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer">
+                                                    <i className="bx bx-microphone bx-sm text-heading"></i>
+                                                </span>
+                                                <span
+                                                    className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer mx-1">
+                                                    <i className="bx bx-paperclip bx-sm text-heading"></i>
+                                                </span>
+                                                {/*<label htmlFor="attach-doc" className="form-label mb-0">*/}
+                                                {/*    <span className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer mx-1">*/}
+                                                {/*        <i className="bx bx-paperclip bx-sm text-heading"></i>*/}
+                                                {/*    </span>*/}
+                                                {/*    <input type="file" id="attach-doc" hidden=""/>*/}
+                                                {/*</label>*/}
+                                                <Button className="btn btn-primary d-flex send-msg-btn"
+                                                        onClick={handleSendMessage}
+
+                                                >
+                                                    <span className="align-middle d-md-inline-block d-none">Send</span>
+                                                    <i className="bx bx-paper-plane ms-md-2 ms-0"></i>
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="app-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="content-backdrop fade"></div>
+            </div>
+        </>
+    )
+}
+
+function ChatbotDefault() {
     return (
         <>
             <div className="content-wrapper mb-4">
@@ -68,13 +461,13 @@ export default function Chatbot() {
                                                     </button>
                                                     <div className="dropdown-menu dropdown-menu-end"
                                                          aria-labelledby="chat-header-actions">
-                                                        <a className="dropdown-item" >
+                                                        <a className="dropdown-item">
                                                             View Contact</a>
-                                                        <a className="dropdown-item" >
+                                                        <a className="dropdown-item">
                                                             Mute Notifications</a>
-                                                        <a className="dropdown-item" >
+                                                        <a className="dropdown-item">
                                                             Block Contact</a>
-                                                        <a className="dropdown-item" >
+                                                        <a className="dropdown-item">
                                                             Clear Chat</a>
                                                         <a className="dropdown-item">
                                                             Report</a>
@@ -89,7 +482,7 @@ export default function Chatbot() {
                                                 <div className="d-flex overflow-hidden">
                                                     <div className="chat-message-wrapper flex-grow-1">
                                                         <div className="chat-message-text">
-                                                            <p className="mb-0">How can we help?  here for you!
+                                                            <p className="mb-0">How can we help? here for you!
                                                                 😄</p>
                                                         </div>
                                                         <div className="text-end text-body-secondary mt-1">
@@ -142,7 +535,8 @@ export default function Chatbot() {
                                                     <div className="chat-message-wrapper flex-grow-1">
                                                         <div className="chat-message-text">
                                                             <p className="mb-0">
-                                                                Sneat has all the components you&#39;ll ever need in a app.
+                                                                Sneat has all the components you&#39;ll ever need in a
+                                                                app.
                                                             </p>
                                                         </div>
                                                         <div className="text-end text-body-secondary mt-1">
@@ -315,10 +709,12 @@ export default function Chatbot() {
                                             <input className="form-control message-input border-0 me-3 shadow-none"
                                                    placeholder="Type your message here..."/>
                                             <div className="message-actions d-flex align-items-center">
-                                                <span className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer">
+                                                <span
+                                                    className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer">
                                                     <i className="bx bx-microphone bx-sm text-heading"></i>
                                                 </span>
-                                                <span className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer mx-1">
+                                                <span
+                                                    className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer mx-1">
                                                     <i className="bx bx-paperclip bx-sm text-heading"></i>
                                                 </span>
                                                 {/*<label htmlFor="attach-doc" className="form-label mb-0">*/}
