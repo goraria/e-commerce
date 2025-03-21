@@ -68,30 +68,27 @@ class ConversationController {
                 // sender: "user",
                 message: userMess,
             });
-
             const rasaReply = response.data.map((msg) => msg.text).join("\n");
-
             const result = {
                 type: "bot",
                 user: {
-                    idaccount: 0,
-                    username: "chatbot",
-                    avatar: "/assets/img/avatars/8.png",
+                    idaccount: account.idaccount,
+                    username: "bot",
+                    avatar: "/assets/img/avatars/0.png",
                     firstname: "Bill",
                     lastname: "Cipher"
                 },
-                message: rasaReply ,
+                message: rasaReply.toString(),
                 time: new Date(),
             }
-
-            const botMessage = await Conversation.create({
-                idaccount: 2,
-                message: rasaReply,
-                time: new Date(),
-                type: "bot",
-            })
-
-            res.json(result);
+            console.log(rasaReply)
+            // const botMessage = await Conversation.create({
+            //     idaccount: account.idaccount,
+            //     message: rasaReply.toString(),
+            //     time: new Date(),
+            //     type: "bot",
+            // })
+            res.json(rasaReply);
         } catch (error) {
             // console.error('Lỗi khi cập nhật thông tin tài khoản và người dùng:', error);
             // console.log(error);

@@ -71,7 +71,7 @@ const ChatbotUserMessage = ({chat}) => {
 
 
 export default function Chatbot() {
-    const data = [
+    const dataDemo = [
         {
             id: 1,
             type: "bot",
@@ -233,6 +233,8 @@ export default function Chatbot() {
     usePerfectScrollbar("chat-bot")
     const [rasaResponse, setRasaResponse] = useState("");
     const [message, setMessage] = useState("");
+    const [data, setData] = useState([]);
+
     const token = localStorage.getItem("token");
 
     const loadConversationHistory = async () => {
@@ -240,9 +242,9 @@ export default function Chatbot() {
             const response = await apiHandler.get('/chatbot/get-history', {
                 headers: {Authorization: `Bearer ${token}`},
             })
-            console.log(response.data);
+            setData(response.data);
         } catch (e) {
-
+            console.log(e)
         }
     }
 
@@ -250,18 +252,19 @@ export default function Chatbot() {
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
             try {
-                const response = await apiHandler.post('/chatbot/send-message',
-                    {message:message}, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            // "Content-Type": "application/json"
-                        },
-                    })
-                const data = response.data;
-                console.log(response);
-                setRasaResponse(data);
-                console.log("Chatbot reply:", data);
+                const response = await apiHandler.post('/chatbot/send-message', {message: message}, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        // "Content-Type": "application/json"
+                    },
+                })
+                // console.log(response.data)
+                setRasaResponse(response.data);
+                // console.log("Chatbot reply:", data);
 
+                console.log(response.data);
+                console.log(response.data.split("\n"));
+                await loadConversationHistory();
             } catch (e) {
             }
             setMessage(""); // Xóa input sau khi gửi
@@ -343,10 +346,10 @@ export default function Chatbot() {
                                     </div>
                                     <div id="chat-bot" className="chat-history-body ps ps--active-y">
                                         <ul className="list-unstyled chat-history">
-                                            {data.map((chat, index) => (
+                                            {data.length > 0 && data.map((chat, index) => (
                                                 chat.type === "bot"
-                                                    ? <ChatbotMessage chat={chat}/>
-                                                    : <ChatbotUserMessage chat={chat}/>
+                                                    ? <ChatbotMessage chat={chat} key={index}/>
+                                                    : <ChatbotUserMessage chat={chat} key={index}/>
                                             ))}
                                         </ul>
                                     </div>
