@@ -16,6 +16,12 @@ export default function OrderSuccess() {
         }
     }, []);
 
+    useEffect(() => {
+        if (location.state) {
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location, navigate]);
+
     return (
         <Overview>
             <div

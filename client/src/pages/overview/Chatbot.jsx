@@ -225,7 +225,7 @@ export default function Chatbot() {
                 firstname: "Japtor",
                 lastname: "Gorthenburg",
             },
-            message: "Something went wrong!",
+            message: "Something went wrong!\nPro",
             time: "10:04 AM",
         },
     ]
@@ -346,7 +346,7 @@ export default function Chatbot() {
                                     </div>
                                     <div id="chat-bot" className="chat-history-body ps ps--active-y">
                                         <ul className="list-unstyled chat-history">
-                                            {data.length > 0 && data.map((chat, index) => (
+                                            {dataDemo.length > 0 && data.map((chat, index) => (
                                                 chat.type === "bot"
                                                     ? <ChatbotMessage chat={chat} key={index}/>
                                                     : <ChatbotUserMessage chat={chat} key={index}/>
@@ -379,7 +379,6 @@ export default function Chatbot() {
                                                 {/*</label>*/}
                                                 <Button className="btn btn-primary d-flex send-msg-btn"
                                                         onClick={handleSendMessage}
-
                                                 >
                                                     <span className="align-middle d-md-inline-block d-none">Send</span>
                                                     <i className="bx bx-paper-plane ms-md-2 ms-0"></i>
