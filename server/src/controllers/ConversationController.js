@@ -68,6 +68,7 @@ class ConversationController {
                 // sender: "user",
                 message: userMess,
             });
+            console.log(response.data.text)
             const rasaReply = response.data.map((msg) => msg.text).join("\n");
             const result = {
                 type: "bot",
@@ -82,12 +83,12 @@ class ConversationController {
                 time: new Date(),
             }
             console.log(rasaReply)
-            // const botMessage = await Conversation.create({
-            //     idaccount: account.idaccount,
-            //     message: rasaReply.toString(),
-            //     time: new Date(),
-            //     type: "bot",
-            // })
+            const botMessage = await Conversation.create({
+                idaccount: account.idaccount,
+                message: rasaReply.toString(),
+                time: new Date(),
+                type: "bot",
+            })
             res.json(rasaReply);
         } catch (error) {
             // console.error('Lỗi khi cập nhật thông tin tài khoản và người dùng:', error);
