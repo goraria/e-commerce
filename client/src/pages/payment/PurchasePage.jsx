@@ -128,7 +128,7 @@ export default function PurchasePage() {
                 voucher,
                 totalPrice,
                 userData,
-                address,
+                address: selectedAddress,
             }
         });
     }
