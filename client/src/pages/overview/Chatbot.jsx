@@ -3,6 +3,7 @@ import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 import axios from "axios";
 import {Button} from "react-bootstrap";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 const ChatbotMessage = ({chat}) => {
     usePerfectScrollbar("chat-bot")
@@ -24,7 +25,10 @@ const ChatbotMessage = ({chat}) => {
                     </div>
                     <div className="chat-message-wrapper flex-grow-1">
                         <div className="chat-message-text bg-white">
-                            <p className="mb-0">{chat.message}</p>
+                            {chat.message.split("\n").map((bot_message, index) => (
+                                <p key={index} className="mb-0">{bot_message}</p>
+                            ))}
+                            {/*<p className="mb-0">{chat.message}</p>*/}
                         </div>
                         <div className="text-body-secondary mt-1">
                             <small>{chat.time}</small>
@@ -263,7 +267,7 @@ export default function Chatbot() {
                 // console.log("Chatbot reply:", data);
 
                 console.log(response.data);
-                console.log(response.data.split("\n"));
+                // console.log(response.data.split("\n"));
                 await loadConversationHistory();
             } catch (e) {
             }
