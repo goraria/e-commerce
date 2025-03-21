@@ -8,13 +8,13 @@ import apiHandler from "../../utils/apiHandler.jsx";
 
 export default function CartList() {
     const [carts, setCart] = useState();
-    const [cartItems, setCartItem] = useState([]);
-    const [product, setProduct] = useState([]);
-    const [default_config, setdefaultconfig] = useState([]);
-    const [descriptions, setArray] = useState([]);
+    // const [cartItems, setCartItem] = useState([]);
+    // const [product, setProduct] = useState([]);
+    // const [default_config, setdefaultconfig] = useState([]);
+    // const [descriptions, setArray] = useState([]);
     const [selectedPrices, setSelectedPrices] = useState([]);
     const [selectedCartItems, setSelectedCartItems] = useState([]);
-    const [vouchername, setVoucherName] = useState([]);
+    // const [vouchername, setVoucherName] = useState([]);
     const [vouchers, setVouchers] = useState([]);
     const [voucher, setVoucher] = useState(null); // Voucher được chọn
 
@@ -139,20 +139,19 @@ export default function CartList() {
         });
     };
 
-    // const handleCheckboxChange = (price, isSelected, item) => {
-    //     fetchCartItemLoad(item.id);
-    //     setSelectedPrices((prevSelectedPrices) =>
-    //         isSelected
-    //             ? [...prevSelectedPrices, price * item.quantity] // Add price if checked
-    //             : prevSelectedPrices.filter((itemPrice) => itemPrice !== price * item.quantity) // Remove if unchecked
-    //     );
-    //
-    //     setSelectedCartItems((prevSelectedCartItems) =>
-    //         isSelected
-    //             ? [...prevSelectedCartItems, item]
-    //             : prevSelectedCartItems.filter((cartItem) => cartItem.idcart_item !== item.idcart_item)
-    //     );
-    // };
+    const handleGotoPurchaseClick = (event) => {
+        event.preventDefault();
+        const { preTotal, discountAmount, total } = calculateTotal();
+        navigate('/pay/purchase', {
+            state: {
+                cartData: selectedCartItems,
+                prePrice: preTotal,
+                discount: discountAmount,
+                voucher: voucher,
+                totalPrice: total,
+            },
+        });
+    };
 
     useEffect(() => {
         loadFullCart();
@@ -194,7 +193,8 @@ export default function CartList() {
                                     onQuantityChange={(newQuantity) =>
                                         handleQuantityChange(item, newQuantity)
                                     }
-                                    onReload={() => loadFullCart()}/>
+                                    onReload={() => loadFullCart()}
+                                />
                             </div>
                         ))}
                     </div>
@@ -264,10 +264,12 @@ export default function CartList() {
                                     <Button
                                         className="w-100"
                                         variant="danger"
-                                        onClick={handleOrderClick}
+                                        // onClick={handleOrderClick}
+                                        onClick={handleGotoPurchaseClick}
                                         disabled={selectedCartItems.length === 0}
                                     >
-                                        Order
+                                        {/*Order*/}
+                                        Go to Purchase
                                     </Button>
                                 </div>
                             </div>
