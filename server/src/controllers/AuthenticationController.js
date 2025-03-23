@@ -157,10 +157,10 @@ class AuthenticationController {
             });
             if (existingAccount) {
                 if (existingAccount.username === username) {
-                    return res.status(400).json({ error: 'Username already exists' });
+                    return res.status(400).json({ message: 'Username already exists!' });
                 }
                 if (existingAccount.email === email) {
-                    return res.status(400).json({ error: 'Email already exists' });
+                    return res.status(400).json({ message: 'Email already exists!' });
                 }
             }
 

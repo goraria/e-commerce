@@ -506,7 +506,7 @@ export default function RegisterPage({ checker }) {
             <NotifyModal
                 type="success"
                 title="Registration successful"
-                message="You have registered successfully."
+                message="You have registered successfully!"
                 show={showSuccess}
                 onHide={() => {
                     setShowSuccess(false);
@@ -515,7 +515,7 @@ export default function RegisterPage({ checker }) {
             />
             <NotifyModal
                 type="danger"
-                title="Registration Failed"
+                title="Registration Failed!"
                 message={error}
                 show={showError}
                 onHide={() => setShowError(false)}
