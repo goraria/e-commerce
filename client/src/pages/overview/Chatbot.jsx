@@ -3,6 +3,7 @@ import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 import axios from "axios";
 import {Button} from "react-bootstrap";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 const ChatbotMessage = ({chat}) => {
     usePerfectScrollbar("chat-bot")
@@ -24,7 +25,10 @@ const ChatbotMessage = ({chat}) => {
                     </div>
                     <div className="chat-message-wrapper flex-grow-1">
                         <div className="chat-message-text bg-white">
-                            <p className="mb-0">{chat.message}</p>
+                            {chat.message.split("\n").map((bot_message, index) => (
+                                <p key={index} className="mb-0">{bot_message}</p>
+                            ))}
+                            {/*<p className="mb-0">{chat.message}</p>*/}
                         </div>
                         <div className="text-body-secondary mt-1">
                             <small>{chat.time}</small>
@@ -71,7 +75,7 @@ const ChatbotUserMessage = ({chat}) => {
 
 
 export default function Chatbot() {
-    const data = [
+    const dataDemo = [
         {
             id: 1,
             type: "bot",
@@ -225,7 +229,7 @@ export default function Chatbot() {
                 firstname: "Japtor",
                 lastname: "Gorthenburg",
             },
-            message: "Something went wrong!",
+            message: "Something went wrong!\nPro",
             time: "10:04 AM",
         },
     ]
@@ -233,6 +237,8 @@ export default function Chatbot() {
     usePerfectScrollbar("chat-bot")
     const [rasaResponse, setRasaResponse] = useState("");
     const [message, setMessage] = useState("");
+    const [data, setData] = useState([]);
+
     const token = localStorage.getItem("token");
 
     const loadConversationHistory = async () => {
@@ -240,9 +246,9 @@ export default function Chatbot() {
             const response = await apiHandler.get('/chatbot/get-history', {
                 headers: {Authorization: `Bearer ${token}`},
             })
-            console.log(response.data);
+            setData(response.data);
         } catch (e) {
-
+            console.log(e)
         }
     }
 
@@ -250,18 +256,19 @@ export default function Chatbot() {
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
             try {
-                const response = await apiHandler.post('/chatbot/send-message',
-                    {message:message}, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            // "Content-Type": "application/json"
-                        },
-                    })
-                const data = response.data;
-                console.log(response);
-                setRasaResponse(data);
-                console.log("Chatbot reply:", data);
+                const response = await apiHandler.post('/chatbot/send-message', {message: message}, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        // "Content-Type": "application/json"
+                    },
+                })
+                // console.log(response.data)
+                setRasaResponse(response.data);
+                // console.log("Chatbot reply:", data);
 
+                console.log(response.data);
+                // console.log(response.data.split("\n"));
+                await loadConversationHistory();
             } catch (e) {
             }
             setMessage(""); // Xóa input sau khi gửi
@@ -343,10 +350,10 @@ export default function Chatbot() {
                                     </div>
                                     <div id="chat-bot" className="chat-history-body ps ps--active-y">
                                         <ul className="list-unstyled chat-history">
-                                            {data.map((chat, index) => (
+                                            {dataDemo.length > 0 && data.map((chat, index) => (
                                                 chat.type === "bot"
-                                                    ? <ChatbotMessage chat={chat}/>
-                                                    : <ChatbotUserMessage chat={chat}/>
+                                                    ? <ChatbotMessage chat={chat} key={index}/>
+                                                    : <ChatbotUserMessage chat={chat} key={index}/>
                                             ))}
                                         </ul>
                                     </div>
@@ -376,7 +383,6 @@ export default function Chatbot() {
                                                 {/*</label>*/}
                                                 <Button className="btn btn-primary d-flex send-msg-btn"
                                                         onClick={handleSendMessage}
-
                                                 >
                                                     <span className="align-middle d-md-inline-block d-none">Send</span>
                                                     <i className="bx bx-paper-plane ms-md-2 ms-0"></i>

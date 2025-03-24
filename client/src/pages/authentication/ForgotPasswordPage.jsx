@@ -7,6 +7,7 @@ import LoadingPage from "../misc/LoadingPage.jsx";
 import { AuthWrapper } from "./AuthWrapper.jsx";
 import { ReCaptchaComponent } from "../../components/recaptcha/Recaptcha.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
+import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 
 export default function ForgotPasswordPage() {
     const [check, setCheck] = useState(false);
@@ -22,17 +23,6 @@ export default function ForgotPasswordPage() {
     const navigate = useNavigate();
 
     const [captchaVerified, setCaptchaVerified] = useState(false); // New state
-    const handleSuccess = (data) => {
-        // console.log('Captcha verification success:', data);
-        // alert('Verification successful, proceed with form submission!');
-        setCaptchaVerified(true);
-    };
-
-    const handleError = (error) => {
-        // console.log('Captcha verification failed:', error);
-        // alert('Verification failed, please try again!');
-        setCaptchaVerified(false);
-    };
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -41,10 +31,13 @@ export default function ForgotPasswordPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
-        if (!captchaVerified) {
-            alert('Please verify the captcha before submitting.');
-            return;
-        }
+
+        // if (!captchaVerified) {
+        //     setError("Please verify the captcha before submitting.");
+        //     setShowError(true)
+        //     return;
+        // }
+
         if (form.checkValidity() === false) {
             event.stopPropagation();
         } else {
@@ -99,12 +92,12 @@ export default function ForgotPasswordPage() {
                             Send Reset Link
                         </button>
                     </div>
-                    <div className="mb-3">
-                        <ReCaptchaComponent
-                            onSuccess={handleSuccess}
-                            onError={handleError}
-                        />
-                    </div>
+                    {/*<div className="mb-3">*/}
+                    {/*    <ReCaptchaComponent*/}
+                    {/*        onSuccess={() => setCaptchaVerified(true)}*/}
+                    {/*        onError={() => setCaptchaVerified(false)}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
                 </Form>
                 <div className="text-center">
                     <Link aria-label="Go to Login Page" to="/auth/login"
@@ -114,6 +107,24 @@ export default function ForgotPasswordPage() {
                     </Link>
                 </div>
             </AuthWrapper>
+
+            <NotifyModal
+                type="success"
+                title="Request Successful"
+                message="You have request in successfully."
+                show={showSuccess}  // truyền showSuccess vào NotifySuccess
+                onHide={() => {
+                    setShowSuccess(false);
+                    navigate('/auth/login');
+                }}  // đóng khi người dùng click
+            />
+            <NotifyModal
+                type="danger"
+                title="Login Failed"
+                message={error}
+                show={showError}  // truyền showError vào NotifyError
+                onHide={() => setShowError(false)}  // đóng khi người dùng click
+            />
         </>
     )
 }

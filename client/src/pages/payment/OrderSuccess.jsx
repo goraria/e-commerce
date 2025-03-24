@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import Overview from "../../layouts/Overview.jsx";
+import { formatDateTime } from "../../utils/formatHandler.jsx";
 
 export default function OrderSuccess() {
     const location = useLocation();
@@ -15,6 +16,12 @@ export default function OrderSuccess() {
             navigate('/pay/cart');
         }
     }, []);
+
+    // useEffect(() => {
+    //     if (location.state) {
+    //         navigate(location.pathname, { replace: true, state: {} });
+    //     }
+    // }, [location, navigate]);
 
     return (
         <Overview>
@@ -51,11 +58,12 @@ export default function OrderSuccess() {
                                     folder to see if the email was routed there.
                                 </p>
                                 <p>
-                                        <span>
-                                            <i className="bx bx-time-five me-1 text-heading align-top"></i>{" "}
-                                            Time placed:&nbsp;
-                                        </span>{" "}
-                                    25/05/2020 13:35pm
+                                    <span>
+                                        <i className="bx bx-time-five me-1 text-heading align-top"></i>{" "}
+                                        Time placed:&nbsp;
+                                    </span>{" "}
+                                    {/*25/05/2020 13:35pm*/}
+                                    {formatDateTime(new Date())}
                                 </p>
                             </div>
                             <div className="col-12">
