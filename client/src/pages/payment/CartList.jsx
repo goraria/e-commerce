@@ -5,18 +5,17 @@ import Transitionbar from '../../layouts/Transitionbar.jsx';
 import CardItem from '../../components/product/CartItem.jsx';
 import axios from 'axios';
 import apiHandler from "../../utils/apiHandler.jsx";
+import { NotifyModal } from "../../components/modal/notice/NotifyModal.jsx";
 
 export default function CartList() {
     const [carts, setCart] = useState();
-    // const [cartItems, setCartItem] = useState([]);
-    // const [product, setProduct] = useState([]);
-    // const [default_config, setdefaultconfig] = useState([]);
-    // const [descriptions, setArray] = useState([]);
     const [selectedPrices, setSelectedPrices] = useState([]);
     const [selectedCartItems, setSelectedCartItems] = useState([]);
     // const [vouchername, setVoucherName] = useState([]);
     const [vouchers, setVouchers] = useState([]);
     const [voucher, setVoucher] = useState(null); // Voucher được chọn
+
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
@@ -187,13 +186,10 @@ export default function CartList() {
                                 <CardItem
                                     element={item}
                                     onChange={handleChange}
-                                    onCheckboxChange={(isSelected) =>
-                                        handleCheckboxChange(item, isSelected)
-                                    }
-                                    onQuantityChange={(newQuantity) =>
-                                        handleQuantityChange(item, newQuantity)
-                                    }
+                                    onCheckboxChange={(isSelected) => handleCheckboxChange(item, isSelected)}
+                                    onQuantityChange={(newQuantity) => handleQuantityChange(item, newQuantity)}
                                     onReload={() => loadFullCart()}
+                                    onRemove={() => setShowSuccess(true)}
                                 />
                             </div>
                         ))}
@@ -277,6 +273,13 @@ export default function CartList() {
                     </div>
                 </div>
             </div>
+            <NotifyModal
+                type="primary"
+                title="Remove item successfully"
+                message="Product has been removed from the cart!"
+                show={showSuccess}
+                onHide={() => setShowSuccess(false)}
+            />
         </>
     );
 }

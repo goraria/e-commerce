@@ -19,6 +19,7 @@ export default function AccountPage({ onReload }) {
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showDeactive, setShowDeactive] = useState(false);
 
     const navigate = useNavigate();
 
@@ -209,6 +210,21 @@ export default function AccountPage({ onReload }) {
         }
     };
 
+    const handleDeactivate = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await apiHandler.post(`/authentication/deactivate`, null, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (response.status === 200) {
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+            }
+        } catch (error) {
+            setError(error.response? error.response.data.message : "Deactivation failed");
+        }
+    }
+
     useEffect(() => {
         getInformation();
         getAvatar();
@@ -271,7 +287,7 @@ export default function AccountPage({ onReload }) {
                                 <label htmlFor="email" className="form-label">
                                     Email Address
                                 </label>
-                                <div className="input-group">
+                                <div className="input-group has-validation">
                                     <span className="input-group-text">
                                         <i className="bx bx-at"></i>
                                     </span>
@@ -288,8 +304,10 @@ export default function AccountPage({ onReload }) {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.email && (
+                                    {errors.email ? (
                                         <div className="invalid-feedback">{errors.email}</div>
+                                    ) : (
+                                        <div className="valid-feedback">Make sure your email is correct!</div>
                                     )}
                                 </div>
                             </div>
@@ -297,7 +315,7 @@ export default function AccountPage({ onReload }) {
                                 <label htmlFor="userName" className="form-label">
                                     Username
                                 </label>
-                                <div className="input-group">
+                                <div className="input-group has-validation">
                                     <span className="input-group-text">
                                         <i className="bx bx-user"></i>
                                     </span>
@@ -315,8 +333,10 @@ export default function AccountPage({ onReload }) {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.username && (
+                                    {errors.username ? (
                                         <div className="invalid-feedback">{errors.username}</div>
+                                    ) : (
+                                        <div className="valid-feedback">Nice!</div>
                                     )}
                                 </div>
                             </div>
@@ -324,7 +344,7 @@ export default function AccountPage({ onReload }) {
                                 <label htmlFor="firstname" className="form-label">
                                     Firstname
                                 </label>
-                                <div className="input-group">
+                                <div className="input-group has-validation">
                                     <input
                                         required
                                         type="text"
@@ -338,8 +358,10 @@ export default function AccountPage({ onReload }) {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.firstname && (
+                                    {errors.firstname ? (
                                         <div className="invalid-feedback">{errors.firstname}</div>
+                                    ) : (
+                                        <div className="valid-feedback">Beautiful name!</div>
                                     )}
                                 </div>
                             </div>
@@ -347,7 +369,7 @@ export default function AccountPage({ onReload }) {
                                 <label htmlFor="lastname" className="form-label">
                                     Lastname
                                 </label>
-                                <div className="input-group">
+                                <div className="input-group has-validation">
                                     <input
                                         required
                                         type="text"
@@ -361,8 +383,10 @@ export default function AccountPage({ onReload }) {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.lastname && (
+                                    {errors.lastname ? (
                                         <div className="invalid-feedback">{errors.lastname}</div>
+                                    ) : (
+                                        <div className="valid-feedback">Beautiful name!</div>
                                     )}
                                 </div>
                             </div>
@@ -370,7 +394,7 @@ export default function AccountPage({ onReload }) {
                                 <label htmlFor="phone" className="form-label">
                                     Phone
                                 </label>
-                                <div className="input-group">
+                                <div className="input-group has-validation">
                                     <span className="input-group-text">
                                         <i className="bx bxs-phone"></i>
                                     </span>
@@ -389,8 +413,10 @@ export default function AccountPage({ onReload }) {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
-                                    {errors.phone && (
+                                    {errors.phone ? (
                                         <div className="invalid-feedback">{errors.phone}</div>
+                                    ) : (
+                                        <div className="valid-feedback">Look good!</div>
                                     )}
                                 </div>
                             </div>
@@ -407,6 +433,7 @@ export default function AccountPage({ onReload }) {
                                 aria-label="Cancel"
                                 type="reset"
                                 className="btn btn-outline-secondary"
+                                onClick={getInformation}
                             >
                                 Cancel
                             </button>
@@ -439,12 +466,14 @@ export default function AccountPage({ onReload }) {
                                 I confirm my account deactivation
                             </label>
                         </div>
-                        <button
+                        <Button
                             aria-label="Deactivate Account"
+                            variant="danger"
                             className="btn btn-danger me-3 deactivate-account"
+                            onClick={() => setShowDeactive(true)}
                         >
                             Deactivate Account
-                        </button>
+                        </Button>
                         <Button
                             aria-label="Change Password"
                             variant="warning"
@@ -462,6 +491,15 @@ export default function AccountPage({ onReload }) {
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 onSave={handleSaveChanges}
+            />
+            <ConfirmModal
+                type="warning"
+                title="Deactivate Account"
+                message="Are you sure you want to deactivate this account?"
+                button="Deactivate"
+                show={showDeactive}
+                onHide={() => setShowDeactive(false)}
+                onSave={handleDeactivate}
             />
         </>
     );
