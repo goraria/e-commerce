@@ -4,9 +4,11 @@ const Product = require('../models/Product')
 const Color = require('../models/Color');
 const Configuration = require('../models/Configuration');
 // const Accessory = require('../models/Accessory');
+const Cart = require('../models/Cart');
+const CartItem = require('../models/CartItem');
 const Discount = require('../models/Discount');
 const Address = require('../models/Address');
-const Account = require('../models/Account')
+const Account = require('../models/Account');
 const User = require('../models/User');
 
 class BillController {
@@ -311,9 +313,104 @@ class BillController {
         const { date, voucher, address, price, status, items } = req.body;
 
         try {
-            if (!address || !price || !status || !items || items.length === 0) {
-                return res.status(400).json({ error: 'Dữ liệu không hợp lệ' });
+            // Kiểm tra dữ liệu bắt buộc
+            if (!items || !Array.isArray(items) || items.length === 0) {
+                return res.json({ message: 'No products selected for purchase.' });
             }
+            if (!address) {
+                return res.json({ message: 'Please choose your address before purchase.' });
+            }
+            if (!status) {
+                return res.json({ message: 'Purchase status is required.' });
+            }
+            if (!price) {
+                return res.json({ message: 'Purchase price is required.' });
+            }
+
+            // Lấy giỏ hàng của người dùng
+            const cart = await Cart.findOne({ where: { idaccount: req.user.id } });
+            if (!cart) {
+                return res.status(400).json({ message: 'User cart not found.' });
+            }
+
+            // Tạo hóa đơn mới
+            const newBill = await Bill.create({
+                idaccount: req.user.id,
+                iddiscount: voucher ? voucher.iddiscount : null,
+                idaddress: address.idaddress,
+                date: date,
+                price: price,
+                status: status,
+            });
+
+            // Duyệt từng sản phẩm trong đơn hàng
+            for (const item of items) {
+                // Lấy thông tin cấu hình của sản phẩm từ bảng Configuration
+                const configuration = await Configuration.findOne({
+                    where: { idconfiguration: item.configuration.idconfiguration },
+                });
+                if (!configuration) {
+                    return res.status(404).json({
+                        message: `Configuration not found for product: ${item.product.name}`,
+                    });
+                }
+
+                // Kiểm tra số lượng tồn kho có đủ không
+                const newQuantity = configuration.quantity - item.quantity;
+                if (newQuantity < 0) {
+                    return res.status(400).json({
+                        message: `Not enough stock for product: ${item.product.name}`,
+                    });
+                }
+
+                // Tạo chi tiết hóa đơn cho sản phẩm đó
+                await BillDetail.create({
+                    idbill: newBill.idbill,
+                    idproduct: item.product.idproduct,
+                    idaccessory: item.accessory ? item.accessory.idaccessory : null,
+                    idcolor: item.color ? item.color.idcolor : null,
+                    idconfiguration: item.configuration.idconfiguration,
+                    product_name: item.product.name,
+                    quantity: item.quantity,
+                    price: item.configuration.price,
+                });
+
+                // Cập nhật số lượng tồn kho trong Configuration
+                configuration.quantity = newQuantity;
+                await configuration.save();
+
+                // Xoá item đã mua khỏi giỏ hàng (CartItem)
+                await CartItem.destroy({
+                    where: {idcart_item: item.idcart_item},
+                });
+            }
+
+            return res.status(201).json(newBill);
+        } catch (error) {
+            console.error("Error creating bill:", error);
+            return res.status(500).json({ error: 'An error occurred while creating the bill.' });
+        }
+    }
+
+    async createBillOld(req, res) {
+        const { date, voucher, address, price, status, items } = req.body;
+
+        try {
+            // if (!address || !price || !status || !items || items.length === 0) {
+            //     return res.status(400).json({ message: 'Data is invalid!, Dữ liệu không hợp lệ' });
+            // }
+
+            // if (!items || items.length === 0) {
+            //     return res.json({ message: 'Not have any product to purchase!' });
+            // } else if (!address) {
+            //     return res.json({ message: 'Please choose your address before purchase!' });
+            // } else if (!status) {
+            //     return res.json({ message: 'Not have status to purchase!' });
+            // } else if (!price) {
+            //     return res.json({ message: 'Not have price to purchase!' });
+            // } else if (!address || !price || !status || !items || items.length === 0) {
+            //     return res.json({ message: 'Data is invalid!' });
+            // }
 
             const newBill = await Bill.create({
                 idaccount: req.user.id,
@@ -339,7 +436,7 @@ class BillController {
 
             res.status(201).json(newBill);
         } catch (error) {
-            console.error('Lỗi server khi tạo hóa đơn:', error);
+            // console.error('Lỗi server khi tạo hóa đơn:', error);
             res.status(500).json({ error: 'Có lỗi xảy ra khi thêm bill' });
         }
     }

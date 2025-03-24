@@ -112,14 +112,27 @@ class AuthenticationController {
     async login(req, res) {
         const { username, password } = req.body;
         try {
-            const account = await Account.findOne({ where: { username, isverify: true } });
+            // const account = await Account.findOne({ where: { username, isverify: true } });
+            // if (!account) {
+            //     return res.status(401).json({ message: 'Invalid username or password' });
+            // }
+
+            const account = await Account.findOne({ where: { username } });
             if (!account) {
                 return res.status(401).json({ message: 'Invalid username or password' });
             }
 
+            if (account.status) {
+                return res.status(401).json({ message: 'Your account is logged in another device. Please log out first and try again!' });
+            }
+
+            if (!account.isverify) {
+                return res.status(401).json({ message: 'Account not verified. Please check your email to verify your account.' });
+            }
+
             const validPassword = await bcrypt.compare(password, account.password);
             if (!validPassword) {
-                return res.status(401).json({ message: 'Invalid username or password' });
+                return res.status(401).json({ message: 'Your password is incorrect!' });
             }
 
             await Account.update({ status: 1 }, { where: { idaccount: account.idaccount } });
@@ -127,23 +140,13 @@ class AuthenticationController {
             const token = jwt.sign({
                 id: account.idaccount,
                 role: account.role,
-                status: account.status
+                status: account.status,
             }, process.env.JWT_SECRET || 'gorth', { expiresIn: '1d' });
 
             return res.json({ message: 'Login successful', token });
         } catch (error) {
-            console.error('Login error:', error);
+            // console.error('Login error:', error);
             return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    async logout(req, res) {
-        try {
-            await Account.update({ status: 0 }, { where: { idaccount: req.user.id } });
-            return res.json({ message: 'Logout successful' });
-        } catch (error) {
-            // console.error('Logout error:', error);
-            res.status(500).json({ message: 'Logout failed', error });
         }
     }
 
@@ -205,6 +208,39 @@ class AuthenticationController {
         }
     }
 
+    async logout(req, res) {
+        try {
+            await Account.update({ status: 0 }, { where: { idaccount: req.user.id } });
+            return res.json({ message: 'Logout successful' });
+        } catch (error) {
+            // console.error('Logout error:', error);
+            res.status(500).json({ message: 'Logout failed', error });
+        }
+    }
+
+    async deactivate(req, res) {
+        try {
+            await Account.update({ isverify: 0, status: 0 }, { where: { idaccount: req.user.id } });
+            return res.json({ message: 'User deactivated successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Error deactivating user' });
+        }
+    }
+
+    async check(req, res) {
+        try {
+            const account = await Account.findByPk(req.user.id);
+            if (!account) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            res.json({ role: account.role });
+        } catch (error) {
+            // console.error('Token validation error:', error);
+            res.status(401).json({ message: 'Invalid token' });
+        }
+    }
+
     static async sendConfirmationEmail(email, token, req, res) {
         const verificationLink = `http://localhost:5172/authentication/verify-email?token=${token}`;
         const transporter = nodemailer.createTransport({
@@ -230,20 +266,6 @@ class AuthenticationController {
             // console.error('Error sending confirmation email:', error);
             // console.log(error)
             return res.status(500).json({ error: 'Error registering user' });
-        }
-    }
-
-    async check(req, res) {
-        try {
-            const account = await Account.findByPk(req.user.id);
-            if (!account) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            res.json({ role: account.role });
-        } catch (error) {
-            // console.error('Token validation error:', error);
-            res.status(401).json({ message: 'Invalid token' });
         }
     }
 
@@ -290,7 +312,7 @@ class AuthenticationController {
         }
     }
 
-    async ForgotPassword(req, res) {
+    async forgotPassword(req, res) {
         try {
             const { email } = req.body;
             const user = await Account.findOne({ where: { email: email } });
@@ -311,7 +333,7 @@ class AuthenticationController {
         }
     };
 
-    async ResetPassword(req, res) {
+    async resetPassword(req, res) {
         const { token, newPassword } = req.body;
         console.log(req.body);
         const hashedPassword = await bcrypt.hash(newPassword, 10);
