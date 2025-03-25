@@ -15,10 +15,12 @@ router.post('/logout', AuthenticationMiddleware, AuthenticationController.logout
 
 router.get('/check', AuthenticationMiddleware, AuthenticationController.check)
 
+router.post('/deactivate', AuthenticationMiddleware, AuthenticationController.deactivate)
+
 router.get('/verify-email', AuthenticationController.verifyEmail)
 
-router.post('/forgot-password', AuthenticationController.ForgotPassword);
+router.post('/forgot-password', AuthenticationController.forgotPassword);
 
-router.post('/reset-password', AuthenticationController.ResetPassword);
+router.post('/reset-password', AuthenticationController.resetPassword);
 router.post('/change-password', AuthenticationController.changePassword);
 module.exports = router
