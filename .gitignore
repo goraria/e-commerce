@@ -45,3 +45,14 @@ logs/
 # Ignore VSCode workspace files except extensions.json
 .vscode/*
 !.vscode/extensions.json
+
+#
+
+**/.DS_Store
+**/.env
+**/.env.local
+**/.env.development
+**/.env.production
+**/.env.test
+**/package-lock.json
+**/yarn.lock
