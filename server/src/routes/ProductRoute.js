@@ -23,6 +23,8 @@ router.delete('/remove-rating/:id', AuthenticationMiddleware, productController.
 
 router.patch('/update-status/:idproduct', productController.updateStatus);
 
+router.put('/search', productController.searchProduct);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 router.get('/load-productid/:idProduct', productController.loadProductWithID);

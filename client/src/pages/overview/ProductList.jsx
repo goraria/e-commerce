@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Button, Row, Col, Stack, Pagination, Form, Badge } from 'react-bootstrap';
 import { SelectSortButton } from "../../components/button/SelectSortButton.jsx";
@@ -12,11 +12,440 @@ import { PaginationCustom } from "../../components/pagination/PaginationCustom.j
 import usePerfectScrollbar from "../../hooks/usePerfectScrollbar.jsx";
 
 export default function ProductList() {
+    // Các filter cứng theo category
+    const categories = [
+        {
+            categorical: "CPU",
+            variant: "danger",
+            item: [
+                "Intel core i5",
+                "Intel core i7",
+                "Intel core i9",
+                "AMD Ryzen 5",
+                "AMD Ryzen 7",
+                "AMD Ryzen 9",
+                "Apple M2",
+                "Apple M3",
+                "Apple M4",
+            ],
+        },
+        {
+            categorical: "GPU",
+            variant: "success",
+            item: ["RTX 1660", "RTX 2060", "RTX 3050", "RTX 3060", "RTX 4050", "RTX 4060"],
+        },
+        {
+            categorical: "RAM",
+            variant: "info",
+            item: ["8 GB", "16 GB", "24 GB", "32 GB", "64 GB", "128 GB"],
+        },
+        {
+            categorical: "Storage",
+            variant: "warning",
+            item: ["256 GB", "512 GB", "1 TB", "2 TB"],
+        },
+        {
+            categorical: "Screen",
+            variant: "primary",
+            item: ["13'", "14'", "15'", "16'"],
+        },
+    ];
+
+    const [brands, setBrands] = useState([]);
+    const [list, setList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Lấy query search từ URL nếu cần
+    const query = new URLSearchParams(location.search);
+    const searchQuery = query.get("search") || "";
+
+    // Nếu có query thì cập nhật searchTerm
+    useEffect(() => {
+        if (searchQuery) {
+            setSearchTerm(searchQuery);
+        }
+    }, [searchQuery]);
+
+    // Load danh sách sản phẩm từ API
+    const handleLoadProducts = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-product");
+            setList(response.data);
+        } catch (error) {
+            console.error("Error loading products:", error);
+        }
+    };
+
+    // Load danh sách thương hiệu từ API
+    const handleLoadBrand = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-brand");
+            setBrands(response.data);
+        } catch (error) {
+            console.error("Error loading brands:", error);
+        }
+    };
+
+    // Tải sản phẩm theo thương hiệu
+    const loadProductByBrand = async (brand) => {
+        try {
+            const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
+            setList(response.data);
+        } catch (error) {
+            console.error("Error loading product by brand:", error);
+        }
+    };
+
+    // Lọc sản phẩm theo điều kiện (ví dụ, theo checkbox của category)
+    const filterProducts = (category, selectedItem) => {
+        // Gọi API lọc theo điều kiện, sau đó cập nhật list
+        (async () => {
+            try {
+                const response = await apiHandler.get(`/products/load-product-condition/${selectedItem}`);
+                setList(response.data);
+            } catch (error) {
+                console.error("Error filtering products:", error);
+            }
+        })();
+    };
+
+    // Search giống DataTables: tìm kiếm toàn cục trên nhiều thuộc tính của sản phẩm
+    // Giả sử mỗi product có: product_name, brand, category, description (bạn chỉnh theo cấu trúc của bạn)
+    const filteredData = list.filter((product) => {
+        const term = searchTerm.toLowerCase();
+        return (
+            (product.product_name && product.product_name.toLowerCase().includes(term)) ||
+            (product.brand && product.brand.toLowerCase().includes(term)) ||
+            (product.category && product.category.toLowerCase().includes(term)) ||
+            (product.description && product.description.toLowerCase().includes(term))
+        );
+    });
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+    };
+
+    useEffect(() => {
+        handleLoadProducts();
+        handleLoadBrand();
+    }, []);
+
+    // Sử dụng PerfectScrollbar cho các nhóm button
+    usePerfectScrollbar("brand-button-group");
+    usePerfectScrollbar("sort-button-group");
+
+    return (
+        <>
+            <Transitionbar />
+            <Overview>
+                <h5 className="card-title">Laptop</h5>
+                <h6 className="card-subtitle text-muted">
+                    Laptop is the best mobile device to work...
+                </h6>
+                <hr className="mb-0" />
+                <div className="d-flex" id="brand-button-group">
+                    {brands.map((brand, index) => (
+                        <BrandButton key={index} brand={brand} onSelect={loadProductByBrand} />
+                    ))}
+                </div>
+            </Overview>
+            <Overview>
+                <h5 className="card-title">Sort by</h5>
+                <h6 className="card-subtitle text-muted">Choose one of config to sort...</h6>
+                <hr className="mb-0" />
+                <div id="sort-button-group">
+                    {categories.map((category) => (
+                        <div key={category.categorical} className="mb-3">
+                            <div>
+                <span className={`badge bg-label-${category.variant} me-2`}>
+                  {category.categorical}
+                </span>
+                            </div>
+                            <div className="d-flex flex-wrap">
+                                {category.item.map((item) => (
+                                    <div key={item} className="form-check form-check-inline">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            value={item}
+                                            onChange={() => filterProducts(category.categorical, item)}
+                                        />
+                                        <label className="form-check-label">{item}</label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Overview>
+            <Overview>
+                <h3 className="text-center m-0">Spotlight</h3>
+            </Overview>
+            <Overview>
+                <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center">
+                        <Form.Select value={itemsPerPage} onChange={handleItemsPerPageChange}>
+                            <option value={2}>2</option>
+                            <option value={4}>4</option>
+                            <option value={8}>8</option>
+                            <option value={12}>12</option>
+                            <option value={24}>24</option>
+                        </Form.Select>
+                        <div className="ms-3">
+                            <Form.Control
+                                type="search"
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                        </div>
+                        <Button className="ms-3" onClick={handleLoadProducts}>
+                            Clear Filter
+                        </Button>
+                    </div>
+                    <PaginationCustom currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                </div>
+            </Overview>
+
+            <div className="container">
+                <div className="row">
+                    {currentItems.map((product) => (
+                        <div key={product.idproduct} className="col col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                            <ProductItem product={product} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    );
+}
+
+function ProductListn() {
     const categories = [
         { categorical: 'CPU', variant: 'danger', item: ['Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','AMD Ryzen 9','Apple M2','Apple M3','Apple M4'] },
         { categorical: 'GPU', variant: 'success', item: ['RTX 1660','RTX 2060','RTX 3050','RTX 3060','RTX 4050','RTX 4060'] },
-        { categorical: 'RAM', variant: 'info', item: ['8 GB','16 GB','24 GB','32 GB','64 GB'] },
-        { categorical: 'Storage', variant: 'warning', item: ['256 GB','512 GB','1 TB',"2TB"] },
+        { categorical: 'RAM', variant: 'info', item: ['8 GB','16 GB','24 GB','32 GB','64 GB','128 GB'] },
+        { categorical: 'Storage', variant: 'warning', item: ['256 GB','512 GB','1 TB',"2 TB"] },
+        { categorical: 'Screen', variant: 'primary', item: ['13\'','14\'','15\'','16\''] },
+    ];
+    // const brands = ['Apple', 'Dell', 'Lenovo', 'Asus', 'HP', 'Acer', 'Microsoft', 'LG']
+    const [brands, setBrands] = useState([]);
+    const [list, setList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8);
+
+    const [searchTerm, setSearchTerm] = useState("");
+
+    // Giả sử filteredData là mảng productList sau khi lọc theo search, v.v.
+    const filteredData = list; // Hoặc thêm logic lọc
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    const location = useLocation();
+
+    // Extract search query from URL
+    const query = new URLSearchParams(location.search);
+    const searchQuery = query.get("search");
+
+    // const filteredData = mergedData.filter(item =>
+    //     item.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     item.lastname.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+    //
+    // const indexOfLastItem = currentPage * itemsPerPage;
+    // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    // const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    //
+    // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handleLoadProducts = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-product");
+            setList(response.data);
+        } catch (error) {}
+    };
+
+    const handleLoadBrand = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-brand");
+            setBrands(response.data);
+        } catch (error) {}
+    }
+
+    const loadProductByBrand = async (brand) => {
+        try {
+            const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
+            setList(response.data);
+        } catch (error) {}
+    };
+
+    // Function to filter products based on dropdown selection
+    const filterProducts = (category, selectedItem) => {
+        const filteredProducts = async () => {
+            try {
+                const response = await apiHandler.get(`/products/load-product-condition/${selectedItem}`);
+                setList(response.data);
+            } catch (error) {}
+        };
+        filteredProducts();
+    };
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+    };
+
+    useEffect(() => {
+        handleLoadProducts();
+        handleLoadBrand();
+
+        if (searchQuery !== '') {
+            // fetchProductByName();
+        }
+
+    }, []);
+
+    // useEffect(() => {
+    //     window.scrollTo({ top: 0, behavior: "smooth" });
+    // }, [currentPage]);
+
+    usePerfectScrollbar("brand-button-group")
+    usePerfectScrollbar("sort-button-group")
+
+    return (
+        <>
+            <Transitionbar/>
+            <Overview>
+                <h5 className="card-title">Laptop</h5>
+                <h6 className="card-subtitle text-muted">
+                    Laptop is best mobile device to work...
+                </h6>
+                <hr className="mb-0"/>
+                <Stack className="demo-inline-spacing" direction="horizontal" id="brand-button-group">
+                    {brands.map((brand, index) => (
+                        <BrandButton
+                            key={index}
+                            brand={brand}
+                            onSelect={loadProductByBrand}
+                        />
+                    ))}
+                </Stack>
+            </Overview>
+            <Overview>
+                <h5 className="card-title">Sort by</h5>
+                <h6 className="card-subtitle text-muted">
+                    Choose one of config to sort...
+                </h6>
+                <hr className="mb-0"/>
+
+                <div className="demo-inline-spacing">
+                    {categories.map((category) => (
+                        <div key={category.categorical} className="mb-3" id="sort-button-group">
+                            <Badge bg={`label-${category.variant}`} className="mb-2 me-2">
+                                {category.categorical}
+                            </Badge>
+                            {category.item.map((item) => (
+                                <div key={item} className="form-check form-check-inline">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value={item}
+                                        onChange={() => filterProducts(category.categorical, item)}
+                                    />
+                                    <label className="form-check-label">{item}</label>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </Overview>
+            <Overview>
+                <h3 className="text-center m-0">Spotlight</h3>
+            </Overview>
+            <Overview>
+                <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div className="m-0">
+                            <Form.Select
+                                // className="w-100"
+                                value={itemsPerPage}
+                                onChange={handleItemsPerPageChange}
+                            >
+                                <option value={2}>2</option>
+                                <option value={4}>4</option>
+                                <option value={8}>8</option>
+                                <option value={12}>12</option>
+                                <option value={24}>24</option>
+                            </Form.Select>
+                        </div>
+                        <div
+                            className="dataTables_filter mb-0 mb-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0 ms-3"> {/* col-sm-6 col-md-2 */}
+                            <Form.Control
+                                className="form-control"
+                                type="search"
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                        </div>
+                        <Button
+                            className="ms-3"
+                            onClick={handleLoadProducts}
+                        >
+                            Clear Filter
+                        </Button>
+                    </div>
+                    <PaginationCustom
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            </Overview>
+
+            <div className="container">
+                {/*<h2 className="text-center mb-4">Spotlight</h2>*/}
+                <div className="row">
+                    {currentItems.map(product => (
+                        <div key={product.idproduct} className="col col-sm-12 col-md-6 col-xl-3 col-lg-4 mb-4">
+                            <ProductItem product={product} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    )
+}
+
+function ProductListb() {
+    const categories = [
+        { categorical: 'CPU', variant: 'danger', item: ['Intel core i5','Intel core i7','Intel core i9','AMD Ryzen 5','AMD Ryzen 7','AMD Ryzen 9','Apple M2','Apple M3','Apple M4'] },
+        { categorical: 'GPU', variant: 'success', item: ['RTX 1660','RTX 2060','RTX 3050','RTX 3060','RTX 4050','RTX 4060'] },
+        { categorical: 'RAM', variant: 'info', item: ['8 GB','16 GB','24 GB','32 GB','64 GB','128 GB'] },
+        { categorical: 'Storage', variant: 'warning', item: ['256 GB','512 GB','1 TB',"2 TB"] },
         { categorical: 'Screen', variant: 'primary', item: ['13\'','14\'','15\'','16\''] },
     ];
     // const brands = ['Apple', 'Dell', 'Lenovo', 'Asus', 'HP', 'Acer', 'Microsoft', 'LG']

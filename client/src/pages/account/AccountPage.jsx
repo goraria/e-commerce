@@ -218,7 +218,8 @@ export default function AccountPage({ onReload }) {
             });
             if (response.status === 200) {
                 localStorage.removeItem("token");
-                window.location.href = "/login";
+                // window.location.href = "/login";
+                navigate("/auth/login")
             }
         } catch (error) {
             setError(error.response? error.response.data.message : "Deactivation failed");

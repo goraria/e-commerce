@@ -502,6 +502,32 @@ class ProductController {
 
     /////////////////////////////////////////////////////////////////////////////
 
+    async searchProduct(req, res) {
+        const { search } = req.params; // Retrieve search query from request parameters
+        try {
+            // Find products where product_name matches the search query
+            const products = await Product.findAll({
+                where: {
+                    product_name: {
+                        [Op.like]: `%${search}%`
+                    }
+                }
+            });
+
+            // If products are found, return them, otherwise return a 404
+            if (products.length > 0) {
+                res.status(200).json(products);
+            } else {
+                res.status(404).json({ message: `No products found matching the search query '${search}'` });
+            }
+
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching products', error });
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
     async loadProductWithID(req, res) {
         const { idProduct } = req.params; // Retrieve idProduct from request parameters
         try {
