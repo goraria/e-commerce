@@ -25,6 +25,347 @@ export default function ProductList() {
                 "AMD Ryzen 7",
                 "AMD Ryzen 9",
                 "Apple M2",
+                "Apple M2 Pro",
+                "Apple M2 Max",
+                "Apple M3",
+                "Apple M3 Pro",
+                "Apple M3 Max",
+                "Apple M4",
+                "Apple M4 Pro",
+                "Apple M4 Max"
+            ],
+        },
+        {
+            categorical: "GPU",
+            variant: "success",
+            item: [
+                "Integrated",
+                "AMD Radeon RX 5500M",
+                "NVIDIA RTX 3050",
+                "NVIDIA RTX 3060",
+                "NVIDIA RTX 4050",
+                "NVIDIA RTX 4060",
+                "NVIDIA RTX 5060",
+                "NVIDIA RTX 5070",
+            ],
+        },
+        {
+            categorical: "RAM",
+            variant: "info",
+            item: ["8 GB", "16 GB", "24 GB", "32 GB", "64 GB"],
+        },
+        {
+            categorical: "Storage",
+            variant: "warning",
+            item: ["256 GB", "512 GB", "1024 GB", "2048 GB"],
+        },
+        {
+            categorical: "Screen",
+            variant: "primary",
+            item: ["13'", "14'", "15'", "16'"],
+        },
+    ];
+
+    const [brands, setBrands] = useState([]);
+    const [list, setList] = useState([]);
+    const [activeFilters, setActiveFilters] = useState({}); // { CPU: ["Intel core i5", "AMD Ryzen 7"], GPU: [...] }
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const [searchType, setSearchType] = useState("basic"); // basic, advanced
+    const [searchQueryTerm, setSearchQueryTerm] = useState(""); // basic, advanced
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Lấy query search từ URL nếu cần
+    const query = new URLSearchParams(location.search);
+    const searchQuery = query.get("search") || "";
+
+    useEffect(() => {
+        if (searchQuery) {
+            setSearchTerm(searchQuery);
+        }
+    }, [searchQuery]);
+
+    // Load danh sách sản phẩm
+    const handleLoadProducts = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-product");
+            setList(response.data);
+            // Reset activeFilters khi clear filter
+            setActiveFilters({});
+        } catch (error) {
+            console.error("Error loading products:", error);
+        }
+    };
+
+    // Load danh sách thương hiệu
+    const handleLoadBrand = async () => {
+        try {
+            const response = await apiHandler.get("/products/load-brand");
+            setBrands(response.data);
+        } catch (error) {
+            console.error("Error loading brands:", error);
+        }
+    };
+
+    // Tải sản phẩm theo thương hiệu
+    const loadProductByBrand = async (brand) => {
+        try {
+            setList([]);
+            const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
+            setList(response.data);
+            // Reset activeFilters khi filter theo brand
+            setActiveFilters({});
+        } catch (error) {
+            console.error("Error loading product by brand:", error);
+        }
+    };
+
+    // Hàm gọi API filter dựa trên activeFilters
+    const applyFilters = async (filters) => {
+        try {
+            // Nếu không có filter nào, load toàn bộ sản phẩm
+            const filterKeys = Object.keys(filters).filter((key) => filters[key].length > 0);
+            if (filterKeys.length === 0) {
+                handleLoadProducts();
+                return;
+            }
+            // Giả sử API của bạn chấp nhận query string với format: ?filters=CPU:Intel core i5,AMD Ryzen 7;GPU:RTX 3050
+            const queryString = filterKeys
+                .map((cat) => `${cat}:${filters[cat].join(",")}`)
+                .join(";");
+            setList([]);
+            const response = await apiHandler.get(`/products/load-product-condition?filters=${encodeURIComponent(queryString)}`);
+            setList(response.data);
+        } catch (error) {
+            // console.error("Error filtering products:", error);
+            setList([]);
+        }
+    };
+
+    // Hàm xử lý khi checkbox thay đổi: category, selectedItem, isChecked
+    const filterProducts = async (category, selectedItem, isChecked) => {
+        setActiveFilters((prev) => {
+            const newFilters = { ...prev };
+            if (newFilters[category]) {
+                if (isChecked) {
+                    // Thêm filter nếu chưa có
+                    if (!newFilters[category].includes(selectedItem)) {
+                        newFilters[category].push(selectedItem);
+                    }
+                } else {
+                    // Bỏ filter: loại bỏ selectedItem khỏi mảng
+                    newFilters[category] = newFilters[category].filter((item) => item !== selectedItem);
+                }
+            } else if (isChecked) {
+                newFilters[category] = [selectedItem];
+            }
+            // Sau khi cập nhật state, gọi API với các filter mới
+            applyFilters(newFilters);
+            return newFilters;
+        });
+    };
+
+    // Search giống DataTables: lọc mảng list theo searchTerm trên các trường của product
+    const globalFilteredData = list.filter((product) => {
+        const term = searchTerm.toLowerCase();
+        return (
+            (product.product_name && product.product_name.toLowerCase().includes(term)) ||
+            (product.brand && product.brand.toLowerCase().includes(term)) ||
+            (product.category && product.category.toLowerCase().includes(term)) ||
+            (product.description && product.description.toLowerCase().includes(term))
+        );
+    });
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = globalFilteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(globalFilteredData.length / itemsPerPage);
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleSearchTypeChange = (e) => {
+        setSearchType(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleSearchQuery = async () => {
+        try {
+            // const query = "intel core 9";
+            const response = await apiHandler.get(`/products/search/${searchQueryTerm}`);
+            setList(response.data);
+
+            // console.log(response.data);
+        } catch (error) {
+            // console.error("Error searching products:", error);
+            setList([]);
+        }
+    };
+
+    useEffect(() => {
+        handleLoadProducts();
+        handleLoadBrand();
+    }, []);
+
+    // Sử dụng PerfectScrollbar cho các nhóm button (nếu bạn đã cài đặt hook usePerfectScrollbar)
+    usePerfectScrollbar("brand-button-group");
+    usePerfectScrollbar("sort-button-group");
+
+    return (
+        <>
+            <Transitionbar />
+            <Overview>
+                <h5 className="card-title">Laptop</h5>
+                <h6 className="card-subtitle text-muted">
+                    Laptop is the best mobile device to work...
+                </h6>
+                <hr className="mb-0" />
+                <div className="d-flex demo-inline-spacing" id="brand-button-group">
+                    {brands.map((brand, index) => (
+                        <BrandButton key={index} brand={brand} onSelect={loadProductByBrand} />
+                    ))}
+                </div>
+            </Overview>
+            <Overview>
+                <h5 className="card-title">Sort by</h5>
+                <h6 className="card-subtitle text-muted">Choose one of config to sort...</h6>
+                <hr className="mb-0" />
+                <div className="demo-inline-spacing" id="sort-button-group">
+                    {categories.map((category) => (
+                        <div key={category.categorical} className="mb-3">{/*  id="sort-button-group" */}
+                            <Badge bg={`label-${category.variant}`} className="mb-2 me-2">
+                                {category.categorical}
+                            </Badge>
+                            {/*<div className="d-flex flex-wrap">*/}
+                            {category.item.map((item) => (
+                                <div key={item} className="form-check form-check-inline">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value={item}
+                                        onChange={(e) => filterProducts(category.categorical, item, e.target.checked)}
+                                    />
+                                    <label className="form-check-label">{item}</label>
+                                </div>
+                            ))}
+                            {/*</div>*/}
+                        </div>
+                    ))}
+                </div>
+            </Overview>
+            <Overview>
+                <h3 className="text-center m-0">Spotlight</h3>
+            </Overview>
+            <Overview>
+                <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div className="m-0">
+                            <Form.Select
+                                // className="w-100"
+                                value={itemsPerPage}
+                                onChange={handleItemsPerPageChange}
+                            >
+                                <option value={2}>2</option>
+                                <option value={4}>4</option>
+                                <option value={8}>8</option>
+                                <option value={12}>12</option>
+                                <option value={24}>24</option>
+                            </Form.Select>
+                        </div>
+                        <div className="m-0 ms-3">
+                            <Form.Select
+                                // className="w-100"
+                                value={searchType}
+                                onChange={handleSearchTypeChange}
+                            >
+                                <option value={"basic"}>Basic</option>
+                                <option value={"advanced"}>Advanced</option>
+                            </Form.Select>
+                        </div>
+                        {(searchType === "basic") ? (
+                            <>
+                                <div className="ms-3">
+                                    <Form.Control
+                                        type="search"
+                                        placeholder="Search..."
+                                        value={searchTerm}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
+                            </>
+                        ) : (searchType === "advanced") ? (
+                            <>
+                                <div className="ms-3">
+                                    <Form.Control
+                                        type="search"
+                                        placeholder="Search..."
+                                        value={searchQueryTerm}
+                                        onChange={(e) => setSearchQueryTerm(e.target.value)}
+                                    />
+                                </div>
+                                <Button className="ms-3" onClick={handleSearchQuery}>
+                                    Search
+                                </Button>
+                            </>
+                        ) : (<></>)}
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <Button className="me-3" onClick={handleLoadProducts}>
+                            Clear Filter
+                        </Button>
+                        <PaginationCustom currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                    </div>
+                </div>
+            </Overview>
+
+            <div className="container">
+                <div className="row">
+                    {globalFilteredData.length > 0 ? (
+                        currentItems.map((product) => (
+                            <div key={product.idproduct} className="col col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                                <ProductItem product={product} />
+                            </div>
+                        ))
+                    ) : (
+                        <div className="col col-12">
+                            <div className="card justify-content-center align-items-center mb-4">
+                                <div className="card-body">
+                                    <h3 className="text-center m-0">No product was found</h3>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </>
+    );
+}
+
+function ProductListm() {
+    // Các filter cứng theo category
+    const categories = [
+        {
+            categorical: "CPU",
+            variant: "danger",
+            item: [
+                "Intel core i5",
+                "Intel core i7",
+                "Intel core i9",
+                "AMD Ryzen 5",
+                "AMD Ryzen 7",
+                "AMD Ryzen 9",
+                "Apple M2",
                 "Apple M3",
                 "Apple M4",
             ],
@@ -94,6 +435,7 @@ export default function ProductList() {
     // Tải sản phẩm theo thương hiệu
     const loadProductByBrand = async (brand) => {
         try {
+            setList([]);
             const response = await apiHandler.get(`/products/load-product-brand/${brand}`);
             setList(response.data);
         } catch (error) {
@@ -102,16 +444,15 @@ export default function ProductList() {
     };
 
     // Lọc sản phẩm theo điều kiện (ví dụ, theo checkbox của category)
-    const filterProducts = (category, selectedItem) => {
+    const filterProducts = async (category, selectedItem) => {
         // Gọi API lọc theo điều kiện, sau đó cập nhật list
-        (async () => {
-            try {
-                const response = await apiHandler.get(`/products/load-product-condition/${selectedItem}`);
-                setList(response.data);
-            } catch (error) {
-                console.error("Error filtering products:", error);
-            }
-        })();
+        try {
+            setList([]);
+            const response = await apiHandler.get(`/products/load-product-condition/${selectedItem}`);
+            setList(response.data);
+        } catch (error) {
+            console.error("Error filtering products:", error);
+        }
     };
 
     // Search giống DataTables: tìm kiếm toàn cục trên nhiều thuộc tính của sản phẩm
@@ -141,9 +482,22 @@ export default function ProductList() {
         setCurrentPage(1);
     };
 
+    const handleSearchQuery = async () => {
+        try {
+            const query = "intel core 9";
+            const response = await apiHandler.get(`/products/search/${query}`);
+            setList(response.data);
+
+            console.log(response.data);
+        } catch (error) {
+            console.error("Error searching products:", error);
+        }
+    };
+
     useEffect(() => {
         handleLoadProducts();
         handleLoadBrand();
+        // handleSearchQuery();
     }, []);
 
     // Sử dụng PerfectScrollbar cho các nhóm button
@@ -159,7 +513,7 @@ export default function ProductList() {
                     Laptop is the best mobile device to work...
                 </h6>
                 <hr className="mb-0" />
-                <div className="d-flex" id="brand-button-group">
+                <div className="d-flex demo-inline-spacing" id="brand-button-group">{/* direction="horizontal" */}
                     {brands.map((brand, index) => (
                         <BrandButton key={index} brand={brand} onSelect={loadProductByBrand} />
                     ))}
@@ -169,44 +523,71 @@ export default function ProductList() {
                 <h5 className="card-title">Sort by</h5>
                 <h6 className="card-subtitle text-muted">Choose one of config to sort...</h6>
                 <hr className="mb-0" />
-                <div id="sort-button-group">
+
+                <div className="demo-inline-spacing">
                     {categories.map((category) => (
-                        <div key={category.categorical} className="mb-3">
-                            <div>
-                <span className={`badge bg-label-${category.variant} me-2`}>
-                  {category.categorical}
-                </span>
-                            </div>
-                            <div className="d-flex flex-wrap">
-                                {category.item.map((item) => (
-                                    <div key={item} className="form-check form-check-inline">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            value={item}
-                                            onChange={() => filterProducts(category.categorical, item)}
-                                        />
-                                        <label className="form-check-label">{item}</label>
-                                    </div>
-                                ))}
-                            </div>
+                        <div key={category.categorical} className="mb-3">{/*  id="sort-button-group" */}
+                            <Badge bg={`label-${category.variant}`} className="mb-2 me-2">
+                                {category.categorical}
+                            </Badge>
+                            {category.item.map((item) => (
+                                <div key={item} className="form-check form-check-inline">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value={item}
+                                        onChange={() => filterProducts(category.categorical, item)}
+                                    />
+                                    <label className="form-check-label">{item}</label>
+                                </div>
+                            ))}
                         </div>
                     ))}
                 </div>
+                {/*<div id="sort-button-group">*/}
+                {/*    {categories.map((category) => (*/}
+                {/*        <div key={category.categorical} className="mb-3">*/}
+                {/*            <div>*/}
+                {/*                <span className={`badge bg-label-${category.variant} me-2`}>*/}
+                {/*                  {category.categorical}*/}
+                {/*                </span>*/}
+                {/*            </div>*/}
+                {/*            <div className="d-flex flex-wrap">*/}
+                {/*                {category.item.map((item) => (*/}
+                {/*                    <div key={item} className="form-check form-check-inline">*/}
+                {/*                        <input*/}
+                {/*                            className="form-check-input"*/}
+                {/*                            type="checkbox"*/}
+                {/*                            value={item}*/}
+                {/*                            onChange={() => filterProducts(category.categorical, item)}*/}
+                {/*                        />*/}
+                {/*                        <label className="form-check-label">{item}</label>*/}
+                {/*                    </div>*/}
+                {/*                ))}*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    ))}*/}
+                {/*</div>*/}
             </Overview>
             <Overview>
                 <h3 className="text-center m-0">Spotlight</h3>
             </Overview>
             <Overview>
                 <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                        <Form.Select value={itemsPerPage} onChange={handleItemsPerPageChange}>
-                            <option value={2}>2</option>
-                            <option value={4}>4</option>
-                            <option value={8}>8</option>
-                            <option value={12}>12</option>
-                            <option value={24}>24</option>
-                        </Form.Select>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div className="m-0">
+                            <Form.Select
+                                // className="w-100"
+                                value={itemsPerPage}
+                                onChange={handleItemsPerPageChange}
+                            >
+                                <option value={2}>2</option>
+                                <option value={4}>4</option>
+                                <option value={8}>8</option>
+                                <option value={12}>12</option>
+                                <option value={24}>24</option>
+                            </Form.Select>
+                        </div>
                         <div className="ms-3">
                             <Form.Control
                                 type="search"
@@ -225,11 +606,19 @@ export default function ProductList() {
 
             <div className="container">
                 <div className="row">
-                    {currentItems.map((product) => (
+                    {list.length ? currentItems.map((product) => (
                         <div key={product.idproduct} className="col col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4">
                             <ProductItem product={product} />
                         </div>
-                    ))}
+                    )) : (
+                        <div className="col col-12">
+                            <div className="card justify-content-center align-items-center mb-4">
+                                <div className="card-body">
+                                    <h3 className="text-center m-0">No product was found</h3>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

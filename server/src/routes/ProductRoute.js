@@ -23,7 +23,8 @@ router.delete('/remove-rating/:id', AuthenticationMiddleware, productController.
 
 router.patch('/update-status/:idproduct', productController.updateStatus);
 
-router.put('/search', productController.searchProduct);
+router.get('/search/:search', productController.searchProduct);
+router.get('/load-product-condition', productController.loadProductWithCondition);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +35,7 @@ router.get('/load-rating/:idproduct', productController.loadRating);
 
 router.get('/load-color/:idProduct', productController.loadColor);
 router.get('/load-idconfiguration/:idConfiguration', productController.loadConfigurationByID);
-router.get('/load-product-condition/:CPU', productController.loadProductWithCondition);
+// router.get('/load-product-condition/:CPU', productController.loadProductWithCondition);
 router.get('/load-product-brand/:Brand', productController.loadProductWithBrand);
 router.get('/load-product-name/:Name', productController.loadProductWithName);
 
