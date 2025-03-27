@@ -502,6 +502,130 @@ class ProductController {
 
     /////////////////////////////////////////////////////////////////////////////
 
+    async searchProduct(req, res) {
+        const { search } = req.params; // Lấy từ khóa tìm kiếm từ request parameters
+
+        try {
+            // Tìm tất cả sản phẩm, bao gồm các bảng liên quan
+            const products = await Product.findAll({
+                include: [
+                    {
+                        model: Configuration,
+                        as: 'Configurations',
+                        required: false, // Nếu không có cấu hình thì vẫn trả về sản phẩm
+                    },
+                    {
+                        model: Color,
+                        as: 'Colors',
+                        required: false,
+                    }
+                ],
+                where: {
+                    [Op.or]: [
+                        { product_name: { [Op.like]: `%${search}%` } },
+                        { brand: { [Op.like]: `%${search}%` } },
+                        { "$Configurations.cpu$": { [Op.like]: `%${search}%` } },
+                        { "$Configurations.ram$": { [Op.like]: `%${search}%` } },
+                        { "$Configurations.gpu$": { [Op.like]: `%${search}%` } },
+                        { "$Configurations.storage$": { [Op.like]: `%${search}%` } },
+                        { "$Configurations.screen$": { [Op.like]: `%${search}%` } },
+                        { "$Configurations.resolution$": { [Op.like]: `%${search}%` } },
+                        { "$Configurations.price$": { [Op.like]: `%${search}%` } },
+                        { "$Colors.color$": { [Op.like]: `%${search}%` } },
+                        // Nếu có thêm các trường cần tìm, bạn có thể thêm vào đây
+                    ]
+                }
+            });
+
+            if (products.length > 0) {
+                return res.status(200).json(products);
+            } else {
+                return res.status(404).json({
+                    message: `No products found matching the search query '${search}'`
+                });
+            }
+        } catch (error) {
+            // console.error("Error fetching products:", error);
+            return res.status(500).json({ message: 'Error fetching products', error });
+        }
+    }
+
+    async loadProductWithCondition(req, res) {
+        const { filters } = req.query;
+
+        if (!filters) {
+            return res.status(400).json({ message: "No filters provided." });
+        }
+
+        // Parse query string filters thành object:
+        // { CPU: ['Intel core i5', 'AMD Ryzen 7'], GPU: ['RTX 3050', 'RTX 3060'] }
+        const filterObj = {};
+        filters.split(';').forEach(segment => {
+            const [category, values] = segment.split(':');
+            if (category && values) {
+                filterObj[category.trim()] = values.split(',').map(val => val.trim());
+            }
+        });
+
+        // Map category name với trường trong bảng Configuration hoặc Color
+        // Ví dụ: CPU, GPU, RAM, Storage, Screen đều nằm trong bảng Configuration
+        const fieldMap = {
+            CPU: "$Configurations.cpu$",
+            GPU: "$Configurations.gpu$",
+            RAM: "$Configurations.ram$",
+            Storage: "$Configurations.storage$",
+            Screen: "$Configurations.screen$",
+            // Nếu cần thêm filter từ bảng Color, ví dụ:
+            // Color: "$Colors.color$"
+        };
+
+        // Xây dựng mảng điều kiện (conditions)
+        const conditions = [];
+        Object.keys(filterObj).forEach(category => {
+            const field = fieldMap[category];
+            if (field) {
+                conditions.push({
+                    [field]: {
+                        [Op.in]: filterObj[category]
+                    }
+                });
+            }
+        });
+
+        // Nếu có nhiều điều kiện, kết hợp bằng AND
+        const whereCondition = conditions.length > 0 ? { [Op.and]: conditions } : {};
+
+        try {
+            // Tìm sản phẩm với các điều kiện tìm kiếm ở bảng Product và các bảng liên quan
+            const products = await Product.findAll({
+                include: [
+                    {
+                        model: Configuration,
+                        as: "Configurations",
+                        required: true, // Nếu không có cấu hình thì không trả về sản phẩm
+                    },
+                    {
+                        model: Color,
+                        as: "Colors",
+                        required: false, // Nếu bạn có filter theo màu, có thể set required tùy ý
+                    }
+                ],
+                where: whereCondition
+            });
+
+            if (products.length > 0) {
+                return res.status(200).json(products);
+            } else {
+                return res.status(404).json({ message: "No products found matching the applied filters." });
+            }
+        } catch (error) {
+            // console.error("Error filtering products:", error);
+            return res.status(500).json({ message: "Error filtering products", error });
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
     async loadProductWithID(req, res) {
         const { idProduct } = req.params; // Retrieve idProduct from request parameters
         try {
@@ -656,7 +780,7 @@ class ProductController {
         }
     }
 
-    async loadProductWithCondition(req, res) {
+    async loadProductWithConditionOld(req, res) {
         const { CPU } = req.params;
 
         try {
