@@ -693,29 +693,27 @@ class ProductController {
     async updateProductName(req, res) {
         const { idProduct } = req.params;
         const updatedData = req.body;
-        console.log(req.body);
         const idcategory = parseInt(updatedData.idcategory, 10);
         try {
-            function convertBackslashesToSlashes(path) {
-                return path.replace(/\\/g, '/');
-            }
-            // console.log(req.file);
-            if (!req.file) {
-                return res.status(400).json({ message: 'No file uploaded' });
-            }
-            // console.log(req.file);
-            const avatarPath = path.join(__dirname, '../../../client/public/assets/img/product');
-            if (!fs.existsSync(avatarPath)) {
-                fs.mkdirSync(avatarPath, { recursive: true });
-            }
-            const filePath = `/assets/img/product/${req.file.filename}`;
-            const filepath = convertBackslashesToSlashes(filePath);
             const product = await Product.findOne({
                 where: { idProduct: idProduct },
             });
             const category = await Category.findOne({
                 where: { idcategory: idcategory },
             });
+            function convertBackslashesToSlashes(path) {
+                return path.replace(/\\/g, '/');
+            }
+            let filepath = product.product_image; // Giữ nguyên ảnh cũ nếu không có ảnh mới
+            // console.log(req.file);
+            if (req.file) {
+                const avatarPath = path.join(__dirname, '../../../client/public/assets/img/product');
+                if (!fs.existsSync(avatarPath)) {
+                    fs.mkdirSync(avatarPath, { recursive: true });
+                }
+                const filePath = `/assets/img/product/${req.file.filename}`;
+                filepath = convertBackslashesToSlashes(filePath);
+            }
             if (!product) {
                 return res.status(404).json({ message: `No account found with id ${idProduct}` });
             }
@@ -746,7 +744,6 @@ class ProductController {
     async deleteProductName(req, res) {
         try {
             const { idProduct } = req.params
-            // console.log(idProduct)
             const product = await Product.findOne({
                 where: {
                     idProduct: idProduct

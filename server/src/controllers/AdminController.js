@@ -290,7 +290,6 @@ class AdminController {
             const product = await Product.findOne({
                 where: { product_name: updatedData.product_name }
             })
-            console.log(product)
             const configuration = await Configuration.findOne({
                 where: { idconfiguration: idConfiguration },
             });
@@ -320,7 +319,6 @@ class AdminController {
 
     async createConfiguration(req, res) {
         const Data = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
-        console.log(Data)
         try {
             const product = await Product.findOne({
                 where: {
@@ -337,7 +335,6 @@ class AdminController {
                 price: Data.price,
                 idproduct: product.idproduct
             });
-
             console.log('newConfiguration created successfully:', newConfiguration);
             return res.status(201).json({
                 configuration: newConfiguration,
@@ -396,7 +393,6 @@ class AdminController {
         } catch (error) {
             res.status(500).json({ message: 'Error fetching color', error });
         }
-
     }
     async updateColor(req, res) {
         const { idColor } = req.params;
@@ -408,8 +404,6 @@ class AdminController {
             const color = await Color.findOne({
                 where: { idcolor: idColor },
             });
-            // console.log(color)
-            console.log(updatedData)
             if (!color) {
                 return res.status(404).json({ message: `No color found with id ${idColor}` });
             }
@@ -428,14 +422,12 @@ class AdminController {
     }
     async createColor(req, res) {
         const Data = req.body; // Giả sử dữ liệu cập nhật được gửi từ client trong body
-        // console.log(Data)
         try {
             const product = await Product.findOne({
                 where: {
                     product_name: Data.product_name
                 }
             })
-            // console.log(product)
             const newColor = await Color.create({
                 color: Data.color,
                 idproduct: product.idproduct
