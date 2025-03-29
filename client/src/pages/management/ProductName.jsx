@@ -7,7 +7,7 @@ import ProductForm from "../../components/modal/form/ProductForm.jsx";
 import CategoryBadge from "../../components/badge/CategoryBadge.jsx";
 import apiHandler from "../../utils/apiHandler.jsx";
 import { renderCategory } from "../../utils/renderHandler.jsx";
-import {PaginationCustom} from "../../components/pagination/PaginationCustom.jsx";
+import { PaginationCustom } from "../../components/pagination/PaginationCustom.jsx";
 
 export default function ProductName() {
     const navigate = useNavigate();
@@ -96,11 +96,12 @@ export default function ProductName() {
 
     const handleDelete = async (id) => {
         try {
-
+            console.log(id)
             // Send delete request to the server
             await apiHandler.delete(`/products/delete-productname/${id}`);
 
             // Optionally, fetch the updated data again
+            console.log(1)
             setShowConfirmDelete(false);
             fetchAPI();
         } catch (error) {

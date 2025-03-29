@@ -14,7 +14,7 @@ export default function PurchasePage() {
     const token = localStorage.getItem("token");
 
     const { cartData, prePrice, discount, voucher, totalPrice, userData } =
-    location.state || {};
+        location.state || {};
 
     // Nếu không có state (giỏ hàng rỗng) thì chuyển hướng về trang giỏ hàng
     useEffect(() => {
@@ -179,7 +179,7 @@ export default function PurchasePage() {
         handleGetUserInfo();
         handleGetUserAddress();
     }, []);
-
+    console.log(selectedAddress)
     return (
         <>
             <Transitionbar />
@@ -541,12 +541,11 @@ function PurchasePageOld() {
     useEffect(() => {
         handleGetUserInfo();
         HandleGetUserAddress();
-
         if (!location.state) {
             navigate('/pay/cart');
         }
     }, []);
-
+    // console.log(selectedAddress)
     return (
         <>
             <Transitionbar />
@@ -594,8 +593,8 @@ function PurchasePageOld() {
                                         placeholder="Enter your fullname"
                                         name="recipientName"
                                         defaultValue={user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : ""}
-                                        // value={recipientName}
-                                        // onChange={this.handleInputChange}
+                                    // value={recipientName}
+                                    // onChange={this.handleInputChange}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formPhoneNumber" className="mt-3">
@@ -606,8 +605,8 @@ function PurchasePageOld() {
                                         placeholder="Phone number"
                                         name="phoneNumber"
                                         defaultValue={user.phone}
-                                        // value={phoneNumber}
-                                        // onChange={this.handleInputChange}
+                                    // value={phoneNumber}
+                                    // onChange={this.handleInputChange}
                                     />
                                 </Form.Group>
                                 {deliveryMethod === 'Delivery' && (
@@ -680,7 +679,7 @@ function PurchasePageOld() {
                     </div>
 
                     <div className="col col-lg-4 col-md-6 col-sm-12 mb-4">
-                        <div className="container position-sticky sticky-summary p-0" style={{top: 24}}>
+                        <div className="container position-sticky sticky-summary p-0" style={{ top: 24 }}>
                             <div className="card p-3 mb-4">
                                 <div className="rounded p-3">
                                     <h5>Price Details</h5>
@@ -703,7 +702,7 @@ function PurchasePageOld() {
                                             <span className="badge bg-label-success ms-1">Free</span>
                                         </dd>
                                     </dl>
-                                    <hr className="my-4"/>
+                                    <hr className="my-4" />
                                     <dl className="row mb-0">
                                         <dt className="col-6 text-heading">Total</dt>
                                         <dd className="col-6 fw-medium text-end text-heading mb-0">${totalPrice}</dd>
@@ -718,9 +717,9 @@ function PurchasePageOld() {
                             <div className="card p-3">
                                 <div className="rounded p-3">
                                     <h5>Order List</h5>
-                                    <hr className="my-4"/>
+                                    <hr className="my-4" />
                                     {cartData?.map((item, index) => (
-                                        <OrderItem key={index} item={item}/>
+                                        <OrderItem key={index} item={item} />
                                     ))}
                                 </div>
                             </div>
