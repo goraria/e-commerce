@@ -320,9 +320,9 @@ export default function ProductPage() {
                                     />
                                 </div>
                                 <div>
-                                    <p>{descriptions.img_description}</p>
+                                    <p>{descriptions?.img_description}</p>
                                     <h4>Thiết kế thời thượng, thuận tiện di chuyển</h4>
-                                    <p>{descriptions.title_description}</p>
+                                    <p>{descriptions?.title_description}</p>
                                 </div>
                                 <div className="d-flex justify-content-center mb-4">
                                     {properties.image ? (
@@ -340,7 +340,7 @@ export default function ProductPage() {
                                 </div>
                                 <div>
                                     <h4>Phù hợp với mọi tác vụ</h4>
-                                    <p>{descriptions.sub_description}</p>
+                                    <p>{descriptions?.sub_description}</p>
                                 </div>
                             </Card.Body>
                         </div>
@@ -350,10 +350,10 @@ export default function ProductPage() {
                                     <div className="card-body row widget-separator g-0">
                                         <div className="col-sm-5 border-shift border-end pe-sm-4">
                                             <h3 className="text-primary d-flex align-items-center gap-2 mb-2">
-                                                {formatRatings(calculateScore(ratings))}
+                                                {ratings.length ? formatRatings(calculateScore(ratings)) : "0"}
                                                 <i className="bx bxs-star bx-sm"></i>
                                             </h3>
-                                            <p className="h6 mb-2">Total 187 reviews</p>
+                                            <p className="h6 mb-2">Total {ratings.length} reviews</p>
                                             <p className="pe-2 mb-2">All reviews are from genuine customers</p>
                                             <span className="badge bg-label-primary mb-4 mb-sm-0">+5 This week</span>
                                             <hr className="d-sm-none"/>
@@ -419,10 +419,10 @@ export default function ProductPage() {
                             <div className="col-md-6">
                                 <div className="card h-100">
                                     <div className="card-body row">
-                                        <div className="col-sm-5">
-                                            <div className="mb-12">
+                                        <div className="col-sm-12">
+                                            <div className="mb-4">
                                                 <h5 className="mb-2 text-nowrap">Reviews statistics</h5>
-                                                <p className="mb-0">
+                                                <p className="d-flex mb-0">
                                                     <span className="me-2">12 New reviews</span>
                                                     <span className="badge bg-label-success">+8.4%</span>
                                                 </p>
@@ -432,53 +432,6 @@ export default function ProductPage() {
                                                     <span className="text-success me-1">87%</span>Positive reviews
                                                 </h6>
                                                 <small>Weekly Report</small>
-                                            </div>
-                                        </div>
-                                        <div
-                                            className="col-sm-7 d-flex justify-content-sm-end align-items-end position-relative">
-                                            <div id="reviewsChart" style={{ minHeight: '175px' }}>
-                                                <div id="apexchartsmsgmet3n"
-                                                     className="apexcharts-canvas apexchartsmsgmet3n apexcharts-theme-light"
-                                                     style={{ width: '190px', height: '160px' }}>
-                                                    <div className="apexcharts-legend"
-                                                         style={{ maxHeight: '80px' }}></div>
-                                                    <div className="apexcharts-tooltip apexcharts-theme-light">
-                                                        <div className="apexcharts-tooltip-title"></div>
-                                                        <div className="apexcharts-tooltip-series-group order-1">
-                                                            <span className="apexcharts-tooltip-marker"></span>
-                                                            <div className="apexcharts-tooltip-text">
-                                                                <div className="apexcharts-tooltip-y-group">
-                                                                    <span
-                                                                        className="apexcharts-tooltip-text-y-label"></span>
-                                                                    <span
-                                                                        className="apexcharts-tooltip-text-y-value"></span>
-                                                                </div>
-                                                                <div className="apexcharts-tooltip-goals-group">
-                                                                    <span
-                                                                        className="apexcharts-tooltip-text-goals-label"></span>
-                                                                    <span
-                                                                        className="apexcharts-tooltip-text-goals-value"></span>
-                                                                </div>
-                                                                <div className="apexcharts-tooltip-z-group">
-                                                                    <span
-                                                                        className="apexcharts-tooltip-text-z-label"></span>
-                                                                    <span
-                                                                        className="apexcharts-tooltip-text-z-value"></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        className="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light">
-                                                        <div className="apexcharts-yaxistooltip-text"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="resize-triggers">
-                                                <div className="expand-trigger">
-                                                    <div style={{ width: '386px', height: '176px' }}></div>
-                                                </div>
-                                                <div className="contract-trigger"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -553,7 +506,7 @@ export default function ProductPage() {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr style={{ height: 64 }}>
+                                        <tr style={{ display: "none", height: 64 }}>
                                             <td>
                                                 <Form.Check
                                                     className="dt-checkboxes-cell"
