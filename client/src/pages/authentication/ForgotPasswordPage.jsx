@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
         setValidated(true);
     };
 
-    if (loading) return <LoadingPage/>;
+    if (loading) return <LoadingPage />;
 
     return (
         <>
@@ -130,12 +130,12 @@ export default function ForgotPasswordPage() {
                         </button>
                     </div>
                     {/* Nếu sử dụng reCAPTCHA, uncomment phần sau */}
-                    {/* <div className="mb-3">
+                    <div className="mb-3">
                         <ReCaptchaComponent
-                          onSuccess={() => setCaptchaVerified(true)}
-                          onError={() => setCaptchaVerified(false)}
+                            onSuccess={() => setCaptchaVerified(true)}
+                            onError={() => setCaptchaVerified(false)}
                         />
-                    </div> */}
+                    </div>
                 </Form>
                 <div className="text-center">
                     <Link
@@ -223,7 +223,7 @@ function ForgotPasswordPageOld() {
     //     authenticationCheck();
     // }, [navigate]);
 
-    if (loading) return <LoadingPage/>
+    if (loading) return <LoadingPage />
 
     return (
         <>
@@ -241,7 +241,7 @@ function ForgotPasswordPageOld() {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
-                            autoFocus/>
+                            autoFocus />
                     </div>
                     <div className="mb-3">
                         <button
@@ -262,7 +262,7 @@ function ForgotPasswordPageOld() {
                 </Form>
                 <div className="text-center">
                     <Link aria-label="Go to Login Page" to="/auth/login"
-                          className="d-flex align-items-center justify-content-center">
+                        className="d-flex align-items-center justify-content-center">
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>

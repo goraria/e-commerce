@@ -180,7 +180,7 @@ export default function LoginPage({ checker }) {
         }
     };
 
-    if (loading) return <LoadingPage/>;
+    if (loading) return <LoadingPage />;
 
     return (
         <>
@@ -243,9 +243,8 @@ export default function LoginPage({ checker }) {
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 <i
-                                    className={`icon-base ${
-                                        showPassword ? "bx bx-show" : "bx bx-hide"
-                                    }`}
+                                    className={`icon-base ${showPassword ? "bx bx-show" : "bx bx-hide"
+                                        }`}
                                 ></i>
                             </span>
                             {errors.password ? (
@@ -265,7 +264,7 @@ export default function LoginPage({ checker }) {
                                     type="checkbox"
                                     id="remember-me"
                                     name="rememberMe"
-                                    // checked={formData.remember}
+                                // checked={formData.remember}
                                 />
                                 <label className="form-check-label" htmlFor="remember-me">
                                     Remember Me
@@ -287,8 +286,13 @@ export default function LoginPage({ checker }) {
                             Log in
                         </button>
                     </div>
+                    <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={() => setCaptchaVerified(true)}
+                            onError={() => setCaptchaVerified(false)}
+                        />
+                    </div>
                 </Form>
-
                 <p className="text-center">
                     <span>New on our platform? </span>
                     <Link
@@ -388,11 +392,11 @@ function LoginPage0({ checker }) {
         event.preventDefault();
         const form = event.currentTarget;
 
-        // if (!captchaVerified) {
-        //     setError("Please verify the captcha before submitting.");
-        //     setShowError(true)
-        //     return;
-        // }
+        if (!captchaVerified) {
+            setError("Please verify the captcha before submitting.");
+            setShowError(true)
+            return;
+        }
 
         if (!form.checkValidity()) {
             event.stopPropagation();
@@ -472,7 +476,7 @@ function LoginPage0({ checker }) {
         handleCheck();
     }, []);
 
-    if (loading) return <LoadingPage/>
+    if (loading) return <LoadingPage />
 
     return (
         <>
@@ -480,7 +484,7 @@ function LoginPage0({ checker }) {
                 <h4 className="mb-2">Welcome to Cipher! 👋</h4>
                 <p className="mb-4">Please sign-in to your account and start the adventure</p>
                 <Form id="formAuthentication" className="mb-3" noValidate
-                      validated={validated} onSubmit={handleSubmit}>
+                    validated={validated} onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
                         <input
@@ -492,7 +496,7 @@ function LoginPage0({ checker }) {
                             name="username"
                             placeholder="Enter your username"
                             required
-                            // autoFocus
+                        // autoFocus
                         />
                         {/*<div className="valid-feedback">*/}
                         {/*    Looks good!*/}
@@ -546,8 +550,8 @@ function LoginPage0({ checker }) {
                                     type="checkbox"
                                     id="remember-me"
                                     name="rememberMe"
-                                    // checked={formData.rememberMe}
-                                    // onChange={handleChange}
+                                // checked={formData.rememberMe}
+                                // onChange={handleChange}
                                 />
                                 <label className="form-check-label" htmlFor="remember-me"> Remember Me </label>
                             </div>
@@ -567,12 +571,12 @@ function LoginPage0({ checker }) {
                         </button>
                     </div>
 
-                    {/*<div className="mb-3">*/}
-                    {/*    <ReCaptchaComponent*/}
-                    {/*        onSuccess={() => setCaptchaVerified(true)}*/}
-                    {/*        onError={() => setCaptchaVerified(false)}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
+                    {/* <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={() => setCaptchaVerified(true)}
+                            onError={() => setCaptchaVerified(false)}
+                        />
+                    </div> */}
                 </Form>
 
                 <p className="text-center">
