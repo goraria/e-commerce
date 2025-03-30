@@ -122,11 +122,11 @@ export default function LoginPage({ checker }) {
         }
 
         // Kiểm tra lại captcha nếu cần (bỏ comment nếu bạn sử dụng)
-        // if (!captchaVerified) {
-        //   setError("Please verify the captcha before submitting.");
-        //   setShowError(true);
-        //   return;
-        // }
+        if (!captchaVerified) {
+            setError("Please verify the captcha before submitting.");
+            setShowError(true);
+            return;
+        }
 
         setLoading(true);
         try {
@@ -180,7 +180,7 @@ export default function LoginPage({ checker }) {
         }
     };
 
-    if (loading) return <LoadingPage />;
+    if (loading) return <LoadingPage/>;
 
     return (
         <>

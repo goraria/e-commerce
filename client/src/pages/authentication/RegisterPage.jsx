@@ -103,7 +103,7 @@ export default function RegisterPage({ checker }) {
                     // errorMsg = "Must only contain letters and single spaces between words, with no leading or trailing spaces";
                     errorMsg = "Lastname must only contain letters (no numbers, special characters)";
                 }
-            break;
+                break;
             }
             case "phone": {
                 // Phone: đúng 10 chữ số, không chứa ký tự khác
@@ -161,11 +161,11 @@ export default function RegisterPage({ checker }) {
         }
 
         // Kiểm tra lại captcha nếu cần (bỏ comment nếu bạn sử dụng)
-        // if (!captchaVerified) {
-        //   setError("Please verify the captcha before submitting.");
-        //   setShowError(true);
-        //   return;
-        // }
+        if (!captchaVerified) {
+            setError("Please verify the captcha before submitting.");
+            setShowError(true);
+            return;
+        }
 
         // Nếu password và retypepass khớp (đã được validate ở trên)
         if (formData.password !== formData.retypepass) {

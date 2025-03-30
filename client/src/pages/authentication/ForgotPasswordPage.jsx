@@ -59,11 +59,11 @@ export default function ForgotPasswordPage() {
             return;
         }
         // Nếu có sử dụng captcha, uncomment phần dưới đây:
-        // if (!captchaVerified) {
-        //   setError("Please verify the captcha before submitting.");
-        //   setShowError(true);
-        //   return;
-        // }
+        if (!captchaVerified) {
+            setError("Please verify the captcha before submitting.");
+            setShowError(true);
+            return;
+        }
 
         setLoading(true);
         try {
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
         setValidated(true);
     };
 
-    if (loading) return <LoadingPage />;
+    if (loading) return <LoadingPage/>;
 
     return (
         <>
@@ -223,7 +223,7 @@ function ForgotPasswordPageOld() {
     //     authenticationCheck();
     // }, [navigate]);
 
-    if (loading) return <LoadingPage />
+    if (loading) return <LoadingPage/>
 
     return (
         <>
