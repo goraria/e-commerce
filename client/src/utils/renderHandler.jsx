@@ -59,8 +59,8 @@ export const renderProductColor = (color) => {
             return <Badge bg="label-secondary">White</Badge>;
         case 'gold':
             return <Badge bg="label-warning">Gold</Badge>;
-        case '':
-            return <Badge bg="label-info">Color</Badge>;
+        case 'cyan':
+            return <Badge bg="label-info">Cyan</Badge>;
         case 'red':
             return <Badge bg="label-danger">Red</Badge>;
         case 'blue':
@@ -68,7 +68,7 @@ export const renderProductColor = (color) => {
         case 'green':
             return <Badge bg="label-success">Green</Badge>;
         default:
-            return <Badge bg="label-light">{color}</Badge>;
+            return <Badge bg="dark">{color}</Badge>;
     }
 };
 
