@@ -219,7 +219,7 @@ export default function RegisterPage({ checker }) {
         }
     };
 
-    if (loading) return <LoadingPage/>;
+    if (loading) return <LoadingPage />;
 
     return (
         <>
@@ -470,6 +470,12 @@ export default function RegisterPage({ checker }) {
                             Register
                         </button>
                     </div>
+                    <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={() => setCaptchaVerified(true)}
+                            onError={() => setCaptchaVerified(false)}
+                        />
+                    </div>
                 </Form>
 
                 <p className="text-center">
@@ -482,7 +488,7 @@ export default function RegisterPage({ checker }) {
                 <p className="text-center">
                     <span>Already have an account?</span>
                     <Link aria-label="Go to Login Page" to="/auth/login"
-                          className="d-flex align-items-center justify-content-center">
+                        className="d-flex align-items-center justify-content-center">
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>
@@ -647,7 +653,7 @@ function RegisterPage0({ checker }) {
         }
     };
 
-    if (loading) return <LoadingPage/>
+    if (loading) return <LoadingPage />
 
     return (
         <>
@@ -837,12 +843,12 @@ function RegisterPage0({ checker }) {
                         </button>
                     </div>
 
-                    {/*<div className="mb-3">*/}
-                    {/*    <ReCaptchaComponent*/}
-                    {/*        onSuccess={() => setCaptchaVerified(true)}*/}
-                    {/*        onError={() => setCaptchaVerified(false)}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
+                    <div className="mb-3">
+                        <ReCaptchaComponent
+                            onSuccess={() => setCaptchaVerified(true)}
+                            onError={() => setCaptchaVerified(false)}
+                        />
+                    </div>
                 </Form>
 
                 <p className="text-center">
@@ -855,7 +861,7 @@ function RegisterPage0({ checker }) {
                 <p className="text-center">
                     <span>Already have an account?</span>
                     <Link aria-label="Go to Login Page" to="/auth/login"
-                          className="d-flex align-items-center justify-content-center">
+                        className="d-flex align-items-center justify-content-center">
                         <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
                         Back to login
                     </Link>
