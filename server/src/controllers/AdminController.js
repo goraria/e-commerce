@@ -491,17 +491,23 @@ class AdminController {
     async updateDescription(req, res) {
         const { idDescription } = req.params;
         const updatedData = req.body;
-
         try {
             const description = await Description.findOne({
                 where: { iddescription: idDescription },
             });
-
+            const product = await Product.findOne({
+                where: { product_name: updatedData.product_name }
+            })
             if (!description) {
                 return res.status(404).json({ message: `No description found with id ${description}` });
             }
-
-            await description.update(updatedData); // Cập nhật dữ liệu từ client
+            const data = {
+                title_description: updatedData.title_description,
+                idproduct: product.idproduct,
+                sub_description: updatedData.sub_description,
+                img_description: updatedData.img_description,
+            }
+            await description.update(data); // Cập nhật dữ liệu từ client
 
             res.status(200).json({ success: true, message: 'description updated successfully', data: description });
 

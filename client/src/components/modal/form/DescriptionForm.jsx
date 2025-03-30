@@ -10,7 +10,7 @@ export default function DescriptionForm({ description, show, onHide, onReload })
         title_description: '',
         product_name: '',
         sub_description: ' ',
-        img_description: ' ',
+        img_description: "null",
     });
 
     const [error, setError] = useState(null);
@@ -23,14 +23,14 @@ export default function DescriptionForm({ description, show, onHide, onReload })
                 title_description: description.title_description || '',
                 product_name: description.product_name || '',
                 sub_description: description.sub_description || '',
-                img_description: description.img_description || '',
+                img_description: description.img_description?.trim() ? description.img_description : null
             });
         } else {
             setFormData({
                 title_description: '',
                 product_name: '',
                 sub_description: ' ',
-                img_description: ' ',
+                img_description: null,
             });
         }
     }, [description]);
@@ -43,14 +43,14 @@ export default function DescriptionForm({ description, show, onHide, onReload })
     const handleInvalid = (event) => {
         event.preventDefault();
         event.stopPropagation();
-
         const form = event.currentTarget;
-
+        const newFormData = { ...formData, img_description: "null" };
+        setFormData(newFormData);
+        console.log(newFormData);
         if (form.checkValidity() === false) {
             setValidated(true);
         } else {
-            const allFieldsFilled = Object.values(formData).every(value => value.trim() !== "");
-
+            const allFieldsFilled = Object.values(newFormData).every(value => value.trim() !== "");
             if (allFieldsFilled) {
                 setShowConfirmModal(true);
             } else {
@@ -66,7 +66,6 @@ export default function DescriptionForm({ description, show, onHide, onReload })
             const response = description
                 ? await apiHandler.post(`/admin/update-description/${description.iddescription}`, formData)
                 : await apiHandler.put('/admin/create-description', formData);
-
             if (response.status === 200 || response.status === 201) {
                 // alert(address ? 'Address updated successfully' : 'Address added successfully');
                 setShowConfirmModal(false)
@@ -94,6 +93,8 @@ export default function DescriptionForm({ description, show, onHide, onReload })
         }
     };
 
+    useEffect(() => {
+    });
     return (
         <>
             <Modal
