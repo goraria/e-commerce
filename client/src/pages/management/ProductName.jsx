@@ -19,7 +19,7 @@ export default function ProductName() {
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [data, setData] = useState([])
     const [data1, setData1] = useState([])
-
+    const [data2, setData2] = useState([])
     const handleShow = (id) => {
         setSelectedProductId(id);
         setShow(true);
@@ -46,12 +46,19 @@ export default function ProductName() {
         const response = await apiHandler.get("/admin/get-category")
         setData1(response.data)
     };
-
-    const mergedData = data.map(user => {
-        const account = data1.find(acc => acc.idcategory === user.idcategory);
-        return { ...user, ...account };
+    const getBrand = async () => {
+        const response = await apiHandler.get("/admin/get-brand")
+        setData2(response.data)
+    };
+    // const mergedData = data.map(user => {
+    //     const account = data1.find(acc => acc.idcategory === user.idcategory);
+    //     return { ...user, ...account, ...brand };
+    // });
+    const mergedData = data.map(product => {
+        const category = data1.find(cat => cat.idcategory === product.idcategory) || {};
+        const brand = data2.find(br => br.idbrand === product.idbrand) || {};
+        return { ...product, ...category, ...brand };
     });
-
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);

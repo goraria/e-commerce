@@ -6,6 +6,7 @@ import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function ProductForm({ product, show, onHide, onReload }) {
     const [validated, setValidated] = useState(false);
+    const [previewImage, setPreviewImage] = useState(null); // State lưu URL xem trước
     const [formData, setFormData] = useState({
         brand: '',
         category_name: '',
@@ -15,13 +16,16 @@ export default function ProductForm({ product, show, onHide, onReload }) {
     });
     const [category, setCategory] = useState([]);
     const [data1, setData1] = useState([])
-
+    const [brand, setBrand] = useState([]);
     const fetchCategory = async () => {
         const response = await apiHandler.get("/category/get-category")
         setCategory(response.data)
         // console.log(response.data)
     }
-
+    const getBrand = async () => {
+        const response = await apiHandler.get("/admin/get-brand")
+        setBrand(response.data)
+    };
     const findIdCategoryByName = (name) => {
         const category = data1.find(cat => cat.category_name.toLowerCase() === name.toLowerCase());
         return category ? category.idcategory : null;
@@ -49,7 +53,16 @@ export default function ProductForm({ product, show, onHide, onReload }) {
                 category_name: value, // Cập nhật tên category
                 idcategory: selectedCategory ? String(selectedCategory.idcategory) : ''
             }));
-        } else {
+        }
+        // Nếu thay đổi là từ brand
+        else if (name === 'brand_name') {
+            const selectedBrand = brand.find(br => br.brand_name === value); // Tìm brand từ danh sách
+            setFormData(prevData => ({
+                ...prevData,
+                brand: selectedBrand ? selectedBrand.brand_name : value // Cập nhật brand
+            }));
+        }
+        else {
             // Cập nhật các trường khác bình thường
             setFormData(prevData => ({
                 ...prevData,
@@ -57,7 +70,17 @@ export default function ProductForm({ product, show, onHide, onReload }) {
             }));
         }
     };
-
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const previewURL = URL.createObjectURL(file);
+            setPreviewImage(previewURL); // Lưu URL ảnh tạm thời
+            setFormData((prevData) => ({
+                ...prevData,
+                product_image: URL.createObjectURL(file) // Lưu URL của ảnh vào state
+            }));
+        }
+    };
     const handleInvalid = async (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -172,6 +195,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
         getImage();
         // fetchAPI1();
         fetchCategory();
+        getBrand();
         if (product) {
             setFormData({
                 brand: product.brand || '',
@@ -194,7 +218,6 @@ export default function ProductForm({ product, show, onHide, onReload }) {
         setValidated(false);
         setError(null);
     }, [show]);
-
     return (
         <>
             <Modal
@@ -215,7 +238,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
                             <div className="d-flex align-items-start align-items-sm-center gap-4 rounded-2 col-7 mb-3">
                                 <div className="avatar-wrapper me-3 rounded-2 bg-label-secondary">
                                     <img
-                                        src={`${formData.product_image}` || "/assets/img/product/default.png"}
+                                        src={`${previewImage}` || "/assets/img/product/default.png"}
                                         alt="product-image"
                                         className="d-block rounded"
                                         height="100"
@@ -235,6 +258,7 @@ export default function ProductForm({ product, show, onHide, onReload }) {
                                             className="product-file-input"
                                             hidden
                                             accept="image/png, image/jpeg"
+                                            onChange={handleImageChange} // Gọi hàm khi chọn ảnh
                                         />
                                     </label>
                                     <button aria-label='Click me' type="button"
@@ -286,24 +310,28 @@ export default function ProductForm({ product, show, onHide, onReload }) {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md={5} controlId="brand">
-                                <Form.Label>Brand</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="brand">
-                                        <i className='bx bx-shape-polygon'></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        name="brand"
-                                        value={formData.brand}
-                                        onChange={handleChange}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please enter brand.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>
+                            <div className="col-5 mb-3">
+                                <label htmlFor="brand" className="form-label">Brand</label>
+                                <select
+                                    className="form-select"
+                                    id="brand"
+                                    name="brand_name"
+                                    defaultValue=""
+                                    value={formData.brand}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Choose Brand</option>
+                                    {
+                                        brand.map((br, index) => (
+                                            <option key={index} value={br.brand_name}>{br.brand_name}</option>
+                                        ))
+                                    }
+                                </select>
+                                <Form.Control.Feedback type="invalid">
+                                    Please select a brand.
+                                </Form.Control.Feedback>
+                            </div>
                         </div>
                         <hr />
                         {/*{error && <p className="text-danger">{error}</p>}*/}

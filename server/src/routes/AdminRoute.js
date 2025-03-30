@@ -40,4 +40,6 @@ router.delete('/delete-voucher/:idVoucher', AdminController.deleteVoucher);
 router.put('/update-voucher/:idVoucher', AdminController.updateVoucher);
 router.post('/create-voucher', AdminController.createVoucher);
 router.patch('/update-voucher-status/:idVoucher', AdminController.updateStatus);
+
+router.get('/get-brand', AdminController.getBrand);
 module.exports = router;

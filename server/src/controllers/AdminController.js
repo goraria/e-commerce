@@ -10,6 +10,7 @@ const Configuration = require('../models/Configuration.js')
 const Color = require('../models/Color.js')
 const Description = require('../models/Description.js')
 const Discount = require('../models/Discount.js')
+const Brand = require('../models/Brand.js')
 class AdminController {
 
     async getAccount(req, res) {
@@ -523,7 +524,7 @@ class AdminController {
                 title_description: Data.title_description,
                 idproduct: product.idproduct,
                 sub_description: Data.sub_description,
-                img_description: Data.img_description
+                img_description: "Asus ROG Zephyrus image"
             });
 
             console.log('Description created successfully:', newDescription);
@@ -667,6 +668,15 @@ class AdminController {
             // console.error('Error updating product name:', error);
             res.status(500).json({ success: false, message: 'Error updating product name', error });
         }
+    }
+    async getBrand(req, res) {
+        try {
+            const brand = await Brand.findAll();
+            res.status(200).json(brand);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching brand', error });
+        }
+
     }
 }
 
