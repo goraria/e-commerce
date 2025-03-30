@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import {ConfirmModal} from "../notice/ConfirmModal.jsx";
+import { ConfirmModal } from "../notice/ConfirmModal.jsx";
 import apiHandler from "../../../utils/apiHandler.jsx";
 
 export default function DescriptionForm({ description, show, onHide, onReload }) {
@@ -71,19 +71,20 @@ export default function DescriptionForm({ description, show, onHide, onReload })
                 // alert(address ? 'Address updated successfully' : 'Address added successfully');
                 setShowConfirmModal(false)
                 onHide();
-                onReload()
+                // onReload()
             }
         } catch (error) {
             setError(error.response ? error.response.data.message : 'Failed to save address');
+            console.log(error)
         }
     };
 
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await apiHandler.delete(`/admin/delete/${color.idaddress}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            // await apiHandler.delete(`/admin/delete/${color.idaddress}`, {
+            //     headers: { Authorization: `Bearer ${token}` }
+            // });
             setShowConfirmDelete(false);
             onHide();
             onReload()
@@ -105,7 +106,7 @@ export default function DescriptionForm({ description, show, onHide, onReload })
             >
                 <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h5>Edit Color</h5>
+                        <h5>Edit Description</h5>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -190,7 +191,7 @@ export default function DescriptionForm({ description, show, onHide, onReload })
                                 </InputGroup>
                             </Form.Group>
                         </Row>
-                        <Row className="mb-3">
+                        {/* <Row className="mb-3">
                             <Form.Group as={Col} md={12} controlId="img_description">
                                 <Form.Label>Img Description</Form.Label>
                                 <InputGroup hasValidation>
@@ -208,8 +209,8 @@ export default function DescriptionForm({ description, show, onHide, onReload })
                                         Please enter Img Description.
                                     </Form.Control.Feedback>
                                 </InputGroup>
-                            </Form.Group>
-                            {/* <Form.Group as={Col} md={4} controlId="state">
+                            </Form.Group> */}
+                        {/* <Form.Group as={Col} md={4} controlId="state">
                                 <Form.Label>State</Form.Label>
                                 <InputGroup hasValidation>
                                     <InputGroup.Text id="state">
@@ -246,9 +247,9 @@ export default function DescriptionForm({ description, show, onHide, onReload })
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group> */}
-                        </Row>
-                        <hr />
-                        {error && <p className="text-danger">{error}</p>}
+                        {/* </Row> */}
+                        {/* <hr />
+                        {error && <p className="text-danger">{error}</p>} */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
