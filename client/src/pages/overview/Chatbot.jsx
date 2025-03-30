@@ -252,6 +252,25 @@ export default function Chatbot() {
         }
     }
 
+    const refeshSendMessage = async () => {
+        try {
+            const response = await apiHandler.post('/chatbot/send-message', {message: "clear"}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    // "Content-Type": "application/json"
+                },
+            })
+            // console.log(response.data)
+            setRasaResponse(response.data);
+            // console.log("Chatbot reply:", data);
+
+            console.log(response.data);
+            // console.log(response.data.split("\n"));
+            await loadConversationHistory();
+        } catch (e) {
+        }
+        setMessage(""); // Xóa input sau khi gửi
+    };
 
     const handleSendMessage = async () => {
         if (message.trim() !== "") {
@@ -381,12 +400,20 @@ export default function Chatbot() {
                                                 {/*    </span>*/}
                                                 {/*    <input type="file" id="attach-doc" hidden=""/>*/}
                                                 {/*</label>*/}
+                                                <Button className="btn btn-primary d-flex send-msg-btn me-2"
+                                                        onClick={refeshSendMessage}
+                                                >
+                                                    {/*<span className="align-middle d-md-inline-block d-none"></span>*/}
+                                                    <i className="bx bx-refresh ms-0"></i>
+                                                </Button>
                                                 <Button className="btn btn-primary d-flex send-msg-btn"
                                                         onClick={handleSendMessage}
                                                 >
                                                     <span className="align-middle d-md-inline-block d-none">Send</span>
-                                                    <i className="bx bx-paper-plane ms-md-2 ms-0"></i>
+                                                    <i className="bx bxs-paper-plane ms-md-2 ms-0"></i>
                                                 </Button>
+
+
                                             </div>
                                         </form>
                                     </div>
